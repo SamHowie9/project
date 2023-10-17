@@ -5,7 +5,9 @@ from astropy.io import fits
 import numpy as np
 import pandas as pd
 import os
+from matplotlib import pyplot as plt
 
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # returns a numpy array of the images to train the model
 def get_images():
@@ -51,13 +53,13 @@ train_images = get_images()
 train_labels = get_labels()
 
 # find half the number of images (and truncate this to ensure we have an integer value but the training and testing data share no common values)
-half_images = int(len(train_images)/2)
+half_images = int(len(train_images)/3)
 
 # split the images and labels in half for training and testing, convert these lists into numpy arrays
 test_images = np.array(train_images[half_images:])
 test_labels = np.array(train_labels[half_images:])
-train_images = np.array(train_images[:half_images])
-train_labels = np.array(train_labels[:half_images])
+train_images = np.array(train_images[:half_images*2])
+train_labels = np.array(train_labels[:half_images*2])
 
 # expand the dimensions of the images from (50,50) to (50,50,1)
 train_images = np.expand_dims(train_images, axis=3)
@@ -87,10 +89,18 @@ model.compile(
 
 
 # train the model on the images and labels, run the model 5 times
-model.fit(
+model_data = model.fit(
     train_images,
     to_categorical(train_labels),
-    epochs=5,
+    epochs=25,
     batch_size=1,
     validation_data=(test_images, to_categorical(test_labels)),
 )
+
+
+training_accuracy = plt.plot(model_data.history["accuracy"], label="Training Data")
+validation_accuracy = plt.plot(model_data.history["val_accuracy"], label="Validation Data")
+plt.ylabel("Accuracy")
+plt.xlabel("Epochs")
+plt.legend()
+plt.show()
