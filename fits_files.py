@@ -14,7 +14,7 @@ train_images = []
 
 hdu_list = fits.open("Images/ui.3007920713.1_0.fits")
 image_data = hdu_list[0].data
-print(image_data)
+# print(image_data)
 df = pd.DataFrame(image_data)
 print(df)
 # train_images.append(image_data)
