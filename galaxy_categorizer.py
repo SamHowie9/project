@@ -53,13 +53,13 @@ train_images = get_images()
 train_labels = get_labels()
 
 # find half the number of images (and truncate this to ensure we have an integer value but the training and testing data share no common values)
-half_images = int(len(train_images)/3)
+half_images = int(len(train_images)/4)
 
 # split the images and labels in half for training and testing, convert these lists into numpy arrays
 test_images = np.array(train_images[half_images:])
 test_labels = np.array(train_labels[half_images:])
-train_images = np.array(train_images[:half_images*2])
-train_labels = np.array(train_labels[:half_images*2])
+train_images = np.array(train_images[:half_images*3])
+train_labels = np.array(train_labels[:half_images*3])
 
 # expand the dimensions of the images from (50,50) to (50,50,1)
 train_images = np.expand_dims(train_images, axis=3)
@@ -92,7 +92,7 @@ model.compile(
 model_data = model.fit(
     train_images,
     to_categorical(train_labels),
-    epochs=25,
+    epochs=30,
     batch_size=1,
     validation_data=(test_images, to_categorical(test_labels)),
 )
