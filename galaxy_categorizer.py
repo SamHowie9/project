@@ -10,8 +10,10 @@ from matplotlib import pyplot as plt
 
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-tf.config.threading.set_inter_op_parallelism_threads(int(os.cpu_count()/2))
-tf.config.threading.set_intra_op_parallelism_threads(int(os.cpu_count()/2))
+os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
+
+# tf.config.threading.set_inter_op_parallelism_threads(int(os.cpu_count()/2))
+# tf.config.threading.set_intra_op_parallelism_threads(int(os.cpu_count()/2))
 
 # print(os.cpu_count())
 
