@@ -5,8 +5,6 @@ from astropy.io import fits
 import numpy as np
 import pandas as pd
 import os
-import matplotlib
-matplotlib.use("GTK3Agg")
 from matplotlib import pyplot as plt
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -91,13 +89,13 @@ model.compile(
 
 
 # train the model on the images and labels, run the model 5 times
-# model_data = model.fit(
-#     train_images,
-#     to_categorical(train_labels),
-#     epochs=3,
-#     batch_size=1,
-#     validation_data=(test_images, to_categorical(test_labels)),
-# )
+model_data = model.fit(
+    train_images,
+    to_categorical(train_labels),
+    epochs=3,
+    batch_size=1,
+    validation_data=(test_images, to_categorical(test_labels)),
+)
 
 
 training_accuracy = plt.plot(model_data.history["accuracy"], label="Training Data")
