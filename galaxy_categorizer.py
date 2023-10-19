@@ -103,4 +103,4 @@ validation_accuracy = plt.plot(model_data.history["val_accuracy"], label="Valida
 plt.ylabel("Accuracy")
 plt.xlabel("Epochs")
 plt.legend()
-plt.show()
+plt.show(block=True)
