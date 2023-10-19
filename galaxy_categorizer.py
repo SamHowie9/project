@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
+# os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0" # for GPU
 
