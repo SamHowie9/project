@@ -81,8 +81,8 @@ filter_size = 3
 pool_size = 2
 
 # list storing all the activation functions
-activation_functions = ["softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
-
+# activation_functions = ["softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
+activation_functions = ["softmax"]
 # create a figure to store the two different plots
 fig, (ax1, ax2) = plt.subplots(1,2)
 
