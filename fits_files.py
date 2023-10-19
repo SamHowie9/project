@@ -1,4 +1,6 @@
 from astropy.io import fits
+import matplotlib
+matplotlib.use("GTK3Agg")
 import matplotlib.pyplot as plt
 import os
 import numpy as np
@@ -17,6 +19,9 @@ image_data = hdu_list[0].data
 # print(image_data)
 df = pd.DataFrame(image_data)
 print(df)
+
+# matplotlib.use()
+
 # train_images.append(image_data)
 
 # for file in os.listdir("Images"):
