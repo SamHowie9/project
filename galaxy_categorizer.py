@@ -1,13 +1,20 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
 from tensorflow.keras.utils import to_categorical
+import tensorflow as tf
 from astropy.io import fits
 import numpy as np
 import pandas as pd
 import os
 from matplotlib import pyplot as plt
 
+
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+tf.config.threading.set_inter_op_parallelism_threads(int(os.cpu_count()/2))
+tf.config.threading.set_intra_op_parallelism_threads(int(os.cpu_count()/2))
+
+# print(os.cpu_count())
+
 
 # returns a numpy array of the images to train the model
 def get_images():
@@ -71,6 +78,7 @@ num_filters = 8
 filter_size = 3
 pool_size = 2
 
+
 # Build the model using those parameters
 model = Sequential([
   Conv2D(num_filters, filter_size, input_shape=(50, 50, 1)),
@@ -92,7 +100,7 @@ model.compile(
 model_data = model.fit(
     train_images,
     to_categorical(train_labels),
-    epochs=3,
+    epochs=30,
     batch_size=1,
     validation_data=(test_images, to_categorical(test_labels)),
 )
