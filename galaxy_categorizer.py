@@ -80,37 +80,62 @@ num_filters = 8
 filter_size = 3
 pool_size = 2
 
+# list storing all the activation functions
+activation_functions = ["softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
 
-# Build the model using those parameters
-model = Sequential([
-  Conv2D(num_filters, filter_size, input_shape=(50, 50, 1)),
-  MaxPooling2D(pool_size=pool_size),
-  Flatten(),
-  Dense(2, activation='softmax'),
-])
+# create a figure to store the two different plots
+fig, (ax1, ax2) = plt.subplots(1,2)
 
+# set the title, labels and accuracy axis limits of the training data plot
+ax1.set_title("Training Data")
+ax1.set_ylabel("Accuracy")
+ax1.set_xlabel("Epochs")
+ax1.set_ylim(0.7, 1)
 
-# compile the model
-model.compile(
-    'adam',                               # gradient based optimiser
-    loss='categorical_crossentropy',      # >2 classes???
-    metrics=['accuracy'],                 # classification problem
-)
-
-
-# train the model on the images and labels, run the model 5 times
-model_data = model.fit(
-    train_images,
-    to_categorical(train_labels),
-    epochs=30,
-    batch_size=1,
-    validation_data=(test_images, to_categorical(test_labels)),
-)
+# set the title, labels and accuracy axis limits of the validation data plot
+ax2.set_title("Validation Data")
+ax2.set_ylabel("Accuracy")
+ax2.set_xlabel("Epochs")
+ax2.set_ylim(0.7, 1)
 
 
-training_accuracy = plt.plot(model_data.history["accuracy"], label="Training Data")
-validation_accuracy = plt.plot(model_data.history["val_accuracy"], label="Validation Data")
-plt.ylabel("Accuracy")
-plt.xlabel("Epochs")
-plt.legend()
-plt.show(block=True)
+# loop through each activation function
+for activation_function in activation_functions:
+
+    # Build the model using those parameters
+    model = Sequential([
+      Conv2D(num_filters, filter_size, input_shape=(50, 50, 1)),
+      MaxPooling2D(pool_size=pool_size),
+      Flatten(),
+      Dense(2, activation=activation_function),
+    ])
+
+
+    # compile the model
+    model.compile(
+        'adam',                               # gradient based optimiser
+        loss='categorical_crossentropy',      # >2 classes???
+        metrics=['accuracy'],                 # classification problem
+    )
+
+
+    # train the model on the images and labels, run the model 5 times
+    model_data = model.fit(
+        train_images,
+        to_categorical(train_labels),
+        epochs=50,
+        batch_size=1,
+        validation_data=(test_images, to_categorical(test_labels)),
+    )
+
+
+    # plot the training accuracy and validation accuracy for that activation function, only add the label of one plot to avoid duplicates in the legend
+    training_accuracy = ax1.plot(model_data.history["accuracy"], label=activation_function)
+    validation_accuracy = ax2.plot(model_data.history["val_accuracy"])
+
+
+# add the shared legened to the figure
+fig.legend(loc="center right")
+
+# display the plots
+plt.show()
