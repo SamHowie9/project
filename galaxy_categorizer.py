@@ -63,10 +63,10 @@ def get_labels():
 train_images = get_images()
 train_labels = get_labels()
 
-# find half the number of images (and truncate this to ensure we have an integer value but the training and testing data share no common values)
+# find a quater the number of images (and truncate this to ensure we have an integer value but the training and testing data share no common values)
 half_images = int(len(train_images)/4)
 
-# split the images and labels in half for training and testing, convert these lists into numpy arrays
+# split the images and labels in into 3/4 for training and 1/4 testing, convert these lists into numpy arrays
 test_images = np.array(train_images[half_images:])
 test_labels = np.array(train_labels[half_images:])
 train_images = np.array(train_images[:half_images*3])
@@ -83,8 +83,10 @@ filter_size = 3
 pool_size = 2
 
 # list storing all the activation functions
-# activation_functions = ["softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
-activation_functions = ["softmax"]
+# activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
+activation_functions = ["softmax", "relu", "sigmoid"]
+
+
 # create a figure to store the two different plots
 fig, (ax1, ax2) = plt.subplots(1,2)
 
@@ -125,7 +127,7 @@ for activation_function in activation_functions:
     model_data = model.fit(
         train_images,
         to_categorical(train_labels),
-        epochs=50,
+        epochs=3,
         batch_size=1,
         validation_data=(test_images, to_categorical(test_labels)),
     )
