@@ -6,6 +6,8 @@ from astropy.io import fits
 import numpy as np
 import pandas as pd
 import os
+import matplotlib
+matplotlib.use("GTKAgg")
 from matplotlib import pyplot as plt
 
 
