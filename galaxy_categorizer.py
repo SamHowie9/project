@@ -145,4 +145,4 @@ fig.legend(loc="center right")
 
 # display the plots
 plt.show()
-plt.savefig(["Plots/activation_function_accuracy"])
+plt.savefig("Plots/activation_function_accuracy")
