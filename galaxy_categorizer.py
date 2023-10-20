@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import os
 import matplotlib
-matplotlib.use("GTK3Agg")
+matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
 
 
