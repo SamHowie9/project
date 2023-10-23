@@ -85,12 +85,16 @@ filter_size = 3
 pool_size = 2
 
 # list storing all the activation functions
-activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
+# activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
+
+activation_functions = ["sigmoid", "softmax", "softplus", "exponential"]
+# activation_functions = ["relu", "softsign", "tanh", "selu", "elu"]
+
 # activation_functions = ["softmax", "relu", "sigmoid"]
 
 
 # create a figure to store the two different plots
-fig, (ax1, ax2) = plt.subplots(1,2)
+fig, (ax1, ax2) = plt.subplots(1,2, figsize=(18,6))
 
 # set the title, labels and accuracy axis limits of the training data plot
 ax1.set_title("Training Data")
@@ -145,4 +149,4 @@ fig.legend(loc="center right")
 
 # display the plots
 plt.show()
-plt.savefig("Plots/all_activation_function_accuracy")
+plt.savefig("Plots/sigmoid_softmax_softplus_exponential_accuracy")
