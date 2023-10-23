@@ -87,8 +87,8 @@ pool_size = 2
 # list storing all the activation functions
 # activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
 
-activation_functions = ["sigmoid", "softmax", "softplus", "exponential"]
-# activation_functions = ["relu", "softsign", "tanh", "selu", "elu"]
+# activation_functions = ["sigmoid", "softmax", "softplus", "exponential"]
+activation_functions = ["relu", "softsign", "tanh", "selu", "elu"]
 
 # activation_functions = ["softmax", "relu", "sigmoid"]
 
@@ -100,13 +100,13 @@ fig, (ax1, ax2) = plt.subplots(1,2, figsize=(18,6))
 ax1.set_title("Training Data")
 ax1.set_ylabel("Accuracy")
 ax1.set_xlabel("Epochs")
-ax1.set_ylim(0.7, 1)
+# ax1.set_ylim(0.7, 1)
 
 # set the title, labels and accuracy axis limits of the validation data plot
 ax2.set_title("Validation Data")
 ax2.set_ylabel("Accuracy")
 ax2.set_xlabel("Epochs")
-ax2.set_ylim(0.7, 1)
+# ax2.set_ylim(0.7, 1)
 
 
 # loop through each activation function
@@ -149,4 +149,4 @@ fig.legend(loc="center right")
 
 # display the plots
 plt.show()
-plt.savefig("Plots/sigmoid_softmax_softplus_exponential_accuracy")
+plt.savefig("Plots/reu_softsign_tanh_selu_eluaccuracy")
