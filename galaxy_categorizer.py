@@ -85,8 +85,8 @@ filter_size = 3
 pool_size = 2
 
 # list storing all the activation functions
-# activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
-activation_functions = ["softmax", "relu", "sigmoid"]
+activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
+# activation_functions = ["softmax", "relu", "sigmoid"]
 
 
 # create a figure to store the two different plots
@@ -129,7 +129,7 @@ for activation_function in activation_functions:
     model_data = model.fit(
         train_images,
         to_categorical(train_labels),
-        epochs=3,
+        epochs=50,
         batch_size=1,
         validation_data=(test_images, to_categorical(test_labels)),
     )
