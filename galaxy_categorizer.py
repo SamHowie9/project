@@ -87,7 +87,7 @@ pool_size = 2
 # list storing all the activation functions
 # activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
 
-# activation_functions = ["sigmoid", "softmax", "softplus", "exponential"]
+activation_functions = ["sigmoid", "softmax", "softplus", "exponential"]
 # activation_functions = ["relu", "softsign", "tanh", "selu", "elu"]
 
 # activation_functions = ["softmax", "relu", "sigmoid"]
