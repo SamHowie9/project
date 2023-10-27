@@ -1,25 +1,20 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
 from tensorflow.keras.utils import to_categorical
-import tensorflow as tf
 from astropy.io import fits
 import numpy as np
 import pandas as pd
 import os
-import matplotlib
-matplotlib.use("Agg")
+# import matplotlib
+# matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-# os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0,1,2" # for GPU
+# select to use GPU 0 on cosma
+os.environ["CUDA_VISIBLE_DEVICES"]="0" # for GPU
 
-# tf.config.threading.set_inter_op_parallelism_threads(int(os.cpu_count()/2))
-# tf.config.threading.set_intra_op_parallelism_threads(int(os.cpu_count()/2))
-
-# print(os.cpu_count())
 
 
 # returns a numpy array of the images to train the model
@@ -74,24 +69,25 @@ test_labels = np.array(train_labels[half_images:])
 train_images = np.array(train_images[:half_images*3])
 train_labels = np.array(train_labels[:half_images*3])
 
-# expand the dimensions of the images from (50,50) to (50,50,1)
+# expand the dimensions of the images to add the number of colours (here we are greyscale so use 1 making the images of shape, (50, 50, 1)
 train_images = np.expand_dims(train_images, axis=3)
 test_images = np.expand_dims(test_images, axis=3)
 
 
-# setting the parameters of the cnn
-num_filters = 8
-filter_size = 3
-pool_size = 2
-
 # list storing all the activation functions
 # activation_functions = ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
-
 # activation_functions = ["sigmoid", "softmax", "softplus", "exponential"]
-activation_functions = ["relu", "softsign", "tanh", "selu", "elu"]
-
+# activation_functions = ["relu", "softsign", "tanh", "selu", "elu"]
 # activation_functions = ["softmax", "relu", "sigmoid"]
+activation_functions = ["sigmoid"]
 
+
+# list containing the number of hidden layers for each passaccuracy values for each number of hidden layers
+all_hidden_layers = range(2, 4)
+
+# lists containing the training and validation accuracy for each number of hidden layers
+train_accuracy_values = []
+val_accuracy_values = []
 
 # create a figure to store the two different plots
 fig, (ax1, ax2) = plt.subplots(1,2, figsize=(18,6))
@@ -100,13 +96,13 @@ fig, (ax1, ax2) = plt.subplots(1,2, figsize=(18,6))
 ax1.set_title("Training Data")
 ax1.set_ylabel("Accuracy")
 ax1.set_xlabel("Epochs")
-# ax1.set_ylim(0.7, 1)
+ax1.set_ylim(0.7, 1)
 
 # set the title, labels and accuracy axis limits of the validation data plot
 ax2.set_title("Validation Data")
 ax2.set_ylabel("Accuracy")
 ax2.set_xlabel("Epochs")
-# ax2.set_ylim(0.7, 1)
+ax2.set_ylim(0.7, 1)
 
 
 # loop through each activation function
@@ -114,10 +110,11 @@ for activation_function in activation_functions:
 
     # Build the model using those parameters
     model = Sequential([
-      Conv2D(num_filters, filter_size, input_shape=(50, 50, 1)),
-      MaxPooling2D(pool_size=pool_size),
-      Flatten(),
-      Dense(2, activation=activation_function),
+        Conv2D(filters=8, kernel_size=3, input_shape=(50, 50, 1)),
+        MaxPooling2D(pool_ size=2),
+        Flatten(),
+        Dense(units=32, activation=activation_function),
+        Dense(units=2, activation=activation_function),
     ])
 
 
@@ -133,7 +130,7 @@ for activation_function in activation_functions:
     model_data = model.fit(
         train_images,
         to_categorical(train_labels),
-        epochs=50,
+        epochs=3,
         batch_size=1,
         validation_data=(test_images, to_categorical(test_labels)),
     )
@@ -144,9 +141,21 @@ for activation_function in activation_functions:
     validation_accuracy = ax2.plot(model_data.history["val_accuracy"])
 
 
+    # print(model_data.history["accuracy"], model_data.history["val_accuracy"])
+    # print((model_data.history["accuracy"])[-1], (model_data.history["val_accuracy"])[-1])
+
+    # add the the training and validation accuracy for each number of hidden layers after 50 epochs
+    # train_accuracy_values.append((model_data.history["accuracy"])[-1])
+    # val_accuracy_values.append((model_data.history["val_accuracy"])[-1])
+
+
+# ax1.plot(all_hidden_layers, train_accuracy_values)
+# ax2.plot(all_hidden_layers, val_accuracy_values)
+
+
 # add the shared legened to the figure
 fig.legend(loc="center right")
 
 # display the plots
 plt.show()
-plt.savefig("Plots/reu_softsign_tanh_selu_eluaccuracy")
+# plt.savefig("Plots/accuracy_vs_hidden_layers")
