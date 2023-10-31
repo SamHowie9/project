@@ -104,7 +104,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # train the model
-autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 training_loss = ax1.plot(model_data.history["loss"], label=activation_function)
 validation_loss = ax2.plot(model_data.history["val_loss"])
