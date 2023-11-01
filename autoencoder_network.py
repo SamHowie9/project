@@ -115,7 +115,6 @@ print()
 model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
-# set up the figure for the training and validation loss plot
 
 # plot the loss for the training and validation data
 training_loss = plt.plot(model_data.history["loss"], label="Training Data")
