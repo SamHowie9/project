@@ -112,7 +112,7 @@ print()
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
 # plot the loss for the training and validation data
@@ -129,7 +129,7 @@ n = 10
 
 # reconstruct the images
 reconstructed_images = autoencoder.predict(test_images[:n])
-reconstructed_images = np.array(Conv2D(filters=1, kernel_size=50, activation="relu", padding="same")(reconstructed_images))
+reconstructed_images = np.array(Conv2D(filters=1, kernel_size=3, activation="relu", padding="same")(reconstructed_images))
 # reconstructed_images = UpSampling2D(size=2)(x)
 
 print(test_images[0].shape)
