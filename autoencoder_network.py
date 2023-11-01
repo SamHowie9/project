@@ -113,5 +113,5 @@ training_loss = ax1.plot(model_data.history["loss"])
 validation_loss = ax2.plot(model_data.history["val_loss"])
 
 plt.show()
-plt.savefig("Plots/autoencoder_loss")
+plt.savefig("Plots/autoencoder_loss_dense")
 
