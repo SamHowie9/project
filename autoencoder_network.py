@@ -90,12 +90,15 @@ ax2.set_xlabel("Epochs")
 input_image = keras.Input(shape=(50, 50, 1))
 
 # layers for the encoder
-x = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
-encoded = MaxPooling2D(pool_size=2, padding="same")(x)
+# x = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
+# encoded = MaxPooling2D(pool_size=2, padding="same")(x)
+#
+# # layers for the decoder
+# x = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
+# decoded = UpSampling2D(size=2)(x)
 
-# layers for the decoder
-x = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
-decoded = UpSampling2D(size=2)(x)
+encoded = layers.Dense(25, activation="relu")(input_image)
+decoded = layers.Dense(50, activation="sigmoid")(encoded)
 
 
 # create and compile the autoencoder model
