@@ -154,5 +154,5 @@ for i in range(1, n):
 
 
 plt.show()
-plt.savefig("Plots/convoluted_autoencoder_reconstruction")
+plt.savefig("Plots/convoluted_autoencoder_reconstruction_images")
 
