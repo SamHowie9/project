@@ -115,45 +115,51 @@ print()
 model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
+# set up the figure for the training and validation loss plot
+
 # plot the loss for the training and validation data
-# training_loss = ax1.plot(model_data.history["loss"])
-# validation_loss = ax2.plot(model_data.history["val_loss"])
+training_loss = plt.plot(model_data.history["loss"], label="Training Data")
+validation_loss = plt.plot(model_data.history["val_loss"], label="Validation Data")
+
+# set the axis titles for the training and validation loss plot
+plt.ylabel("Loss")
+plt.xlabel("Epochs")
 
 
 # create a subset of the validation data to reconstruct (first 10 images)
 # images_to_reconstruct = test_images[:10]
 # images_to_reconstruct = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
 
-# number of images to reconstruct
-n = 10
-
-# reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[:n])
-reconstructed_images = np.array(Conv2D(filters=1, kernel_size=3, activation="relu", padding="same")(reconstructed_images))
-# reconstructed_images = UpSampling2D(size=2)(x)
-
-print(test_images[0].shape)
-print(reconstructed_images[0].shape)
-
-
-plt.figure(figsize=(20,4))
-for i in range(1, n):
-
-    # display the original images (with no axes)
-    ax_o = plt.subplot(2, n, i)
-    plt.imshow(test_images[i].reshape(50, 50))
-    ax_o.get_xaxis().set_visible(False)
-    ax_o.get_yaxis().set_visible(False)
-
-    # display the reconstructed images (with no axes)
-    ax_r = plt.subplot(2, n, i + n)
-    plt.imshow(reconstructed_images[i].reshape(50, 50))
-
-    ax_r.get_xaxis().set_visible(False)
-    ax_r.get_yaxis().set_visible(False)
+# # number of images to reconstruct
+# n = 10
+#
+# # reconstruct the images
+# reconstructed_images = autoencoder.predict(test_images[:n])
+# reconstructed_images = np.array(Conv2D(filters=1, kernel_size=3, activation="relu", padding="same")(reconstructed_images))
+# # reconstructed_images = UpSampling2D(size=2)(x)
+#
+# print(test_images[0].shape)
+# print(reconstructed_images[0].shape)
+#
+#
+# plt.figure(figsize=(20,4))
+# for i in range(1, n):
+#
+#     # display the original images (with no axes)
+#     ax_o = plt.subplot(2, n, i)
+#     plt.imshow(test_images[i].reshape(50, 50))
+#     ax_o.get_xaxis().set_visible(False)
+#     ax_o.get_yaxis().set_visible(False)
+#
+#     # display the reconstructed images (with no axes)
+#     ax_r = plt.subplot(2, n, i + n)
+#     plt.imshow(reconstructed_images[i].reshape(50, 50))
+#
+#     ax_r.get_xaxis().set_visible(False)
+#     ax_r.get_yaxis().set_visible(False)
 
 
 
 plt.show()
-plt.savefig("Plots/convoluted_autoencoder_reconstruction")
+plt.savefig("Plots/autoencoder_val_train_loss_single_plot")
 
