@@ -123,7 +123,7 @@ validation_loss = plt.plot(model_data.history["val_loss"], label="Validation Dat
 # set the axis titles and legend for the training and validation loss plot
 plt.ylabel("Loss")
 plt.xlabel("Epochs")
-plt.legend()
+plt.legend(loc="upper right")
 
 
 # create a subset of the validation data to reconstruct (first 10 images)
