@@ -112,7 +112,7 @@ print()
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 
 # plot the loss for the training and validation data
@@ -127,9 +127,9 @@ model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1
 # number of images to reconstruct
 n = 10
 
-# reconstruct the images (we have to perform the 2d convolution layer to the predicted reconstructed images to make sure they have the right dimension)
+# reconstruct the images
 reconstructed_images = autoencoder.predict(test_images[:n])
-reconstructed_images = np.array(Conv2D(filters=1, kernel_size=3, activation="relu", padding="same")(reconstructed_images))
+reconstructed_images = np.array(Conv2D(filters=1, kernel_size=50, activation="relu", padding="same")(reconstructed_images))
 # reconstructed_images = UpSampling2D(size=2)(x)
 
 print(test_images[0].shape)
@@ -148,6 +148,7 @@ for i in range(1, n):
     # display the reconstructed images (with no axes)
     ax_r = plt.subplot(2, n, i + n)
     plt.imshow(reconstructed_images[i].reshape(50, 50))
+
     ax_r.get_xaxis().set_visible(False)
     ax_r.get_yaxis().set_visible(False)
 
