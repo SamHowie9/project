@@ -98,7 +98,7 @@ input_image = keras.Input(shape=(50, 50, 1))
 # decoded = UpSampling2D(size=2)(x)
 
 encoded = layers.Dense(25, activation="relu")(input_image)
-decoded = layers.Dense(50, activation="sigmoid")(encoded)
+decoded = layers.Dense(1, activation="sigmoid")(encoded)
 
 
 # create and compile the autoencoder model
