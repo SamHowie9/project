@@ -98,6 +98,7 @@ encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(in
 decoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
 # decoded = UpSampling2D(size=2)(x)
 
+
 # encoded = layers.Dense(25, activation="relu")(input_image)
 # decoded = layers.Dense(1, activation="sigmoid")(encoded)
 
