@@ -107,9 +107,6 @@ decoded = Conv2D(filters=1, kernel_size=3, activation="sigmoid", padding="same")
 autoencoder = keras.Model(input_image, decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
-print(train_images.shape)
-print(test_images.shape)
-print()
 
 
 # train the model
@@ -120,16 +117,16 @@ plt.figure(figsize=(18,5))
 
 # plot the loss for the training and validation data
 ax = plt.subplot(1, 3, 1)
-training_loss, = plt.plot(model_data.history["loss"], label="Training Data")
-validation_loss, = plt.plot(model_data.history["val_loss"], label="Validation Data")
+training_loss, = plt.plot((model_data.history["loss"])[1:], label="Training Data")
+validation_loss, = plt.plot((model_data.history["val_loss"])[1:], label="Validation Data")
 ax.legend(loc="upper right")
 
 ax = plt.subplot(1, 3, 2)
-training_loss, = plt.plot(model_data.history["loss"], label="Training Data")
+training_loss, = plt.plot((model_data.history["loss"])[1:], label="Training Data")
 ax.legend(loc="upper right")
 
 ax = plt.subplot(1, 3, 3)
-training_loss, = plt.plot(model_data.history["val_loss"], label="Valiation Data", color="#ff7f0e")
+training_loss, = plt.plot((model_data.history["val_loss"])[1:], label="Valiation Data", color="#ff7f0e")
 ax.legend(loc="upper right")
 
 # set the axis titles and legend for the training and validation loss plot
