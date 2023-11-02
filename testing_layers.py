@@ -87,6 +87,11 @@ epochs = 50
 
 for filters in all_filters:
 
+    print()
+    print()
+    print("Using ", filters, " filters")
+    print()
+
     # Instantiate a Keras tensor to allow us to build the model
     input_image = keras.Input(shape=(50, 50, 1))
 
