@@ -155,5 +155,5 @@ axs[2].legend(loc="upper left")
 # plt.legend(loc="upper right")
 
 plt.show()
-plt.savefig("Plots/autoencoder_conv2d_loss")
+plt.savefig("Plots/autoencoder_conv2d_filter_size")
 
