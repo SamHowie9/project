@@ -91,7 +91,7 @@ test_images = np.expand_dims(test_images, axis=3)
 input_image = keras.Input(shape=(50, 50, 1))
 
 # layers for the encoder
-enocded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
+encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
 # encoded = MaxPooling2D(pool_size=2, padding="same")(x)
 
 # layers for the decoder
