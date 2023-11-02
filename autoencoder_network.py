@@ -116,21 +116,21 @@ print()
 model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
-plt.figure(figsize=15, 5)
+plt.figure(figsize=(18,5))
 
 # plot the loss for the training and validation data
 ax = plt.subplot(1, 3, 1)
 training_loss, = plt.plot(model_data.history["loss"], label="Training Data")
 validation_loss, = plt.plot(model_data.history["val_loss"], label="Validation Data")
-ax.plt.legend(loc="upper right")
+ax.legend(loc="upper right")
 
 ax = plt.subplot(1, 3, 2)
 training_loss, = plt.plot(model_data.history["loss"], label="Training Data")
-ax.plt.legend(loc="upper right")
+ax.legend(loc="upper right")
 
 ax = plt.subplot(1, 3, 3)
-training_loss, = plt.plot(model_data.history["val_loss"], label="Valiation Data")
-ax.plt.legend(loc="upper right")
+training_loss, = plt.plot(model_data.history["val_loss"], label="Valiation Data", color="#ff7f0e")
+ax.legend(loc="upper right")
 
 # set the axis titles and legend for the training and validation loss plot
 plt.ylabel("Loss")
