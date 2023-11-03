@@ -99,8 +99,8 @@ for kernel_size in all_kernels:
     encoded = Conv2D(filters=8, kernel_size=kernel_size, activation="relu", padding="same")(input_image)
 
     # layers for the decoder (extra one with 1 filter to get back to the correct shape)
-    decoded = Conv2D(filters=filters, kernel_size=3, activation="relu", padding="same")(encoded)
-    decoded = Conv2D(filters=1, kernel_size=3, activation="sigmoid", padding="same")(encoded)
+    decoded = Conv2D(filters=8, kernel_size=kernel_size, activation="relu", padding="same")(encoded)
+    decoded = Conv2D(filters=1, kernel_size=kernel_size, activation="sigmoid", padding="same")(encoded)
 
 
     # create and compile the autoencoder model
