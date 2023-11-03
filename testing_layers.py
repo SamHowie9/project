@@ -80,23 +80,23 @@ training_loss = []
 validation_loss = []
 
 # list to store the number of filters
-all_filters = list(range(1, 15))
+all_kernels = list(range(1, 10))
 
 # set the number of epochs
 epochs = 50
 
-for filters in all_filters:
+for kernel_size in all_kernels:
 
     print()
     print()
-    print("Using ", filters, " filters")
+    print("Using a kernel size of ", kernel_size)
     print()
 
     # Instantiate a Keras tensor to allow us to build the model
     input_image = keras.Input(shape=(50, 50, 1))
 
     # layers for the encoder
-    encoded = Conv2D(filters=filters, kernel_size=3, activation="relu", padding="same")(input_image)
+    encoded = Conv2D(filters=8, kernel_size=kernel_size, activation="relu", padding="same")(input_image)
 
     # layers for the decoder (extra one with 1 filter to get back to the correct shape)
     decoded = Conv2D(filters=filters, kernel_size=3, activation="relu", padding="same")(encoded)
@@ -123,15 +123,15 @@ validation_loss = np.array(validation_loss)
 fig, axs = plt.subplots(1, 3, figsize=(18,5))
 axs[0].plot(all_filters, training_loss, label="Training Data")
 axs[0].plot(all_filters, validation_loss, label="Validation Data", color="#ff7f0e")
-axs[0].legend(loc="upper left")
+axs[0].legend(loc="upper right")
 axs[0].set_ylabel("Loss")
-axs[0].set_xlabel("Filters")
+axs[0].set_xlabel("Kernel Size")
 axs[1].plot(all_filters, training_loss, label="Training Data")
-axs[1].set_xlabel("Filters")
-axs[1].legend(loc="upper left")
+axs[1].set_xlabel("Kernel Size")
+axs[1].legend(loc="upper right")
 axs[2].plot(all_filters, validation_loss, label="Validation Data", color="#ff7f0e")
-axs[2].set_xlabel("Filters")
-axs[2].legend(loc="upper left")
+axs[2].set_xlabel("Kernel Size")
+axs[2].legend(loc="upper right")
 
 
 # plt.figure(figsize=(18,5))
@@ -160,5 +160,5 @@ axs[2].legend(loc="upper left")
 # plt.legend(loc="upper right")
 
 plt.show()
-plt.savefig("Plots/autoencoder_conv2d_filter_size")
+plt.savefig("Plots/autoencoder_conv2d_kernel_size")
 
