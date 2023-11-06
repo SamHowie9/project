@@ -4,6 +4,7 @@ from matplotlib import image as mpimg
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/galedge_10.png")
 
 print(image.shape)
+print(type(image))
 
 plt.imshow(image)
 
