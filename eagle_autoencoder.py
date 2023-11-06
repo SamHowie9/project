@@ -61,7 +61,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=1, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
 # gets the residue (image showing difference) between the reconstructed and original image
