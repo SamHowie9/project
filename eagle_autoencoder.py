@@ -95,6 +95,7 @@ for i in range(0, n-1):
     axs[2,i].get_xaxis().set_visible(False)
     axs[2,i].get_yaxis().set_visible(False)
 
+    print(np.amax(residue_image))
 
 
 plt.show()
