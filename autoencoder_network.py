@@ -108,11 +108,11 @@ autoencoder = keras.Model(input_image, decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
-
 # train the model
 model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
+# create a figure to show the loss for validation and training data against number of epochs
 # plt.figure(figsize=(18,5))
 #
 # # plot the loss for the training and validation data
