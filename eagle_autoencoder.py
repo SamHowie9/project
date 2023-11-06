@@ -97,32 +97,20 @@ fig, axs = plt.subplots(3, n, figsize=(20,8))
 # plot each subplot
 for i in range(0, n-1):
 
-    axs[0,i].imshow(test_images[i].reshape(256, 256, 3))
+    axs[0,i].imshow(test_images[i])
     axs[0,i].get_xaxis().set_visible(False)
     axs[0,i].get_yaxis().set_visible(False)
 
-    axs[1,i].imshow(reconstructed_images[i].reshape(256, 256, 3))
+    axs[1,i].imshow(reconstructed_images[i])
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
     # calculate residue (difference between two images)
     residue_image = np.subtract(reconstructed_images[i], test_images[i])
-    axs[2,i].imshow(residue_image.reshape((256, 256, 3)))
+    axs[2,i].imshow(residue_image)
     axs[2,i].get_xaxis().set_visible(False)
     axs[2,i].get_yaxis().set_visible(False)
 
-    # # display the original images (with no axes)
-    # ax_o = plt.subplot(2, n, i)
-    # plt.imshow(test_images[i].reshape(256, 256, 3))
-    # ax_o.get_xaxis().set_visible(False)
-    # ax_o.get_yaxis().set_visible(False)
-    #
-    # # display the reconstructed images (with no axes)
-    # ax_r = plt.subplot(2, n, i + n)
-    # plt.imshow(reconstructed_images[i].reshape(256, 256, 3))
-    #
-    # ax_r.get_xaxis().set_visible(False)
-    # ax_r.get_yaxis().set_visible(False)
 
 
 plt.show()
