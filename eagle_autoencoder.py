@@ -88,7 +88,7 @@ for i in range(1, n):
 
     # display the reconstructed images (with no axes)
     ax_r = plt.subplot(2, n, i + n)
-    plt.imshow(reconstructed_images[i].reshape(50, 50))
+    plt.imshow(reconstructed_images[i].reshape(256, 256, 3))
 
     ax_r.get_xaxis().set_visible(False)
     ax_r.get_yaxis().set_visible(False)
