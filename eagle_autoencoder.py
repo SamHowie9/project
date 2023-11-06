@@ -23,7 +23,7 @@ def get_images():
     for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
 
         # open the fits file and get the image data (this is a numpy array of each pixel value)
-        image = fits.open("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/" + file)
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/" + file)
 
         # append the image data to the main list containing all data of all the images
         train_images.append(image)
