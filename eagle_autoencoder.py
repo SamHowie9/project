@@ -92,7 +92,7 @@ reconstructed_images = autoencoder.predict(test_images[:n])
 
 # create figure to hold subplots
 # plt.figure(figsize=(20,4))
-fig, axs = plt.subplots(3, n, figsize=(20,4))
+fig, axs = plt.subplots(3, n, figsize=(20,8))
 
 # plot each subplot
 for i in range(0, n-1):
