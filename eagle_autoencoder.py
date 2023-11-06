@@ -35,7 +35,6 @@ def get_images():
 # get the images and labels to train the model
 train_images = get_images()
 
-[[[][][]]]
 
 # find the number of images that you will test the model on
 testing_count = int(len(train_images/4))
