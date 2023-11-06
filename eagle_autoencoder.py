@@ -65,20 +65,20 @@ model_data = autoencoder.fit(train_images, train_images, epochs=1, batch_size=1,
 
 
 # gets the residue (image showing difference) between the reconstructed and original image
-def get_residue(original_image, reconstructed_image):
-
-    # store the residue image (as a list initially
-    residue = []
-
-    # loop through each rgb channel
-    for channel in range(0, 3):
-
-        # find the difference between the two images and append them to the other rgb channels
-        channel_residue = np.subtract(reconstructed_image[channel], original_image[channel]).tolist()
-        residue.append(channel_residue)
-
-    # return residue as a numpy array
-    return np.array(residue)
+# def get_residue(original_image, reconstructed_image):
+#
+#     # store the residue image (as a list initially
+#     residue = []
+#
+#     # loop through each rgb channel
+#     for channel in range(0, 3):
+#
+#         # find the difference between the two images and append them to the other rgb channels
+#         channel_residue = np.subtract(reconstructed_image[channel], original_image[channel]).tolist()
+#         residue.append(channel_residue)
+#
+#     # return residue as a numpy array
+#     return np.array(residue)
 
 
 # create a subset of the validation data to reconstruct (first 10 images)
@@ -106,7 +106,7 @@ for i in range(0, n-1):
     axs[1,i].get_yaxis().set_visible(False)
 
     # calculate residue (difference between two images)
-    residue_image = get_residue(test_images[i], reconstructed_images[i])
+    residue_image = np.subtract(reconstructed_images, test_images)
     axs[2,i].imshow(residue_image.reshape((256, 256, 3)))
     axs[2,i].get_xaxis().set_visible(False)
     axs[2,i].get_yaxis().set_visible(False)
