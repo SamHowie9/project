@@ -61,7 +61,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 
 
@@ -82,7 +82,7 @@ for i in range(1, n):
 
     # display the original images (with no axes)
     ax_o = plt.subplot(2, n, i)
-    plt.imshow(test_images[i].reshape(50, 50))
+    plt.imshow(test_images[i].reshape(256, 256, 3))
     ax_o.get_xaxis().set_visible(False)
     ax_o.get_yaxis().set_visible(False)
 
