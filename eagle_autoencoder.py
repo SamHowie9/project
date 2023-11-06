@@ -64,23 +64,6 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
-# gets the residue (image showing difference) between the reconstructed and original image
-# def get_residue(original_image, reconstructed_image):
-#
-#     # store the residue image (as a list initially
-#     residue = []
-#
-#     # loop through each rgb channel
-#     for channel in range(0, 3):
-#
-#         # find the difference between the two images and append them to the other rgb channels
-#         channel_residue = np.subtract(reconstructed_image[channel], original_image[channel]).tolist()
-#         residue.append(channel_residue)
-#
-#     # return residue as a numpy array
-#     return np.array(residue)
-
-
 # create a subset of the validation data to reconstruct (first 10 images)
 images_to_reconstruct = test_images[:10]
 
@@ -91,22 +74,23 @@ n = 10
 reconstructed_images = autoencoder.predict(test_images[:n])
 
 # create figure to hold subplots
-# plt.figure(figsize=(20,4))
 fig, axs = plt.subplots(3, n-1, figsize=(20,8))
 
 # plot each subplot
 for i in range(0, n-1):
 
+    # show the original image (remove axes)
     axs[0,i].imshow(test_images[i])
     axs[0,i].get_xaxis().set_visible(False)
     axs[0,i].get_yaxis().set_visible(False)
 
+    # show the reconstructed image (remove axes)
     axs[1,i].imshow(reconstructed_images[i])
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-    # calculate residue (difference between two images)
-    residue_image = np.subtract(reconstructed_images[i], test_images[i])
+    # calculate residue (difference between two images) and show this
+    residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
     axs[2,i].imshow(residue_image)
     axs[2,i].get_xaxis().set_visible(False)
     axs[2,i].get_yaxis().set_visible(False)
