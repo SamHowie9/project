@@ -106,7 +106,7 @@ for i in range(0, n-1):
     axs[1,i].get_yaxis().set_visible(False)
 
     # calculate residue (difference between two images)
-    residue_image = np.subtract(reconstructed_images, test_images)
+    residue_image = np.subtract(reconstructed_images[i], test_images[i])
     axs[2,i].imshow(residue_image.reshape((256, 256, 3)))
     axs[2,i].get_xaxis().set_visible(False)
     axs[2,i].get_yaxis().set_visible(False)
