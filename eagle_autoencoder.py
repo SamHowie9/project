@@ -112,7 +112,7 @@ image_size = 256
 figure = np.zeros(())
 
 # sample points within [-15, 15] standard deviations
-grid_x = np.linespace(-15, 15, n)
+grid_x = np.linspace(-15, 15, n)
 grid_y = np.linspace(-15, 15, n)
 
 # populate each point on the figure
