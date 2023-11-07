@@ -61,7 +61,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=1, batch_size=1, validation_data=(test_images, test_images))
 
 
 # create a subset of the validation data to reconstruct (first 10 images)
@@ -74,7 +74,7 @@ n = 10
 reconstructed_images = autoencoder.predict(test_images[:n])
 
 # create figure to hold subplots
-fig, axs = plt.subplots(3, n-1, figsize=(20,8))
+fig, axs = plt.subplots(4, n-1, figsize=(20,8))
 
 # plot each subplot
 for i in range(0, n-1):
@@ -95,7 +95,15 @@ for i in range(0, n-1):
     axs[2,i].get_xaxis().set_visible(False)
     axs[2,i].get_yaxis().set_visible(False)
 
+    # add an exponential transform to the residue to show differences more clearly
+    exponential_residue = np.exp(5 * residue_image) - 1
+    axs[3,i].imshow(exponential_residue)
+    axs[3,i].get_xaxis().set_visible(False)
+    axs[3,i].get_yaxis().set_visible(False)
+
+
     print(np.amax(residue_image))
+
 
 
 plt.show()
