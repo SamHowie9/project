@@ -119,7 +119,7 @@ grid_y = np.linspace(-15, 15, n)
 for i, yi in enumerate(grid_x):
     for j, xi in enumerate(grid_y):
 
-        z_sample = np.array([[xi, yi]])
+        z_sample = np.array([xi, yi])
 
         x_decoded = autoencoder.predict(z_sample)
 
