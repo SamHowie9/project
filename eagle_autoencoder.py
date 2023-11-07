@@ -61,50 +61,78 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[:10]
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[:10]
+#
+# # number of images to reconstruct
+# n = 10
+#
+# # reconstruct the images
+# reconstructed_images = autoencoder.predict(test_images[:n])
+#
+# # create figure to hold subplots
+# fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+#
+# # plot each subplot
+# for i in range(0, n-1):
+#
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(test_images[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
+#
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
+#
+#     # calculate residue (difference between two images) and show this
+#     residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+#     axs[2,i].imshow(residue_image)
+#     axs[2,i].get_xaxis().set_visible(False)
+#     axs[2,i].get_yaxis().set_visible(False)
+#
+#     # add an exponential transform to the residue to show differences more clearly
+#     exponential_residue = np.exp(5 * residue_image) - 1
+#     axs[3,i].imshow(exponential_residue)
+#     axs[3,i].get_xaxis().set_visible(False)
+#     axs[3,i].get_yaxis().set_visible(False)
 
-# number of images to reconstruct
-n = 10
 
-# reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[:n])
+# number of galxies on each side
+n = 15
 
-# create figure to hold subplots
-fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+# size of each image
+image_size = 256
 
-# plot each subplot
-for i in range(0, n-1):
+# create the figure to store the images
+figure = np.zeros(())
 
-    # show the original image (remove axes)
-    axs[0,i].imshow(test_images[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
+# sample points within [-15, 15] standard deviations
+grid_x = np.linespace(-15, 15, n)
+grid_y = np.linspace(-15, 15, n)
 
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
+# populate each point on the figure
+for i, yi in enumerate(grid_x):
+    for j, xi in enumerate(grid_y):
 
-    # calculate residue (difference between two images) and show this
-    residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    axs[2,i].imshow(residue_image)
-    axs[2,i].get_xaxis().set_visible(False)
-    axs[2,i].get_yaxis().set_visible(False)
+        z_sample = np.array([[xi, yi]])
 
-    # add an exponential transform to the residue to show differences more clearly
-    exponential_residue = np.exp(5 * residue_image) - 1
-    axs[3,i].imshow(exponential_residue)
-    axs[3,i].get_xaxis().set_visible(False)
-    axs[3,i].get_yaxis().set_visible(False)
+        x_decoded = autoencoder.predict(z_sample)
 
+        image = x_decoded[0].reshape(image_size, image_size, 3)
 
-    print(np.amax(residue_image))
+        # add image to the figure
+        figure[i * image_size: (i+1) * image_size,
+               j * image_size: (j+1) * image_size] = image
+
+plt.figure(figsize=(20,20))
+plt.imshow(figure)
 
 
 
 plt.show()
-plt.savefig("Plots/eagle_reconstruction")
+plt.savefig("Plots/latent_manifold")
