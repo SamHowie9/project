@@ -61,7 +61,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=1, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
 
 
 # create a subset of the validation data to reconstruct (first 10 images)
