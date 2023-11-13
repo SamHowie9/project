@@ -47,6 +47,11 @@ test_images = np.array(train_images[testing_count:])
 # Instantiate a Keras tensor to allow us to build the model
 input_image = keras.Input(shape=(256, 256, 3))
 
+#### normalise each colour band
+r
+g
+b
+
 # layers for the encoder
 encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
 
@@ -58,7 +63,7 @@ decoded = Conv2D(filters=3, kernel_size=3, activation="sigmoid", padding="same")
 # create and compile the autoencoder model
 autoencoder = keras.Model(input_image, decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
-
+autoencoder.summary()
 
 # train the model
 model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
