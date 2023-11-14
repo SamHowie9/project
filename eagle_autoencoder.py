@@ -54,11 +54,16 @@ b
 
 # layers for the encoder
 encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
+encoded = Dense(units=32, activation="relu")
 
 # layers for the decoder (extra one with 1 filter to get back to the correct shape)
+decoded = Dense(units=32, activation="relu")
 decoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
 decoded = Conv2D(filters=3, kernel_size=3, activation="sigmoid", padding="same")(encoded)
 
+# embedding layer
+# how do these featuress compare with actual features
+# garaff paper eagle galaxy structure measurement
 
 # create and compile the autoencoder model
 autoencoder = keras.Model(input_image, decoded)
@@ -66,7 +71,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.summary()
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+# model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 
 # # create a subset of the validation data to reconstruct (first 10 images)
@@ -107,37 +112,37 @@ model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1,
 #     axs[3,i].get_yaxis().set_visible(False)
 
 
-# number of galxies on each side
-n = 15
-
-# size of each image
-image_size = 256
-
-# create the figure to store the images
-figure = np.zeros(())
-
-# sample points within [-15, 15] standard deviations
-grid_x = np.linspace(-15, 15, n)
-grid_y = np.linspace(-15, 15, n)
-
-# populate each point on the figure
-for i, yi in enumerate(grid_x):
-    for j, xi in enumerate(grid_y):
-
-        z_sample = np.array([xi, yi, 3])
-
-        x_decoded = autoencoder.predict(z_sample)
-
-        image = x_decoded[0].reshape(image_size, image_size, 3)
-
-        # add image to the figure
-        figure[i * image_size: (i+1) * image_size,
-               j * image_size: (j+1) * image_size] = image
-
-plt.figure(figsize=(20,20))
-plt.imshow(figure)
-
-
-
-plt.show()
-plt.savefig("Plots/latent_manifold")
+# # number of galxies on each side
+# n = 15
+#
+# # size of each image
+# image_size = 256
+#
+# # create the figure to store the images
+# figure = np.zeros(())
+#
+# # sample points within [-15, 15] standard deviations
+# grid_x = np.linspace(-15, 15, n)
+# grid_y = np.linspace(-15, 15, n)
+#
+# # populate each point on the figure
+# for i, yi in enumerate(grid_x):
+#     for j, xi in enumerate(grid_y):
+#
+#         z_sample = np.array([xi, yi, 3])
+#
+#         x_decoded = autoencoder.predict(z_sample)
+#
+#         image = x_decoded[0].reshape(image_size, image_size, 3)
+#
+#         # add image to the figure
+#         figure[i * image_size: (i+1) * image_size,
+#                j * image_size: (j+1) * image_size] = image
+#
+# plt.figure(figsize=(20,20))
+# plt.imshow(figure)
+#
+#
+#
+# plt.show()
+# plt.savefig("Plots/latent_manifold")
