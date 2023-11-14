@@ -48,9 +48,9 @@ test_images = np.array(train_images[testing_count:])
 input_image = keras.Input(shape=(256, 256, 3))
 
 #### normalise each colour band
-r
-g
-b
+# r
+# g
+# b
 
 # layers for the encoder
 encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
