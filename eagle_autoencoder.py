@@ -47,19 +47,32 @@ test_images = np.array(train_images[testing_count:])
 # Instantiate a Keras tensor to allow us to build the model
 input_image = keras.Input(shape=(256, 256, 3))
 
-#### normalise each colour band
+# #### normalise each colour band
 # r
 # g
 # b
 
 # layers for the encoder
-encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
-encoded = Dense(units=32, activation="relu")
+# layers for the encoder
+x = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
+x = MaxPooling2D(pool_size=2)(x)
+# x = Dense(units=32, activation="relu")(x)
+x = Conv2D(filters=4, kernel_size=3, activation="relu", padding="same")(x)
+x = MaxPooling2D(pool_size=2)(x)
+x = MaxPooling2D(pool_size=2)(x)
 
-# layers for the decoder (extra one with 1 filter to get back to the correct shape)
-decoded = Dense(units=32, activation="relu")
-decoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
-decoded = Conv2D(filters=3, kernel_size=3, activation="sigmoid", padding="same")(encoded)
+x = Flatten()(x)
+encoded = Dense(units=2, activation="relu")(x)
+x = Dense(units=4096, activation="relu")(encoded)
+x = Reshape((32,32,4))(x)
+
+x = UpSampling2D(size=2)(x)
+x = UpSampling2D(size=2)(x)
+x = Conv2D(filters=4, kernel_size=3, activation="relu", padding="same")(x)
+x = UpSampling2D(size=2)(x)
+x = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(x)
+
+decoded = Conv2D(filters=3, kernel_size=3, activation="relu", padding="same")(x)
 
 # embedding layer
 # how do these featuress compare with actual features
@@ -70,9 +83,13 @@ autoencoder = keras.Model(input_image, decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.summary()
 
-# train the model
-# model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
+# train the model
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+
+plt.plot(model_data.history["accuracy"], label="training data")
+plt.plot(model_data.history["val_accuracy"], label="validation data")
+plt.legend()
 
 # # create a subset of the validation data to reconstruct (first 10 images)
 # images_to_reconstruct = test_images[:10]
@@ -141,8 +158,7 @@ autoencoder.summary()
 #
 # plt.figure(figsize=(20,20))
 # plt.imshow(figure)
-#
-#
-#
-# plt.show()
-# plt.savefig("Plots/latent_manifold")
+
+
+plt.show()
+plt.savefig("Plots/dense_autoencoder_loss")
