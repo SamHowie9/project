@@ -87,8 +87,8 @@ autoencoder.summary()
 # train the model
 model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
-plt.plot(model_data.history["accuracy"], label="training data")
-plt.plot(model_data.history["val_accuracy"], label="validation data")
+plt.plot(model_data.history["loss"], label="training data")
+plt.plot(model_data.history["val_loss"], label="validation data")
 plt.legend()
 
 # # create a subset of the validation data to reconstruct (first 10 images)
