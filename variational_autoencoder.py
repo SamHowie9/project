@@ -78,7 +78,7 @@ decoder = keras.Model(input_image, decoded, name="decoder")
 # build the VAE Model with a custom train step
 class VAE(keras.Model):
     def __init__(self, encoder, decoder, **kwargs):
-        super()__init__(**kwargs)
+        super().__init__(**kwargs)
         self.encoder = encoder
         self.decoder = decoder
         self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
