@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.keras.layers import Conv2D, Conv2DTranspose, Dense, Flatten, Reshape
+from tensorflow.keras.layers import Layer, Conv2D, Conv2DTranspose, Dense, Flatten, Reshape
 import tensorflow as tf
 import keras
 import numpy as np
@@ -43,6 +43,17 @@ all_images = get_images()
 # # train_images = np.array(all_images[:testing_count*3])
 # # test_images = np.array(all_images[testing_count:])
 
+
+def Sampling(Layer):
+
+    # Uses (z_mean, z_log_var) to sample z, the vector encoding a digit
+
+    def call(self, inputs):
+        z_mean, z_log_var = inputs
+        batch = tf.shape(z_mean)[0]
+        dim = tf.shape(z_mean)[1]
+        epsilon = tf.random.normal(shape=(batch, dim))
+        return z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
 
 # Define keras tensor for the encoder
