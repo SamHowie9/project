@@ -124,7 +124,7 @@ class VAE(keras.Model):
 # train the VAE
 vae = VAE(encoder, decoder)
 vae.compile(optimiser="adam")
-vae.fit(all_images, epochs=50, batch_size=1)
+vae.fit(all_images, epochs=3, batch_size=1)
 
 
 
@@ -166,6 +166,7 @@ def plot_latent_space(model, n=10):
 
 
 plot_latent_space(vae)
+
 
 plt.show()
 plt.savefig("latent_space")
