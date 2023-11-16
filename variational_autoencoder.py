@@ -1,7 +1,6 @@
 import numpy as np
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose, Dense, Flatten, Reshape
 import tensorflow as tf
-import tensorflow-probability as tfp
 import keras
 import numpy as np
 import pandas as pd
