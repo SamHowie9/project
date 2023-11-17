@@ -71,8 +71,8 @@ print()
 print()
 
 # get the extracted features from the middle layer
-extracted_features = encoder.predict(all_images)
-print(extracted_features.shape)
+extracted_features = encoder.predict(all_images).tolist()
+print(extracted_features)
 
 # print()
 # print()
