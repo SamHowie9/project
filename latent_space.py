@@ -28,8 +28,12 @@ for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
 # convert the list of images into a numpy array
 all_images = np.array(all_images)
 
-image = all_images[0]
-print(image.shape)
+first_image = all_images[0]
+print()
+print()
+print(first_image.shape)
+print()
+print()
 
 
 # Define keras tensor for the encoder
