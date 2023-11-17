@@ -64,5 +64,8 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="
 # # build the decoder
 # decoder = keras.Model(input_image, decoded, name="decoder")
 
-
-# print(encoder(image))
+print()
+print()
+print(encoded(first_image))
+print()
+print()
