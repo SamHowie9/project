@@ -39,9 +39,9 @@ input_image_encoder = keras.Input(shape=(256, 256, 3))                          
 x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image_encoder)    # (128, 128, 32)
 x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                      # (64, 64, 64)
 x = Flatten()(x)                                                                                            # (262144) = (64 * 64 * 64)
-z_mean = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
-z_log_var = Dense(units=2, activation="relu", name="z_log_var")(x)                                          # (2)
-z = Sampling()([z_mean, z_log_var])
+encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
+# z_log_var = Dense(units=2, activation="relu", name="z_log_var")(x)                                          # (2)
+# z = Sampling()([z_mean, z_log_var])
 
 # build the encoder
 encoder = keras.Model(input_image_encoder, [z_mean, z_log_var, z], name="encoder")
