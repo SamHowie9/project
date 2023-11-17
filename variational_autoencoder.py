@@ -1,4 +1,3 @@
-import numpy as np
 from tensorflow.keras.layers import Layer, Conv2D, Conv2DTranspose, Dense, Flatten, Reshape
 import tensorflow as tf
 import keras
