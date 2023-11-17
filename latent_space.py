@@ -56,7 +56,7 @@ encoder = keras.Model(inputs=input_image_encoder, outputs=encoded, name="encoder
 
 # layers for the decoder
 x = Dense(units=32)(encoded)
-x = Dense(unts=256)(x)
+x = Dense(units=256)(x)
 x = Dense(units=2048)
 x = Dense(units=64*64*32, activation="relu")(encoded)                                           # (131072) = (64 * 64 * 32)
 x = Reshape((64, 64, 32))(x)                                                                                # (64, 64, 32)
