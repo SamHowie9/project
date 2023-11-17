@@ -72,7 +72,7 @@ x = Dense(units=64*64*32, activation="relu")(x)                                 
 x = Reshape((64, 64, 32))(x)                                                                                # (64, 64, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (265, 256, 32)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same")(x)                   # (256, 256, 3)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)                   # (256, 256, 3)
 
 
 
