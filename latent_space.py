@@ -67,6 +67,13 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 # train the autoencoder
 autoencoder.fit(all_images, all_images, epochs=3, batch_size=1)
 
+print()
+print()
+
+# get the extracted features from the middle layer
+extracted_features = encoder.predict(all_images)
+print(extracted_features.shape)
+
 # print()
 # print()
 # print(encoded(first_image))
