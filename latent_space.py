@@ -42,9 +42,9 @@ x = Flatten()(x)                                                                
 encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
 # z_log_var = Dense(units=2, activation="relu", name="z_log_var")(x)                                          # (2)
 # z = Sampling()([z_mean, z_log_var])
-
-# build the encoder
-encoder = keras.Model(input_image_encoder, [z_mean, z_log_var, z], name="encoder")
+#
+# # build the encoder
+# encoder = keras.Model(input_image_encoder, [z_mean, z_log_var, z], name="encoder")
 
 
 # Define keras tensor for the decoder
