@@ -44,28 +44,31 @@ x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="sam
 x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                      # (64, 64, 64)
 x = Flatten()(x)                                                                                            # (262144) = (64 * 64 * 64)
 encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
-# z_log_var = Dense(units=2, activation="relu", name="z_log_var")(x)                                          # (2)
-# z = Sampling()([z_mean, z_log_var])
-#
-# # build the encoder
-# encoder = keras.Model(input_image_encoder, [z_mean, z_log_var, z], name="encoder")
 
+# build the encoder
+encoder = keras.Model(inputs=input_image_encoder, outputs=encoded, name="encoder")
 
-# Define keras tensor for the decoder
-input_image_decoder = keras.Input(shape=(2))                                                                # (2)
+# # Define keras tensor for the decoder
+# input_image_decoder = keras.Input(shape=(2))                                                                # (2)
 
 # layers for the decoder
-x = Dense(units=64*64*32, activation="relu")(input_image_decoder)                                           # (131072) = (64 * 64 * 32)
+x = Dense(units=64*64*32, activation="relu")(encoded)                                           # (131072) = (64 * 64 * 32)
 x = Reshape((64, 64, 32))(x)                                                                                # (64, 64, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (265, 256, 32)
 decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same")(x)                   # (256, 256, 3)
-#
-# # build the decoder
-# decoder = keras.Model(input_image, decoded, name="decoder")
 
-print()
-print()
-print(encoded(first_image))
-print()
-print()
+# build the autoencoder
+autoencoder = keras.Model(inputs=input_image_encoder, outputs=decoded)
+
+# compile the autoencoder
+autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
+
+# train the autoencoder
+autoencoder.fit(all_images, all_images, epochs=3, batch_size=1)
+
+# print()
+# print()
+# print(encoded(first_image))
+# print()
+# print()
