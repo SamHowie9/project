@@ -72,7 +72,7 @@ autoencoder = keras.Model(inputs=input_image_encoder, outputs=decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the autoencoder
-autoencoder.fit(all_images, all_images, epochs=50, batch_size=1)
+autoencoder.fit(all_images, all_images, epochs=3, batch_size=1)
 
 print()
 print()
