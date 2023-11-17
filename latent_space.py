@@ -57,8 +57,8 @@ encoder = keras.Model(inputs=input_image_encoder, outputs=encoded, name="encoder
 # layers for the decoder
 x = Dense(units=32)(encoded)
 x = Dense(units=256)(x)
-x = Dense(units=2048)
-x = Dense(units=64*64*32, activation="relu")(encoded)                                           # (131072) = (64 * 64 * 32)
+x = Dense(units=2048)(x)
+x = Dense(units=64*64*32, activation="relu")(x)                                           # (131072) = (64 * 64 * 32)
 x = Reshape((64, 64, 32))(x)                                                                                # (64, 64, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (265, 256, 32)
