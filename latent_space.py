@@ -43,6 +43,9 @@ input_image_encoder = keras.Input(shape=(256, 256, 3))                          
 x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image_encoder)    # (128, 128, 32)
 x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                      # (64, 64, 64)
 x = Flatten()(x)                                                                                            # (262144) = (64 * 64 * 64)
+x = Dense(units=2048)(x)
+x = Dense(units=256)(x)
+x = Dense(units=32)(x)
 encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
 
 # build the encoder
@@ -52,6 +55,9 @@ encoder = keras.Model(inputs=input_image_encoder, outputs=encoded, name="encoder
 # input_image_decoder = keras.Input(shape=(2))                                                                # (2)
 
 # layers for the decoder
+x = Dense(units=32)(encoded)
+x = Dense(unts=256)(x)
+x = Dense(units=2048)
 x = Dense(units=64*64*32, activation="relu")(encoded)                                           # (131072) = (64 * 64 * 32)
 x = Reshape((64, 64, 32))(x)                                                                                # (64, 64, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
@@ -65,7 +71,7 @@ autoencoder = keras.Model(inputs=input_image_encoder, outputs=decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the autoencoder
-autoencoder.fit(all_images, all_images, epochs=3, batch_size=1)
+autoencoder.fit(all_images, all_images, epochs=50, batch_size=1)
 
 print()
 print()
