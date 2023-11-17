@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
+from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 import keras
 import numpy as np
 import pandas as pd
