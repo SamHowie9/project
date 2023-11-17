@@ -58,7 +58,7 @@ x = Dense(units=2048)(x)
 encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
 
 # build the encoder
-encoder = keras.Model(inputs=input_image_encoder, outputs=encoded, name="encoder")
+encoder = keras.Model(inputs=input_image, outputs=encoded, name="encoder")
 
 # # Define keras tensor for the decoder
 # input_image_decoder = keras.Input(shape=(2))                                                                # (2)
