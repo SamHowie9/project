@@ -15,6 +15,9 @@ print()
 print()
 print(np.amax(image))
 print(image.shape)
+print(image[0].shape)
+print(image[1].shape)
+print(image[2].shape)
 
 fig, axs = plt.subplots(1, 4, figsize=(20,4))
 
