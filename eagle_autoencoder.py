@@ -126,7 +126,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.summary()
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=50, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=75, batch_size=1, validation_data=(test_images, test_images))
 
 plt.plot(model_data.history["loss"], label="training data")
 plt.plot(model_data.history["val_loss"], label="validation data")
@@ -169,6 +169,15 @@ for i in range(0, n-1):
     # axs[3,i].imshow(exponential_residue)
     # axs[3,i].get_xaxis().set_visible(False)
     # axs[3,i].get_yaxis().set_visible(False)
+
+
+
+# build the encoder for feature extraction
+encoder = keras.Model(input_image, encoded)
+extracted_features = encoder.predict(train_images)
+
+print(extracted_features.tolist())
+
 
 
 # # number of galxies on each side
