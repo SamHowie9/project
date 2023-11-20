@@ -58,7 +58,7 @@ x = Dense(units=2048)(x)
 encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
 
 # build the encoder
-encoder = keras.Model(inputs=input_image, outputs=encoded, name="encoder")
+# encoder = keras.Model(inputs=input_image, outputs=encoded, name="encoder")
 
 # # Define keras tensor for the decoder
 # input_image_decoder = keras.Input(shape=(2))                                                                # (2)
@@ -88,9 +88,9 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", paddin
 # decoded = Conv2D(filters=3, kernel_size=3, activation="sigmoid", padding="same")(encoded)
 
 
-# create and compile the autoencoder model
-autoencoder = keras.Model(input_image, decoded)
-autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
+# # create and compile the autoencoder model
+# autoencoder = keras.Model(input_image, decoded)
+# autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 
@@ -116,7 +116,7 @@ n = 10
 reconstructed_images = autoencoder.predict(test_images[:n])
 
 # create figure to hold subplots
-fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+fig, axs = plt.subplots(4, n-1, figsize=(20,4))
 
 # plot each subplot
 for i in range(0, n-1):
@@ -131,17 +131,17 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-    # calculate residue (difference between two images) and show this
-    residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    axs[2,i].imshow(residue_image)
-    axs[2,i].get_xaxis().set_visible(False)
-    axs[2,i].get_yaxis().set_visible(False)
-
-    # add an exponential transform to the residue to show differences more clearly
-    exponential_residue = np.exp(5 * residue_image) - 1
-    axs[3,i].imshow(exponential_residue)
-    axs[3,i].get_xaxis().set_visible(False)
-    axs[3,i].get_yaxis().set_visible(False)
+    # # calculate residue (difference between two images) and show this
+    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+    # axs[2,i].imshow(residue_image)
+    # axs[2,i].get_xaxis().set_visible(False)
+    # axs[2,i].get_yaxis().set_visible(False)
+    #
+    # # add an exponential transform to the residue to show differences more clearly
+    # exponential_residue = np.exp(5 * residue_image) - 1
+    # axs[3,i].imshow(exponential_residue)
+    # axs[3,i].get_xaxis().set_visible(False)
+    # axs[3,i].get_yaxis().set_visible(False)
 
 
 # # number of galxies on each side
