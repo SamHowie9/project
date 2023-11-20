@@ -103,7 +103,7 @@ x = Dense(units=32)(x)                                                          
 encoded = Dense(units=2)(x)                                                                               # (2)
 
 # layers for the decoder
-x = Dense(units=32)(decoded)
+x = Dense(units=32)(encoded)
 x = Dense(units=256)(x)
 x = Reshape((8, 8, 4))(x)
 x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)
