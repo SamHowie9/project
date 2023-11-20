@@ -44,41 +44,6 @@ train_images = np.array(train_images[:testing_count*3])
 test_images = np.array(train_images[testing_count:])
 
 
-
-# Define keras tensor for the encoder
-input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
-
-# layers for the encoder
-x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 32)
-x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                      # (64, 64, 16)
-x = Flatten()(x)                                                                                            # (65536) = (64 * 64 * 16)
-# x = Dense(units=16384)(x)
-x = Dense(units=1028)(x)
-# x = Dense(units=256)(x)
-# x = Dense(units=32)(x)
-encoded = Dense(units=32, activation="relu", name="z_mean")(x)                                                # (2)
-
-# build the encoder
-# encoder = keras.Model(inputs=input_image, outputs=encoded, name="encoder")
-
-# # Define keras tensor for the decoder
-# input_image_decoder = keras.Input(shape=(2))                                                                # (2)
-
-# layers for the decoder
-# x = Dense(units=32)(encoded)
-# x = Dense(units=256)(x)
-# x = Dense(units=1028)(encoded)
-x = Dense(units=16384)(encoded)
-# x = Dense(units=64*64*32, activation="relu")(x)                                           # (131072) = (64 * 64 * 32)
-x = Dense(units=64*64*16, activation="relu")(x)                                           # (65536) = (64 * 64 * 16)
-x = Reshape((64, 64, 16))(x)                                                                                # (64, 64, 16)
-x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
-x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (265, 256, 32)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)                   # (256, 256, 3)
-
-
-
-
 # # Instantiate a Keras tensor to allow us to build the model
 # input_image = keras.Input(shape=(256, 256, 3))
 #
@@ -91,88 +56,151 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", paddin
 
 
 
+# # Define keras tensor for the encoder
+# input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
+#
+# # layers for the encoder
+# x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 32)
+# x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                      # (64, 64, 16)
+# x = Flatten()(x)                                                                                            # (65536) = (64 * 64 * 16)
+# # x = Dense(units=16384)(x)
+# x = Dense(units=1028)(x)
+# # x = Dense(units=256)(x)
+# # x = Dense(units=32)(x)
+# encoded = Dense(units=32, activation="relu", name="z_mean")(x)                                                # (2)
+#
+# # build the encoder
+# # encoder = keras.Model(inputs=input_image, outputs=encoded, name="encoder")
+#
+# # # Define keras tensor for the decoder
+# # input_image_decoder = keras.Input(shape=(2))                                                                # (2)
+#
+# # layers for the decoder
+# # x = Dense(units=32)(encoded)
+# # x = Dense(units=256)(x)
+# # x = Dense(units=1028)(encoded)
+# x = Dense(units=16384)(encoded)
+# # x = Dense(units=64*64*32, activation="relu")(x)                                           # (131072) = (64 * 64 * 32)
+# x = Dense(units=64*64*16, activation="relu")(x)                                           # (65536) = (64 * 64 * 16)
+# x = Reshape((64, 64, 16))(x)                                                                                # (64, 64, 16)
+# x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
+# x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (265, 256, 32)
+# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)                   # (256, 256, 3)
+
+
+
+# Define keras tensor for the encoder
+input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
+
+# layers for the encoder
+x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
+x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 128, 32)
+x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
+x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
+x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
+x = Flatten()(x)                                                                                    # (256)
+x = Dense(units=32)(x)                                                                              # (32)
+encoded = Dense(units=2)(x)                                                                               # (2)
+
+# layers for the decoder
+x = Dense(units=32)(decoded)
+x = Dense(units=256)(x)
+x = Reshape((8, 8, 4))(x)
+x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)
+x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)
+x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)
+x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)
+x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)
+
+
+
+
+
+
+
 
 # create and compile the autoencoder model
 autoencoder = keras.Model(input_image, decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.summary()
 
-# train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
-
-plt.plot(model_data.history["loss"], label="training data")
-plt.plot(model_data.history["val_loss"], label="validation data")
-plt.legend()
-
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[:10]
-
-# number of images to reconstruct
-n = 10
-
-# reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[:n])
-
-# create figure to hold subplots
-# fig, axs = plt.subplots(4, n-1, figsize=(20,8))
-fig, axs = plt.subplots(2, n-1, figsize=(20,4))
-
-# plot each subplot
-for i in range(0, n-1):
-
-    # show the original image (remove axes)
-    axs[0,i].imshow(test_images[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
-
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
-
-    # # calculate residue (difference between two images) and show this
-    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    # axs[2,i].imshow(residue_image)
-    # axs[2,i].get_xaxis().set_visible(False)
-    # axs[2,i].get_yaxis().set_visible(False)
-    #
-    # # add an exponential transform to the residue to show differences more clearly
-    # exponential_residue = np.exp(5 * residue_image) - 1
-    # axs[3,i].imshow(exponential_residue)
-    # axs[3,i].get_xaxis().set_visible(False)
-    # axs[3,i].get_yaxis().set_visible(False)
-
-
-# # number of galxies on each side
-# n = 15
+# # train the model
+# model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 #
-# # size of each image
-# image_size = 256
+# plt.plot(model_data.history["loss"], label="training data")
+# plt.plot(model_data.history["val_loss"], label="validation data")
+# plt.legend()
 #
-# # create the figure to store the images
-# figure = np.zeros(())
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[:10]
 #
-# # sample points within [-15, 15] standard deviations
-# grid_x = np.linspace(-15, 15, n)
-# grid_y = np.linspace(-15, 15, n)
+# # number of images to reconstruct
+# n = 10
 #
-# # populate each point on the figure
-# for i, yi in enumerate(grid_x):
-#     for j, xi in enumerate(grid_y):
+# # reconstruct the images
+# reconstructed_images = autoencoder.predict(test_images[:n])
 #
-#         z_sample = np.array([xi, yi, 3])
+# # create figure to hold subplots
+# # fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+# fig, axs = plt.subplots(2, n-1, figsize=(20,4))
 #
-#         x_decoded = autoencoder.predict(z_sample)
+# # plot each subplot
+# for i in range(0, n-1):
 #
-#         image = x_decoded[0].reshape(image_size, image_size, 3)
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(test_images[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
 #
-#         # add image to the figure
-#         figure[i * image_size: (i+1) * image_size,
-#                j * image_size: (j+1) * image_size] = image
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
 #
-# plt.figure(figsize=(20,20))
-# plt.imshow(figure)
-
-
-plt.show()
-plt.savefig("Plots/dense_reconstruction")
+#     # # calculate residue (difference between two images) and show this
+#     # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+#     # axs[2,i].imshow(residue_image)
+#     # axs[2,i].get_xaxis().set_visible(False)
+#     # axs[2,i].get_yaxis().set_visible(False)
+#     #
+#     # # add an exponential transform to the residue to show differences more clearly
+#     # exponential_residue = np.exp(5 * residue_image) - 1
+#     # axs[3,i].imshow(exponential_residue)
+#     # axs[3,i].get_xaxis().set_visible(False)
+#     # axs[3,i].get_yaxis().set_visible(False)
+#
+#
+# # # number of galxies on each side
+# # n = 15
+# #
+# # # size of each image
+# # image_size = 256
+# #
+# # # create the figure to store the images
+# # figure = np.zeros(())
+# #
+# # # sample points within [-15, 15] standard deviations
+# # grid_x = np.linspace(-15, 15, n)
+# # grid_y = np.linspace(-15, 15, n)
+# #
+# # # populate each point on the figure
+# # for i, yi in enumerate(grid_x):
+# #     for j, xi in enumerate(grid_y):
+# #
+# #         z_sample = np.array([xi, yi, 3])
+# #
+# #         x_decoded = autoencoder.predict(z_sample)
+# #
+# #         image = x_decoded[0].reshape(image_size, image_size, 3)
+# #
+# #         # add image to the figure
+# #         figure[i * image_size: (i+1) * image_size,
+# #                j * image_size: (j+1) * image_size] = image
+# #
+# # plt.figure(figsize=(20,20))
+# # plt.imshow(figure)
+#
+#
+# plt.show()
+# plt.savefig("Plots/dense_reconstruction")
