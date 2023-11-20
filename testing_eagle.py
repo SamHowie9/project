@@ -4,8 +4,17 @@ import numpy as np
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/galedge_10.png")
 
-print(image)
+print(image[0])
+print()
+print()
+print(image[1])
+print()
+print()
+print(image[2])
+print()
+print()
 print(np.amax(image))
+print(image.shape)
 
 fig, axs = plt.subplots(1, 4, figsize=(20,4))
 
