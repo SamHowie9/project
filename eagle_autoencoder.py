@@ -45,52 +45,48 @@ test_images = np.array(train_images[testing_count:])
 
 
 
-# Define keras tensor for the encoder
-input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
-
-# layers for the encoder
-x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 32)
-x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                      # (64, 64, 64)
-x = Flatten()(x)                                                                                            # (262144) = (64 * 64 * 64)
-x = Dense(units=2048)(x)
-# x = Dense(units=256)(x)
-# x = Dense(units=32)(x)
-encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
-
-# build the encoder
-# encoder = keras.Model(inputs=input_image, outputs=encoded, name="encoder")
-
-# # Define keras tensor for the decoder
-# input_image_decoder = keras.Input(shape=(2))                                                                # (2)
-
-# layers for the decoder
-# x = Dense(units=32)(encoded)
-# x = Dense(units=256)(x)
-x = Dense(units=2048)(encoded)
-# x = Dense(units=64*64*32, activation="relu")(x)                                           # (131072) = (64 * 64 * 32)
-x = Dense(units=64*64*32, activation="relu")(x)                                           # (131072) = (64 * 64 * 32)
-x = Reshape((64, 64, 32))(x)                                                                                # (64, 64, 32)
-x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
-x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (265, 256, 32)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)                   # (256, 256, 3)
-
-
-
-
-# # Instantiate a Keras tensor to allow us to build the model
-# input_image = keras.Input(shape=(256, 256, 3))
+# # Define keras tensor for the encoder
+# input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
 #
 # # layers for the encoder
-# encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
+# x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 32)
+# x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                      # (64, 64, 64)
+# x = Flatten()(x)                                                                                            # (262144) = (64 * 64 * 64)
+# x = Dense(units=2048)(x)
+# # x = Dense(units=256)(x)
+# # x = Dense(units=32)(x)
+# encoded = Dense(units=2, activation="relu", name="z_mean")(x)                                                # (2)
 #
-# # layers for the decoder (extra one with 1 filter to get back to the correct shape)
-# decoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
-# decoded = Conv2D(filters=3, kernel_size=3, activation="sigmoid", padding="same")(encoded)
+# # build the encoder
+# # encoder = keras.Model(inputs=input_image, outputs=encoded, name="encoder")
+#
+# # # Define keras tensor for the decoder
+# # input_image_decoder = keras.Input(shape=(2))                                                                # (2)
+#
+# # layers for the decoder
+# # x = Dense(units=32)(encoded)
+# # x = Dense(units=256)(x)
+# x = Dense(units=2048)(encoded)
+# # x = Dense(units=64*64*32, activation="relu")(x)                                           # (131072) = (64 * 64 * 32)
+# x = Dense(units=64*64*32, activation="relu")(x)                                           # (131072) = (64 * 64 * 32)
+# x = Reshape((64, 64, 32))(x)                                                                                # (64, 64, 32)
+# x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (128, 128, 64)
+# x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)             # (265, 256, 32)
+# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)                   # (256, 256, 3)
 
 
-# # create and compile the autoencoder model
-# autoencoder = keras.Model(input_image, decoded)
-# autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
+
+
+# Instantiate a Keras tensor to allow us to build the model
+input_image = keras.Input(shape=(256, 256, 3))
+
+# layers for the encoder
+encoded = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(input_image)
+
+# layers for the decoder (extra one with 1 filter to get back to the correct shape)
+x = Conv2D(filters=8, kernel_size=3, activation="relu", padding="same")(encoded)
+decoded = Conv2D(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)
+
 
 
 
@@ -116,7 +112,8 @@ n = 10
 reconstructed_images = autoencoder.predict(test_images[:n])
 
 # create figure to hold subplots
-fig, axs = plt.subplots(4, n-1, figsize=(20,4))
+# fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+fig, axs = plt.subplots(2, n-1, figsize=(20,4))
 
 # plot each subplot
 for i in range(0, n-1):
