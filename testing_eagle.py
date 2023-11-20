@@ -9,21 +9,21 @@ print(np.amax(image))
 
 fig, axs = plt.subplots(1, 4, figsize=(20,4))
 
-axs[0,0].imshow(image)
-axs[0,0].get_xaxis().set_visible(False)
-axs[0,0].get_yaxis().set_visible(False)
+axs[0].imshow(image)
+axs[0].get_xaxis().set_visible(False)
+axs[0].get_yaxis().set_visible(False)
 
-axs[0,1].imshow(image[0])
-axs[0,1].get_xaxis().set_visible(False)
-axs[0,1].get_yaxis().set_visible(False)
+axs[1].imshow(image[0])
+axs[1].get_xaxis().set_visible(False)
+axs[1].get_yaxis().set_visible(False)
 
-axs[0,2].imshow(image[1])
-axs[0,2].get_xaxis().set_visible(False)
-axs[0,2].get_yaxis().set_visible(False)
+axs[2].imshow(image[1])
+axs[2].get_xaxis().set_visible(False)
+axs[2].get_yaxis().set_visible(False)
 
-axs[0,3].imshow(image[2])
-axs[0,3].get_xaxis().set_visible(False)
-axs[0,3].get_yaxis().set_visible(False)
+axs[3].imshow(image[2])
+axs[3].get_xaxis().set_visible(False)
+axs[3].get_yaxis().set_visible(False)
 
 plt.imshow(image)
 
