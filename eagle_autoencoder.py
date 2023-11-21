@@ -115,11 +115,6 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", paddin
 
 
 
-a
-a
-a
-
-
 
 # create and compile the autoencoder model
 autoencoder = keras.Model(input_image, decoded)
