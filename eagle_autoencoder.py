@@ -180,7 +180,7 @@ print(extracted_features.tolist())
 
 fig, axs = plt.subplots(1, 2, figsize=(20, 10))
 
-asx[0].hist(extracted_features[0])
+axs[0].hist(extracted_features[0])
 axs[1].hist(extracted_features[1])
 
 
