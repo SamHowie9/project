@@ -7,6 +7,11 @@ import os
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
+
+plt.scatter()
+
+
+
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 # select to use GPU 0 on cosma
