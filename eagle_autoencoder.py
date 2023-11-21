@@ -115,8 +115,9 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", paddin
 
 
 
-
-
+a
+a
+a
 
 
 
@@ -126,7 +127,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.summary()
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 plt.plot(model_data.history["loss"], label="training data")
 plt.plot(model_data.history["val_loss"], label="validation data")
