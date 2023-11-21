@@ -176,12 +176,21 @@ reconstructed_images = autoencoder.predict(test_images[:n])
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
 
-print(extracted_features.tolist())
+# lists to store the values of each image for each extracted feature
+f1 = []
+f2 = []
+
+# loop through each pair of values for each image and add the values to the individual lists
+for i in range(extracted_features.shape[0]):
+    f1.append(A[i][0])
+    f2.append(A[i][1])
+
+# print(extracted_features.tolist())
 
 fig, axs = plt.subplots(1, 2, figsize=(20, 10))
 
-axs[0].hist(extracted_features[0])
-axs[1].hist(extracted_features[1])
+axs[0].hist(f1)
+axs[1].hist(f2)
 
 
 
