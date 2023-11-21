@@ -126,7 +126,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.summary()
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=100, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 plt.plot(model_data.history["loss"], label="training data")
 plt.plot(model_data.history["val_loss"], label="validation data")
@@ -182,8 +182,8 @@ f2 = []
 
 # loop through each pair of values for each image and add the values to the individual lists
 for i in range(extracted_features.shape[0]):
-    f1.append(A[i][0])
-    f2.append(A[i][1])
+    f1.append(extracted_features[i][0])
+    f2.append(extracted_features[i][1])
 
 # print(extracted_features.tolist())
 
