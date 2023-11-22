@@ -28,6 +28,13 @@ for i in range(A.shape[0]):
 print(f1)
 print(f2)
 
+# linear regression via least squares
+b, a = np.polyfit(f1, f2, deg=1)
+
+# Create sequence of 100 numbers from the minimum feature 1 value to the maximum feature 1 value
+xseq = np.linspace(np.min(f1), np.max(f1), num=100)
+
+
 fig, axs = plt.subplots(1, 3, figsize=(22, 5))
 
 axs[0].hist(f1, bins=40)
@@ -37,6 +44,7 @@ axs[1].hist(f2, bins=40)
 axs[1].set_title("Feature 2")
 
 axs[2].scatter(f1, f2, s=5)
+axs[2].plot(xseq, a + b * xseq, color="k", lw=2)
 axs[2].set_title("Feature 2 Against Feature 1")
 axs[2].set_ylabel("Feature 2")
 axs[2].set_xlabel("Feature 1")
