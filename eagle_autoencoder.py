@@ -222,4 +222,4 @@ axs[1].hist(f2, bins=20)
 
 
 plt.show()
-plt.savefig("Plots/dense_reconstruction")
+plt.savefig("Plots/2_feature_historgram")
