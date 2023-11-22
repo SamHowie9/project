@@ -137,7 +137,7 @@ n = 10
 # reconstruct the images
 reconstructed_images = autoencoder.predict(test_images[:n])
 
-create figure to hold subplots
+# create figure to hold subplots
 fig, axs = plt.subplots(4, n-1, figsize=(20,8))
 fig, axs = plt.subplots(2, n-1, figsize=(20,4))
 
