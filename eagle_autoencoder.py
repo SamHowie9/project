@@ -188,11 +188,11 @@ for i in range(extracted_features.shape[0]):
 fig, axs = plt.subplots(1, 3, figsize=(25, 10))
 
 axs[0].hist(f1, bins=40)
-axs[0].set_text("Feature 1")
+axs[0].set_title("Feature 1")
 axs[1].hist(f2, bins=40)
-axs[1].set_text("Feature 2")
+axs[1].set_title("Feature 2")
 axs[2].scatter(f1, f2)
-axs[2].set_text("Feature 2 Against Feature 1")
+axs[2].set_title("Feature 2 Against Feature 1")
 axs[2].set_ylabel("Feature 2")
 axs[2].set_xlabel("Feature 1")
 
