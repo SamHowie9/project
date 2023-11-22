@@ -41,8 +41,9 @@ axs[2].set_title("Feature 2 Against Feature 1")
 axs[2].set_ylabel("Feature 2")
 axs[2].set_xlabel("Feature 1")
 
-plt.show()
+
 plt.savefig("Plots/2_feature_historgram")
+plt.show()
 
 
 
