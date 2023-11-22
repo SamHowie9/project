@@ -172,7 +172,7 @@ model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
 
-print(extracted_features)
+print(extracted_features.tolist())
 
 # lists to store the values of each image for each extracted feature
 f1 = []
@@ -185,10 +185,16 @@ for i in range(extracted_features.shape[0]):
 
 # print(extracted_features.tolist())
 
-fig, axs = plt.subplots(1, 2, figsize=(20, 10))
+fig, axs = plt.subplots(1, 3, figsize=(25, 10))
 
-axs[0].hist(f1, bins=20)
-axs[1].hist(f2, bins=20)
+axs[0].hist(f1, bins=40)
+axs[0].set_text("Feature 1")
+axs[1].hist(f2, bins=40)
+axs[1].set_text("Feature 2")
+axs[2].scatter(f1, f2)
+axs[2].set_text("Feature 2 Against Feature 1")
+axs[2].set_ylabel("Feature 2")
+axs[2].set_xlabel("Feature 1")
 
 
 
