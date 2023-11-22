@@ -124,69 +124,69 @@ autoencoder.summary()
 # train the model
 model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
-plt.plot(model_data.history["loss"], label="training data")
-plt.plot(model_data.history["val_loss"], label="validation data")
-plt.legend()
+# plt.plot(model_data.history["loss"], label="training data")
+# plt.plot(model_data.history["val_loss"], label="validation data")
+# plt.legend()
 
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[:10]
-
-# number of images to reconstruct
-n = 10
-
-# reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[:n])
-
-# create figure to hold subplots
-fig, axs = plt.subplots(4, n-1, figsize=(20,8))
-fig, axs = plt.subplots(2, n-1, figsize=(20,4))
-
-# plot each subplot
-for i in range(0, n-1):
-
-    # show the original image (remove axes)
-    axs[0,i].imshow(test_images[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
-
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
-
-    # # calculate residue (difference between two images) and show this
-    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    # axs[2,i].imshow(residue_image)
-    # axs[2,i].get_xaxis().set_visible(False)
-    # axs[2,i].get_yaxis().set_visible(False)
-    #
-    # # add an exponential transform to the residue to show differences more clearly
-    # exponential_residue = np.exp(5 * residue_image) - 1
-    # axs[3,i].imshow(exponential_residue)
-    # axs[3,i].get_xaxis().set_visible(False)
-    # axs[3,i].get_yaxis().set_visible(False)
-
-
-
-# # build the encoder for feature extraction
-# encoder = keras.Model(input_image, encoded)
-# extracted_features = encoder.predict(train_images)
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[:10]
 #
-# # lists to store the values of each image for each extracted feature
-# f1 = []
-# f2 = []
+# # number of images to reconstruct
+# n = 10
 #
-# # loop through each pair of values for each image and add the values to the individual lists
-# for i in range(extracted_features.shape[0]):
-#     f1.append(extracted_features[i][0])
-#     f2.append(extracted_features[i][1])
+# # reconstruct the images
+# reconstructed_images = autoencoder.predict(test_images[:n])
 #
-# # print(extracted_features.tolist())
+# # create figure to hold subplots
+# fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+# fig, axs = plt.subplots(2, n-1, figsize=(20,4))
 #
-# fig, axs = plt.subplots(1, 2, figsize=(20, 10))
+# # plot each subplot
+# for i in range(0, n-1):
 #
-# axs[0].hist(f1)
-# axs[1].hist(f2)
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(test_images[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
+#
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
+#
+#     # # calculate residue (difference between two images) and show this
+#     # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+#     # axs[2,i].imshow(residue_image)
+#     # axs[2,i].get_xaxis().set_visible(False)
+#     # axs[2,i].get_yaxis().set_visible(False)
+#     #
+#     # # add an exponential transform to the residue to show differences more clearly
+#     # exponential_residue = np.exp(5 * residue_image) - 1
+#     # axs[3,i].imshow(exponential_residue)
+#     # axs[3,i].get_xaxis().set_visible(False)
+#     # axs[3,i].get_yaxis().set_visible(False)
+
+
+
+# build the encoder for feature extraction
+encoder = keras.Model(input_image, encoded)
+extracted_features = encoder.predict(train_images)
+
+# lists to store the values of each image for each extracted feature
+f1 = []
+f2 = []
+
+# loop through each pair of values for each image and add the values to the individual lists
+for i in range(extracted_features.shape[0]):
+    f1.append(extracted_features[i][0])
+    f2.append(extracted_features[i][1])
+
+# print(extracted_features.tolist())
+
+fig, axs = plt.subplots(1, 2, figsize=(20, 10))
+
+axs[0].hist(f1, bins=20)
+axs[1].hist(f2, bins=20)
 
 
 
