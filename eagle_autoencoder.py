@@ -172,6 +172,8 @@ model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
 
+print(extracted_features)
+
 # lists to store the values of each image for each extracted feature
 f1 = []
 f2 = []
