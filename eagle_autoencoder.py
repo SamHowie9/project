@@ -131,113 +131,115 @@ model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=
 # plt.plot(model_data.history["val_loss"], label="validation data")
 # plt.legend()
 
-# # create a subset of the validation data to reconstruct (first 10 images)
-# images_to_reconstruct = test_images[:10]
-#
-# # number of images to reconstruct
-# n = 10
-#
-# # reconstruct the images
-# reconstructed_images = autoencoder.predict(test_images[:n])
-#
-# # create figure to hold subplots
+
+
+# create a subset of the validation data to reconstruct (first 10 images)
+images_to_reconstruct = test_images[:10]
+
+# number of images to reconstruct
+n = 10
+
+# reconstruct the images
+reconstructed_images = autoencoder.predict(test_images[:n])
+
+# create figure to hold subplots
 # fig, axs = plt.subplots(4, n-1, figsize=(20,8))
-# fig, axs = plt.subplots(2, n-1, figsize=(20,4))
+fig, axs = plt.subplots(2, n-1, figsize=(20,4))
+
+# plot each subplot
+for i in range(0, n-1):
+
+    # show the original image (remove axes)
+    axs[0,i].imshow(test_images[i])
+    axs[0,i].get_xaxis().set_visible(False)
+    axs[0,i].get_yaxis().set_visible(False)
+
+    # show the reconstructed image (remove axes)
+    axs[1,i].imshow(reconstructed_images[i])
+    axs[1,i].get_xaxis().set_visible(False)
+    axs[1,i].get_yaxis().set_visible(False)
+
+    # # calculate residue (difference between two images) and show this
+    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+    # axs[2,i].imshow(residue_image)
+    # axs[2,i].get_xaxis().set_visible(False)
+    # axs[2,i].get_yaxis().set_visible(False)
+    #
+    # # add an exponential transform to the residue to show differences more clearly
+    # exponential_residue = np.exp(5 * residue_image) - 1
+    # axs[3,i].imshow(exponential_residue)
+    # axs[3,i].get_xaxis().set_visible(False)
+    # axs[3,i].get_yaxis().set_visible(False)
+
+
+
+# # build the encoder for feature extraction
+# encoder = keras.Model(input_image, encoded)
+# extracted_features = encoder.predict(train_images)
 #
-# # plot each subplot
-# for i in range(0, n-1):
 #
-#     # show the original image (remove axes)
-#     axs[0,i].imshow(test_images[i])
-#     axs[0,i].get_xaxis().set_visible(False)
-#     axs[0,i].get_yaxis().set_visible(False)
+# print(extracted_features.tolist())
 #
-#     # show the reconstructed image (remove axes)
-#     axs[1,i].imshow(reconstructed_images[i])
-#     axs[1,i].get_xaxis().set_visible(False)
-#     axs[1,i].get_yaxis().set_visible(False)
+# # lists to store the values of each image for each extracted feature
+# f1 = []
+# f2 = []
+# f3 = []
 #
-#     # # calculate residue (difference between two images) and show this
-#     # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-#     # axs[2,i].imshow(residue_image)
-#     # axs[2,i].get_xaxis().set_visible(False)
-#     # axs[2,i].get_yaxis().set_visible(False)
-#     #
-#     # # add an exponential transform to the residue to show differences more clearly
-#     # exponential_residue = np.exp(5 * residue_image) - 1
-#     # axs[3,i].imshow(exponential_residue)
-#     # axs[3,i].get_xaxis().set_visible(False)
-#     # axs[3,i].get_yaxis().set_visible(False)
-
-
-
-# build the encoder for feature extraction
-encoder = keras.Model(input_image, encoded)
-extracted_features = encoder.predict(train_images)
-
-
-print(extracted_features.tolist())
-
-# lists to store the values of each image for each extracted feature
-f1 = []
-f2 = []
-f3 = []
-
-# loop through each pair of values for each image and add the values to the individual lists
-for i in range(extracted_features.shape[0]):
-    f1.append(extracted_features[i][0])
-    f2.append(extracted_features[i][1])
-    f3.append(extracted_features[i][2])
-
-
-
-# linear regression via least squares between each of the 3 features
-b_12, a_12 = np.polyfit(f1, f2, deg=1)
-b_13, a_13 = np.polyfit(f1, f3, deg=1)
-b_23, a_23 = np.polyfit(f2, f3, deg=1)
-
-
-# Create sequence of 100 numbers from the minimum feature 1 value to the maximum feature 1 value (for regression line)
-sequence_f1 = np.linspace(np.min(f1), np.max(f1), num=100)
-sequence_f2 = np.linspace(np.min(f2), np.max(f2), num=100)
-
-
-
-# create the figure for the plot
-fig, axs = plt.subplots(2, 3, figsize=(25, 10))
-
-# pplot feature 1
-axs[0][0].hist(f1, bins=40)
-axs[0][0].set_title("Feature 1")
-
-# plot feature 2
-axs[0][1].hist(f2, bins=40)
-axs[0][1].set_title("Feature 2")
-
-# plot feature 3
-axs[0][2].hist(f3, bins=40)
-axs[0][2].set_title("Feature 3")
-
-# correlation between 1 and 2
-axs[1][0].scatter(f1, f2, s=5)
-axs[1][0].plot(sequence_f1, a_12 + b_12 * sequence_f1, color="k", lw=2)
-axs[1][0].set_title("Feature 2 Against Feature 1")
-axs[1][0].set_ylabel("Feature 2")
-axs[1][0].set_xlabel("Feature 1")
-
-# correlation between 1 and 3
-axs[1][1].scatter(f1, f3, s=5)
-axs[1][1].plot(sequence_f1, a_13 + b_13 * sequence_f1, color="k", lw=2)
-axs[1][1].set_title("Feature 3 Against Feature 1")
-axs[1][1].set_ylabel("Feature 3")
-axs[1][1].set_xlabel("Feature 1")
-
-# correlation between 2 and 3
-axs[1][2].scatter(f2, f3, s=5)
-axs[1][2].plot(sequence_f2, a_23 + b_23 * sequence_f2, color="k", lw=2)
-axs[1][2].set_title("Feature 3 Against Feature 2")
-axs[1][2].set_ylabel("Feature 3")
-axs[1][2].set_xlabel("Feature 2")
+# # loop through each pair of values for each image and add the values to the individual lists
+# for i in range(extracted_features.shape[0]):
+#     f1.append(extracted_features[i][0])
+#     f2.append(extracted_features[i][1])
+#     f3.append(extracted_features[i][2])
+#
+#
+#
+# # linear regression via least squares between each of the 3 features
+# b_12, a_12 = np.polyfit(f1, f2, deg=1)
+# b_13, a_13 = np.polyfit(f1, f3, deg=1)
+# b_23, a_23 = np.polyfit(f2, f3, deg=1)
+#
+#
+# # Create sequence of 100 numbers from the minimum feature 1 value to the maximum feature 1 value (for regression line)
+# sequence_f1 = np.linspace(np.min(f1), np.max(f1), num=100)
+# sequence_f2 = np.linspace(np.min(f2), np.max(f2), num=100)
+#
+#
+#
+# # create the figure for the plot
+# fig, axs = plt.subplots(2, 3, figsize=(25, 10))
+#
+# # pplot feature 1
+# axs[0][0].hist(f1, bins=40)
+# axs[0][0].set_title("Feature 1")
+#
+# # plot feature 2
+# axs[0][1].hist(f2, bins=40)
+# axs[0][1].set_title("Feature 2")
+#
+# # plot feature 3
+# axs[0][2].hist(f3, bins=40)
+# axs[0][2].set_title("Feature 3")
+#
+# # correlation between 1 and 2
+# axs[1][0].scatter(f1, f2, s=5)
+# axs[1][0].plot(sequence_f1, a_12 + b_12 * sequence_f1, color="k", lw=2)
+# axs[1][0].set_title("Feature 2 Against Feature 1")
+# axs[1][0].set_ylabel("Feature 2")
+# axs[1][0].set_xlabel("Feature 1")
+#
+# # correlation between 1 and 3
+# axs[1][1].scatter(f1, f3, s=5)
+# axs[1][1].plot(sequence_f1, a_13 + b_13 * sequence_f1, color="k", lw=2)
+# axs[1][1].set_title("Feature 3 Against Feature 1")
+# axs[1][1].set_ylabel("Feature 3")
+# axs[1][1].set_xlabel("Feature 1")
+#
+# # correlation between 2 and 3
+# axs[1][2].scatter(f2, f3, s=5)
+# axs[1][2].plot(sequence_f2, a_23 + b_23 * sequence_f2, color="k", lw=2)
+# axs[1][2].set_title("Feature 3 Against Feature 2")
+# axs[1][2].set_ylabel("Feature 3")
+# axs[1][2].set_xlabel("Feature 2")
 
 
 
@@ -272,5 +274,5 @@ axs[1][2].set_xlabel("Feature 2")
 # plt.imshow(figure)
 
 
-plt.savefig("Plots/3_feature_historgram")
+plt.savefig("Plots/3_feature_reconstruction")
 plt.show()
