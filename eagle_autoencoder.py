@@ -114,8 +114,6 @@ x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", pad
 decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
 
 
-
-
 # create and compile the autoencoder model
 autoencoder = keras.Model(input_image, decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
@@ -125,19 +123,7 @@ autoencoder.summary()
 model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 
-# build the encoder for feature extraction
-encoder = keras.Model(input_image, encoded)
-extracted_features = encoder.predict(train_images)
 
-
-# # input shape for the decoder
-# decoder_input_image = keras.Input(shape=(2))
-#
-# # build the decoder
-# decoder = keras.Model(decoder_input_image, decoded)
-# decoder.compile(optimizer="adam", loss="binary_crossentropy")
-# decoder.summry()
-#
 # reconstructed_images = decoder.predict(extracted_features)
 
 
@@ -188,17 +174,6 @@ extracted_features = encoder.predict(train_images)
 # build the encoder for feature extraction
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
-
-
-# input shape for the decoder
-decoder_input_image = keras.Input(shape=(2))
-
-# create the decoder
-decoder = keras.Model(decoder_input_image, decoded)
-decoder.compile(optimizer="adam", loss="binary_crossentropy")
-decoder.summry()
-
-reconstructed_images = decoder.predict(extracted_features)
 
 
 print(extracted_features.tolist())
