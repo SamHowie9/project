@@ -124,6 +124,23 @@ autoencoder.summary()
 # train the model
 model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
+
+# build the encoder for feature extraction
+encoder = keras.Model(input_image, encoded)
+extracted_features = encoder.predict(train_images)
+
+
+# # input shape for the decoder
+# decoder_input_image = keras.Input(shape=(2))
+#
+# # build the decoder
+# decoder = keras.Model(decoder_input_image, decoded)
+# decoder.compile(optimizer="adam", loss="binary_crossentropy")
+# decoder.summry()
+#
+# reconstructed_images = decoder.predict(extracted_features)
+
+
 # plt.plot(model_data.history["loss"], label="training data")
 # plt.plot(model_data.history["val_loss"], label="validation data")
 # plt.legend()
@@ -172,6 +189,18 @@ model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
 
+
+# input shape for the decoder
+decoder_input_image = keras.Input(shape=(2))
+
+# create the decoder
+decoder = keras.Model(decoder_input_image, decoded)
+decoder.compile(optimizer="adam", loss="binary_crossentropy")
+decoder.summry()
+
+reconstructed_images = decoder.predict(extracted_features)
+
+
 print(extracted_features.tolist())
 
 # lists to store the values of each image for each extracted feature
@@ -211,8 +240,8 @@ axs[0][1].hist(f2, bins=40)
 axs[0][1].set_title("Feature 2")
 
 # plot feature 3
-axs[0][1].hist(f3, bins=40)
-axs[0][1].set_title("Feature 3")
+axs[0][2].hist(f3, bins=40)
+axs[0][2].set_title("Feature 3")
 
 # correlation between 1 and 2
 axs[1][0].scatter(f1, f2, s=5)
