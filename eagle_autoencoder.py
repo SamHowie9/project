@@ -150,7 +150,7 @@ n = 15
 image_size = 256
 
 # create the figure to store the images
-figure = np.zeros(())
+figure = np.zeros((image_size * n, image_size * n))
 
 # sample points within [-15, 15] standard deviations
 grid_x = np.linspace(-8, 8, n)
@@ -170,7 +170,7 @@ for i, yi in enumerate(grid_x):
         figure[i * image_size: (i+1) * image_size,
                j * image_size: (j+1) * image_size] = image
 
-plt.figure(figsize=(20,20))
+plt.figure(figsize=(20, 20))
 plt.imshow(figure)
 
 
