@@ -100,7 +100,7 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=3)(x)                                                                         # (2)
+encoded = Dense(units=2)(x)                                                                         # (2)
 
 # layers for the decoder
 x = Dense(units=32)(encoded)                                                                        # (32)
@@ -120,56 +120,98 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.summary()
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 
 
 # reconstructed_images = decoder.predict(extracted_features)
 
+# layers for decoder model
+input_image_decoder = keras.Input(shape=(2))
 
-# plt.plot(model_data.history["loss"], label="training data")
-# plt.plot(model_data.history["val_loss"], label="validation data")
-# plt.legend()
+# layers for the decoder
+x = Dense(units=32)(input_image)                                                                        # (32)
+x = Dense(units=256)(x)                                                                             # (256)
+x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
+x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
+x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
+x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
+x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
+x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
+
+
+decoder = keras.Model(input_image_decoder, decoded)
+
+# number of galxies on each side
+n = 15
+
+# size of each image
+image_size = 256
+
+# create the figure to store the images
+figure = np.zeros(())
+
+# sample points within [-15, 15] standard deviations
+grid_x = np.linspace(-8, 8, n)
+grid_y = np.linspace(-8, 8, n)
+
+# populate each point on the figure
+for i, yi in enumerate(grid_x):
+    for j, xi in enumerate(grid_y):
+
+        z_sample = np.array([xi, yi, 3])
+
+        x_decoded = decoder.predict(z_sample)
+
+        image = x_decoded[0].reshape(image_size, image_size, 3)
+
+        # add image to the figure
+        figure[i * image_size: (i+1) * image_size,
+               j * image_size: (j+1) * image_size] = image
+
+plt.figure(figsize=(20,20))
+plt.imshow(figure)
 
 
 
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[:10]
-
-# number of images to reconstruct
-n = 10
-
-# reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[:n])
-
-# create figure to hold subplots
-# fig, axs = plt.subplots(4, n-1, figsize=(20,8))
-fig, axs = plt.subplots(2, n-1, figsize=(20,4))
-
-# plot each subplot
-for i in range(0, n-1):
-
-    # show the original image (remove axes)
-    axs[0,i].imshow(test_images[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
-
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
-
-    # # calculate residue (difference between two images) and show this
-    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    # axs[2,i].imshow(residue_image)
-    # axs[2,i].get_xaxis().set_visible(False)
-    # axs[2,i].get_yaxis().set_visible(False)
-    #
-    # # add an exponential transform to the residue to show differences more clearly
-    # exponential_residue = np.exp(5 * residue_image) - 1
-    # axs[3,i].imshow(exponential_residue)
-    # axs[3,i].get_xaxis().set_visible(False)
-    # axs[3,i].get_yaxis().set_visible(False)
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[:10]
+#
+# # number of images to reconstruct
+# n = 10
+#
+# # reconstruct the images
+# reconstructed_images = autoencoder.predict(test_images[:n])
+#
+# # create figure to hold subplots
+# # fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+# fig, axs = plt.subplots(2, n-1, figsize=(20,4))
+#
+# # plot each subplot
+# for i in range(0, n-1):
+#
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(test_images[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
+#
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
+#
+#     # # calculate residue (difference between two images) and show this
+#     # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+#     # axs[2,i].imshow(residue_image)
+#     # axs[2,i].get_xaxis().set_visible(False)
+#     # axs[2,i].get_yaxis().set_visible(False)
+#     #
+#     # # add an exponential transform to the residue to show differences more clearly
+#     # exponential_residue = np.exp(5 * residue_image) - 1
+#     # axs[3,i].imshow(exponential_residue)
+#     # axs[3,i].get_xaxis().set_visible(False)
+#     # axs[3,i].get_yaxis().set_visible(False)
 
 
 
@@ -243,36 +285,15 @@ for i in range(0, n-1):
 
 
 
-# # number of galxies on each side
-# n = 15
-#
-# # size of each image
-# image_size = 256
-#
-# # create the figure to store the images
-# figure = np.zeros(())
-#
-# # sample points within [-15, 15] standard deviations
-# grid_x = np.linspace(-15, 15, n)
-# grid_y = np.linspace(-15, 15, n)
-#
-# # populate each point on the figure
-# for i, yi in enumerate(grid_x):
-#     for j, xi in enumerate(grid_y):
-#
-#         z_sample = np.array([xi, yi, 3])
-#
-#         x_decoded = autoencoder.predict(z_sample)
-#
-#         image = x_decoded[0].reshape(image_size, image_size, 3)
-#
-#         # add image to the figure
-#         figure[i * image_size: (i+1) * image_size,
-#                j * image_size: (j+1) * image_size] = image
-#
-# plt.figure(figsize=(20,20))
-# plt.imshow(figure)
 
 
-plt.savefig("Plots/3_feature_reconstruction")
+
+
+# plt.plot(model_data.history["loss"], label="training data")
+# plt.plot(model_data.history["val_loss"], label="validation data")
+# plt.legend()
+
+
+
+plt.savefig("Plots/2_feature_latent_space")
 plt.show()
