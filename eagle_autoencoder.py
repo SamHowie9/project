@@ -130,7 +130,7 @@ model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1,
 input_image_decoder = keras.Input(shape=(2))
 
 # layers for the decoder
-x = Dense(units=32)(input_image)                                                                        # (32)
+x = Dense(units=32)(input_image)                                                                    # (32)
 x = Dense(units=256)(x)                                                                             # (256)
 x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
 x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
@@ -160,7 +160,7 @@ grid_y = np.linspace(-8, 8, n)
 for i, yi in enumerate(grid_x):
     for j, xi in enumerate(grid_y):
 
-        z_sample = np.array([xi, yi, 3])
+        z_sample = np.array([xi, yi])
 
         x_decoded = decoder.predict(z_sample)
 
