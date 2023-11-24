@@ -233,7 +233,7 @@ for i in range(extracted_features.shape[0]):
     f1.append(extracted_features[i][0])
     f2.append(extracted_features[i][1])
     f3.append(extracted_features[i][2])
-    f4.append(extracted_features[i][2])
+    f4.append(extracted_features[i][3])
 
 
 
@@ -254,7 +254,7 @@ sequence_f4 = np.linspace(np.min(f4), np.max(f4), num=100)
 
 
 # create the figure for the plot
-fig, axs = plt.subplots(3, 4, figsize=(25, 10))
+fig, axs = plt.subplots(3, 4, figsize=(25, 15))
 
 # pplot feature 1
 axs[0][0].hist(f1, bins=40)
@@ -270,7 +270,7 @@ axs[0][2].set_title("Feature 3")
 
 # plot feature 4
 axs[0][3].hist(f4, bins=40)
-axs[0][3].set_title("Feature 3")
+axs[0][3].set_title("Feature 4")
 
 
 # correlation between 2 and 1
