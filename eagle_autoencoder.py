@@ -299,7 +299,7 @@ axs[1][3].scatter(f3, f2, s=5)
 axs[1][3].plot(sequence_f3, a_32 + b_32 * sequence_f3, color="k", lw=2)
 axs[1][3].set_title("Feature 2 Against Feature 3")
 axs[1][3].set_xlabel("Feature 3")
-axs[1][3].set_ylabel("Feature 2)
+axs[1][3].set_ylabel("Feature 2")
 
 # correlation between 4 and 2
 axs[2][0].scatter(f4, f2, s=5)
