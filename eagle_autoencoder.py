@@ -100,7 +100,8 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=3, name="encoded")(x)                                                         # (2)
+encoded = Dense(units=2, name="encoded")(x)                                                         # (2)
+
 
 # layers for the decoder
 x = Dense(units=32)(encoded)                                                                        # (32)
@@ -131,45 +132,46 @@ encoder = keras.Model(autoencoder.input, encoder_layer.output)
 
 # create decoder
 decoder = keras.Model(encoder_layer.output, decoder_layer.output)
+decoder.summary()
 
 
 # compile the autoencoder model
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+# model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 
 
-# number of galaxies on each side
-n = 15
-
-# size of each image
-image_size = 256
-
-# create the figure to store the images
-figure = np.zeros((image_size * n, image_size * n))
-
-# sample points within [-15, 15] standard deviations
-grid_x = np.linspace(-8, 8, n)
-grid_y = np.linspace(-8, 8, n)
-
-# populate each point on the figure
-for i, yi in enumerate(grid_x):
-    for j, xi in enumerate(grid_y):
-
-        z_sample = np.array([[xi, yi]])
-
-        x_decoded = decoder.predict(z_sample)
-
-        image = x_decoded[0].reshape(image_size, image_size, 3)
-
-        # add image to the figure
-        figure[i * image_size: (i+1) * image_size,
-               j * image_size: (j+1) * image_size] = image
-
-plt.figure(figsize=(20, 20))
-plt.imshow(figure)
+# # number of galaxies on each side
+# n = 15
+#
+# # size of each image
+# image_size = 256
+#
+# # create the figure to store the images
+# figure = np.zeros((image_size * n, image_size * n))
+#
+# # sample points within [-15, 15] standard deviations
+# grid_x = np.linspace(-8, 8, n)
+# grid_y = np.linspace(-8, 8, n)
+#
+# # populate each point on the figure
+# for i, yi in enumerate(grid_x):
+#     for j, xi in enumerate(grid_y):
+#
+#         z_sample = np.array([[xi, yi]])
+#
+#         x_decoded = decoder.predict(z_sample)
+#
+#         image = x_decoded[0].reshape(image_size, image_size, 3)
+#
+#         # add image to the figure
+#         figure[i * image_size: (i+1) * image_size,
+#                j * image_size: (j+1) * image_size] = image
+#
+# plt.figure(figsize=(20, 20))
+# plt.imshow(figure)
 
 
 
