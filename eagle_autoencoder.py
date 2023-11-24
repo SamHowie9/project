@@ -100,7 +100,7 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=2)(x)                                                                         # (2)
+encoded = Dense(units=2, name="decoded")(x)                                                                         # (2)
 
 # layers for the decoder
 x = Dense(units=32)(encoded)                                                                        # (32)
@@ -111,39 +111,37 @@ x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padd
 x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="encoded")(x)        # (256, 256, 3)
 
 
-# create and compile the autoencoder model
+# crate autoencoder
 autoencoder = keras.Model(input_image, decoded)
+
+
+# extract encoder layer and decoder layer from autoencoder
+encoder_layer = autoencoder.get_layer("encoded")
+decoder_layer = autoencoder.get_layer("decoded")
+
+# define encoded input
+encoded_input = keras.Input(shape=(2))
+
+
+# crete encoder
+encoder = keras.Model(autoencoder.input, encoder_layer.output)
+
+# create decoder
+decoder = keras.Model(encoder_layer.output, decoder_layer.output)
+
+
+# compile the autoencoder model
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
-autoencoder.summary()
 
 # train the model
 model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 
 
-# reconstructed_images = decoder.predict(extracted_features)
-
-# layers for decoder model
-input_image_decoder = keras.Input(shape=(2))
-
-# layers for the decoder
-x = Dense(units=32)(input_image_decoder)                                                                    # (32)
-x = Dense(units=256)(x)                                                                             # (256)
-x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
-x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
-x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
-x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
-x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
-x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
-
-
-decoder = keras.Model(input_image_decoder, decoded)
-
-# number of galxies on each side
+# number of galaxies on each side
 n = 15
 
 # size of each image
