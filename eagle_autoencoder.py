@@ -100,7 +100,7 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=2, name="encoded")(x)                                                         # (2)
+encoded = Dense(units=4, name="encoded")(x)                                                         # (2)
 
 
 # layers for the decoder
@@ -123,16 +123,16 @@ autoencoder = keras.Model(input_image, decoded)
 encoder_layer = autoencoder.get_layer("encoded")
 decoder_layer = autoencoder.get_layer("decoded")
 
-# define encoded input
-encoded_input = keras.Input(shape=(2))
-
-
-# crete encoder
-encoder = keras.Model(autoencoder.input, encoder_layer.output)
-
-# create decoder
-decoder = keras.Model(encoder_layer.output, decoder_layer.output)
-decoder.summary()
+# # define encoded input
+# encoded_input = keras.Input(shape=(2))
+#
+#
+# # crete encoder
+# encoder = keras.Model(autoencoder.input, encoder_layer.output)
+#
+# # create decoder
+# decoder = keras.Model(encoder_layer.output, decoder_layer.output)
+# decoder.summary()
 
 
 # compile the autoencoder model
@@ -215,73 +215,109 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 
-# # build the encoder for feature extraction
-# encoder = keras.Model(input_image, encoded)
-# extracted_features = encoder.predict(train_images)
-#
-#
-# print(extracted_features.tolist())
-#
-# # lists to store the values of each image for each extracted feature
-# f1 = []
-# f2 = []
-# f3 = []
-#
-# # loop through each pair of values for each image and add the values to the individual lists
-# for i in range(extracted_features.shape[0]):
-#     f1.append(extracted_features[i][0])
-#     f2.append(extracted_features[i][1])
-#     f3.append(extracted_features[i][2])
-#
-#
-#
-# # linear regression via least squares between each of the 3 features
-# b_12, a_12 = np.polyfit(f1, f2, deg=1)
-# b_13, a_13 = np.polyfit(f1, f3, deg=1)
-# b_23, a_23 = np.polyfit(f2, f3, deg=1)
-#
-#
-# # Create sequence of 100 numbers from the minimum feature 1 value to the maximum feature 1 value (for regression line)
-# sequence_f1 = np.linspace(np.min(f1), np.max(f1), num=100)
-# sequence_f2 = np.linspace(np.min(f2), np.max(f2), num=100)
-#
-#
-#
-# # create the figure for the plot
-# fig, axs = plt.subplots(2, 3, figsize=(25, 10))
-#
-# # pplot feature 1
-# axs[0][0].hist(f1, bins=40)
-# axs[0][0].set_title("Feature 1")
-#
-# # plot feature 2
-# axs[0][1].hist(f2, bins=40)
-# axs[0][1].set_title("Feature 2")
-#
-# # plot feature 3
-# axs[0][2].hist(f3, bins=40)
-# axs[0][2].set_title("Feature 3")
-#
-# # correlation between 1 and 2
-# axs[1][0].scatter(f1, f2, s=5)
-# axs[1][0].plot(sequence_f1, a_12 + b_12 * sequence_f1, color="k", lw=2)
-# axs[1][0].set_title("Feature 2 Against Feature 1")
-# axs[1][0].set_ylabel("Feature 2")
-# axs[1][0].set_xlabel("Feature 1")
-#
-# # correlation between 1 and 3
-# axs[1][1].scatter(f1, f3, s=5)
-# axs[1][1].plot(sequence_f1, a_13 + b_13 * sequence_f1, color="k", lw=2)
-# axs[1][1].set_title("Feature 3 Against Feature 1")
-# axs[1][1].set_ylabel("Feature 3")
-# axs[1][1].set_xlabel("Feature 1")
-#
-# # correlation between 2 and 3
-# axs[1][2].scatter(f2, f3, s=5)
-# axs[1][2].plot(sequence_f2, a_23 + b_23 * sequence_f2, color="k", lw=2)
-# axs[1][2].set_title("Feature 3 Against Feature 2")
-# axs[1][2].set_ylabel("Feature 3")
-# axs[1][2].set_xlabel("Feature 2")
+# build the encoder for feature extraction
+encoder = keras.Model(input_image, encoded)
+extracted_features = encoder.predict(train_images)
+
+
+print(extracted_features.tolist())
+
+# lists to store the values of each image for each extracted feature
+f1 = []
+f2 = []
+f3 = []
+f4 = []
+
+# loop through each pair of values for each image and add the values to the individual lists
+for i in range(extracted_features.shape[0]):
+    f1.append(extracted_features[i][0])
+    f2.append(extracted_features[i][1])
+    f3.append(extracted_features[i][2])
+    f4.append(extracted_features[i][2])
+
+
+
+# linear regression via least squares between each of the 3 features
+b_21, a_21 = np.polyfit(f2, f1, deg=1)
+b_31, a_31 = np.polyfit(f3, f1, deg=1)
+b_32, a_32 = np.polyfit(f3, f2, deg=1)
+b_41, a_41 = np.polyfit(f4, f1, deg=1)
+b_42, a_42 = np.polyfit(f4, f2, deg=1)
+b_43, a_43 = np.polyfit(f4, f3, deg=1)
+
+
+# Create sequence of 100 numbers from the minimum feature 1 value to the maximum feature 1 value (for regression line)
+sequence_f2 = np.linspace(np.min(f2), np.max(f2), num=100)
+sequence_f3 = np.linspace(np.min(f3), np.max(f3), num=100)
+sequence_f4 = np.linspace(np.min(f4), np.max(f4), num=100)
+
+
+
+# create the figure for the plot
+fig, axs = plt.subplots(3, 4, figsize=(25, 10))
+
+# pplot feature 1
+axs[0][0].hist(f1, bins=40)
+axs[0][0].set_title("Feature 1")
+
+# plot feature 2
+axs[0][1].hist(f2, bins=40)
+axs[0][1].set_title("Feature 2")
+
+# plot feature 3
+axs[0][2].hist(f3, bins=40)
+axs[0][2].set_title("Feature 3")
+
+# plot feature 4
+axs[0][3].hist(f4, bins=40)
+axs[0][3].set_title("Feature 3")
+
+
+# correlation between 2 and 1
+axs[1][0].scatter(f2, f1, s=5)
+axs[1][0].plot(sequence_f2, a_23 + b_23 * sequence_f2, color="k", lw=2)
+axs[1][0].set_title("Feature 1 Against Feature 2")
+axs[1][0].set_xlabel("Feature 2")
+axs[1][0].set_ylabel("Feature 1")
+
+# correlation between 3 and 1
+axs[1][1].scatter(f3, f1, s=5)
+axs[1][1].plot(sequence_f3, a_31 + b_31 * sequence_f3, color="k", lw=2)
+axs[1][1].set_title("Feature 1 Against Feature 3)
+axs[1][1].set_xlabel("Feature 3")
+axs[1][1].set_ylabel("Feature 1")
+
+# correlation between 4 and 1
+axs[1][2].scatter(f4, f1, s=5)
+axs[1][2].plot(sequence_f4, a_41 + b_41 * sequence_f4, color="k", lw=2)
+axs[1][2].set_title("Feature 1 Against Feature 4")
+axs[1][2].set_xlabel("Feature 4")
+axs[1][2].set_ylabel("Feature 1")
+
+# correlation between 3 and 2
+axs[1][3].scatter(f3, f2, s=5)
+axs[1][3].plot(sequence_f3, a_32 + b_32 * sequence_f3, color="k", lw=2)
+axs[1][3].set_title("Feature 2 Against Feature 3")
+axs[1][3].set_xlabel("Feature 3")
+axs[1][3].set_ylabel("Feature 2)
+
+# correlation between 4 and 2
+axs[2][0].scatter(f4, f2, s=5)
+axs[2][0].plot(sequence_f4, a_42 + b_42 * sequence_f4, color="k", lw=2)
+axs[2][0].set_title("Feature 2 Against Feature 4")
+axs[2][0].set_xlabel("Feature 4")
+axs[2][0].set_ylabel("Feature 2")
+
+# correlation between 4 and 3
+axs[2][1].scatter(f4, f3, s=5)
+axs[2][1].plot(sequence_f4, a_43 + b_43 * sequence_f4, color="k", lw=2)
+axs[2][1].set_title("Feature 3 Against Feature 4")
+axs[2][1].set_xlabel("Feature 4")
+axs[2][1].set_ylabel("Feature 3")
+
+
+
+
 
 
 
@@ -295,5 +331,5 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 
-plt.savefig("Plots/2_feature_latent_space")
+plt.savefig("Plots/4_feature_histogram")
 plt.show()
