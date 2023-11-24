@@ -275,7 +275,7 @@ axs[0][3].set_title("Feature 3")
 
 # correlation between 2 and 1
 axs[1][0].scatter(f2, f1, s=5)
-axs[1][0].plot(sequence_f2, a_23 + b_23 * sequence_f2, color="k", lw=2)
+axs[1][0].plot(sequence_f2, a_21 + b_21 * sequence_f2, color="k", lw=2)
 axs[1][0].set_title("Feature 1 Against Feature 2")
 axs[1][0].set_xlabel("Feature 2")
 axs[1][0].set_ylabel("Feature 1")
