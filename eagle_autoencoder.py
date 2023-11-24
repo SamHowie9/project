@@ -283,7 +283,7 @@ axs[1][0].set_ylabel("Feature 1")
 # correlation between 3 and 1
 axs[1][1].scatter(f3, f1, s=5)
 axs[1][1].plot(sequence_f3, a_31 + b_31 * sequence_f3, color="k", lw=2)
-axs[1][1].set_title("Feature 1 Against Feature 3)
+axs[1][1].set_title("Feature 1 Against Feature 3")
 axs[1][1].set_xlabel("Feature 3")
 axs[1][1].set_ylabel("Feature 1")
 
