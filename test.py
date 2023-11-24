@@ -5,55 +5,74 @@ from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSam
 import keras
 
 
+a = [1, 2, 3, 4, 5, 6]
+b = [2, 5, 3, 1, 5, 6]
+c = [3, 1, 5, 7, 2, 5]
+d = [7, 2, 5, 2, 7, 9]
 
-# Define keras tensor for the encoder
-input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
+fig, axs = plt.subplots(3, 3, sharex=True, figsize=(25, 10))
 
-# layers for the encoder
-x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
-x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 128, 32)
-x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
-x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
-x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
-x = Flatten()(x)                                                                                    # (256)
-x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=2, name="encoded")(x)                                                         # (2)
+axs[0,0] = plt.scatter(a, b)
+axs[1,0] = plt.scatter(a, c)
+axs[2,0] = plt.scatter(a, d)
+axs[1,1] = plt.scatter(b, c)
+axs[2,1] = plt.scatter(b, d)
+axs[2,2] = plt.scatter(c, d)
 
-
-# layers for the decoder
-x = Dense(units=32)(encoded)                                                                        # (32)
-x = Dense(units=256)(x)                                                                             # (256)
-x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
-x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
-x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
-x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
-x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
-x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (256, 256, 3)
+plt.show()
 
 
-# crate autoencoder
-autoencoder = keras.Model(input_image, decoded)
 
 
-# extract encoder layer and decoder layer from autoencoder
-encoder_layer = autoencoder.get_layer("encoded")
-decoder_layer = autoencoder.get_layer("decoded")
 
-# define encoded input
-encoded_input = keras.Input(shape=(2))
-
-
-# crete encoder
-encoder = keras.Model(autoencoder.input, encoder_layer.output)
-
-# create decoder
-decoder = keras.Model(encoder_layer.output, decoder_layer.output)
-decoder.summary()
-
-
-# compile the autoencoder model
-autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
+# # Define keras tensor for the encoder
+# input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
+#
+# # layers for the encoder
+# x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
+# x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 128, 32)
+# x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
+# x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
+# x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
+# x = Flatten()(x)                                                                                    # (256)
+# x = Dense(units=32)(x)                                                                              # (32)
+# encoded = Dense(units=2, name="encoded")(x)                                                         # (2)
+#
+#
+# # layers for the decoder
+# x = Dense(units=32)(encoded)                                                                        # (32)
+# x = Dense(units=256)(x)                                                                             # (256)
+# x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
+# x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
+# x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
+# x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
+# x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
+# x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
+# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (256, 256, 3)
+#
+#
+# # crate autoencoder
+# autoencoder = keras.Model(input_image, decoded)
+#
+#
+# # extract encoder layer and decoder layer from autoencoder
+# encoder_layer = autoencoder.get_layer("encoded")
+# decoder_layer = autoencoder.get_layer("decoded")
+#
+# # define encoded input
+# encoded_input = keras.Input(shape=(2))
+#
+#
+# # crete encoder
+# encoder = keras.Model(autoencoder.input, encoder_layer.output)
+#
+# # create decoder
+# decoder = keras.Model(encoder_layer.output, decoder_layer.output)
+# decoder.summary()
+#
+#
+# # compile the autoencoder model
+# autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # # input for the decoder
