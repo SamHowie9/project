@@ -17,9 +17,8 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=3, name="encoded")(x)                                                         # (2)
+encoded = Dense(units=2, name="encoded")(x)                                                         # (2)
 
-# input_image = keras.Input(shape=(2))
 
 # layers for the decoder
 x = Dense(units=32)(encoded)                                                                        # (32)
@@ -52,6 +51,9 @@ encoder = keras.Model(autoencoder.input, encoder_layer.output)
 decoder = keras.Model(encoder_layer.output, decoder_layer.output)
 decoder.summary()
 
+
+# compile the autoencoder model
+autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 
 # # input for the decoder
