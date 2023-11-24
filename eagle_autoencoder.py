@@ -315,6 +315,9 @@ axs[2][1].set_title("Feature 3 Against Feature 4")
 axs[2][1].set_xlabel("Feature 4")
 axs[2][1].set_ylabel("Feature 3")
 
+axs[2][2].set_axis_off()
+axs[2][3].set_axis_off()
+
 
 
 
