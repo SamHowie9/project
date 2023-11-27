@@ -235,6 +235,7 @@ for i in range(extracted_features.shape[0]):
     f2.append(extracted_features[i][1])
     f3.append(extracted_features[i][2])
     f4.append(extracted_features[i][3])
+    f5.append(extracted_features[i][4])
 
 
 
@@ -374,5 +375,5 @@ axs[2][4].set_ylabel("Feature 5")
 
 
 
-plt.savefig("Plots/4_feature_histogram")
+plt.savefig("Plots/5_feature_histogram")
 plt.show()
