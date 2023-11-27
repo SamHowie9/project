@@ -5,20 +5,37 @@ from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSam
 import keras
 
 
+
+# df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+#
+# print(df[["GalaxyID", "galfit_n"]])
+
+
+
 a = [1, 2, 3, 4, 5, 6]
 b = [2, 5, 3, 1, 5, 6]
 c = [3, 1, 5, 7, 2, 5]
 d = [7, 2, 5, 2, 7, 9]
 
-fig, axs = plt.subplots(3, 3, sharex=True, figsize=(25, 10))
+# plt.scatter(a, b)
 
-axs[0,0] = plt.scatter(a, b)
-axs[1,0] = plt.scatter(a, c)
-axs[2,0] = plt.scatter(a, d)
-axs[1,1] = plt.scatter(b, c)
-axs[2,1] = plt.scatter(b, d)
-axs[2,2] = plt.scatter(c, d)
+# plt.savefig("Plots/test1")
+# # plt.show()
+#
+# plt.scatter(c,d)
+# plt.savefig("Plots/test2")
+# # plt.show()
 
+#
+
+# for i in range(1, 1):
+
+fig, axs = plt.subplots(1, 2, figsize=(25, 10))
+
+axs[0] = plt.plot(a, b)
+axs[1] = plt.plot(b, c)
+
+plt.savefig("Plots/test" + str(1))
 plt.show()
 
 
@@ -131,22 +148,34 @@ plt.show()
 #
 # print(f1)
 # print(f2)
-#
+
+
+
 # # linear regression via least squares
 # b, a = np.polyfit(f1, f2, deg=1)
 #
 # # Create sequence of 100 numbers from the minimum feature 1 value to the maximum feature 1 value
 # xseq = np.linspace(np.min(f1), np.max(f1), num=100)
 #
-#
+# # plot the trend line
+# plt.plot(xseq, a + b * xseq, color="k", lw=2)
+
+
+
+
+
+
 # fig, axs = plt.subplots(1, 3, figsize=(22, 5))
 #
+# # plot feature 1
 # axs[0].hist(f1, bins=40)
 # axs[0].set_title("Feature 1")
 #
+# # plot feature 2
 # axs[1].hist(f2, bins=40)
 # axs[1].set_title("Feature 2")
 #
+# # scatter plot of feature 2 vs feature 1
 # axs[2].scatter(f1, f2, s=5)
 # axs[2].plot(xseq, a + b * xseq, color="k", lw=2)
 # axs[2].set_title("Feature 2 Against Feature 1")
