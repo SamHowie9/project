@@ -433,5 +433,5 @@ axs[3][5].set_axis_off()
 
 
 
-plt.savefig("Plots/5_feature_histogram")
+plt.savefig("Plots/6_feature_histogram")
 plt.show()
