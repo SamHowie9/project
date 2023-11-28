@@ -100,7 +100,7 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=5, name="encoded")(x)                                                         # (2)
+encoded = Dense(units=6, name="encoded")(x)                                                         # (2)
 
 
 # layers for the decoder
@@ -299,11 +299,11 @@ axs[0][3].hist(f4, bins=40)
 axs[0][3].set_title("Feature 4")
 
 # plot feature 5
-axs[0][4].hist(f4, bins=40)
+axs[0][4].hist(f5, bins=40)
 axs[0][4].set_title("Feature 5")
 
 # plot feature 6
-axs[0][5].hist(f4, bins=40)
+axs[0][5].hist(f6, bins=40)
 axs[0][5].set_title("Feature 6")
 
 
@@ -332,22 +332,22 @@ axs[1][2].set_ylabel("Feature 1")
 axs[1][3].scatter(f5, f1, s=5)
 axs[1][3].plot(sequence_f5, a_51 + b_51 * sequence_f5, color="k", lw=1.5)
 axs[1][3].set_title("Feature 1 Against Feature 5")
-axs[1][3].set_xlabel("Feature 4")
+axs[1][3].set_xlabel("Feature 5")
 axs[1][3].set_ylabel("Feature 1")
 
 # correlation between 6 and 1
-axs[1][3].scatter(f6, f1, s=5)
-axs[1][3].plot(sequence_f6, a_61 + b_61 * sequence_f6, color="k", lw=1.5)
-axs[1][3].set_title("Feature 1 Against Feature 6")
-axs[1][3].set_xlabel("Feature 6")
-axs[1][3].set_ylabel("Feature 1")
+axs[1][4].scatter(f6, f1, s=5)
+axs[1][4].plot(sequence_f6, a_61 + b_61 * sequence_f6, color="k", lw=1.5)
+axs[1][4].set_title("Feature 1 Against Feature 6")
+axs[1][4].set_xlabel("Feature 6")
+axs[1][4].set_ylabel("Feature 1")
 
 # correlation between 3 and 2
-axs[1][4].scatter(f3, f2, s=5)
-axs[1][4].plot(sequence_f3, a_32 + b_32 * sequence_f3, color="k", lw=1.5)
-axs[1][4].set_title("Feature 2 Against Feature 3")
-axs[1][4].set_xlabel("Feature 3")
-axs[1][4].set_ylabel("Feature 2")
+axs[1][5].scatter(f3, f2, s=5)
+axs[1][5].plot(sequence_f3, a_32 + b_32 * sequence_f3, color="k", lw=1.5)
+axs[1][5].set_title("Feature 2 Against Feature 3")
+axs[1][5].set_xlabel("Feature 3")
+axs[1][5].set_ylabel("Feature 2")
 
 # correlation between 4 and 2
 axs[2][0].scatter(f4, f2, s=5)
@@ -357,65 +357,65 @@ axs[2][0].set_xlabel("Feature 4")
 axs[2][0].set_ylabel("Feature 2")
 
 # correlation between 5 and 2
-axs[2][0].scatter(f5, f2, s=5)
-axs[2][0].plot(sequence_f5, a_52 + b_52 * sequence_f5, color="k", lw=1.5)
-axs[2][0].set_title("Feature 2 Against Feature 5")
-axs[2][0].set_xlabel("Feature 5")
-axs[2][0].set_ylabel("Feature 2")
+axs[2][1].scatter(f5, f2, s=5)
+axs[2][1].plot(sequence_f5, a_52 + b_52 * sequence_f5, color="k", lw=1.5)
+axs[2][1].set_title("Feature 2 Against Feature 5")
+axs[2][1].set_xlabel("Feature 5")
+axs[2][1].set_ylabel("Feature 2")
 
 # correlation between 6 and 2
-axs[2][0].scatter(f6, f2, s=5)
-axs[2][0].plot(sequence_f6, a_62 + b_62 * sequence_f6, color="k", lw=1.5)
-axs[2][0].set_title("Feature 2 Against Feature 6")
-axs[2][0].set_xlabel("Feature 6")
-axs[2][0].set_ylabel("Feature 2")
+axs[2][2].scatter(f6, f2, s=5)
+axs[2][2].plot(sequence_f6, a_62 + b_62 * sequence_f6, color="k", lw=1.5)
+axs[2][2].set_title("Feature 2 Against Feature 6")
+axs[2][2].set_xlabel("Feature 6")
+axs[2][2].set_ylabel("Feature 2")
 
 # correlation between 4 and 3
-axs[2][1].scatter(f4, f3, s=5)
-axs[2][1].plot(sequence_f4, a_43 + b_43 * sequence_f4, color="k", lw=1.5)
-axs[2][1].set_title("Feature 3 Against Feature 4")
-axs[2][1].set_xlabel("Feature 3")
-axs[2][1].set_ylabel("Feature 4")
+axs[2][3].scatter(f4, f3, s=5)
+axs[2][3].plot(sequence_f4, a_43 + b_43 * sequence_f4, color="k", lw=1.5)
+axs[2][3].set_title("Feature 3 Against Feature 4")
+axs[2][3].set_xlabel("Feature 4")
+axs[2][3].set_ylabel("Feature 3")
 
 # correlation between 5 and 3
-axs[2][2].scatter(f5, f3, s=5)
-axs[2][2].plot(sequence_f5, a_53 + b_53 * sequence_f5, color="k", lw=1.5)
-axs[2][2].set_title("Feature 3 Against Feature 5")
-axs[2][2].set_xlabel("Feature 3")
-axs[2][2].set_ylabel("Feature 5")
+axs[2][4].scatter(f5, f3, s=5)
+axs[2][4].plot(sequence_f5, a_53 + b_53 * sequence_f5, color="k", lw=1.5)
+axs[2][4].set_title("Feature 3 Against Feature 5")
+axs[2][4].set_xlabel("Feature 5")
+axs[2][4].set_ylabel("Feature 3")
 
 # correlation between 6 and 3
-axs[2][3].scatter(f6, f3, s=5)
-axs[2][3].plot(sequence_f6, a_63 + b_63 * sequence_f6, color="k", lw=1.5)
-axs[2][3].set_title("Feature 3 Against Feature 6")
-axs[2][3].set_xlabel("Feature 3")
-axs[2][3].set_ylabel("Feature 6")
+axs[2][5].scatter(f6, f3, s=5)
+axs[2][5].plot(sequence_f6, a_63 + b_63 * sequence_f6, color="k", lw=1.5)
+axs[2][5].set_title("Feature 3 Against Feature 6")
+axs[2][5].set_xlabel("Feature 6")
+axs[2][5].set_ylabel("Feature 3")
 
 # correlation between 5 and 4
-axs[2][4].scatter(f5, f4, s=5)
-axs[2][4].plot(sequence_f5, a_54 + b_54 * sequence_f5, color="k", lw=1.5)
-axs[2][4].set_title("Feature 4 Against Feature 5")
-axs[2][4].set_xlabel("Feature 4")
-axs[2][4].set_ylabel("Feature 5")
+axs[3][0].scatter(f5, f4, s=5)
+axs[3][0].plot(sequence_f5, a_54 + b_54 * sequence_f5, color="k", lw=1.5)
+axs[3][0].set_title("Feature 4 Against Feature 5")
+axs[3][0].set_xlabel("Feature 5")
+axs[3][0].set_ylabel("Feature 4")
 
 # correlation between 6 and 4
-axs[2][4].scatter(f6, f4, s=5)
-axs[2][4].plot(sequence_f6, a_64 + b_64 * sequence_f6, color="k", lw=1.5)
-axs[2][4].set_title("Feature 4 Against Feature 6")
-axs[2][4].set_xlabel("Feature 4")
-axs[2][4].set_ylabel("Feature 6")
+axs[3][1].scatter(f6, f4, s=5)
+axs[3][1].plot(sequence_f6, a_64 + b_64 * sequence_f6, color="k", lw=1.5)
+axs[3][1].set_title("Feature 4 Against Feature 6")
+axs[3][1].set_xlabel("Feature 6")
+axs[3][1].set_ylabel("Feature 4")
 
 # correlation between 6 and 5
-axs[2][4].scatter(f6, f5, s=5)
-axs[2][4].plot(sequence_f6, a_65 + b_65 * sequence_f6, color="k", lw=1.5)
-axs[2][4].set_title("Feature 5 Against Feature 6")
-axs[2][4].set_xlabel("Feature 5")
-axs[2][4].set_ylabel("Feature 6")
+axs[3][2].scatter(f6, f5, s=5)
+axs[3][2].plot(sequence_f6, a_65 + b_65 * sequence_f6, color="k", lw=1.5)
+axs[3][2].set_title("Feature 5 Against Feature 6")
+axs[3][2].set_xlabel("Feature 6")
+axs[3][2].set_ylabel("Feature 5")
 
 
-
-# axs[2][2].set_axis_off()
-# axs[2][3].set_axis_off()
+axs[3][3].set_axis_off()
+axs[3][4].set_axis_off()
+axs[3][5].set_axis_off()
 
 
 
