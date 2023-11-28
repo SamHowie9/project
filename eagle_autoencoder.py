@@ -237,20 +237,37 @@ for i in range(extracted_features.shape[0]):
     f3.append(extracted_features[i][2])
     f4.append(extracted_features[i][3])
     f5.append(extracted_features[i][4])
+    f6.append(extracted_features[i][5])
 
 
 
 # linear regression via least squares between each of the 3 features
+# b_21, a_21 = np.polyfit(f2, f1, deg=1)
+# b_31, a_31 = np.polyfit(f3, f1, deg=1)
+# b_41, a_41 = np.polyfit(f4, f1, deg=1)
+# b_51, a_51 = np.polyfit(f5, f1, deg=1)
+# b_32, a_32 = np.polyfit(f3, f2, deg=1)
+# b_42, a_42 = np.polyfit(f4, f2, deg=1)
+# b_43, a_43 = np.polyfit(f4, f3, deg=1)
+# b_52, a_52 = np.polyfit(f5, f2, deg=1)
+# b_53, a_53 = np.polyfit(f5, f3, deg=1)
+# b_54, a_54 = np.polyfit(f5, f4, deg=1)
 b_21, a_21 = np.polyfit(f2, f1, deg=1)
 b_31, a_31 = np.polyfit(f3, f1, deg=1)
 b_41, a_41 = np.polyfit(f4, f1, deg=1)
 b_51, a_51 = np.polyfit(f5, f1, deg=1)
+b_61, a_61 = np.polyfit(f6, f1, deg=1)
 b_32, a_32 = np.polyfit(f3, f2, deg=1)
 b_42, a_42 = np.polyfit(f4, f2, deg=1)
-b_43, a_43 = np.polyfit(f4, f3, deg=1)
 b_52, a_52 = np.polyfit(f5, f2, deg=1)
+b_62, a_62 = np.polyfit(f6, f2, deg=1)
+b_43, a_43 = np.polyfit(f4, f3, deg=1)
 b_53, a_53 = np.polyfit(f5, f3, deg=1)
+b_63, a_63 = np.polyfit(f6, f3, deg=1)
 b_54, a_54 = np.polyfit(f5, f4, deg=1)
+b_64, a_64 = np.polyfit(f6, f4, deg=1)
+b_65, a_65 = np.polyfit(f6, f5, deg=1)
+
 
 
 # Create sequence of 100 numbers from the minimum feature 1 value to the maximum feature 1 value (for regression line)
@@ -258,6 +275,7 @@ sequence_f2 = np.linspace(np.min(f2), np.max(f2), num=100)
 sequence_f3 = np.linspace(np.min(f3), np.max(f3), num=100)
 sequence_f4 = np.linspace(np.min(f4), np.max(f4), num=100)
 sequence_f5 = np.linspace(np.min(f5), np.max(f5), num=100)
+sequence_f6 = np.linspace(np.min(f6), np.max(f6), num=100)
 
 
 
@@ -283,6 +301,10 @@ axs[0][3].set_title("Feature 4")
 # plot feature 5
 axs[0][4].hist(f4, bins=40)
 axs[0][4].set_title("Feature 5")
+
+# plot feature 6
+axs[0][5].hist(f4, bins=40)
+axs[0][5].set_title("Feature 6")
 
 
 # correlation between 2 and 1
@@ -313,6 +335,13 @@ axs[1][3].set_title("Feature 1 Against Feature 5")
 axs[1][3].set_xlabel("Feature 4")
 axs[1][3].set_ylabel("Feature 1")
 
+# correlation between 6 and 1
+axs[1][3].scatter(f6, f1, s=5)
+axs[1][3].plot(sequence_f6, a_61 + b_61 * sequence_f6, color="k", lw=1.5)
+axs[1][3].set_title("Feature 1 Against Feature 6")
+axs[1][3].set_xlabel("Feature 6")
+axs[1][3].set_ylabel("Feature 1")
+
 # correlation between 3 and 2
 axs[1][4].scatter(f3, f2, s=5)
 axs[1][4].plot(sequence_f3, a_32 + b_32 * sequence_f3, color="k", lw=1.5)
@@ -327,6 +356,20 @@ axs[2][0].set_title("Feature 2 Against Feature 4")
 axs[2][0].set_xlabel("Feature 4")
 axs[2][0].set_ylabel("Feature 2")
 
+# correlation between 5 and 2
+axs[2][0].scatter(f5, f2, s=5)
+axs[2][0].plot(sequence_f5, a_52 + b_52 * sequence_f5, color="k", lw=1.5)
+axs[2][0].set_title("Feature 2 Against Feature 5")
+axs[2][0].set_xlabel("Feature 5")
+axs[2][0].set_ylabel("Feature 2")
+
+# correlation between 6 and 2
+axs[2][0].scatter(f6, f2, s=5)
+axs[2][0].plot(sequence_f6, a_62 + b_62 * sequence_f6, color="k", lw=1.5)
+axs[2][0].set_title("Feature 2 Against Feature 6")
+axs[2][0].set_xlabel("Feature 6")
+axs[2][0].set_ylabel("Feature 2")
+
 # correlation between 4 and 3
 axs[2][1].scatter(f4, f3, s=5)
 axs[2][1].plot(sequence_f4, a_43 + b_43 * sequence_f4, color="k", lw=1.5)
@@ -334,19 +377,19 @@ axs[2][1].set_title("Feature 3 Against Feature 4")
 axs[2][1].set_xlabel("Feature 3")
 axs[2][1].set_ylabel("Feature 4")
 
-# correlation between 5 and 2
-axs[2][2].scatter(f5, f2, s=5)
-axs[2][2].plot(sequence_f5, a_52 + b_52 * sequence_f5, color="k", lw=1.5)
-axs[2][2].set_title("Feature 2 Against Feature 5")
-axs[2][2].set_xlabel("Feature 2")
+# correlation between 5 and 3
+axs[2][2].scatter(f5, f3, s=5)
+axs[2][2].plot(sequence_f5, a_53 + b_53 * sequence_f5, color="k", lw=1.5)
+axs[2][2].set_title("Feature 3 Against Feature 5")
+axs[2][2].set_xlabel("Feature 3")
 axs[2][2].set_ylabel("Feature 5")
 
-# correlation between 5 and 3
-axs[2][3].scatter(f5, f3, s=5)
-axs[2][3].plot(sequence_f5, a_53 + b_53 * sequence_f5, color="k", lw=1.5)
-axs[2][3].set_title("Feature 3 Against Feature 5")
+# correlation between 6 and 3
+axs[2][3].scatter(f6, f3, s=5)
+axs[2][3].plot(sequence_f6, a_63 + b_63 * sequence_f6, color="k", lw=1.5)
+axs[2][3].set_title("Feature 3 Against Feature 6")
 axs[2][3].set_xlabel("Feature 3")
-axs[2][3].set_ylabel("Feature 5")
+axs[2][3].set_ylabel("Feature 6")
 
 # correlation between 5 and 4
 axs[2][4].scatter(f5, f4, s=5)
@@ -354,6 +397,20 @@ axs[2][4].plot(sequence_f5, a_54 + b_54 * sequence_f5, color="k", lw=1.5)
 axs[2][4].set_title("Feature 4 Against Feature 5")
 axs[2][4].set_xlabel("Feature 4")
 axs[2][4].set_ylabel("Feature 5")
+
+# correlation between 6 and 4
+axs[2][4].scatter(f6, f4, s=5)
+axs[2][4].plot(sequence_f6, a_64 + b_64 * sequence_f6, color="k", lw=1.5)
+axs[2][4].set_title("Feature 4 Against Feature 6")
+axs[2][4].set_xlabel("Feature 4")
+axs[2][4].set_ylabel("Feature 6")
+
+# correlation between 6 and 5
+axs[2][4].scatter(f6, f5, s=5)
+axs[2][4].plot(sequence_f6, a_65 + b_65 * sequence_f6, color="k", lw=1.5)
+axs[2][4].set_title("Feature 5 Against Feature 6")
+axs[2][4].set_xlabel("Feature 5")
+axs[2][4].set_ylabel("Feature 6")
 
 
 
