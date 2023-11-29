@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 # select to use GPU 0 on cosma
 os.environ["CUDA_VISIBLE_DEVICES"]="0" # for GPU
