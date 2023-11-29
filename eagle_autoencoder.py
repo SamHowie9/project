@@ -100,7 +100,7 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=7, name="encoded")(x)                                                         # (2)
+encoded = Dense(units=6, name="encoded")(x)                                                         # (2)
 
 
 # layers for the decoder
