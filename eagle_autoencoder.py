@@ -35,12 +35,12 @@ for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
 # train_images = get_images()
 
 
-# find the number of images that you will test the model on
-testing_count = int(len(train_images)/4)
-
-# split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
-train_images = np.array(train_images[:testing_count*3])
-test_images = np.array(train_images[testing_count:])
+# # find the number of images that you will test the model on
+# testing_count = int(len(train_images)/4)
+#
+# # split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
+# train_images = np.array(train_images[:testing_count*3])
+# test_images = np.array(train_images[testing_count:])
 
 
 # # Instantiate a Keras tensor to allow us to build the model
