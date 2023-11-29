@@ -140,7 +140,7 @@ decoder_layer = autoencoder.get_layer("decoded")
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=5, batch_size=1, validation_data=(test_images, test_images))
 
 
 
