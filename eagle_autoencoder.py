@@ -35,12 +35,12 @@ for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
 # train_images = get_images()
 
 
-# # find the number of images that you will test the model on
-# testing_count = int(len(train_images)/4)
-#
-# # split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
-# train_images = np.array(train_images[:testing_count*3])
-# test_images = np.array(train_images[testing_count:])
+# find the number of images that you will test the model on
+testing_count = int(len(train_images)/10)
+
+# split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
+train_images = np.array(train_images[:testing_count*10])
+test_images = np.array(train_images[testing_count:])
 
 
 # # Instantiate a Keras tensor to allow us to build the model
@@ -138,8 +138,7 @@ decoder_layer = autoencoder.get_layer("decoded")
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1)
-# model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
 autoencoder.save_weights(filepath="Weights/7_feature_weights", overwrite=True)
