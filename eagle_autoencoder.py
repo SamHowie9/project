@@ -222,6 +222,10 @@ autoencoder.save_weights(filepath="Weights/7_feature_weights", overwrite=True)
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
 
+# write the extracted features to a file to save them
+f = open("Features/7_features", "w")
+f.write(extracted_features)
+f.close()
 
 print(extracted_features.tolist())
 
