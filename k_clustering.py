@@ -6,27 +6,50 @@ import pandas as pd
 import os
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
+import seaborn as sns
+from sklearn.cluster import KMeans
 
-
-# # stores an empty list to contain all the image data to train the model
-# all_images = []
-#
-# # loop through the directory containing all the image files
-# for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
-#
-#     # open the fits file and get the image data (this is a numpy array of each pixel value)
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/" + file)
-#
-#     # append the image data to the main list containing all data of all the images
-#     all_images.append(image)
 
 
 
 # open the file to load the extracted features
 f = open("Features/6_features.txt", "r")
-extracted_features = f.read()
-
-print(extracted_features)
+extracted_features = np.array(eval(f.read()))
 
 
+kmeans = KMeans(n_clusters=6, random_state=0, n_init='auto')
+clusters = kmeans.fit_predict(extracted_features)
+
+print(clusters)
+
+# lists to store the values of each image for each extracted feature
+f1 = []
+f2 = []
+f3 = []
+f4 = []
+f5 = []
+f6 = []
+
+# loop through each pair of values for each image and add the values to the individual lists
+for i in range(extracted_features.shape[0]):
+    f1.append(extracted_features[i][0])
+    f2.append(extracted_features[i][1])
+    f3.append(extracted_features[i][2])
+    f4.append(extracted_features[i][3])
+    f5.append(extracted_features[i][4])
+    f6.append(extracted_features[i][5])
+
+
+df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6"])
+df["Category"] = clusters
+
+
+print(df)
+
+kws = dict(s=5, linewidth=0)
+
+sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
+
+plt.savefig("Plots/6_feature_clustering")
+plt.show()
 
