@@ -11,7 +11,7 @@ from matplotlib import image as mpimg
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 # select to use GPU 0 on cosma
-os.environ["CUDA_VISIBLE_DEVICES"]="1" # for GPU
+os.environ["CUDA_VISIBLE_DEVICES"]="2" # for GPU
 
 
 
@@ -138,13 +138,13 @@ decoder_layer = autoencoder.get_layer("decoded")
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-# model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
-# autoencoder.save_weights(filepath="Weights/7_feature_weights", overwrite=True)
+autoencoder.save_weights(filepath="Weights/7_feature_weights.h5", overwrite=True)
 
 
-autoencoder.load_weights("7_feature_weights")
+# autoencoder.load_weights("7_feature_weights.h5")
 
 
 # # number of galaxies on each side
