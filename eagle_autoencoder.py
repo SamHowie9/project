@@ -144,7 +144,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 # autoencoder.save_weights(filepath="Weights/7_feature_weights.h5", overwrite=True)
 
 
-autoencoder.load_weights("7_feature_weights.h5")
+autoencoder.load_weights("Weights/7_feature_weights.h5")
 
 
 # # number of galaxies on each side
