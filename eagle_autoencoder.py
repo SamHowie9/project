@@ -223,15 +223,17 @@ autoencoder.load_weights("Weights/7_feature_weights.h5")
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
 
-print(extracted_features)
-print()
-print()
-print(np.array2string(extracted_features))
+np.save("Features/7_features", extracted_features)
 
-# write the extracted features to a file to save them
-f = open("Features/7_features", "w")
-f.write(np.array2string(extracted_features))
-f.close()
+# print(extracted_features)
+# print()
+# print()
+# print(np.array2string(extracted_features))
+#
+# # write the extracted features to a file to save them
+# f = open("Features/7_features", "w")
+# f.write(np.array2string(extracted_features))
+# f.close()
 
 print(extracted_features.tolist())
 
