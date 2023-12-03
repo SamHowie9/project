@@ -138,13 +138,13 @@ decoder_layer = autoencoder.get_layer("decoded")
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
+# model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
-autoencoder.save_weights(filepath="Weights/7_feature_weights.h5", overwrite=True)
+# autoencoder.save_weights(filepath="Weights/7_feature_weights.h5", overwrite=True)
 
 
-# autoencoder.load_weights("7_feature_weights.h5")
+autoencoder.load_weights("7_feature_weights.h5")
 
 
 # # number of galaxies on each side
@@ -222,6 +222,11 @@ autoencoder.save_weights(filepath="Weights/7_feature_weights.h5", overwrite=True
 # build the encoder for feature extraction
 encoder = keras.Model(input_image, encoded)
 extracted_features = encoder.predict(train_images)
+
+print(extracted_features)
+print()
+print()
+print(np.array2string(extracted_features))
 
 # write the extracted features to a file to save them
 f = open("Features/7_features", "w")
