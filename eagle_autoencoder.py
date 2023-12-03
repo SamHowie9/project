@@ -230,7 +230,7 @@ print(np.array2string(extracted_features))
 
 # write the extracted features to a file to save them
 f = open("Features/7_features", "w")
-f.write(extracted_features)
+f.write(np.array2string(extracted_features))
 f.close()
 
 print(extracted_features.tolist())
