@@ -24,7 +24,7 @@ for i, galaxy_set in enumerate(os.listdir("/cosma7/data/Eagle/web-storage/")):
         # loop through each galaxy in the excel file
         for galaxy in df["GalaxyID"].tolist():
 
-            if galaxy in file:
+            if str(galaxy) in file:
 
                 count[i] += 1
 
