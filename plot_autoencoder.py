@@ -58,18 +58,53 @@ decoder_layer = autoencoder.get_layer("decoded")
 # build the encoder
 encoder = keras.Model(autoencoder.input, encoder_layer.output)
 
-# build the decoder
-encoded_input = keras.Input(shape=(encoding_dim,))
-# Retrieve the last layer of the autoencoder model
-decoder_layer = autoencoder.layers[-1]
-# Create the decoder model
-decoder = keras.Model(encoded_input, decoder_layer(encoded_input))
-
+# # build the decoder
+# encoded_input = keras.Input(shape=(8,))
+# # Retrieve the last layer of the autoencoder model
+# decoder_layer = autoencoder.layers[-1]
+# # Create the decoder model
+# decoder = keras.Model(encoded_input, decoder_layer(encoded_input))
 
 
 
 # extract the features
-# extracted_features = encoder.predict(train_images)
+extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-# np.save("Features/8_features.npy", extracted_features)
+np.save("Features/8_features.npy", extracted_features)
+
+
+# add the features to a dataframe
+df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"])
+
+
+
+
+
+# create the pairplot with custom marker size
+kws = dict(s=10)
+g = sns.pairplot(df, corner=True, plot_kws=kws)
+
+
+# function to add the correlation coefficient to the plots
+def corrfunc(x, y, ax=None, color=None):
+    # find the correlation coefficient and round to 3 dp
+    correlation = np.corrcoef(x, y)[0][1]
+    correlation = np.round(correlation, decimals=3)
+
+    # annotate the plot with the correlation coefficient
+    ax = ax or plt.gca()
+    ax.annotate(("ρ = " + str(correlation)), xy=(0.1, 1), xycoords=ax.transAxes)
+
+
+# add the correlation coefficient to each of the scatter plots
+g.map_lower(corrfunc)
+
+# add some vertical space between the plots (given we are adding the correlation coefficients
+plt.subplots_adjust(hspace=0.2)
+
+
+
+# save and display the plot
+plt.savefig("Plots/8_feature_histogram")
+plt.show()
