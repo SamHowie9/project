@@ -120,6 +120,25 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", paddin
 # crate autoencoder
 autoencoder = keras.Model(input_image, decoded)
 
+
+
+# crate autoencoder
+autoencoder = keras.Model(input_image, decoded)
+
+encoder = keras.Sequential()
+for i in range(0, 9):
+    encoder.add(autoencoder.layers[i])
+
+decoder = keras.Sequential()
+for i in range(9, 18):
+    decoder.add(autoencoder.layers[i])
+
+decoder.build(input_shape=(None, encoding_dim))
+
+
+
+
+
 # compile the autoencoder model
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
@@ -129,30 +148,30 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 autoencoder.load_weights("Weights/8_feature_weights.h5")
 
 # save the weights
-autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
+# autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
 
 
 
-# extract encoder layer and decoder layer from autoencoder
-encoder_layer = autoencoder.get_layer("encoded")
-decoder_layer = autoencoder.get_layer("decoded")
-
-# get the shape of the decoder input
-decoder_input = keras.Input(shape=encoding_dim)
-
-# build the encoder
-encoder = keras.Model(autoencoder.input, encoder_layer.output)
-
-# build the decoder
-decoder = keras.Model(decoder_input, autoencoder.layers[-1](decoder_input))
-
-
-
-# # extract the features
-# extracted_features = encoder.predict(train_images)
+# # extract encoder layer and decoder layer from autoencoder
+# encoder_layer = autoencoder.get_layer("encoded")
+# decoder_layer = autoencoder.get_layer("decoded")
 #
-# # save the features as a numpy array
-# np.save("Features/8_features.npy", extracted_features)
+# # get the shape of the decoder input
+# decoder_input = keras.Input(shape=encoding_dim)
+#
+# # build the encoder
+# encoder = keras.Model(autoencoder.input, encoder_layer.output)
+#
+# # build the decoder
+# decoder = keras.Model(decoder_input, autoencoder.layers[-1](decoder_input))
+
+
+
+# extract the features
+extracted_features = encoder.predict(train_images)
+
+# save the features as a numpy array
+np.save("Features/8_features.npy", extracted_features)
 
 
 
