@@ -124,7 +124,7 @@ autoencoder = keras.Model(input_image, decoded)
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=1, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
 autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
@@ -142,7 +142,7 @@ decoder_input = keras.Input(shape=encoding_dim)
 encoder = keras.Model(autoencoder.input, encoder_layer.output)
 
 # build the decoder
-decoder = keras.Model(decoder_input, decoder_layer(decoder_input))
+decoder = keras.Model(decoder_input, autoencoder.layers[-1](decoder_input))
 
 
 
