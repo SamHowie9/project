@@ -6,7 +6,9 @@ import keras
 import os
 
 
-count = [0, 0, 0, 0, 0, 0]
+face = [0, 0, 0, 0, 0, 0]
+edge = [0, 0, 0, 0, 0, 0]
+rand = [0, 0, 0, 0, 0, 0]
 
 
 df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
@@ -25,7 +27,14 @@ for i, galaxy_set in enumerate(os.listdir("/cosma7/data/Eagle/web-storage/")):
         for galaxy in df["GalaxyID"].tolist():
 
             if file == ("galface_" + str(galaxy) + ".png"):
+                face[i] += 1
 
-                count[i] += 1
+            if file == ("galedge_" + str(galaxy) + ".png"):
+                edge[i] += 1
 
-print(count)
+            if file == ("galrand_" + str(galaxy) + ".png"):
+                rand[i] += 1
+
+print(face)
+print(edge)
+print(rand)
