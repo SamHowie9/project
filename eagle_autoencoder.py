@@ -87,6 +87,8 @@ test_images = np.array(train_images[testing_count:])
 # decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same")(x)                   # (256, 256, 3)
 
 
+# set the encoding dimension (number of extracted features)
+encoding_dim = 8
 
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
@@ -99,7 +101,7 @@ x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
 x = Dense(units=32)(x)                                                                              # (32)
-encoded = Dense(units=8, name="encoded")(x)                                                         # (2)
+encoded = Dense(units=encoding_dim, name="encoded")(x)                                                         # (2)
 
 
 # layers for the decoder
@@ -114,13 +116,43 @@ x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", pad
 decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (256, 256, 3)
 
 
+
 # crate autoencoder
 autoencoder = keras.Model(input_image, decoded)
+
+# compile the autoencoder model
+autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
+
+# train the model
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+
+# save the weights
+autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
+
 
 
 # extract encoder layer and decoder layer from autoencoder
 encoder_layer = autoencoder.get_layer("encoded")
 decoder_layer = autoencoder.get_layer("decoded")
+
+# get the shape of the decoder input
+decoder_input = keras.Input(shape=encoding_dim)
+
+# build the encoder
+encoder = keras.Model(autoencoder.input, encoder_layer)
+
+# build the decoder
+decoder = keras.Model(decoder_input, decoder_layer)
+
+
+
+# extract the features
+extracted_features = encoder.predict(train_images)
+
+# save the features as a numpy array
+np.save("Features/8_features.npy", extracted_features)
+
+
 
 # # define encoded input
 # encoded_input = keras.Input(shape=(2))
@@ -134,14 +166,7 @@ decoder_layer = autoencoder.get_layer("decoded")
 # decoder.summary()
 
 
-# compile the autoencoder model
-autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
-# train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
-
-# save the weights
-autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
 
 
 # autoencoder.load_weights("Weights/8_feature_weights.h5")
@@ -219,11 +244,11 @@ autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True
 
 
 
-# build the encoder for feature extraction
-encoder = keras.Model(input_image, encoded)
-extracted_features = encoder.predict(train_images)
-
-np.save("Features/8_features", extracted_features)
+# # build the encoder for feature extraction
+# encoder = keras.Model(input_image, encoded)
+# extracted_features = encoder.predict(train_images)
+#
+# np.save("Features/8_features", extracted_features)
 
 # print(extracted_features)
 # print()
@@ -527,5 +552,5 @@ np.save("Features/8_features", extracted_features)
 
 
 
-plt.savefig("Plots/8_feature_histogram")
-plt.show()
+# plt.savefig("Plots/8_feature_histogram")
+# plt.show()
