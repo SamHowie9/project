@@ -119,7 +119,7 @@ import keras
 
 
 
-extracted_features = np.load("Features/7_features.npy")
+extracted_features = np.load("Features/8_features.npy")
 
 # # lists to store the values of each image for each extracted feature
 # f1 = []
@@ -140,7 +140,7 @@ extracted_features = np.load("Features/7_features.npy")
 #     f6.append(extracted_features[i][5])
 
 
-df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7"])
+df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"])
 
 
 
@@ -165,13 +165,12 @@ def corrfunc(x, y, ax=None, color=None):
 
 
 kws = dict(s=10)
-
 g = sns.pairplot(df, corner=True, plot_kws=kws)
 g.map_lower(corrfunc)
 
 plt.subplots_adjust(hspace=0.2)
 
-plt.savefig("Plots/7_feature_histogram")
+plt.savefig("Plots/8_feature_histogram")
 plt.show()
 
 
