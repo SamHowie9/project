@@ -136,7 +136,7 @@ encoder_layer = autoencoder.get_layer("encoded")
 decoder_layer = autoencoder.get_layer("decoded")
 
 # get the shape of the decoder input
-decoder_input = keras.Input(shape=encoder_layer.output_shape)
+decoder_input = keras.Input(shape=encoding_dim)
 
 # build the encoder
 encoder = keras.Model(autoencoder.input, encoder_layer.output)
