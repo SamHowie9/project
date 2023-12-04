@@ -12,44 +12,29 @@ from sklearn.cluster import KMeans
 
 
 
-# open the file to load the extracted features
-f = open("Features/6_features.txt", "r")
-extracted_features = np.array(eval(f.read()))
+# load the extracted features
+extracted_features = np.load("Features/7_features.npy")
 
-
-kmeans = KMeans(n_clusters=6, random_state=0, n_init='auto')
+kmeans = KMeans(n_clusters=7, random_state=0, n_init='auto')
 clusters = kmeans.fit_predict(extracted_features)
 
-print(clusters)
+centers = kmeans.cluster_centers_
+# print(centers)
 
-# lists to store the values of each image for each extracted feature
-f1 = []
-f2 = []
-f3 = []
-f4 = []
-f5 = []
-f6 = []
-
-# loop through each pair of values for each image and add the values to the individual lists
-for i in range(extracted_features.shape[0]):
-    f1.append(extracted_features[i][0])
-    f2.append(extracted_features[i][1])
-    f3.append(extracted_features[i][2])
-    f4.append(extracted_features[i][3])
-    f5.append(extracted_features[i][4])
-    f6.append(extracted_features[i][5])
+for center in centers:
+    print(center)
 
 
-df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6"])
+df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7"])
 df["Category"] = clusters
 
 
-print(df)
+# print(df)
 
-kws = dict(s=5, linewidth=0)
-
-sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
-
-plt.savefig("Plots/6_feature_clustering")
-plt.show()
+# kws = dict(s=5, linewidth=0)
+#
+# sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
+#
+# plt.savefig("Plots/7_feature_clustering")
+# plt.show()
 
