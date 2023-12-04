@@ -13,7 +13,7 @@ rand = [0, 0, 0, 0, 0, 0]
 
 df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
-print(df["GalaxyID"].tolist())
+# print(df["GalaxyID"].tolist())
 
 # loop through each galaxy set (with an index)
 for i, galaxy_set in enumerate(os.listdir("/cosma7/data/Eagle/web-storage/")):
