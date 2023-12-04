@@ -139,7 +139,7 @@ decoder_layer = autoencoder.get_layer("decoded")
 decoder_input = keras.Input(shape=encoding_dim)
 
 # build the encoder
-encoder = keras.Model(autoencoder.input, encoder_layer)
+encoder = keras.Model(autoencoder.input, encoder_layer.output)
 
 # build the decoder
 decoder = keras.Model(decoder_input, decoder_layer(decoder_input))
