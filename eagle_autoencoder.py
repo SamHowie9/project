@@ -144,15 +144,15 @@ decoder_input = keras.Input(shape=encoding_dim)
 encoder = keras.Model(autoencoder.input, encoder_layer.output)
 
 # build the decoder
-# decoder = keras.Model(decoder_input, autoencoder.layers[-1](decoder_input))
+decoder = keras.Model(decoder_input, autoencoder.layers[-1](decoder_input))
 
 
 
-# extract the features
-extracted_features = encoder.predict(train_images)
-
-# save the features as a numpy array
-np.save("Features/8_features.npy", extracted_features)
+# # extract the features
+# extracted_features = encoder.predict(train_images)
+#
+# # save the features as a numpy array
+# np.save("Features/8_features.npy", extracted_features)
 
 
 
