@@ -40,36 +40,49 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", paddin
 # crate autoencoder
 autoencoder = keras.Model(input_image, decoded)
 
+encoder = keras.Sequential()
+for i in range(0, 9):
+    encoder.add(autoencoder.layers[i])
 
+decoder = keras.Sequential()
+for i in range(9, 18):
+    decoder.add(autoencoder.layers[i])
 
-# extract layers to build encoder
-encoded = autoencoder.layers[1]
-encoded = autoencoder.layers[2]
-encoded = autoencoder.layers[3]
-encoded = autoencoder.layers[4]
-encoded = autoencoder.layers[5]
-encoded = autoencoder.layers[6]
-encoded = autoencoder.layers[7]
-encoded = autoencoder.layers[8]
+decoder.build(input_shape=(None, encoding_dim))
 
-encoder = keras.Model(input_image, encoded.output)
 encoder.summary()
-
-# input for decoder
-encoded_input = keras.Input(shape=(encoding_dim,))
-
-# extract layers for decoder
-decoded = autoencoder.layers[-1]
-decoded = autoencoder.layers[-2]
-decoded = autoencoder.layers[-3]
-decoded = autoencoder.layers[-4]
-decoded = autoencoder.layers[-5]
-decoded = autoencoder.layers[-6]
-decoded = autoencoder.layers[-7]
-decoded = autoencoder.layers[-8]
-
-decoder = keras.Model(encoded_input, decoded(encoded_input))
 decoder.summary()
+
+
+# # extract layers to build encoder
+# encoded = autoencoder.layers[1]
+# encoded = autoencoder.layers[2]
+# encoded = autoencoder.layers[3]
+# encoded = autoencoder.layers[4]
+# encoded = autoencoder.layers[5]
+# encoded = autoencoder.layers[6]
+# encoded = autoencoder.layers[7]
+# encoded = autoencoder.layers[8]
+#
+# encoder = keras.Model(input_image, encoded.output)
+# encoder.summary()
+#
+# # input for decoder
+# encoded_input = keras.Input(shape=(encoding_dim,))
+#
+# # extract layers for decoder
+# decoded = autoencoder.layers[-1]
+# decoded = autoencoder.layers[-2]
+# decoded = autoencoder.layers[-3]
+# decoded = autoencoder.layers[-4]
+# decoded = autoencoder.layers[-5]
+# decoded = autoencoder.layers[-6]
+# decoded = autoencoder.layers[-7]
+# decoded = autoencoder.layers[-8]
+#
+# decoder = keras.Model(encoded_input, autoencoder.layers[-9](encoded_input))
+# decoder.add(autoencoder.layers[-8])
+# decoder.summary()
 
 
 # # extract encoder layer and decoder layer from autoencoder
@@ -135,5 +148,5 @@ plt.subplots_adjust(hspace=0.2)
 
 
 # save and display the plot
-plt.savefig("Plots/8_feature_histogram")
+plt.savefig("Plots/8_feature_histogram_comparison")
 plt.show()
