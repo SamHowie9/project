@@ -46,8 +46,6 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 # load the weights
 autoencoder.load_weights("Weights/8_feature_weights.h5")
 
-# save the weights
-autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
 
 
 
@@ -55,19 +53,23 @@ autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True
 encoder_layer = autoencoder.get_layer("encoded")
 decoder_layer = autoencoder.get_layer("decoded")
 
-# get the shape of the decoder input
-decoder_input = keras.Input(shape=encoding_dim)
+
 
 # build the encoder
 encoder = keras.Model(autoencoder.input, encoder_layer.output)
 
 # build the decoder
-decoder = keras.Model(decoder_input, autoencoder.layers[-1](decoder_input))
+encoded_input = keras.Input(shape=(encoding_dim,))
+# Retrieve the last layer of the autoencoder model
+decoder_layer = autoencoder.layers[-1]
+# Create the decoder model
+decoder = keras.Model(encoded_input, decoder_layer(encoded_input))
+
 
 
 
 # extract the features
-extracted_features = encoder.predict(train_images)
+# extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/8_features.npy", extracted_features)
+# np.save("Features/8_features.npy", extracted_features)
