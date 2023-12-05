@@ -8,6 +8,7 @@ import os
 
 # load the extracted features
 extracted_features = np.load("Features/8_features_new.npy")
+extracted_features = np.flipud(np.rot90(extracted_features))
 
 print(extracted_features.shape)
 
@@ -23,7 +24,8 @@ axis_ratio = (df1["galfit_q"] + df2["galfit_q"]) / 2
 position_angle = (df1["galfit_PA"] + df2["galfit_PA"]) / 2
 
 
-print(ab_magnitude.shape)
+print(ab_magnitude[:-4].shape)
+print(extracted_features[0].shape)
 
 # print(df.to_string())
 
@@ -42,14 +44,26 @@ print(ab_magnitude.shape)
 fig, axs = plt.subplots(6, 8, figsize=(25,20))
 
 for i in range(0, 8):
-    axs[0, i].scatter(extracted_features[i], ab_magnitude)
-    axs[1, i].scatter(extracted_features[i], mass)
-    axs[2, i].scatter(extracted_features[i], semi_major)
-    axs[3, i].scatter(extracted_features[i], sersic)
-    axs[4, i].scatter(extracted_features[i], axis_ratio)
-    axs[5, i].scatter(extracted_features[i], position_angle)
+
+    title = "Feature " + str(i+1)
+    axs[0, i].set_title(title)
+
+    axs[0, i].scatter(extracted_features[i], ab_magnitude[:-4], s=2)
+    axs[1, i].scatter(extracted_features[i], mass[:-4], s=2)
+    axs[2, i].scatter(extracted_features[i], semi_major[:-4], s=2)
+    axs[3, i].scatter(extracted_features[i], sersic[:-4], s=2)
+    axs[4, i].scatter(extracted_features[i], axis_ratio[:-4], s=2)
+    axs[5, i].scatter(extracted_features[i], position_angle[:-4], s=2)
+
+axs[0, 0].set_ylabel("AB Magnitude")
+axs[1, 0].set_ylabel("Stellar Mass")
+axs[2, 0].set_ylabel("Semi-Major Axis")
+axs[3, 0].set_ylabel("Sersic Index")
+axs[4, 0].set_ylabel("Axis Ratio")
+axs[5, 0].set_ylabel("Position Angle")
 
 
+plt.savefig("Plots/8_feature_property_comparison")
 plt.show()
 
 
