@@ -18,7 +18,7 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 # print(df["GalaxyID"].tolist())
 #
-# # loop through each galaxy set (with an index)
+# loop through each galaxy set (with an index)
 # for i, galaxy_set in enumerate(os.listdir("/cosma7/data/Eagle/web-storage/")):
 #
 #     # print(i, galaxy_set)
@@ -46,10 +46,12 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 # print(df)
 
+print(df.shape)
+
 all_images = []
 
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
-    print(galaxy)
+    # print(galaxy)
     try:
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
         all_images.append(image)
@@ -59,7 +61,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         df.drop(axis=0, index=i)
         i -= 1
 
-
+print(np.array(all_images).shape)
 
 # [1, 1, 0, 3624, 1, 1]
 # [1, 1, 0, 3624, 1, 1]
