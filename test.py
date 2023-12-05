@@ -48,8 +48,8 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 # print(df.shape)
 #
-# all_images = []
-#
+all_images = []
+
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     # print(galaxy)
     # try:
@@ -63,8 +63,13 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     filename = "galface_" + str(galaxy) + ".png"
 
-    if filename not in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
+    if filename in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+        all_images.append(image)
+    else:
         print(galaxy)
+
+print(np.array(all_images).shape)
 
 # print(df.shape)
 
