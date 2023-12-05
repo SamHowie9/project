@@ -25,14 +25,13 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 # loop through each galaxy in the supplmental file
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
-    try:
-        # try to open the image corresponding to that galaxy and add it to the list of all other galaxies in the file
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
+    filename = "galface_" + str(galaxy) + ".png"
+
+    if filename in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
         all_images.append(image)
-    except:
-        # if that galaxy is not in our set then remove it from the dataframe and decrement our counter
+    else:
         df.drop(axis=0, index=i)
-        i -= 1
 
 
 # # loop through the directory containing all the image files
@@ -105,7 +104,7 @@ test_images = np.array(all_images[testing_count:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 7
+encoding_dim = 9
 
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
@@ -163,7 +162,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
-autoencoder.save_weights(filepath="Weights/7_feature_weights_new.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights/9_feature_weights_new.h5", overwrite=True)
 
 
 # load the weights
@@ -191,7 +190,7 @@ autoencoder.save_weights(filepath="Weights/7_feature_weights_new.h5", overwrite=
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/7_features_new.npy", extracted_features)
+np.save("Features/9_features_new.npy", extracted_features)
 
 
 
@@ -595,5 +594,5 @@ for i in range(0, n-1):
 
 
 
-plt.savefig("Plots/7_feature_reconstruction_comparison")
+plt.savefig("Plots/9_feature_reconstruction_comparison")
 plt.show()
