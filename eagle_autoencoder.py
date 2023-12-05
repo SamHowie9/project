@@ -35,7 +35,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         df.drop(axis=0, index=i)
         i -= 1
 
-print(all_images.shape)
+print(np.array(all_images).shape)
 
 # # loop through the directory containing all the image files
 # for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
