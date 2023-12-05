@@ -61,7 +61,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     #     df.drop(axis=0, index=i)
     #     i -= 1
 
-    filename = "galface_" + str(galaxy) + ".png""
+    filename = "galface_" + str(galaxy) + ".png"
 
     if filename not in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
         print(galaxy)
