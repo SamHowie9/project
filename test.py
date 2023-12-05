@@ -16,7 +16,7 @@ rand = [0, 0, 0, 0, 0, 0]
 df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 
-print(df["GalaxyID"].tolist())
+# print(df["GalaxyID"].tolist())
 
 # # loop through each galaxy set (with an index)
 # for i, galaxy_set in enumerate(os.listdir("/cosma7/data/Eagle/web-storage/")):
@@ -61,10 +61,12 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     #     df.drop(axis=0, index=i)
     #     i -= 1
 
-    if galaxy not in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
+    filename = "galface_" + str(galaxy) + ".png""
+
+    if filename not in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
         print(galaxy)
 
-print(df.shape)
+# print(df.shape)
 
 # [1, 1, 0, 3624, 1, 1]
 # [1, 1, 0, 3624, 1, 1]
