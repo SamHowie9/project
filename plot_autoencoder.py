@@ -4,7 +4,10 @@ import seaborn as sns
 import pandas as pd
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 import keras
+import os
 
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 # set the encoding dimension (number of extracted features)
@@ -50,8 +53,8 @@ for i in range(9, 18):
 
 decoder.build(input_shape=(None, encoding_dim))
 
-encoder.summary()
-decoder.summary()
+# encoder.summary()
+# decoder.summary()
 
 
 # # extract layers to build encoder

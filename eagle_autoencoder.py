@@ -227,43 +227,43 @@ np.save("Features/8_features.npy", extracted_features)
 
 
 
-# # create a subset of the validation data to reconstruct (first 10 images)
-# images_to_reconstruct = test_images[:10]
-#
-# # number of images to reconstruct
-# n = 10
-#
-# # reconstruct the images
-# reconstructed_images = autoencoder.predict(test_images[:n])
-#
-# # create figure to hold subplots
-# # fig, axs = plt.subplots(4, n-1, figsize=(20,8))
-# fig, axs = plt.subplots(2, n-1, figsize=(20,4))
-#
-# # plot each subplot
-# for i in range(0, n-1):
-#
-#     # show the original image (remove axes)
-#     axs[0,i].imshow(test_images[i])
-#     axs[0,i].get_xaxis().set_visible(False)
-#     axs[0,i].get_yaxis().set_visible(False)
-#
-#     # show the reconstructed image (remove axes)
-#     axs[1,i].imshow(reconstructed_images[i])
-#     axs[1,i].get_xaxis().set_visible(False)
-#     axs[1,i].get_yaxis().set_visible(False)
-#
-#     # # calculate residue (difference between two images) and show this
-#     # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-#     # axs[2,i].imshow(residue_image)
-#     # axs[2,i].get_xaxis().set_visible(False)
-#     # axs[2,i].get_yaxis().set_visible(False)
-#     #
-#     # # add an exponential transform to the residue to show differences more clearly
-#     # exponential_residue = np.exp(5 * residue_image) - 1
-#     # axs[3,i].imshow(exponential_residue)
-#     # axs[3,i].get_xaxis().set_visible(False)
-#     # axs[3,i].get_yaxis().set_visible(False)
+# create a subset of the validation data to reconstruct (first 10 images)
+images_to_reconstruct = test_images[:10]
+
+# number of images to reconstruct
+n = 10
+
+# reconstruct the images
+reconstructed_images = autoencoder.predict(test_images[:n])
+
+# create figure to hold subplots
+# fig, axs = plt.subplots(4, n-1, figsize=(20,8))
+fig, axs = plt.subplots(2, n-1, figsize=(20,4))
+
+# plot each subplot
+for i in range(0, n-1):
+
+    # show the original image (remove axes)
+    axs[0,i].imshow(test_images[i])
+    axs[0,i].get_xaxis().set_visible(False)
+    axs[0,i].get_yaxis().set_visible(False)
+
+    # show the reconstructed image (remove axes)
+    axs[1,i].imshow(reconstructed_images[i])
+    axs[1,i].get_xaxis().set_visible(False)
+    axs[1,i].get_yaxis().set_visible(False)
+
+    # # calculate residue (difference between two images) and show this
+    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+    # axs[2,i].imshow(residue_image)
+    # axs[2,i].get_xaxis().set_visible(False)
+    # axs[2,i].get_yaxis().set_visible(False)
+    #
+    # # add an exponential transform to the residue to show differences more clearly
+    # exponential_residue = np.exp(5 * residue_image) - 1
+    # axs[3,i].imshow(exponential_residue)
+    # axs[3,i].get_xaxis().set_visible(False)
+    # axs[3,i].get_yaxis().set_visible(False)
 
 
 
@@ -575,5 +575,5 @@ np.save("Features/8_features.npy", extracted_features)
 
 
 
-# plt.savefig("Plots/8_feature_histogram")
-# plt.show()
+plt.savefig("Plots/8_feature_reconstruction")
+plt.show()

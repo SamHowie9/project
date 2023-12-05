@@ -38,3 +38,7 @@ for i, galaxy_set in enumerate(os.listdir("/cosma7/data/Eagle/web-storage/")):
 print(face)
 print(edge)
 print(rand)
+
+# [1, 1, 0, 3624, 1, 1]
+# [1, 1, 0, 3624, 1, 1]
+# [1, 1, 0, 3624, 1, 1]
