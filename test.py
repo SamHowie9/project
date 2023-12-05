@@ -49,13 +49,13 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 all_images = []
 
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
-
+    print(galaxy)
     try:
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
         all_images.append(image)
     except:
         print(str(galaxy), "...")
-        print("...")
+        print(".................................................................")
         df.drop(axis=0, index=i)
         i -= 1
 
