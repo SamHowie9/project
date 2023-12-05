@@ -55,6 +55,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         all_images.append(image)
     except:
         print(str(galaxy), "...")
+        print("...")
         df.drop(axis=0, index=i)
         i -= 1
 
