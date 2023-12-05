@@ -7,12 +7,14 @@ import os
 from matplotlib import image as mpimg
 
 
-face = [0, 0, 0, 0, 0, 0]
-edge = [0, 0, 0, 0, 0, 0]
-rand = [0, 0, 0, 0, 0, 0]
+# face = [0, 0, 0, 0, 0, 0]
+# edge = [0, 0, 0, 0, 0, 0]
+# rand = [0, 0, 0, 0, 0, 0]
+
 
 
 df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+
 
 # print(df["GalaxyID"].tolist())
 #
@@ -43,8 +45,6 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 # pd.set_option('display.max_rows', None)
 
 # print(df)
-print()
-print()
 
 all_images = []
 
@@ -54,19 +54,11 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
         all_images.append(image)
     except:
-        print(galaxy)
+        print(str(galaxy))
         df.drop(axis=0, index=i)
         i -= 1
 
 
-np.save("stab3510_supplemental_file/images.npy", np.array(all_images))
-
-# print(df)
-
-# print(df)
-
-print(np.array(all_images).shape)
-# print(all_images[0])
 
 # [1, 1, 0, 3624, 1, 1]
 # [1, 1, 0, 3624, 1, 1]
