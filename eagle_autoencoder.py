@@ -15,17 +15,34 @@ os.environ["CUDA_VISIBLE_DEVICES"]="2" # for GPU
 
 
 
+
 # stores an empty list to contain all the image data to train the model
-train_images = []
+all_images = []
 
-# loop through the directory containing all the image files
-for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
+# load the supplemental file into a dataframe
+df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
-    # open the fits file and get the image data (this is a numpy array of each pixel value)
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/" + file)
+# loop through each galaxy in the supplmental file
+for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
-    # append the image data to the main list containing all data of all the images
-    train_images.append(image)
+    try:
+        # try to open the image corresponding to that galaxy and add it to the list of all other galaxies in the file
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
+        all_images.append(image)
+    except:
+        # if that galaxy is not in our set then remove it from the dataframe and decrement our counter
+        df.drop(axis=0, index=i)
+        i -= 1
+
+
+# # loop through the directory containing all the image files
+# for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
+#
+#     # open the fits file and get the image data (this is a numpy array of each pixel value)
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/" + file)
+#
+#     # append the image data to the main list containing all data of all the images
+#     all_images.append(image)
 
 # # return this list
 # return train_images
@@ -36,11 +53,11 @@ for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
 
 
 # find the number of images that you will test the model on
-testing_count = int(len(train_images)/10)
+testing_count = int(len(all_images)/10)
 
 # split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
-train_images = np.array(train_images[:testing_count*10])
-test_images = np.array(train_images[testing_count:])
+train_images = np.array(all_images[:testing_count*10])
+test_images = np.array(all_images[testing_count:])
 
 
 # # Instantiate a Keras tensor to allow us to build the model
@@ -146,7 +163,7 @@ autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
-autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights/8_feature_weights_new.h5", overwrite=True)
 
 
 # load the weights
@@ -174,7 +191,7 @@ autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/8_features.npy", extracted_features)
+np.save("Features/8_features_new.npy", extracted_features)
 
 
 
@@ -578,5 +595,5 @@ for i in range(0, n-1):
 
 
 
-plt.savefig("Plots/8_feature_reconstruction")
+plt.savefig("Plots/8_feature_reconstruction_comparison")
 plt.show()
