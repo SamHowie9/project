@@ -51,7 +51,7 @@ all_images = []
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     try:
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0752_Subhalo/galface_" + str(galaxy) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
         all_images.append(image)
     except:
         print(galaxy)
