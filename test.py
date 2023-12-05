@@ -42,7 +42,7 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 all_images = []
 
-for i, galaxy in enumerate(["GalaxyID"].tolist()):
+for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     try:
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/galface_" + str(galaxy) + ".png")
