@@ -61,7 +61,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         df.drop(axis=0, index=i)
         i -= 1
 
-print(np.array(all_images).shape)
+print(df.shape)
 
 # [1, 1, 0, 3624, 1, 1]
 # [1, 1, 0, 3624, 1, 1]
