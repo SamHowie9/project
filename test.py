@@ -40,6 +40,12 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 # print(edge)
 # print(rand)
 
+pd.set_option('display.max_rows', None)
+
+print(df)
+print()
+print()
+
 all_images = []
 
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
@@ -48,8 +54,16 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/galface_" + str(galaxy) + ".png")
         all_images.append(image)
     except:
+        print(galaxy)
         df.drop(axis=0, index=i)
         i -= 1
+
+print()
+print()
+
+print(df)
+
+print(df)
 
 print(np.array(all_images).shape)
 print()
