@@ -11,7 +11,7 @@ from sklearn.cluster import KMeans
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 8
+encoding_dim = 7
 
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
@@ -60,14 +60,14 @@ decoder.build(input_shape=(None, encoding_dim))
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # load the weights
-autoencoder.load_weights("Weights/8_feature_weights.h5")
+autoencoder.load_weights("Weights/7_feature_weights_new.h5")
 
 
 
 
 
 # load the extracted features
-extracted_features = np.load("Features/8_features.npy")
+extracted_features = np.load("Features/7_features_new.npy")
 
 
 
@@ -87,19 +87,43 @@ reconstructions = decoder.predict(centers)
 print(reconstructions[0])
 
 # create figure to hold subplots
-fig, axs = plt.subplots(2, 4, figsize=(20,4))
+fig, axs = plt.subplots(2, 4, figsize=(20,15))
 
-axs[0, 0].imshow(np.exp(5 * reconstructions[0]) - 1)
-axs[0, 1].imshow(np.exp(5 * reconstructions[1]) - 1)
-axs[0, 2].imshow(np.exp(5 * reconstructions[2]) - 1)
-axs[0, 3].imshow(np.exp(5 * reconstructions[3]) - 1)
-axs[1, 0].imshow(np.exp(5 * reconstructions[4]) - 1)
-axs[1, 1].imshow(np.exp(5 * reconstructions[5]) - 1)
-axs[1, 2].imshow(np.exp(5 * reconstructions[6]) - 1)
-axs[1, 3].imshow(np.exp(5 * reconstructions[7]) - 1)
+axs[0, 0].imshow(reconstructions[0])
+axs[0, 0].get_xaxis().set_visible(False)
+axs[0, 0].get_yaxis().set_visible(False)
 
+axs[0, 1].imshow(reconstructions[1])
+axs[0, 1].get_xaxis().set_visible(False)
+axs[0, 1].get_yaxis().set_visible(False)
+
+axs[0, 2].imshow(reconstructions[2])
+axs[0, 2].get_xaxis().set_visible(False)
+axs[0, 2].get_yaxis().set_visible(False)
+
+axs[0, 3].imshow(reconstructions[3])
+axs[0, 3].get_xaxis().set_visible(False)
+axs[0, 3].get_yaxis().set_visible(False)
+
+axs[1, 0].imshow(reconstructions[4])
+axs[1, 0].get_xaxis().set_visible(False)
+axs[1, 0].get_yaxis().set_visible(False)
+
+axs[1, 1].imshow(reconstructions[5])
+axs[1, 1].get_xaxis().set_visible(False)
+axs[1, 1].get_yaxis().set_visible(False)
+
+axs[1, 2].imshow(reconstructions[6])
+axs[1, 2].get_xaxis().set_visible(False)
+axs[1, 2].get_yaxis().set_visible(False)
+
+axs[1, 3].imshow(reconstructions[7])
+axs[1, 3].get_xaxis().set_visible(False)
+axs[1, 3].get_yaxis().set_visible(False)
+
+
+plt.savefig("Plots/7_cluster_reconstruction_new")
 plt.show()
-
 
 # df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7"])
 # df["Category"] = clusters

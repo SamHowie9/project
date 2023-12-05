@@ -7,6 +7,25 @@ import os
 from matplotlib import image as mpimg
 
 
+A = np.array([[0, 1, 2, 3, 4], [0, 1, 2, 3, 4]])
+B = np.rot90(A)
+C = np.flipud(B)
+D = np.flipud(np.rot90(A))
+print(A)
+print()
+print(B)
+print()
+print(C)
+print()
+print(D)
+print()
+
+print(A.shape)
+print(B.shape)
+print(C.shape)
+print(D.shape)
+
+
 face = [0, 0, 0, 0, 0, 0]
 edge = [0, 0, 0, 0, 0, 0]
 rand = [0, 0, 0, 0, 0, 0]
@@ -48,30 +67,30 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 # print(df.shape)
 #
-all_images = []
-
-for i, galaxy in enumerate(df["GalaxyID"].tolist()):
-    # print(galaxy)
-    # try:
-    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
-    #     all_images.append(image)
-    # except:
-    #     print(str(galaxy), "...")
-    #     print(".................................................................")
-    #     df.drop(axis=0, index=i)
-    #     i -= 1
-
-    filename = "galface_" + str(galaxy) + ".png"
-
-    if filename in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-        all_images.append(image)
-    else:
-        df.drop(axis=0, index=i)
-        print(galaxy)
-
-print(df.shape)
-print(np.array(all_images).shape)
+# all_images = []
+#
+# for i, galaxy in enumerate(df["GalaxyID"].tolist()):
+#     # print(galaxy)
+#     # try:
+#     #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
+#     #     all_images.append(image)
+#     # except:
+#     #     print(str(galaxy), "...")
+#     #     print(".................................................................")
+#     #     df.drop(axis=0, index=i)
+#     #     i -= 1
+#
+#     filename = "galface_" + str(galaxy) + ".png"
+#
+#     if filename in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+#         all_images.append(image)
+#     else:
+#         df.drop(axis=0, index=i)
+#         print(galaxy)
+#
+# print(df.shape)
+# print(np.array(all_images).shape)
 
 # print(df.shape)
 
