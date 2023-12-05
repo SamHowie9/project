@@ -58,16 +58,14 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         df.drop(axis=0, index=i)
         i -= 1
 
-print()
-print()
+
+np.save("stab3510_supplemental_file/images.npy", np.array(all_images))
 
 # print(df)
 
 # print(df)
 
 print(np.array(all_images).shape)
-print()
-print()
 # print(all_images[0])
 
 # [1, 1, 0, 3624, 1, 1]
