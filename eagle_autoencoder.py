@@ -30,10 +30,12 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
         all_images.append(image)
     except:
+        print(galaxy)
         # if that galaxy is not in our set then remove it from the dataframe and decrement our counter
         df.drop(axis=0, index=i)
         i -= 1
 
+print(all_images.shape)
 
 # # loop through the directory containing all the image files
 # for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
