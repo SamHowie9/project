@@ -88,7 +88,7 @@ test_images = np.array(train_images[testing_count:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 7
+encoding_dim = 8
 
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
@@ -143,12 +143,15 @@ decoder.build(input_shape=(None, encoding_dim))
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-# model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
-
-autoencoder.load_weights("Weights/7_feature_weights.h5")
+model_data = autoencoder.fit(train_images, train_images, epochs=150, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
-# autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights/8_feature_weights.h5", overwrite=True)
+
+
+# load the weights
+# autoencoder.load_weights("Weights/7_feature_weights.h5")
+
 
 
 
@@ -171,7 +174,7 @@ autoencoder.load_weights("Weights/7_feature_weights.h5")
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/7_features.npy", extracted_features)
+np.save("Features/8_features.npy", extracted_features)
 
 
 
@@ -575,5 +578,5 @@ for i in range(0, n-1):
 
 
 
-plt.savefig("Plots/7_feature_reconstruction")
+plt.savefig("Plots/8_feature_reconstruction")
 plt.show()
