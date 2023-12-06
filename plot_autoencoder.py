@@ -11,7 +11,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 8
+encoding_dim = 9
 
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
@@ -110,17 +110,17 @@ decoder.build(input_shape=(None, encoding_dim))
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # load the weights
-autoencoder.load_weights("Weights/9_feature_weights.h5")
+autoencoder.load_weights("Weights/9_feature_weights_new.h5")
 
 
 
 
 # load the extracted features
-extracted_features = np.load("Features/8_features.npy")
+extracted_features = np.load("Features/9_features_new.npy")
 
 
 # add the features to a dataframe
-df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"])
+df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
 
 
 
@@ -151,5 +151,5 @@ plt.subplots_adjust(hspace=0.2)
 
 
 # save and display the plot
-plt.savefig("Plots/8_feature_histogram_comparison")
+plt.savefig("Plots/9_feature_histogram_comparison")
 plt.show()

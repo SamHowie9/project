@@ -72,80 +72,82 @@ extracted_features = np.load("Features/9_features_new.npy")
 kmeans = KMeans(n_clusters=9, random_state=0, n_init='auto')
 clusters = kmeans.fit_predict(extracted_features)
 
+print(clusters)
+print(clusters.shape)
 
 
 
 
-centers = kmeans.cluster_centers_
-# print(centers)
-
-for center in centers:
-    print(center)
-
-# print(centers[0])
-
-reconstructions = decoder.predict(centers)
-
-print(reconstructions[0])
-
-# create figure to hold subplots
-fig, axs = plt.subplots(2, 5, figsize=(20,10))
-
-axs[0, 0].imshow(reconstructions[0])
-axs[0, 0].get_xaxis().set_visible(False)
-axs[0, 0].get_yaxis().set_visible(False)
-
-axs[0, 1].imshow(reconstructions[1])
-axs[0, 1].get_xaxis().set_visible(False)
-axs[0, 1].get_yaxis().set_visible(False)
-
-axs[0, 2].imshow(reconstructions[2])
-axs[0, 2].get_xaxis().set_visible(False)
-axs[0, 2].get_yaxis().set_visible(False)
-
-axs[0, 3].imshow(reconstructions[3])
-axs[0, 3].get_xaxis().set_visible(False)
-axs[0, 3].get_yaxis().set_visible(False)
-
-axs[0, 4].imshow(reconstructions[4])
-axs[0, 4].get_xaxis().set_visible(False)
-axs[0, 4].get_yaxis().set_visible(False)
-
-axs[1, 0].imshow(reconstructions[5])
-axs[1, 0].get_xaxis().set_visible(False)
-axs[1, 0].get_yaxis().set_visible(False)
-
-axs[1, 1].imshow(reconstructions[6])
-axs[1, 1].get_xaxis().set_visible(False)
-axs[1, 1].get_yaxis().set_visible(False)
-
-axs[1, 2].imshow(reconstructions[7])
-axs[1, 2].get_xaxis().set_visible(False)
-axs[1, 2].get_yaxis().set_visible(False)
-
-axs[1, 3].imshow(reconstructions[8])
-axs[1, 3].get_xaxis().set_visible(False)
-axs[1, 3].get_yaxis().set_visible(False)
-
-axs[1, 4].set_axis_off()
-
-
-plt.savefig("Plots/9_cluster_reconstruction_new")
-plt.show()
-
-
-
-
-# df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
-# df["Category"] = clusters
+# centers = kmeans.cluster_centers_
+# # print(centers)
+#
+# for center in centers:
+#     print(center)
+#
+# # print(centers[0])
+#
+# reconstructions = decoder.predict(centers)
+#
+# print(reconstructions[0])
+#
+# # create figure to hold subplots
+# fig, axs = plt.subplots(2, 5, figsize=(20,10))
+#
+# axs[0, 0].imshow(reconstructions[0])
+# axs[0, 0].get_xaxis().set_visible(False)
+# axs[0, 0].get_yaxis().set_visible(False)
+#
+# axs[0, 1].imshow(reconstructions[1])
+# axs[0, 1].get_xaxis().set_visible(False)
+# axs[0, 1].get_yaxis().set_visible(False)
+#
+# axs[0, 2].imshow(reconstructions[2])
+# axs[0, 2].get_xaxis().set_visible(False)
+# axs[0, 2].get_yaxis().set_visible(False)
+#
+# axs[0, 3].imshow(reconstructions[3])
+# axs[0, 3].get_xaxis().set_visible(False)
+# axs[0, 3].get_yaxis().set_visible(False)
+#
+# axs[0, 4].imshow(reconstructions[4])
+# axs[0, 4].get_xaxis().set_visible(False)
+# axs[0, 4].get_yaxis().set_visible(False)
+#
+# axs[1, 0].imshow(reconstructions[5])
+# axs[1, 0].get_xaxis().set_visible(False)
+# axs[1, 0].get_yaxis().set_visible(False)
+#
+# axs[1, 1].imshow(reconstructions[6])
+# axs[1, 1].get_xaxis().set_visible(False)
+# axs[1, 1].get_yaxis().set_visible(False)
+#
+# axs[1, 2].imshow(reconstructions[7])
+# axs[1, 2].get_xaxis().set_visible(False)
+# axs[1, 2].get_yaxis().set_visible(False)
+#
+# axs[1, 3].imshow(reconstructions[8])
+# axs[1, 3].get_xaxis().set_visible(False)
+# axs[1, 3].get_yaxis().set_visible(False)
+#
+# axs[1, 4].set_axis_off()
 #
 #
-# print(df)
-#
-# kws = dict(s=5, linewidth=0)
-#
-# sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
-#
-# plt.savefig("Plots/9_feature_clustering_new")
+# plt.savefig("Plots/9_cluster_reconstruction_new")
 # plt.show()
+
+
+
+
+df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
+df["Category"] = clusters
+
+
+# print(df)
+
+kws = dict(s=5, linewidth=0)
+
+sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
+
+plt.savefig("Plots/9_feature_clustering_new")
+plt.show()
 
