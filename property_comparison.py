@@ -67,47 +67,44 @@ df["galfit_PA"] = position_angle
 df["Cluster"] = clusters
 
 
-print(df)
-
 group_1 = df.loc[df["Cluster"] == 0, "GalaxyID"].tolist()
 group_2 = df.loc[df["Cluster"] == 1, "GalaxyID"].tolist()
 
-print(group_1)
-print(group_2)
 
 
-fig, axs = plt.subplots(2, 6, figsize=(30,10))
 
 
-for i in range(0, 3):
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i]) + ".png")
-    axs[0, i].imshow(image)
-    axs[0, i].get_xaxis().set_visible(False)
-    axs[0, i].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+3]) + ".png")
-    axs[0, i+3].imshow(image)
-    axs[0, i+3].get_xaxis().set_visible(False)
-    axs[0, i+3].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i]) + ".png")
-    axs[1, i].imshow(image)
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+3]) + ".png")
-    axs[1, i+3].imshow(image)
-    axs[1, i+3].get_xaxis().set_visible(False)
-    axs[1, i+3].get_yaxis().set_visible(False)
-
-
-axs[0,1].set_title("Group 1", pad=15)
-axs[0,4].set_title("Group 2", pad=15)
-
-
-plt.savefig("Plots/2_cluster_originals")
-plt.show()
+# fig, axs = plt.subplots(2, 6, figsize=(30,10))
+#
+# for i in range(0, 3):
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i]) + ".png")
+#     axs[0, i].imshow(image)
+#     axs[0, i].get_xaxis().set_visible(False)
+#     axs[0, i].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+3]) + ".png")
+#     axs[0, i+3].imshow(image)
+#     axs[0, i+3].get_xaxis().set_visible(False)
+#     axs[0, i+3].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i]) + ".png")
+#     axs[1, i].imshow(image)
+#     axs[1, i].get_xaxis().set_visible(False)
+#     axs[1, i].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+3]) + ".png")
+#     axs[1, i+3].imshow(image)
+#     axs[1, i+3].get_xaxis().set_visible(False)
+#     axs[1, i+3].get_yaxis().set_visible(False)
+#
+#
+# axs[0,1].set_title("Group 1", pad=15)
+# axs[0,4].set_title("Group 2", pad=15)
+#
+#
+# plt.savefig("Plots/2_cluster_originals")
+# plt.show()
 
 
 
