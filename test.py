@@ -7,33 +7,52 @@ import os
 from matplotlib import image as mpimg
 
 
-A = np.array([[0, 1, 2, 3, 4], [0, 1, 2, 3, 4]])
-B = np.rot90(A)
-C = np.flipud(B)
-D = np.flipud(np.rot90(A))
-print(A)
+# A = np.array([[0, 1, 2, 3, 4], [0, 1, 2, 3, 4]])
+# B = np.rot90(A)
+# C = np.flipud(B)
+# D = np.flipud(np.rot90(A))
+# print(A)
+# print()
+# print(B)
+# print()
+# print(C)
+# print()
+# print(D)
+# print()
+#
+# print(A.shape)
+# print(B.shape)
+# print(C.shape)
+# print(D.shape)
+#
+#
+# face = [0, 0, 0, 0, 0, 0]
+# edge = [0, 0, 0, 0, 0, 0]
+# rand = [0, 0, 0, 0, 0, 0]
+#
+#
+#
+# df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+
+
+A = ["a", "b", "c", "d", "e", "f"]
+
+B = ["b", "c", "d", "f"]
+
+dataset_df = pd.DataFrame(A, columns=["Letter"])
+
+print(dataset_df)
 print()
-print(B)
-print()
-print(C)
-print()
-print(D)
-print()
 
-print(A.shape)
-print(B.shape)
-print(C.shape)
-print(D.shape)
+for i, letter in enumerate(dataset_df["Letter"].tolist()):
 
+    print(i, letter)
 
-face = [0, 0, 0, 0, 0, 0]
-edge = [0, 0, 0, 0, 0, 0]
-rand = [0, 0, 0, 0, 0, 0]
+    if letter not in B:
+        print(".....")
+        dataset_df.drop(axis=0, index=i, inplace=True)
 
-
-
-df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
-
+print(dataset_df)
 
 # print(df["GalaxyID"].tolist())
 

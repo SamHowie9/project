@@ -32,8 +32,8 @@ for i, galaxy in enumerate(df1["GalaxyID"].tolist()):
     filename = "galface_" + str(galaxy) + ".png"
 
     if filename not in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
-        df1.drop(axis=0, index=i)
-        df2.drop(axis=0, index=i)
+        df1.drop(axis=0, index=i, inplace=True)
+        df2.drop(axis=0, index=i, inplace=True)
 
 
 print(df1.shape)
