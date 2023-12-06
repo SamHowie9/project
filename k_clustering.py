@@ -11,7 +11,7 @@ from sklearn.cluster import KMeans
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 16
+encoding_dim = 9
 
 
 
@@ -20,24 +20,24 @@ extracted_features = np.load("Features/" + str(encoding_dim) + "_features_new.np
 
 
 
-# stores an empty list to contain all the image data to train the model
-all_images = []
-
-# load the supplemental file into a dataframe
-df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
-
-print(df.shape)
-
-# loop through each galaxy in the supplmental file
-for i, galaxy in enumerate(df["GalaxyID"].tolist()):
-
-    filename = "galface_" + str(galaxy) + ".png"
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-    all_images.append(image)
-
-
-print(np.array(all_images).shape)
+# # stores an empty list to contain all the image data to train the model
+# all_images = []
+#
+# # load the supplemental file into a dataframe
+# df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+#
+# print(df.shape)
+#
+# # loop through each galaxy in the supplmental file
+# for i, galaxy in enumerate(df["GalaxyID"].tolist()):
+#
+#     filename = "galface_" + str(galaxy) + ".png"
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+#     all_images.append(image)
+#
+#
+# print(np.array(all_images).shape)
 
 
 

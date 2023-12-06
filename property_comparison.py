@@ -9,25 +9,34 @@ from sklearn.cluster import KMeans
 from matplotlib import image as mpimg
 
 
+# extracted_features = np.flipud(np.rot90(extracted_features_original))
+
+
+# set the encoding dimension (number of extracted features)
+encoding_dim = 9
+
+
 
 # load the extracted features
-extracted_features_original = np.load("Features/9_features_new.npy")
+extracted_features = np.load("Features/" + str(encoding_dim) + "_features_new.npy")
+
+# perform clustering
+kmeans = KMeans(n_clusters=2, random_state=0, n_init='auto')
+
+# extract the clusters for each galaxy
+clusters = kmeans.fit_predict(extracted_features)
+
+centers = kmeans.cluster_centers_
 
 
-extracted_features = np.flipud(np.rot90(extracted_features_original))
 
-
-# k means clustering for the extracted features
-kmeans = KMeans(n_clusters=9, random_state=0, n_init='auto')
-
-# find which cluster each galaxy belongs to
-clusters = kmeans.fit_predict(extracted_features_original)
-
-# find the center of each cluster
-centers = kmeans.cluster_centers_(extracted_features_original)
-
-print(clusters.)
+print(clusters)
+print(clusters.shape)
 print(centers)
+print(centers.shape)
+
+
+# group_1 = df.loc[df['Cluster'] == 3, 'GalaxyID']
 
 
 # load the two excel files into dataframes
@@ -60,10 +69,45 @@ df["Cluster"] = clusters
 
 print(df)
 
+group_1 = df.loc[df["Cluster"] == 0, "GalaxyID"].tolist()
+group_2 = df.loc[df["Cluster"] == 1, "GalaxyID"].tolist()
+
+print(group_1)
+print(group_2)
 
 
+fig, axs = plt.subplots(2, 6, figsize=(30,10))
 
 
+for i in range(0, 3):
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_1[i]] + ".png")
+    axs[0, i].imshow(image)
+    axs[0, i].get_xaxis().set_visible(False)
+    axs[0, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_1[i+3]] + ".png")
+    axs[0, i+3].imshow(image)
+    axs[0, i+3].get_xaxis().set_visible(False)
+    axs[0, i+3].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_2[i]] + ".png")
+    axs[1, i].imshow(image)
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_2[i+3]] + ".png")
+    axs[1, i+3].imshow(image)
+    axs[1, i+3].get_xaxis().set_visible(False)
+    axs[1, i+3].get_yaxis().set_visible(False)
+
+
+axs[0,1].set_title("Group 1", pad=15)
+axs[0,4].set_title("Group 2", pad=15)
+
+
+plt.savefig("Plots/2_cluster_originals")
+plt.show()
 
 
 
