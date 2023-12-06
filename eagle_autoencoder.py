@@ -11,8 +11,9 @@ from matplotlib import image as mpimg
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
-# select to use GPU 0 on cosma
-os.environ["CUDA_VISIBLE_DEVICES"]="2" # for GPU
+
+# select which GPU to use
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 
@@ -23,7 +24,7 @@ all_images = []
 # load the supplemental file into a dataframe
 df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
-# loop through each galaxy in the supplmental file
+# loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     # get the filename for that galaxy
