@@ -5,6 +5,28 @@ import pandas as pd
 # import keras
 import os
 from matplotlib import image as mpimg
+import seaborn as sns
+
+
+
+# load the extracted features
+extracted_features = np.load("Features/16_features.npy")
+
+
+# add the features to a dataframe
+df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "f13", "f14", "f15", "f16"])
+
+
+
+
+
+# create the pairplot with custom marker size
+kws = dict(s=10)
+g = sns.pairplot(df, corner=True, plot_kws=kws)
+
+
+
+
 
 
 # A = np.array([[0, 1, 2, 3, 4], [0, 1, 2, 3, 4]])
@@ -35,29 +57,29 @@ from matplotlib import image as mpimg
 # df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 
-A = ["a", "b", "c", "d", "e", "f"]
+# A = ["a", "b", "c", "d", "e", "f"]
+#
+# B = ["b", "c", "d", "f"]
+#
+# dataset_df = pd.DataFrame(A, columns=["Letter"])
+#
+# print(dataset_df)
+# print()
+#
+# for i, letter in enumerate(dataset_df["Letter"].tolist()):
+#
+#     print(i, letter)
+#
+#     if letter in B:
+#         print(".")
+#     else:
+#         print("...")
+#
+#     # if letter not in B:
+#     #     print(".....")
+#     #     dataset_df.drop(axis=0, index=i, inplace=True)
 
-B = ["b", "c", "d", "f"]
-
-dataset_df = pd.DataFrame(A, columns=["Letter"])
-
-print(dataset_df)
-print()
-
-for i, letter in enumerate(dataset_df["Letter"].tolist()):
-
-    print(i, letter)
-
-    if letter in B:
-        print(".")
-    else:
-        print("...")
-
-    # if letter not in B:
-    #     print(".....")
-    #     dataset_df.drop(axis=0, index=i, inplace=True)
-
-print(dataset_df)
+# print(dataset_df)
 
 # print(df["GalaxyID"].tolist())
 
