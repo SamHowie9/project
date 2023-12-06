@@ -99,7 +99,9 @@ for i in range(9, 18):
 decoder.build(input_shape=(None, encoding_dim))
 
 
-
+# root means squared loss function
+def root_mean_squared_error(y_true, y_pred):
+    return K.sqrt(K.mean(K.square(y_pred - y_true)))
 
 
 # compile the autoencoder model
