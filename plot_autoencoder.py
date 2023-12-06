@@ -110,7 +110,7 @@ decoder.build(input_shape=(None, encoding_dim))
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # load the weights
-autoencoder.load_weights("Weights/8_feature_weights.h5")
+autoencoder.load_weights("Weights/9_feature_weights.h5")
 
 
 
