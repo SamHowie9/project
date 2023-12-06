@@ -51,8 +51,9 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
 
 # split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
-train_images = np.array(all_images[:-100])
-test_images = np.array(all_images[-100:])
+train_images = np.array(all_images)
+# train_images = np.array(all_images[:-100])
+# test_images = np.array(all_images[-100:])
 
 
 
@@ -156,7 +157,7 @@ decoder.build(input_shape=(None, encoding_dim))
 autoencoder.compile(optimizer="adam", loss="binary_crossentropy")
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=20, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=20, batch_size=1)
 
 # save the weights
 autoencoder.save_weights(filepath="Weights/9_feature_weights_new.h5", overwrite=True)
