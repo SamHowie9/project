@@ -81,22 +81,22 @@ fig, axs = plt.subplots(2, 6, figsize=(30,10))
 
 for i in range(0, 3):
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_1[i]] + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i]) + ".png")
     axs[0, i].imshow(image)
     axs[0, i].get_xaxis().set_visible(False)
     axs[0, i].get_yaxis().set_visible(False)
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_1[i+3]] + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+3]) + ".png")
     axs[0, i+3].imshow(image)
     axs[0, i+3].get_xaxis().set_visible(False)
     axs[0, i+3].get_yaxis().set_visible(False)
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_2[i]] + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i]) + ".png")
     axs[1, i].imshow(image)
     axs[1, i].get_xaxis().set_visible(False)
     axs[1, i].get_yaxis().set_visible(False)
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str[group_2[i+3]] + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+3]) + ".png")
     axs[1, i+3].imshow(image)
     axs[1, i+3].get_xaxis().set_visible(False)
     axs[1, i+3].get_yaxis().set_visible(False)
