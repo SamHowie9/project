@@ -30,13 +30,6 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
     all_images.append(image)
 
-print()
-print()
-print()
-print(np.array(all_images).shape)
-print()
-print()
-print()
 
 
 # # loop through the directory containing all the image files
@@ -56,12 +49,11 @@ print()
 # train_images = get_images()
 
 
-# find the number of images that you will test the model on
-testing_count = int(len(all_images)/10)
 
 # split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
-train_images = np.array(all_images[:testing_count*10])
-test_images = np.array(all_images[testing_count:])
+train_images = np.array(all_images[:-100])
+test_images = np.array(all_images[-100:])
+
 
 
 # # Instantiate a Keras tensor to allow us to build the model
