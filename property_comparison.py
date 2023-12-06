@@ -35,10 +35,10 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
 
 # load the extracted features
-extracted_features = np.load("Features/9_features_new.npy")
+extracted_features_original = np.load("Features/9_features_new.npy")
 
 
-extracted_features = np.flipud(np.rot90(extracted_features))
+extracted_features = np.flipud(np.rot90(extracted_features_original))
 
 print(extracted_features.shape)
 
@@ -80,7 +80,7 @@ position_angle = (df1["galfit_PA"] + df2["galfit_PA"]) / 2
 
 # k means clustering for the extracted features
 kmeans = KMeans(n_clusters=9, random_state=0, n_init='auto')
-clusters = kmeans.fit_predict(extracted_features)
+clusters = kmeans.fit_predict(extracted_features_original)
 
 print(clusters.shape)
 print(clusters)
@@ -112,7 +112,26 @@ for i in range(0, 9):
     title = "Feature " + str(i+1)
     axs[0, i].set_title(title)
 
+    # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle, hue=clusters, palette="colorblind")
+    #
+    # axs[0, i].get_legend().remove()
+    # axs[1, i].get_legend().remove()
+    # axs[2, i].get_legend().remove()
+    # axs[3, i].get_legend().remove()
+    # axs[4, i].get_legend().remove()
+    # axs[5, i].get_legend().remove()
+
     sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude)
+    sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass)
+    sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major)
+    sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic)
+    sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio)
+    sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle)
 
     # axs[0, i].scatter(extracted_features[i], ab_magnitude, s=2)
     # axs[1, i].scatter(extracted_features[i], mass, s=2)
@@ -122,6 +141,7 @@ for i in range(0, 9):
     # axs[5, i].scatter(extracted_features[i], position_angle, s=2)
 
 axs[0, 0].set_ylabel("AB Magnitude")
+
 axs[1, 0].set_ylabel("Stellar Mass")
 axs[2, 0].set_ylabel("Semi-Major Axis")
 axs[3, 0].set_ylabel("Sersic Index")
@@ -129,7 +149,7 @@ axs[4, 0].set_ylabel("Axis Ratio")
 axs[5, 0].set_ylabel("Position Angle")
 
 
-plt.savefig("Plots/9_feature_property_comparison_clusters")
+plt.savefig("Plots/9_feature_property_comparison")
 plt.show()
 
 
