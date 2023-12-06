@@ -111,14 +111,14 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=200, batch_size=1, validation_data=(test_images, test_images))
+# model_data = autoencoder.fit(train_images, train_images, epochs=200, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
-autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
+# autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
 
 
 # load the weights
-# autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
+autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
 
 
 # extract the features
@@ -168,10 +168,10 @@ plt.show()
 
 
 
-# plot the training and validation loss
-plt.plot(model_data.history["loss"], label="training data")
-plt.plot(model_data.history["val_loss"], label="validation data")
-plt.legend()
-
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_loss")
-plt.show()
+# # plot the training and validation loss
+# plt.plot(model_data.history["loss"], label="training data")
+# plt.plot(model_data.history["val_loss"], label="validation data")
+# plt.legend()
+#
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_loss")
+# plt.show()
