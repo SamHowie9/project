@@ -22,11 +22,12 @@ df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 df2 = pd.read_csv("stab3510_supplemental_file/table2.csv", comment="#")
 
 
-# load the supplemental file into a dataframe
-data_df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+
+print(df1.shape)
+print(df2.shape)
 
 # loop through each galaxy in the supplmental file
-for i, galaxy in enumerate(data_df["GalaxyID"].tolist()):
+for i, galaxy in enumerate(df1["GalaxyID"].tolist()):
 
     filename = "galface_" + str(galaxy) + ".png"
 
@@ -34,6 +35,9 @@ for i, galaxy in enumerate(data_df["GalaxyID"].tolist()):
         df1.drop(axis=0, index=i)
         df2.drop(axis=0, index=i)
 
+
+print(df1.shape)
+print(df2.shape)
 
 
 
