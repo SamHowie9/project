@@ -103,7 +103,7 @@ decoder.build(input_shape=(None, encoding_dim))
 
 
 # compile the autoencoder model
-autoencoder.compile(optimizer="adam", loss="root_mean_squared_error")
+autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model

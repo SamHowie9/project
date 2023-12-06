@@ -10,30 +10,6 @@ from matplotlib import image as mpimg
 
 
 
-# stores an empty list to contain all the image data to train the model
-all_images = []
-
-# load the supplemental file into a dataframe
-df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
-
-# print(df.shape)
-
-# # loop through each galaxy in the supplmental file
-# for i, galaxy in enumerate(df["GalaxyID"].tolist()):
-#
-#     filename = "galface_" + str(galaxy) + ".png"
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-#     all_images.append(image)
-#
-#
-# print(np.array(all_images).shape)
-
-
-
-
-
-
 # load the extracted features
 extracted_features_original = np.load("Features/9_features_new.npy")
 
@@ -48,30 +24,18 @@ df2 = pd.read_csv("stab3510_supplemental_file/table2.csv", comment="#")
 
 
 
-# print(df1.shape)
-# print(df2.shape)
-#
-# # loop through each galaxy in the supplmental file
-# for i, galaxy in enumerate(df1["GalaxyID"].tolist()):
-#
-#     filename = "galface_" + str(galaxy) + ".png"
-#
-#     if filename not in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
-#         df1.drop(axis=0, index=i, inplace=True)
-#         df2.drop(axis=0, index=i, inplace=True)
-#
-#
-# print(df1.shape)
-# print(df2.shape)
-
-
-
+# extract relevant properties
+galaxy_id = df1["GalaxyID"]
 ab_magnitude = df1["galfit_mag"]
 mass = df2["galfit_lmstar"]
 semi_major = (df1["galfit_re"] + df2["galfit_re"]) / 2
 sersic = (df1["galfit_n"] + df2["galfit_n"]) / 2
 axis_ratio = (df1["galfit_q"] + df2["galfit_q"]) / 2
 position_angle = (df1["galfit_PA"] + df2["galfit_PA"]) / 2
+
+
+df = pd.DataFrame(columns=["GalaxyID", "galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"])
+
 
 
 
