@@ -48,9 +48,14 @@ for i, letter in enumerate(dataset_df["Letter"].tolist()):
 
     print(i, letter)
 
-    if letter not in B:
-        print(".....")
-        dataset_df.drop(axis=0, index=i, inplace=True)
+    if letter in B:
+        print(".")
+    else:
+        print("...")
+
+    # if letter not in B:
+    #     print(".....")
+    #     dataset_df.drop(axis=0, index=i, inplace=True)
 
 print(dataset_df)
 
