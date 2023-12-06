@@ -27,11 +27,8 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     filename = "galface_" + str(galaxy) + ".png"
 
-    if filename in os.listdir("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/"):
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-        all_images.append(image)
-    else:
-        df.drop(axis=0, index=i, inplace=True)
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+    all_images.append(image)
 
 
 # # loop through the directory containing all the image files
