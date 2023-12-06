@@ -30,6 +30,14 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
     all_images.append(image)
 
+print()
+print()
+print()
+print(np.array(all_images).shape)
+print()
+print()
+print()
+
 
 # # loop through the directory containing all the image files
 # for file in os.listdir("/cosma7/data/Eagle/web-storage/RefL0025N0376_Subhalo/"):
