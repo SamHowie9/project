@@ -25,6 +25,24 @@ kws = dict(s=10)
 g = sns.pairplot(df, corner=True, plot_kws=kws)
 
 
+# function to add the correlation coefficient to the plots
+def corrfunc(x, y, ax=None, color=None):
+    # find the correlation coefficient and round to 3 dp
+    correlation = np.corrcoef(x, y)[0][1]
+    correlation = np.round(correlation, decimals=3)
+
+    # annotate the plot with the correlation coefficient
+    ax = ax or plt.gca()
+    ax.annotate(("ρ = " + str(correlation)), xy=(0.1, 1), xycoords=ax.transAxes)
+
+
+# add the correlation coefficient to each of the scatter plots
+g.map_lower(corrfunc)
+
+
+plt.savefig("Plots/16_feature_histogram")
+plt.show()
+
 
 
 
