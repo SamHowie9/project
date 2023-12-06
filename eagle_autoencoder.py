@@ -1,6 +1,7 @@
 import numpy as np
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 import keras
+from keras import backend as K
 import numpy as np
 import pandas as pd
 import os
@@ -101,7 +102,7 @@ decoder.build(input_shape=(None, encoding_dim))
 
 # root means squared loss function
 def root_mean_squared_error(y_true, y_pred):
-    return keras.sqrt(keras.mean(keras.square(y_pred - y_true)))
+    return K.sqrt(K.mean(K.square(y_pred - y_true)))
 
 
 # compile the autoencoder model
