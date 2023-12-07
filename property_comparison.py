@@ -13,7 +13,7 @@ from matplotlib import image as mpimg
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 16
+encoding_dim = 32
 
 
 
