@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-# import seaborn as sns
+import seaborn as sns
 import pandas as pd
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 # import keras
@@ -18,7 +18,7 @@ encoding_dim = 16
 
 
 # load the extracted features
-extracted_features = np.load("Features/" + str(encoding_dim) + "_features_new.npy")
+extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 
 # perform clustering
 kmeans = KMeans(n_clusters=2, random_state=0, n_init='auto')
@@ -44,6 +44,11 @@ df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 df2 = pd.read_csv("stab3510_supplemental_file/table2.csv", comment="#")
 
 
+# account for hte validation data and remove final 200 elements
+df1.drop(df1.tail(200).index, inplace=True)
+df2.drop(df2.tail(200).index, inplace=True)
+
+
 
 # extract relevant properties
 galaxy_id = df1["GalaxyID"]
@@ -64,6 +69,11 @@ df["galfit_re"] = semi_major
 df["galfit_n"] = sersic
 df["galfit_q"] = axis_ratio
 df["galfit_PA"] = position_angle
+
+print(df1.shape)
+print(df2.shape)
+print(df.shape)
+
 df["Cluster"] = clusters
 
 
@@ -103,8 +113,10 @@ axs[0,1].set_title("Group 1", pad=15)
 axs[0,4].set_title("Group 2", pad=15)
 
 
-plt.savefig("Plots/2_cluster_originals")
+plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
 plt.show()
+
+
 
 columns = []
 for i in range(1, encoding_dim+1):
@@ -120,7 +132,7 @@ kws = dict(s=5, linewidth=0)
 
 sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
 
-plt.savefig("Plots/2_cluster_features")
+plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_features")
 plt.show()
 
 
