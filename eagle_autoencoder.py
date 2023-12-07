@@ -48,7 +48,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 16
+encoding_dim = 32
 
 
 
@@ -62,12 +62,12 @@ x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="sam
 x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
-x = Dense(units=32)(x)                                                                              # (32)
+x = Dense(units=64)(x)                                                                              # (32)
 encoded = Dense(units=encoding_dim, name="encoded")(x)                                              # (2)
 
 
 # layers for the decoder
-x = Dense(units=32)(encoded)                                                                        # (32)
+x = Dense(units=64)(encoded)                                                                        # (32)
 x = Dense(units=256)(x)                                                                             # (256)
 x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
 x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
