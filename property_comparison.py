@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-# import seaborn as sns
+import seaborn as sns
 import pandas as pd
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 # import keras
@@ -9,7 +9,7 @@ from sklearn.cluster import KMeans
 from matplotlib import image as mpimg
 
 
-# extracted_features = np.flipud(np.rot90(extracted_features_original))
+
 
 
 # set the encoding dimension (number of extracted features)
@@ -87,47 +87,47 @@ print(np.array(group_2).shape)
 
 
 
-fig, axs = plt.subplots(3, 6, figsize=(30,10))
-
-for i in range(0, 3):
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i]) + ".png")
-    axs[0, i].imshow(image)
-    axs[0, i].get_xaxis().set_visible(False)
-    axs[0, i].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+3]) + ".png")
-    axs[1, i].imshow(image)
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+6]) + ".png")
-    axs[2, i].imshow(image)
-    axs[2, i].get_xaxis().set_visible(False)
-    axs[2, i].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i]) + ".png")
-    axs[0, i+3].imshow(image)
-    axs[0, i+3].get_xaxis().set_visible(False)
-    axs[0, i+3].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+3]) + ".png")
-    axs[1, i+3].imshow(image)
-    axs[1, i+3].get_xaxis().set_visible(False)
-    axs[1, i+3].get_yaxis().set_visible(False)
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+6]) + ".png")
-    axs[2, i+3].imshow(image)
-    axs[2, i+3].get_xaxis().set_visible(False)
-    axs[2, i+3].get_yaxis().set_visible(False)
-
-
-axs[0,1].set_title("Group 1", pad=15)
-axs[0,4].set_title("Group 2", pad=15)
-
-
-plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
-plt.show()
+# fig, axs = plt.subplots(3, 6, figsize=(30,10))
+#
+# for i in range(0, 3):
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i]) + ".png")
+#     axs[0, i].imshow(image)
+#     axs[0, i].get_xaxis().set_visible(False)
+#     axs[0, i].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+3]) + ".png")
+#     axs[1, i].imshow(image)
+#     axs[1, i].get_xaxis().set_visible(False)
+#     axs[1, i].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+6]) + ".png")
+#     axs[2, i].imshow(image)
+#     axs[2, i].get_xaxis().set_visible(False)
+#     axs[2, i].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i]) + ".png")
+#     axs[0, i+3].imshow(image)
+#     axs[0, i+3].get_xaxis().set_visible(False)
+#     axs[0, i+3].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+3]) + ".png")
+#     axs[1, i+3].imshow(image)
+#     axs[1, i+3].get_xaxis().set_visible(False)
+#     axs[1, i+3].get_yaxis().set_visible(False)
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+6]) + ".png")
+#     axs[2, i+3].imshow(image)
+#     axs[2, i+3].get_xaxis().set_visible(False)
+#     axs[2, i+3].get_yaxis().set_visible(False)
+#
+#
+# axs[0,1].set_title("Group 1", pad=15)
+# axs[0,4].set_title("Group 2", pad=15)
+#
+#
+# plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+# plt.show()
 
 
 
@@ -136,14 +136,14 @@ plt.show()
 #     columns.append("f" + str(i))
 #
 # extracted_feature_df = pd.DataFrame(extracted_features, columns=columns)
-# extracted_feature_df["Category"] = clusters
+# extracted_feature_df["Cluster"] = clusters
 #
 #
-# print(df)
+# print(extracted_feature_df)
 #
 # kws = dict(s=5, linewidth=0)
 #
-# sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
+# sns.pairplot(extracted_feature_df, corner=True, hue="Cluster", plot_kws=kws, palette="colorblind")
 #
 # plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_features")
 # plt.show()
@@ -151,52 +151,77 @@ plt.show()
 
 
 
+extracted_features = np.flipud(np.rot90(extracted_features))
 
-# fig, axs = plt.subplots(6, 9, figsize=(25,20))
-#
-# for i in range(0, 9):
-#
-#     title = "Feature " + str(i+1)
-#     axs[0, i].set_title(title)
-#
-#     # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle, hue=clusters, palette="colorblind")
-#     #
-#     # axs[0, i].get_legend().remove()
-#     # axs[1, i].get_legend().remove()
-#     # axs[2, i].get_legend().remove()
-#     # axs[3, i].get_legend().remove()
-#     # axs[4, i].get_legend().remove()
-#     # axs[5, i].get_legend().remove()
-#
-#     sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude)
-#     sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass)
-#     sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major)
-#     sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic)
-#     sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio)
-#     sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle)
-#
-#     # axs[0, i].scatter(extracted_features[i], ab_magnitude, s=2)
-#     # axs[1, i].scatter(extracted_features[i], mass, s=2)
-#     # axs[2, i].scatter(extracted_features[i], semi_major, s=2)
-#     # axs[3, i].scatter(extracted_features[i], sersic, s=2)
-#     # axs[4, i].scatter(extracted_features[i], axis_ratio, s=2)
-#     # axs[5, i].scatter(extracted_features[i], position_angle, s=2)
-#
+fig, axs = plt.subplots(encoding_dim, 6, figsize=(20,60))
+
+for i in range(0, encoding_dim):
+
+    # title = "Feature " + str(i+1)
+    # axs[0, i].set_title(title)
+
+    # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle, hue=clusters, palette="colorblind")
+
+
+    # sns.scatterplot(ax=axs[i, 0], y=extracted_features[i], x=ab_magnitude, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[i, 1], y=extracted_features[i], x=mass, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[i, 2], y=extracted_features[i], x=semi_major, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[i, 3], y=extracted_features[i], x=sersic, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[i, 4], y=extracted_features[i], x=axis_ratio, hue=clusters, palette="colorblind")
+    # sns.scatterplot(ax=axs[i, 5], y=extracted_features[i], x=position_angle, hue=clusters, palette="colorblind")
+    #
+    # plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
+    # plt.show()
+    #
+    # axs[i, 0].get_legend().remove()
+    # axs[i, 1].get_legend().remove()
+    # axs[i, 2].get_legend().remove()
+    # axs[i, 3].get_legend().remove()
+    # axs[i, 4].get_legend().remove()
+    # axs[i, 5].get_legend().remove()
+    #
+    # axs[i, 0].set_ylabel("Feature " + str(i))
+
+
+    # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude)
+    # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass)
+    # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major)
+    # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic)
+    # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio)
+    # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle)
+
+    bins = 75
+
+    axs[i, 0].hist2d(y=extracted_features[i], x=ab_magnitude, bins=(bins, bins), cmap=plt.cm.BuPu)
+    axs[i, 1].hist2d(y=extracted_features[i], x=mass, bins=(bins, bins), cmap=plt.cm.BuPu)
+    axs[i, 2].hist2d(y=extracted_features[i], x=semi_major, bins=(bins, bins), cmap=plt.cm.BuPu)
+    axs[i, 3].hist2d(y=extracted_features[i], x=sersic, bins=(bins, bins), cmap=plt.cm.BuPu)
+    axs[i, 4].hist2d(y=extracted_features[i], x=axis_ratio, bins=(bins, bins), cmap=plt.cm.BuPu)
+    axs[i, 5].hist2d(y=extracted_features[i], x=position_angle, bins=(bins, bins), cmap=plt.cm.BuPu)
+
+
+axs[0, 0].set_title("AB Magnitude")
+axs[0, 1].set_title("Stellar Mass")
+axs[0, 2].set_title("Semi-Major Axis")
+axs[0, 3].set_title("Sersic Index")
+axs[0, 4].set_title("Axis Ratio")
+axs[0, 5].set_title("Position Angle")
+
 # axs[0, 0].set_ylabel("AB Magnitude")
-#
 # axs[1, 0].set_ylabel("Stellar Mass")
 # axs[2, 0].set_ylabel("Semi-Major Axis")
 # axs[3, 0].set_ylabel("Sersic Index")
 # axs[4, 0].set_ylabel("Axis Ratio")
 # axs[5, 0].set_ylabel("Position Angle")
-#
-#
-# plt.savefig("Plots/9_feature_property_comparison")
+
+plt.yticks(rotation=90)
+
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_comparison")
 # plt.show()
 
 
