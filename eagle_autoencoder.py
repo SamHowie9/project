@@ -170,10 +170,10 @@ print("...")
 
 
 
-# # plot the training and validation loss
-# plt.plot(model_data.history["loss"], label="training data")
-# plt.plot(model_data.history["val_loss"], label="validation data")
-# plt.legend()
-#
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_loss")
-# plt.show()
+# plot the training and validation loss
+plt.plot(model_data.history["loss"], label="training data")
+plt.plot(model_data.history["val_loss"], label="validation data")
+plt.legend()
+
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_loss")
+plt.show()
