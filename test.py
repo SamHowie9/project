@@ -6,42 +6,48 @@ import pandas as pd
 import os
 from matplotlib import image as mpimg
 import seaborn as sns
+import random
 
 
 
-# load the extracted features
-extracted_features = np.load("Features/16_features.npy")
-
-
-# add the features to a dataframe
-df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "f13", "f14", "f15", "f16"])
+A = random.sample(range(0, 1000), 9)
+print(A)
 
 
 
-
-
-# create the pairplot with custom marker size
-kws = dict(s=10)
-g = sns.pairplot(df, corner=True, plot_kws=kws)
-
-
-# function to add the correlation coefficient to the plots
-def corrfunc(x, y, ax=None, color=None):
-    # find the correlation coefficient and round to 3 dp
-    correlation = np.corrcoef(x, y)[0][1]
-    correlation = np.round(correlation, decimals=3)
-
-    # annotate the plot with the correlation coefficient
-    ax = ax or plt.gca()
-    ax.annotate(("ρ = " + str(correlation)), xy=(0.1, 1), xycoords=ax.transAxes)
-
-
-# add the correlation coefficient to each of the scatter plots
-g.map_lower(corrfunc)
-
-
-plt.savefig("Plots/16_feature_histogram")
-plt.show()
+# # load the extracted features
+# extracted_features = np.load("Features/16_features.npy")
+#
+#
+# # add the features to a dataframe
+# df = pd.DataFrame(extracted_features, columns=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "f13", "f14", "f15", "f16"])
+#
+#
+#
+#
+#
+# # create the pairplot with custom marker size
+# kws = dict(s=10)
+# g = sns.pairplot(df, corner=True, plot_kws=kws)
+#
+#
+# # function to add the correlation coefficient to the plots
+# def corrfunc(x, y, ax=None, color=None):
+#     # find the correlation coefficient and round to 3 dp
+#     correlation = np.corrcoef(x, y)[0][1]
+#     correlation = np.round(correlation, decimals=3)
+#
+#     # annotate the plot with the correlation coefficient
+#     ax = ax or plt.gca()
+#     ax.annotate(("ρ = " + str(correlation)), xy=(0.1, 1), xycoords=ax.transAxes)
+#
+#
+# # add the correlation coefficient to each of the scatter plots
+# g.map_lower(corrfunc)
+#
+#
+# plt.savefig("Plots/16_feature_histogram")
+# plt.show()
 
 
 
