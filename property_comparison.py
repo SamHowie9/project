@@ -8,18 +8,23 @@ import os
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.neighbors import NearestCentroid
 from matplotlib import image as mpimg
+import random
 
 
 
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 32
+encoding_dim = 16
 
 
 
 # load the extracted features
 extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+
+print(extracted_features)
+
+
 
 # perform k means clustering
 kmeans = KMeans(n_clusters=2, random_state=0, n_init='auto')
@@ -40,8 +45,11 @@ clf.fit(extracted_features, clusters_h)
 centers_h = clf.centroids_
 
 
-clusters = clusters_k
-centers = centers_k
+clusters = clusters_h
+centers = centers_h
+
+print(clusters)
+print(centers)
 
 
 
@@ -100,82 +108,89 @@ print(np.array(group_1).shape)
 print(np.array(group_2).shape)
 
 
-fig, axs = plt.subplots(2, 3, figsize=(20,10))
-
-axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.9)
-axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.8)
-axs[0, 0].set_title("Absolute Magnitude")
-
-axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.9)
-axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.8)
-axs[0, 1].set_title("Stellar Mass")
-
-axs[0, 2].hist(group_1["galfit_re"], bins=50, alpha=0.9)
-axs[0, 2].hist(group_2["galfit_re"], bins=50, alpha=0.8)
-axs[0, 2].set_title("Semi-Major Axis")
-
-axs[1, 0].hist(group_1["galfit_n"], bins=50, alpha=0.9)
-axs[1, 0].hist(group_2["galfit_n"], bins=50, alpha=0.8)
-axs[1, 0].set_title("Sersic Index")
-
-axs[1, 1].hist(group_1["galfit_q"], bins=50, alpha=0.9)
-axs[1, 1].hist(group_2["galfit_q"], bins=50, alpha=0.8)
-axs[1, 1].set_title("Axis Ratio")
-
-axs[1, 2].hist(group_1["galfit_PA"], bins=50, alpha=0.9)
-axs[1, 2].hist(group_2["galfit_PA"], bins=50, alpha=0.8)
-axs[1, 2].set_title("Position Angle")
-
-fig.legend(labels=["Cluster 1", "Cluster 2"], loc="center right")
-
-plt.savefig("Plots/2_cluster_properties_kmeans")
-plt.show()
 
 
 
-
-
-# fig, axs = plt.subplots(3, 6, figsize=(30,10))
+# fig, axs = plt.subplots(2, 3, figsize=(20,10))
 #
-# for i in range(0, 3):
+# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.9)
+# axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.8)
+# axs[0, 0].set_title("Absolute Magnitude")
 #
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_id[i]) + ".png")
-#     axs[0, i].imshow(image)
-#     axs[0, i].get_xaxis().set_visible(False)
-#     axs[0, i].get_yaxis().set_visible(False)
+# axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.9)
+# axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.8)
+# axs[0, 1].set_title("Stellar Mass")
 #
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_id[i+3]) + ".png")
-#     axs[1, i].imshow(image)
-#     axs[1, i].get_xaxis().set_visible(False)
-#     axs[1, i].get_yaxis().set_visible(False)
+# axs[0, 2].hist(group_1["galfit_re"], bins=50, alpha=0.9)
+# axs[0, 2].hist(group_2["galfit_re"], bins=50, alpha=0.8)
+# axs[0, 2].set_title("Semi-Major Axis")
 #
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_id[i+6]) + ".png")
-#     axs[2, i].imshow(image)
-#     axs[2, i].get_xaxis().set_visible(False)
-#     axs[2, i].get_yaxis().set_visible(False)
+# axs[1, 0].hist(group_1["galfit_n"], bins=50, alpha=0.9)
+# axs[1, 0].hist(group_2["galfit_n"], bins=50, alpha=0.8)
+# axs[1, 0].set_title("Sersic Index")
 #
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_id[i]) + ".png")
-#     axs[0, i+3].imshow(image)
-#     axs[0, i+3].get_xaxis().set_visible(False)
-#     axs[0, i+3].get_yaxis().set_visible(False)
+# axs[1, 1].hist(group_1["galfit_q"], bins=50, alpha=0.9)
+# axs[1, 1].hist(group_2["galfit_q"], bins=50, alpha=0.8)
+# axs[1, 1].set_title("Axis Ratio")
 #
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_id[i+3]) + ".png")
-#     axs[1, i+3].imshow(image)
-#     axs[1, i+3].get_xaxis().set_visible(False)
-#     axs[1, i+3].get_yaxis().set_visible(False)
+# axs[1, 2].hist(group_1["galfit_PA"], bins=50, alpha=0.9)
+# axs[1, 2].hist(group_2["galfit_PA"], bins=50, alpha=0.8)
+# axs[1, 2].set_title("Position Angle")
 #
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_id[i+6]) + ".png")
-#     axs[2, i+3].imshow(image)
-#     axs[2, i+3].get_xaxis().set_visible(False)
-#     axs[2, i+3].get_yaxis().set_visible(False)
+# fig.legend(labels=["Cluster 1", "Cluster 2"], loc="center right")
 #
-#
-# axs[0,1].set_title("Group 1", pad=15)
-# axs[0,4].set_title("Group 2", pad=15)
-#
-#
-# plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+# plt.savefig("Plots/2_cluster_properties_hierarchical")
 # plt.show()
+
+
+group_1_random = random.sample(range(0, len(group_1_id)), 9)
+group_2_random = random.sample(range(0, len(group_2_id)), 9)
+
+print(group_1_random)
+print(group_2_random)
+
+
+fig, axs = plt.subplots(3, 6, figsize=(30,10))
+
+for i in range(0, 3):
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
+    axs[0, i].imshow(image)
+    axs[0, i].get_xaxis().set_visible(False)
+    axs[0, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+3]) + ".png")
+    axs[1, i].imshow(image)
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+6]) + ".png")
+    axs[2, i].imshow(image)
+    axs[2, i].get_xaxis().set_visible(False)
+    axs[2, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i]) + ".png")
+    axs[0, i+3].imshow(image)
+    axs[0, i+3].get_xaxis().set_visible(False)
+    axs[0, i+3].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
+    axs[1, i+3].imshow(image)
+    axs[1, i+3].get_xaxis().set_visible(False)
+    axs[1, i+3].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+6]) + ".png")
+    axs[2, i+3].imshow(image)
+    axs[2, i+3].get_xaxis().set_visible(False)
+    axs[2, i+3].get_yaxis().set_visible(False)
+
+
+axs[0,1].set_title("Group 1", pad=15)
+axs[0,4].set_title("Group 2", pad=15)
+
+
+plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.show()
 
 
 
