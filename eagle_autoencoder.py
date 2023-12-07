@@ -167,7 +167,7 @@ plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction")
 plt.show()
 
 print("...")
-
+plt.cla()
 
 
 # plot the training and validation loss
