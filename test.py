@@ -9,9 +9,9 @@ import seaborn as sns
 import random
 
 
-
-A = random.sample(range(0, 1000), 9)
-print(A)
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
+plt.imshow(image)
+plt.savefig("Plots/test")
 
 
 
