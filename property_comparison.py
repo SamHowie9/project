@@ -118,22 +118,22 @@ plt.show()
 
 
 
-columns = []
-for i in range(1, encoding_dim+1):
-    columns.append("f" + str(i))
-
-extracted_feature_df = pd.DataFrame(extracted_features, columns=columns)
-extracted_feature_df["Category"] = clusters
-
-
-print(df)
-
-kws = dict(s=5, linewidth=0)
-
-sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
-
-plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_features")
-plt.show()
+# columns = []
+# for i in range(1, encoding_dim+1):
+#     columns.append("f" + str(i))
+#
+# extracted_feature_df = pd.DataFrame(extracted_features, columns=columns)
+# extracted_feature_df["Category"] = clusters
+#
+#
+# print(df)
+#
+# kws = dict(s=5, linewidth=0)
+#
+# sns.pairplot(df, corner=True, hue="Category", plot_kws=kws, palette="colorblind")
+#
+# plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_features")
+# plt.show()
 
 
 
