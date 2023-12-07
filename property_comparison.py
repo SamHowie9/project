@@ -189,7 +189,7 @@ axs[0,1].set_title("Group 1", pad=15)
 axs[0,4].set_title("Group 2", pad=15)
 
 
-plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals_k")
 plt.show()
 
 
