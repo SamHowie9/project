@@ -151,78 +151,78 @@ print(np.array(group_2).shape)
 
 
 
-extracted_features = np.flipud(np.rot90(extracted_features))
-
-fig, axs = plt.subplots(encoding_dim, 6, figsize=(20,60))
-
-for i in range(0, encoding_dim):
-
-    # title = "Feature " + str(i+1)
-    # axs[0, i].set_title(title)
-
-    # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle, hue=clusters, palette="colorblind")
-
-
-    # sns.scatterplot(ax=axs[i, 0], y=extracted_features[i], x=ab_magnitude, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[i, 1], y=extracted_features[i], x=mass, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[i, 2], y=extracted_features[i], x=semi_major, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[i, 3], y=extracted_features[i], x=sersic, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[i, 4], y=extracted_features[i], x=axis_ratio, hue=clusters, palette="colorblind")
-    # sns.scatterplot(ax=axs[i, 5], y=extracted_features[i], x=position_angle, hue=clusters, palette="colorblind")
-    #
-    # plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
-    # plt.show()
-    #
-    # axs[i, 0].get_legend().remove()
-    # axs[i, 1].get_legend().remove()
-    # axs[i, 2].get_legend().remove()
-    # axs[i, 3].get_legend().remove()
-    # axs[i, 4].get_legend().remove()
-    # axs[i, 5].get_legend().remove()
-    #
-    # axs[i, 0].set_ylabel("Feature " + str(i))
-
-
-    # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude)
-    # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass)
-    # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major)
-    # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic)
-    # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio)
-    # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle)
-
-    bins = 75
-
-    axs[i, 0].hist2d(y=extracted_features[i], x=ab_magnitude, bins=(bins, bins), cmap=plt.cm.BuPu)
-    axs[i, 1].hist2d(y=extracted_features[i], x=mass, bins=(bins, bins), cmap=plt.cm.BuPu)
-    axs[i, 2].hist2d(y=extracted_features[i], x=semi_major, bins=(bins, bins), cmap=plt.cm.BuPu)
-    axs[i, 3].hist2d(y=extracted_features[i], x=sersic, bins=(bins, bins), cmap=plt.cm.BuPu)
-    axs[i, 4].hist2d(y=extracted_features[i], x=axis_ratio, bins=(bins, bins), cmap=plt.cm.BuPu)
-    axs[i, 5].hist2d(y=extracted_features[i], x=position_angle, bins=(bins, bins), cmap=plt.cm.BuPu)
-
-
-axs[0, 0].set_title("AB Magnitude")
-axs[0, 1].set_title("Stellar Mass")
-axs[0, 2].set_title("Semi-Major Axis")
-axs[0, 3].set_title("Sersic Index")
-axs[0, 4].set_title("Axis Ratio")
-axs[0, 5].set_title("Position Angle")
-
-# axs[0, 0].set_ylabel("AB Magnitude")
-# axs[1, 0].set_ylabel("Stellar Mass")
-# axs[2, 0].set_ylabel("Semi-Major Axis")
-# axs[3, 0].set_ylabel("Sersic Index")
-# axs[4, 0].set_ylabel("Axis Ratio")
-# axs[5, 0].set_ylabel("Position Angle")
-
-plt.yticks(rotation=90)
-
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_comparison")
-# plt.show()
+# extracted_features = np.flipud(np.rot90(extracted_features))
+#
+# fig, axs = plt.subplots(encoding_dim, 6, figsize=(20,60))
+#
+# for i in range(0, encoding_dim):
+#
+#     # title = "Feature " + str(i+1)
+#     # axs[0, i].set_title(title)
+#
+#     # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle, hue=clusters, palette="colorblind")
+#
+#
+#     # sns.scatterplot(ax=axs[i, 0], y=extracted_features[i], x=ab_magnitude, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[i, 1], y=extracted_features[i], x=mass, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[i, 2], y=extracted_features[i], x=semi_major, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[i, 3], y=extracted_features[i], x=sersic, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[i, 4], y=extracted_features[i], x=axis_ratio, hue=clusters, palette="colorblind")
+#     # sns.scatterplot(ax=axs[i, 5], y=extracted_features[i], x=position_angle, hue=clusters, palette="colorblind")
+#     #
+#     # plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
+#     # plt.show()
+#     #
+#     # axs[i, 0].get_legend().remove()
+#     # axs[i, 1].get_legend().remove()
+#     # axs[i, 2].get_legend().remove()
+#     # axs[i, 3].get_legend().remove()
+#     # axs[i, 4].get_legend().remove()
+#     # axs[i, 5].get_legend().remove()
+#     #
+#     # axs[i, 0].set_ylabel("Feature " + str(i))
+#
+#
+#     # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude)
+#     # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass)
+#     # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major)
+#     # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic)
+#     # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio)
+#     # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle)
+#
+#     bins = 75
+#
+#     axs[i, 0].hist2d(y=extracted_features[i], x=ab_magnitude, bins=(bins, bins), cmap=plt.cm.BuPu)
+#     axs[i, 1].hist2d(y=extracted_features[i], x=mass, bins=(bins, bins), cmap=plt.cm.BuPu)
+#     axs[i, 2].hist2d(y=extracted_features[i], x=semi_major, bins=(bins, bins), cmap=plt.cm.BuPu)
+#     axs[i, 3].hist2d(y=extracted_features[i], x=sersic, bins=(bins, bins), cmap=plt.cm.BuPu)
+#     axs[i, 4].hist2d(y=extracted_features[i], x=axis_ratio, bins=(bins, bins), cmap=plt.cm.BuPu)
+#     axs[i, 5].hist2d(y=extracted_features[i], x=position_angle, bins=(bins, bins), cmap=plt.cm.BuPu)
+#
+#
+# axs[0, 0].set_title("AB Magnitude")
+# axs[0, 1].set_title("Stellar Mass")
+# axs[0, 2].set_title("Semi-Major Axis")
+# axs[0, 3].set_title("Sersic Index")
+# axs[0, 4].set_title("Axis Ratio")
+# axs[0, 5].set_title("Position Angle")
+#
+# # axs[0, 0].set_ylabel("AB Magnitude")
+# # axs[1, 0].set_ylabel("Stellar Mass")
+# # axs[2, 0].set_ylabel("Semi-Major Axis")
+# # axs[3, 0].set_ylabel("Sersic Index")
+# # axs[4, 0].set_ylabel("Axis Ratio")
+# # axs[5, 0].set_ylabel("Position Angle")
+#
+# plt.yticks(rotation=90)
+#
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_comparison")
+# # plt.show()
 
 
 
