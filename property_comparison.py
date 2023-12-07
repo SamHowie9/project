@@ -36,98 +36,98 @@ print(centers)
 print(centers.shape)
 
 
-# group_1 = df.loc[df['Cluster'] == 3, 'GalaxyID']
-
-
-# load the two excel files into dataframes
-df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
-df2 = pd.read_csv("stab3510_supplemental_file/table2.csv", comment="#")
-
-
-# account for hte validation data and remove final 200 elements
-df1.drop(df1.tail(200).index, inplace=True)
-df2.drop(df2.tail(200).index, inplace=True)
 
 
 
-# extract relevant properties
-galaxy_id = df1["GalaxyID"]
-ab_magnitude = df1["galfit_mag"]
-mass = df2["galfit_lmstar"]
-semi_major = (df1["galfit_re"] + df2["galfit_re"]) / 2
-sersic = (df1["galfit_n"] + df2["galfit_n"]) / 2
-axis_ratio = (df1["galfit_q"] + df2["galfit_q"]) / 2
-position_angle = (df1["galfit_PA"] + df2["galfit_PA"]) / 2
-
-
-# create a new dataframe to contain all the relevant information about each galaxy
-df = pd.DataFrame(columns=["GalaxyID", "galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA", "Cluster"])
-df["GalaxyID"] = galaxy_id
-df["galfit_mag"] = ab_magnitude
-df["galfit_lmstar"] = mass
-df["galfit_re"] = semi_major
-df["galfit_n"] = sersic
-df["galfit_q"] = axis_ratio
-df["galfit_PA"] = position_angle
-
-print(df1.shape)
-print(df2.shape)
-print(df.shape)
-
-df["Cluster"] = clusters
-
-
-group_1 = df.loc[df["Cluster"] == 0, "GalaxyID"].tolist()
-group_2 = df.loc[df["Cluster"] == 1, "GalaxyID"].tolist()
-
-print(np.array(group_1).shape)
-print(np.array(group_2).shape)
-
-
-
-
-
-# fig, axs = plt.subplots(3, 6, figsize=(30,10))
-#
-# for i in range(0, 3):
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i]) + ".png")
-#     axs[0, i].imshow(image)
-#     axs[0, i].get_xaxis().set_visible(False)
-#     axs[0, i].get_yaxis().set_visible(False)
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+3]) + ".png")
-#     axs[1, i].imshow(image)
-#     axs[1, i].get_xaxis().set_visible(False)
-#     axs[1, i].get_yaxis().set_visible(False)
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+6]) + ".png")
-#     axs[2, i].imshow(image)
-#     axs[2, i].get_xaxis().set_visible(False)
-#     axs[2, i].get_yaxis().set_visible(False)
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i]) + ".png")
-#     axs[0, i+3].imshow(image)
-#     axs[0, i+3].get_xaxis().set_visible(False)
-#     axs[0, i+3].get_yaxis().set_visible(False)
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+3]) + ".png")
-#     axs[1, i+3].imshow(image)
-#     axs[1, i+3].get_xaxis().set_visible(False)
-#     axs[1, i+3].get_yaxis().set_visible(False)
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+6]) + ".png")
-#     axs[2, i+3].imshow(image)
-#     axs[2, i+3].get_xaxis().set_visible(False)
-#     axs[2, i+3].get_yaxis().set_visible(False)
+# # load the two excel files into dataframes
+# df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+# df2 = pd.read_csv("stab3510_supplemental_file/table2.csv", comment="#")
 #
 #
-# axs[0,1].set_title("Group 1", pad=15)
-# axs[0,4].set_title("Group 2", pad=15)
+# # account for hte validation data and remove final 200 elements
+# df1.drop(df1.tail(200).index, inplace=True)
+# df2.drop(df2.tail(200).index, inplace=True)
 #
 #
-# plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
-# plt.show()
+#
+# # extract relevant properties
+# galaxy_id = df1["GalaxyID"]
+# ab_magnitude = df1["galfit_mag"]
+# mass = df2["galfit_lmstar"]
+# semi_major = (df1["galfit_re"] + df2["galfit_re"]) / 2
+# sersic = (df1["galfit_n"] + df2["galfit_n"]) / 2
+# axis_ratio = (df1["galfit_q"] + df2["galfit_q"]) / 2
+# position_angle = (df1["galfit_PA"] + df2["galfit_PA"]) / 2
+#
+#
+# # create a new dataframe to contain all the relevant information about each galaxy
+# df = pd.DataFrame(columns=["GalaxyID", "galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA", "Cluster"])
+# df["GalaxyID"] = galaxy_id
+# df["galfit_mag"] = ab_magnitude
+# df["galfit_lmstar"] = mass
+# df["galfit_re"] = semi_major
+# df["galfit_n"] = sersic
+# df["galfit_q"] = axis_ratio
+# df["galfit_PA"] = position_angle
+#
+# print(df1.shape)
+# print(df2.shape)
+# print(df.shape)
+#
+# df["Cluster"] = clusters
+#
+#
+# group_1 = df.loc[df["Cluster"] == 0, "GalaxyID"].tolist()
+# group_2 = df.loc[df["Cluster"] == 1, "GalaxyID"].tolist()
+#
+# print(np.array(group_1).shape)
+# print(np.array(group_2).shape)
+
+
+
+
+
+fig, axs = plt.subplots(3, 6, figsize=(30,10))
+
+for i in range(0, 3):
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i]) + ".png")
+    axs[0, i].imshow(image)
+    axs[0, i].get_xaxis().set_visible(False)
+    axs[0, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+3]) + ".png")
+    axs[1, i].imshow(image)
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[i+6]) + ".png")
+    axs[2, i].imshow(image)
+    axs[2, i].get_xaxis().set_visible(False)
+    axs[2, i].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i]) + ".png")
+    axs[0, i+3].imshow(image)
+    axs[0, i+3].get_xaxis().set_visible(False)
+    axs[0, i+3].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+3]) + ".png")
+    axs[1, i+3].imshow(image)
+    axs[1, i+3].get_xaxis().set_visible(False)
+    axs[1, i+3].get_yaxis().set_visible(False)
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[i+6]) + ".png")
+    axs[2, i+3].imshow(image)
+    axs[2, i+3].get_xaxis().set_visible(False)
+    axs[2, i+3].get_yaxis().set_visible(False)
+
+
+axs[0,1].set_title("Group 1", pad=15)
+axs[0,4].set_title("Group 2", pad=15)
+
+
+plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.show()
 
 
 
