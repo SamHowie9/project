@@ -169,17 +169,17 @@ for i in range(0, 3):
     axs[2, i].get_xaxis().set_visible(False)
     axs[2, i].get_yaxis().set_visible(False)
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_id[i]) + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_id[i]) + ".png")
     axs[0, i+3].imshow(image)
     axs[0, i+3].get_xaxis().set_visible(False)
     axs[0, i+3].get_yaxis().set_visible(False)
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_id[i+3]) + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_id[i+3]) + ".png")
     axs[1, i+3].imshow(image)
     axs[1, i+3].get_xaxis().set_visible(False)
     axs[1, i+3].get_yaxis().set_visible(False)
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_id[i+6]) + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_id[i+6]) + ".png")
     axs[2, i+3].imshow(image)
     axs[2, i+3].get_xaxis().set_visible(False)
     axs[2, i+3].get_yaxis().set_visible(False)
