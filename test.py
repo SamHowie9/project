@@ -5,7 +5,7 @@ import pandas as pd
 # import keras
 import os
 from matplotlib import image as mpimg
-import seaborn as sns
+# import seaborn as sns
 import random
 
 
