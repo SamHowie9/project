@@ -45,8 +45,8 @@ clf.fit(extracted_features, clusters_h)
 centers_h = clf.centroids_
 
 
-clusters = clusters_k
-centers = centers_k
+clusters = clusters_h
+centers = centers_h
 
 print(clusters)
 print(centers)
