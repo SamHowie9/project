@@ -27,14 +27,14 @@ print(extracted_features)
 
 
 # perform k means clustering
-kmeans = KMeans(n_clusters=2, random_state=0, n_init='auto')
+kmeans = KMeans(n_clusters=4, random_state=0, n_init='auto')
 
 # extract the k mean clusters and their centers
 clusters_k = kmeans.fit_predict(extracted_features)
 centers_k = kmeans.cluster_centers_
 
 # perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=2, affinity="euclidean", linkage="ward")
+hierarchical = AgglomerativeClustering(n_clusters=4, affinity="euclidean", linkage="ward")
 
 # get hierarchical clusters
 clusters_h = hierarchical.fit_predict(extracted_features)
@@ -97,121 +97,152 @@ df["Cluster"] = clusters
 
 group_1 = df.loc[df["Cluster"] == 0]
 group_2 = df.loc[df["Cluster"] == 1]
+group_3 = df.loc[df["Cluster"] == 2]
+group_4 = df.loc[df["Cluster"] == 3]
 
 group_1_id = group_1["GalaxyID"]
 group_2_id = group_2["GalaxyID"]
+group_3_id = group_2["GalaxyID"]
+group_4_id = group_2["GalaxyID"]
 
-print(group_1)
-print(group_2)
+# print(group_1)
+# print(group_2)
 
 print(np.array(group_1).shape)
 print(np.array(group_2).shape)
+print(np.array(group_3).shape)
+print(np.array(group_4).shape)
 
 
 
 
 
-# fig, axs = plt.subplots(2, 3, figsize=(20,10))
-#
-# axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.9)
-# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.8)
+fig, axs = plt.subplots(2, 3, figsize=(20,10))
+
+axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.9)
+axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.8)
+axs[0, 0].hist(group_3["galfit_mag"], bins=50, alpha=0.8)
+axs[0, 0].hist(group_4["galfit_mag"], bins=50, alpha=0.8)
+axs[0, 0].set_title("Absolute Magnitude")
+
+# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.9, zorder=0)
+# axs[0, 0].hist(group_4["galfit_mag"], bins=50, alpha=0.8, zorder=10)
+# axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.8, zorder=15)
+# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.8, zorder=5)
 # axs[0, 0].set_title("Absolute Magnitude")
-#
-# axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.9)
-# axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.8)
+
+
+axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.8)
+axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.9)
+axs[0, 1].hist(group_3["galfit_lmstar"], bins=50, alpha=0.8)
+axs[0, 1].hist(group_4["galfit_lmstar"], bins=50, alpha=0.8)
+axs[0, 1].set_title("Stellar Mass")
+
+# axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.8, zorder=0)
+# axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.9, zorder=10)
+# axs[0, 1].hist(group_3["galfit_lmstar"], bins=50, alpha=0.8, zorder=15)
+# axs[0, 1].hist(group_4["galfit_lmstar"], bins=50, alpha=0.8, zorder=5)
 # axs[0, 1].set_title("Stellar Mass")
-#
-# axs[0, 2].hist(group_2["galfit_re"], bins=50, alpha=0.9)
-# axs[0, 2].hist(group_1["galfit_re"], bins=50, alpha=0.8)
-# axs[0, 2].set_title("Semi-Major Axis")
-#
-# axs[1, 0].hist(group_2["galfit_n"], bins=50, alpha=0.9)
-# axs[1, 0].hist(group_1["galfit_n"], bins=50, alpha=0.8)
-# axs[1, 0].set_title("Sersic Index")
-#
-# axs[1, 1].hist(group_2["galfit_q"], bins=50, alpha=0.9)
-# axs[1, 1].hist(group_1["galfit_q"], bins=50, alpha=0.8)
-# axs[1, 1].set_title("Axis Ratio")
-#
-# axs[1, 2].hist(group_2["galfit_PA"], bins=50, alpha=0.9)
-# axs[1, 2].hist(group_1["galfit_PA"], bins=50, alpha=0.8)
-# axs[1, 2].set_title("Position Angle")
-#
-# fig.legend(labels=["Group 1", "Group 2"], loc="center right")
-#
-# plt.savefig("Plots/2_cluster_properties_hierarchical")
-# plt.show()
 
+axs[0, 2].hist(group_1["galfit_re"], bins=50, alpha=0.9)
+axs[0, 2].hist(group_2["galfit_re"], bins=50, alpha=0.8)
+axs[0, 2].hist(group_3["galfit_re"], bins=50, alpha=0.8)
+axs[0, 2].hist(group_4["galfit_re"], bins=50, alpha=0.8)
+axs[0, 2].set_title("Semi-Major Axis")
 
+axs[1, 0].hist(group_1["galfit_n"], bins=50, alpha=0.9)
+axs[1, 0].hist(group_2["galfit_n"], bins=50, alpha=0.8)
+axs[1, 0].hist(group_3["galfit_n"], bins=50, alpha=0.8)
+axs[1, 0].hist(group_4["galfit_n"], bins=50, alpha=0.8)
+axs[1, 0].set_title("Sersic Index")
 
+axs[1, 1].hist(group_1["galfit_q"], bins=50, alpha=0.9)
+axs[1, 1].hist(group_2["galfit_q"], bins=50, alpha=0.8)
+axs[1, 1].hist(group_3["galfit_q"], bins=50, alpha=0.8)
+axs[1, 1].hist(group_4["galfit_q"], bins=50, alpha=0.8)
+axs[1, 1].set_title("Axis Ratio")
 
+axs[1, 2].hist(group_1["galfit_PA"], bins=50, alpha=0.9)
+axs[1, 2].hist(group_2["galfit_PA"], bins=50, alpha=0.8)
+axs[1, 2].hist(group_3["galfit_PA"], bins=50, alpha=0.8)
+axs[1, 2].hist(group_4["galfit_PA"], bins=50, alpha=0.8)
+axs[1, 2].set_title("Position Angle")
 
-group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
-group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
+fig.legend(labels=["Group 1", "Group 2", "Group 3", "Group 4"], loc="center right")
 
-group_1_random = group_1_id.iloc[group_1_random_index].tolist()
-group_2_random = group_2_id.iloc[group_2_random_index].tolist()
-
-# group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
-# group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
-
-print(group_1_random)
-print(group_2_random)
-
-# fig, axs = plt.subplots(3, 6, figsize=(20,10))
-
-fig = plt.figure(constrained_layout=False, figsize=(20, 10))
-
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05)
-
-for i in range(0, 3):
-
-    g1_ax1 = fig.add_subplot(gs1[0, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
-    g1_ax1.imshow(image)
-    g1_ax1.get_xaxis().set_visible(False)
-    g1_ax1.get_yaxis().set_visible(False)
-
-    g1_ax2 = fig.add_subplot(gs1[1, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+3]) + ".png")
-    g1_ax2.imshow(image)
-    g1_ax2.get_xaxis().set_visible(False)
-    g1_ax2.get_yaxis().set_visible(False)
-
-    g1_ax3 = fig.add_subplot(gs1[2, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+6]) + ".png")
-    g1_ax3.imshow(image)
-    g1_ax3.get_xaxis().set_visible(False)
-    g1_ax3.get_yaxis().set_visible(False)
-
-    g2_ax1 = fig.add_subplot(gs2[0, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i]) + ".png")
-    g2_ax1.imshow(image)
-    g2_ax1.get_xaxis().set_visible(False)
-    g2_ax1.get_yaxis().set_visible(False)
-
-    g2_ax2 = fig.add_subplot(gs2[1, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
-    g2_ax2.imshow(image)
-    g2_ax2.get_xaxis().set_visible(False)
-    g2_ax2.get_yaxis().set_visible(False)
-
-    g2_ax3 = fig.add_subplot(gs2[2, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+6]) + ".png")
-    g2_ax3.imshow(image)
-    g2_ax3.get_xaxis().set_visible(False)
-    g2_ax3.get_yaxis().set_visible(False)
-
-
-    if i == 1:
-        g1_ax1.set_title("Group 1", fontsize=30, pad=20)
-        g2_ax1.set_title("Group 2", fontsize=30, pad=20)
-
-
-
-plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.savefig("Plots/2_cluster_properties")
 plt.show()
+
+
+
+
+
+# group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
+# group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
+#
+# group_1_random = group_1_id.iloc[group_1_random_index].tolist()
+# group_2_random = group_2_id.iloc[group_2_random_index].tolist()
+#
+# # group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
+# # group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
+#
+# print(group_1_random)
+# print(group_2_random)
+#
+# # fig, axs = plt.subplots(3, 6, figsize=(20,10))
+#
+# fig = plt.figure(constrained_layout=False, figsize=(20, 10))
+#
+# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05)
+# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05)
+#
+# for i in range(0, 3):
+#
+#     g1_ax1 = fig.add_subplot(gs1[0, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
+#     g1_ax1.imshow(image)
+#     g1_ax1.get_xaxis().set_visible(False)
+#     g1_ax1.get_yaxis().set_visible(False)
+#
+#     g1_ax2 = fig.add_subplot(gs1[1, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+3]) + ".png")
+#     g1_ax2.imshow(image)
+#     g1_ax2.get_xaxis().set_visible(False)
+#     g1_ax2.get_yaxis().set_visible(False)
+#
+#     g1_ax3 = fig.add_subplot(gs1[2, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+6]) + ".png")
+#     g1_ax3.imshow(image)
+#     g1_ax3.get_xaxis().set_visible(False)
+#     g1_ax3.get_yaxis().set_visible(False)
+#
+#     g2_ax1 = fig.add_subplot(gs2[0, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i]) + ".png")
+#     g2_ax1.imshow(image)
+#     g2_ax1.get_xaxis().set_visible(False)
+#     g2_ax1.get_yaxis().set_visible(False)
+#
+#     g2_ax2 = fig.add_subplot(gs2[1, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
+#     g2_ax2.imshow(image)
+#     g2_ax2.get_xaxis().set_visible(False)
+#     g2_ax2.get_yaxis().set_visible(False)
+#
+#     g2_ax3 = fig.add_subplot(gs2[2, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+6]) + ".png")
+#     g2_ax3.imshow(image)
+#     g2_ax3.get_xaxis().set_visible(False)
+#     g2_ax3.get_yaxis().set_visible(False)
+#
+#
+#     if i == 1:
+#         g1_ax1.set_title("Group 1", fontsize=30, pad=20)
+#         g2_ax1.set_title("Group 2", fontsize=30, pad=20)
+#
+#
+#
+# plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+# plt.show()
 
 
 
