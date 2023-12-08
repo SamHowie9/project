@@ -150,7 +150,7 @@ print(np.array(group_2).shape)
 # print(group_2_random)
 
 
-fig, axs = plt.subplots(3, 6, figsize=(30,10))
+fig, axs = plt.subplots(3, 6, figsize=(20,10))
 
 for i in range(0, 3):
 
