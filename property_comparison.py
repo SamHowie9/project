@@ -113,28 +113,28 @@ print(np.array(group_2).shape)
 
 # fig, axs = plt.subplots(2, 3, figsize=(20,10))
 #
-# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.9)
-# axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.8)
+# axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.9)
+# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.8)
 # axs[0, 0].set_title("Absolute Magnitude")
 #
-# axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.9)
-# axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.8)
+# axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.9)
+# axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.8)
 # axs[0, 1].set_title("Stellar Mass")
 #
-# axs[0, 2].hist(group_1["galfit_re"], bins=50, alpha=0.9)
-# axs[0, 2].hist(group_2["galfit_re"], bins=50, alpha=0.8)
+# axs[0, 2].hist(group_2["galfit_re"], bins=50, alpha=0.9)
+# axs[0, 2].hist(group_1["galfit_re"], bins=50, alpha=0.8)
 # axs[0, 2].set_title("Semi-Major Axis")
 #
-# axs[1, 0].hist(group_1["galfit_n"], bins=50, alpha=0.9)
-# axs[1, 0].hist(group_2["galfit_n"], bins=50, alpha=0.8)
+# axs[1, 0].hist(group_2["galfit_n"], bins=50, alpha=0.9)
+# axs[1, 0].hist(group_1["galfit_n"], bins=50, alpha=0.8)
 # axs[1, 0].set_title("Sersic Index")
 #
-# axs[1, 1].hist(group_1["galfit_q"], bins=50, alpha=0.9)
-# axs[1, 1].hist(group_2["galfit_q"], bins=50, alpha=0.8)
+# axs[1, 1].hist(group_2["galfit_q"], bins=50, alpha=0.9)
+# axs[1, 1].hist(group_1["galfit_q"], bins=50, alpha=0.8)
 # axs[1, 1].set_title("Axis Ratio")
 #
-# axs[1, 2].hist(group_1["galfit_PA"], bins=50, alpha=0.9)
-# axs[1, 2].hist(group_2["galfit_PA"], bins=50, alpha=0.8)
+# axs[1, 2].hist(group_2["galfit_PA"], bins=50, alpha=0.9)
+# axs[1, 2].hist(group_1["galfit_PA"], bins=50, alpha=0.8)
 # axs[1, 2].set_title("Position Angle")
 #
 # fig.legend(labels=["Cluster 1", "Cluster 2"], loc="center right")
@@ -145,107 +145,75 @@ print(np.array(group_2).shape)
 
 
 
-# group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
-# group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
 
-# group_1_random = group_1_id.iloc[group_1_random_index].tolist()
-# group_2_random = group_2_id.iloc[group_2_random_index].tolist()
-
-group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
-group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
-
-print(group_1_random)
-print(group_2_random)
-
-# fig, axs = plt.subplots(3, 6, figsize=(20,10))
-
-fig = plt.figure(constrained_layout=False, figsize=(20, 10))
-
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05)
-
-for i in range(0, 3):
-
-    g1_ax1 = fig.add_subplot(gs1[0, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
-    g1_ax1.imshow(image)
-    g1_ax1.get_xaxis().set_visible(False)
-    g1_ax1.get_yaxis().set_visible(False)
-
-    g1_ax2 = fig.add_subplot(gs1[1, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+3]) + ".png")
-    g1_ax2.imshow(image)
-    g1_ax2.get_xaxis().set_visible(False)
-    g1_ax2.get_yaxis().set_visible(False)
-
-    g1_ax3 = fig.add_subplot(gs1[2, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+6]) + ".png")
-    g1_ax3.imshow(image)
-    g1_ax3.get_xaxis().set_visible(False)
-    g1_ax3.get_yaxis().set_visible(False)
-
-    g2_ax1 = fig.add_subplot(gs2[0, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i]) + ".png")
-    g2_ax1.imshow(image)
-    g2_ax1.get_xaxis().set_visible(False)
-    g2_ax1.get_yaxis().set_visible(False)
-
-    g2_ax2 = fig.add_subplot(gs2[1, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
-    g2_ax2.imshow(image)
-    g2_ax2.get_xaxis().set_visible(False)
-    g2_ax2.get_yaxis().set_visible(False)
-
-    g2_ax3 = fig.add_subplot(gs2[2, i])
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+6]) + ".png")
-    g2_ax3.imshow(image)
-    g2_ax3.get_xaxis().set_visible(False)
-    g2_ax3.get_yaxis().set_visible(False)
-
-
-    if i == 1:
-        g1_ax1.set_title("Group 1", fontsize=30, pad=20)
-        g2_ax1.set_title("Group 2", fontsize=30, pad=20)
-
-
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
-    # axs[0, i].imshow(image)
-    # axs[0, i].get_xaxis().set_visible(False)
-    # axs[0, i].get_yaxis().set_visible(False)
-    #
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+3]) + ".png")
-    # axs[1, i].imshow(image)
-    # axs[1, i].get_xaxis().set_visible(False)
-    # axs[1, i].get_yaxis().set_visible(False)
-    #
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+6]) + ".png")
-    # axs[2, i].imshow(image)
-    # axs[2, i].get_xaxis().set_visible(False)
-    # axs[2, i].get_yaxis().set_visible(False)
-    #
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i]) + ".png")
-    # axs[0, i+3].imshow(image)
-    # axs[0, i+3].get_xaxis().set_visible(False)
-    # axs[0, i+3].get_yaxis().set_visible(False)
-    #
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
-    # axs[1, i+3].imshow(image)
-    # axs[1, i+3].get_xaxis().set_visible(False)
-    # axs[1, i+3].get_yaxis().set_visible(False)
-    #
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+6]) + ".png")
-    # axs[2, i+3].imshow(image)
-    # axs[2, i+3].get_xaxis().set_visible(False)
-    # axs[2, i+3].get_yaxis().set_visible(False)
+# # group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
+# # group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
+#
+# # group_1_random = group_1_id.iloc[group_1_random_index].tolist()
+# # group_2_random = group_2_id.iloc[group_2_random_index].tolist()
+#
+# group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
+# group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
+#
+# print(group_1_random)
+# print(group_2_random)
+#
+# # fig, axs = plt.subplots(3, 6, figsize=(20,10))
+#
+# fig = plt.figure(constrained_layout=False, figsize=(20, 10))
+#
+# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05)
+# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05)
+#
+# for i in range(0, 3):
+#
+#     g1_ax1 = fig.add_subplot(gs1[0, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
+#     g1_ax1.imshow(image)
+#     g1_ax1.get_xaxis().set_visible(False)
+#     g1_ax1.get_yaxis().set_visible(False)
+#
+#     g1_ax2 = fig.add_subplot(gs1[1, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+3]) + ".png")
+#     g1_ax2.imshow(image)
+#     g1_ax2.get_xaxis().set_visible(False)
+#     g1_ax2.get_yaxis().set_visible(False)
+#
+#     g1_ax3 = fig.add_subplot(gs1[2, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+6]) + ".png")
+#     g1_ax3.imshow(image)
+#     g1_ax3.get_xaxis().set_visible(False)
+#     g1_ax3.get_yaxis().set_visible(False)
+#
+#     g2_ax1 = fig.add_subplot(gs2[0, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i]) + ".png")
+#     g2_ax1.imshow(image)
+#     g2_ax1.get_xaxis().set_visible(False)
+#     g2_ax1.get_yaxis().set_visible(False)
+#
+#     g2_ax2 = fig.add_subplot(gs2[1, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
+#     g2_ax2.imshow(image)
+#     g2_ax2.get_xaxis().set_visible(False)
+#     g2_ax2.get_yaxis().set_visible(False)
+#
+#     g2_ax3 = fig.add_subplot(gs2[2, i])
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+6]) + ".png")
+#     g2_ax3.imshow(image)
+#     g2_ax3.get_xaxis().set_visible(False)
+#     g2_ax3.get_yaxis().set_visible(False)
+#
+#
+#     if i == 1:
+#         g1_ax1.set_title("Group 1", fontsize=30, pad=20)
+#         g2_ax1.set_title("Group 2", fontsize=30, pad=20)
+#
+#
+#
+# plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+# plt.show()
 
 
-# axs[0,1].set_title("Group 1", pad=15, fontsize=40)
-# axs[0,4].set_title("Group 2", pad=15, fontsize=40)
-
-
-
-plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
-plt.show()
 
 
 
@@ -269,49 +237,13 @@ plt.show()
 
 
 
+
+
 # extracted_features = np.flipud(np.rot90(extracted_features))
 #
 # fig, axs = plt.subplots(encoding_dim, 6, figsize=(20,60))
 #
 # for i in range(0, encoding_dim):
-#
-#     # title = "Feature " + str(i+1)
-#     # axs[0, i].set_title(title)
-#
-#     # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle, hue=clusters, palette="colorblind")
-#
-#
-#     # sns.scatterplot(ax=axs[i, 0], y=extracted_features[i], x=ab_magnitude, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[i, 1], y=extracted_features[i], x=mass, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[i, 2], y=extracted_features[i], x=semi_major, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[i, 3], y=extracted_features[i], x=sersic, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[i, 4], y=extracted_features[i], x=axis_ratio, hue=clusters, palette="colorblind")
-#     # sns.scatterplot(ax=axs[i, 5], y=extracted_features[i], x=position_angle, hue=clusters, palette="colorblind")
-#     #
-#     # plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
-#     # plt.show()
-#     #
-#     # axs[i, 0].get_legend().remove()
-#     # axs[i, 1].get_legend().remove()
-#     # axs[i, 2].get_legend().remove()
-#     # axs[i, 3].get_legend().remove()
-#     # axs[i, 4].get_legend().remove()
-#     # axs[i, 5].get_legend().remove()
-#     #
-#     # axs[i, 0].set_ylabel("Feature " + str(i))
-#
-#
-#     # sns.scatterplot(ax=axs[0, i], x=extracted_features[i], y=ab_magnitude)
-#     # sns.scatterplot(ax=axs[1, i], x=extracted_features[i], y=mass)
-#     # sns.scatterplot(ax=axs[2, i], x=extracted_features[i], y=semi_major)
-#     # sns.scatterplot(ax=axs[3, i], x=extracted_features[i], y=sersic)
-#     # sns.scatterplot(ax=axs[4, i], x=extracted_features[i], y=axis_ratio)
-#     # sns.scatterplot(ax=axs[5, i], x=extracted_features[i], y=position_angle)
 #
 #     bins = 75
 #
@@ -330,17 +262,12 @@ plt.show()
 # axs[0, 4].set_title("Axis Ratio")
 # axs[0, 5].set_title("Position Angle")
 #
-# # axs[0, 0].set_ylabel("AB Magnitude")
-# # axs[1, 0].set_ylabel("Stellar Mass")
-# # axs[2, 0].set_ylabel("Semi-Major Axis")
-# # axs[3, 0].set_ylabel("Sersic Index")
-# # axs[4, 0].set_ylabel("Axis Ratio")
-# # axs[5, 0].set_ylabel("Position Angle")
 #
 # plt.yticks(rotation=90)
 #
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_comparison")
-# # plt.show()
+# plt.show()
+
 
 
 
