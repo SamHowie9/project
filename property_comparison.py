@@ -143,8 +143,11 @@ print(np.array(group_2).shape)
 # plt.show()
 
 
-group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
-group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
+# group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
+# group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
+group_1_random_index = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
+group_2_random_index = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
+
 
 group_1_random = group_1_id.iloc[group_1_random_index].tolist()
 group_2_random = group_2_id.iloc[group_2_random_index].tolist()
@@ -192,7 +195,7 @@ axs[0,1].set_title("Group 1", pad=15, fontsize=40)
 axs[0,4].set_title("Group 2", pad=15, fontsize=40)
 
 
-plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals_k")
+plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
 plt.show()
 
 
