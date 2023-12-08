@@ -146,14 +146,14 @@ print(np.array(group_2).shape)
 
 
 
-# group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
-# group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
+group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
+group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
 
-# group_1_random = group_1_id.iloc[group_1_random_index].tolist()
-# group_2_random = group_2_id.iloc[group_2_random_index].tolist()
+group_1_random = group_1_id.iloc[group_1_random_index].tolist()
+group_2_random = group_2_id.iloc[group_2_random_index].tolist()
 
-group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
-group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
+# group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
+# group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
 
 print(group_1_random)
 print(group_2_random)
