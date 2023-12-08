@@ -98,8 +98,8 @@ df["Cluster"] = clusters
 group_1 = df.loc[df["Cluster"] == 0]
 group_2 = df.loc[df["Cluster"] == 1]
 
-group_1_id = group_1["GalaxyID"].tolist()
-group_2_id = group_2["GalaxyID"].tolist()
+group_1_id = group_1["GalaxyID"]
+group_2_id = group_2["GalaxyID"]
 
 print(group_1)
 print(group_2)
@@ -146,8 +146,8 @@ print(np.array(group_2).shape)
 group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
 group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
 
-group_1_random = group_1_id.iloc[group_1_random_index]
-group_2_random = group_2_id.iloc[group_2_random_index]
+group_1_random = group_1_id.iloc[group_1_random_index].tolist()
+group_2_random = group_2_id.iloc[group_2_random_index].tolist()
 
 print(group_1_random)
 print(group_2_random)
