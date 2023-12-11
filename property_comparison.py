@@ -287,10 +287,10 @@ for i in range(0, 3):
 
 
     if i == 1:
-        g1_ax1.set_title("Group 1", fontsize=30, pad=20)
-        g2_ax1.set_title("Group 2", fontsize=30, pad=20)
-        g3_ax1.set_title("Group 3", fontsize=30, pad=20)
-        g4_ax1.set_title("Group 4", fontsize=30, pad=20)
+        g1_ax1.set_title(("Group 1 " + str(print(np.array(group_1).shape[0]))), fontsize=30, pad=20)
+        g2_ax1.set_title(("Group 2 " + str(print(np.array(group_1).shape[0]))), fontsize=30, pad=20)
+        g3_ax1.set_title(("Group 3 " + str(print(np.array(group_1).shape[0]))), fontsize=30, pad=20)
+        g4_ax1.set_title(("Group 4 " + str(print(np.array(group_1).shape[0]))), fontsize=30, pad=20)
 
 
 
