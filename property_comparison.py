@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-# import seaborn as sns
+import seaborn as sns
 import pandas as pd
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 # import keras
@@ -17,24 +17,26 @@ import random
 # set the encoding dimension (number of extracted features)
 encoding_dim = 32
 
+# set the number of clusters
+n_clusters = 20
 
 
 # load the extracted features
 extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 
-print(extracted_features)
+# print(extracted_features)
 
 
 
-# perform k means clustering
-kmeans = KMeans(n_clusters=4, random_state=0, n_init='auto')
-
-# extract the k mean clusters and their centers
-clusters_k = kmeans.fit_predict(extracted_features)
-centers_k = kmeans.cluster_centers_
+# # perform k means clustering
+# kmeans = KMeans(n_clusters=2, random_state=0, n_init='auto')
+#
+# # extract the k mean clusters and their centers
+# clusters_k = kmeans.fit_predict(extracted_features)
+# centers_k = kmeans.cluster_centers_
 
 # perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=2, affinity="euclidean", linkage="ward")
+hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
 
 # get hierarchical clusters
 clusters_h = hierarchical.fit_predict(extracted_features)
@@ -48,8 +50,8 @@ centers_h = clf.centroids_
 clusters = clusters_h
 centers = centers_h
 
-print(clusters)
-print(centers)
+# print(clusters)
+# print(centers)
 
 
 
@@ -91,6 +93,13 @@ df["galfit_PA"] = position_angle
 df["Cluster"] = clusters
 
 
+
+
+
+
+
+# print(df[["galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"]].mean())
+
 # group_1 = df.loc[df["Cluster"] == 0, "GalaxyID"].tolist()
 # group_2 = df.loc[df["Cluster"] == 1, "GalaxyID"].tolist()
 
@@ -117,61 +126,87 @@ print(np.array(group_4).shape)
 
 
 
-fig, axs = plt.subplots(2, 3, figsize=(20,10))
+mean_df = pd.DataFrame(columns=["galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"])
 
-axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.9)
-axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.8)
-# axs[0, 0].hist(group_3["galfit_mag"], bins=50, alpha=0.8)
-# axs[0, 0].hist(group_4["galfit_mag"], bins=50, alpha=0.8)
-axs[0, 0].set_title("Absolute Magnitude")
+for i in range(0, n_clusters):
+    mean_cluster = df.loc[df["Cluster"] == i, ["galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"]].mean()
+    mean_df.loc[i] = mean_cluster
 
-# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.9, zorder=0)
-# axs[0, 0].hist(group_4["galfit_mag"], bins=50, alpha=0.8, zorder=10)
-# axs[0, 0].hist(group_2["galfit_mag"], bins=50, alpha=0.8, zorder=15)
-# axs[0, 0].hist(group_1["galfit_mag"], bins=50, alpha=0.8, zorder=5)
-# axs[0, 0].set_title("Absolute Magnitude")
+mean_df["Cluster"] = list(range(0, n_clusters))
 
 
-axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.8)
-axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.9)
-# axs[0, 1].hist(group_3["galfit_lmstar"], bins=50, alpha=0.8)
-# axs[0, 1].hist(group_4["galfit_lmstar"], bins=50, alpha=0.8)
-axs[0, 1].set_title("Stellar Mass")
+# g = sns.pairplot(data=mean_df, hue="Cluster", palette="colorblind", corner=True)
 
-# axs[0, 1].hist(group_1["galfit_lmstar"], bins=50, alpha=0.8, zorder=0)
-# axs[0, 1].hist(group_2["galfit_lmstar"], bins=50, alpha=0.9, zorder=10)
-# axs[0, 1].hist(group_3["galfit_lmstar"], bins=50, alpha=0.8, zorder=15)
-# axs[0, 1].hist(group_4["galfit_lmstar"], bins=50, alpha=0.8, zorder=5)
-# axs[0, 1].set_title("Stellar Mass")
+# cmap = sns.color_palette("cubehelix", as_cmap=True)
+# sns.scatterplot(data=mean_df, x="galfit_mag", y="galfit_lmstar", hue="galfit_re", palette=cmap)
+# sns.color_palette("cubehelix", as_cmap=True)
 
-axs[0, 2].hist(group_1["galfit_re"], bins=50, alpha=0.9)
-axs[0, 2].hist(group_2["galfit_re"], bins=50, alpha=0.8)
-# axs[0, 2].hist(group_3["galfit_re"], bins=50, alpha=0.8)
-# axs[0, 2].hist(group_4["galfit_re"], bins=50, alpha=0.8)
-axs[0, 2].set_title("Semi-Major Axis")
+plt.scatter(x=mean_df["galfit_lmstar"], y=mean_df["galfit_n"], s=100, linewidths=1, edgecolors="black", c=mean_df["galfit_mag"], cmap="plasma")
+plt.xlabel("Stellar Mass")
+plt.ylabel("Sersic Index")
 
-axs[1, 0].hist(group_1["galfit_n"], bins=50, alpha=0.9)
-axs[1, 0].hist(group_2["galfit_n"], bins=50, alpha=0.8)
-# axs[1, 0].hist(group_3["galfit_n"], bins=50, alpha=0.8)
-# axs[1, 0].hist(group_4["galfit_n"], bins=50, alpha=0.8)
-axs[1, 0].set_title("Sersic Index")
 
-axs[1, 1].hist(group_1["galfit_q"], bins=50, alpha=0.9)
-axs[1, 1].hist(group_2["galfit_q"], bins=50, alpha=0.8)
-# axs[1, 1].hist(group_3["galfit_q"], bins=50, alpha=0.8)
-# axs[1, 1].hist(group_4["galfit_q"], bins=50, alpha=0.8)
-axs[1, 1].set_title("Axis Ratio")
+plt.colorbar(label="Absolute Magnitude")
 
-axs[1, 2].hist(group_1["galfit_PA"], bins=50, alpha=0.9)
-axs[1, 2].hist(group_2["galfit_PA"], bins=50, alpha=0.8)
-# axs[1, 2].hist(group_3["galfit_PA"], bins=50, alpha=0.8)
-# axs[1, 2].hist(group_4["galfit_PA"], bins=50, alpha=0.8)
-axs[1, 2].set_title("Position Angle")
 
-fig.legend(labels=["Group 1", "Group 2"], loc="center right")
-
-plt.savefig("Plots/2_cluster_properties")
+plt.savefig("Plots/stellar_mass_sersic_ab_" + str(n_clusters) + "_clusters")
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+# fig, axs = plt.subplots(2, 6, figsize=(25, 8))
+#
+# h0 = sns.histplot(ax=axs[0, 0], data=df, x="galfit_mag", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h0.set(xlabel=None, ylabel=None, title="Absolute Magnitude")
+# h1 = sns.histplot(ax=axs[0, 1], data=df, x="galfit_lmstar", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h1.set(xlabel=None, ylabel=None, title="Stellar Mass")
+# h2 = sns.histplot(ax=axs[0, 2], data=df, x="galfit_re", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h2.set(xlabel=None, ylabel=None, title="Semi-Major Axis")
+# h3 = sns.histplot(ax=axs[0, 3], data=df, x="galfit_n", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h3.set(xlabel=None, ylabel=None, title="Sersic Index")
+# h4 = sns.histplot(ax=axs[0, 4], data=df, x="galfit_q", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h4.set(xlabel=None, ylabel=None, title="Axis Ratio")
+# h5 = sns.histplot(ax=axs[0, 5], data=df, x="galfit_PA", hue="Cluster", palette="bright", linewidth=0, legend=True, element="poly")
+# h5.set(xlabel=None, ylabel=None, title="Position Angle")
+#
+# b0 = sns.boxplot(ax=axs[1, 0], data=df, x="Cluster", y="galfit_mag", showfliers=False, whis=0, palette="pastel")
+# b0.set(xlabel=None, ylabel=None, xticklabels=[])
+# b1 = sns.boxplot(ax=axs[1, 1], data=df, x="Cluster", y="galfit_lmstar", showfliers=False, whis=0, palette="pastel")
+# b1.set(xlabel=None, ylabel=None, xticklabels=[])
+# b2 = sns.boxplot(ax=axs[1, 2], data=df, x="Cluster", y="galfit_re", showfliers=False, whis=0, palette="pastel")
+# b2.set(xlabel=None, ylabel=None, xticklabels=[])
+# b3 = sns.boxplot(ax=axs[1, 3], data=df, x="Cluster", y="galfit_n", showfliers=False, whis=0, palette="pastel")
+# b3.set(xlabel=None, ylabel=None, xticklabels=[])
+# b4 = sns.boxplot(ax=axs[1, 4], data=df, x="Cluster", y="galfit_q", showfliers=False, whis=0, palette="pastel")
+# b4.set(xlabel=None, ylabel=None, xticklabels=[])
+# b5 = sns.boxplot(ax=axs[1, 5], data=df, x="Cluster", y="galfit_PA", showfliers=False, whis=0, palette="pastel")
+# b5.set(xlabel=None, ylabel=None, xticklabels=[])
+#
+# sns.move_legend(axs[0, 5], "center left", bbox_to_anchor=(1.05, -0.1))
+#
+# labels = []
+# for i in range(1, n_clusters+1):
+#     labels.append("Group " + str(i))
+#
+# legend = axs[0, 5].get_legend()
+# legend.set_title("Clusters")
+# for current, new in zip(legend.texts, labels):
+#     current.set_text(new)
+#
+#
+#
+# plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
+# plt.show()
+
+
 
 
 
