@@ -294,7 +294,7 @@ for i in range(0, 3):
 
 
 
-plt.savefig("Plots/4_cluster_" + str(encoding_dim) + "_feature_originals_2")
+plt.savefig("Plots/4_cluster_" + str(encoding_dim) + "_feature_originals_3")
 plt.show()
 
 
