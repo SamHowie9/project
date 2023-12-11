@@ -234,7 +234,7 @@ for i in range(0, 3):
     g2_ax2 = fig.add_subplot(gs2[1, i])
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
     g2_ax2.imshow(image)
-    # g2_ax2.get_xaxis().set_visible(False)
+    g2_ax2.get_xaxis().set_visible(False)
     g2_ax2.get_yaxis().set_visible(False)
 
     g2_ax3 = fig.add_subplot(gs2[2, i])
@@ -246,38 +246,38 @@ for i in range(0, 3):
 
     g3_ax1 = fig.add_subplot(gs3[0, i])
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i]) + ".png")
-    g2_ax1.imshow(image)
+    g3_ax1.imshow(image)
     g3_ax1.get_xaxis().set_visible(False)
     g3_ax1.get_yaxis().set_visible(False)
 
     g3_ax2 = fig.add_subplot(gs3[1, i])
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+3]) + ".png")
-    g2_ax1.imshow(image)
+    g3_ax2.imshow(image)
     g3_ax2.get_xaxis().set_visible(False)
     g3_ax2.get_yaxis().set_visible(False)
 
     g3_ax3 = fig.add_subplot(gs3[2, i])
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+6]) + ".png")
-    g2_ax1.imshow(image)
+    g3_ax3.imshow(image)
     g3_ax3.get_xaxis().set_visible(False)
     g3_ax3.get_yaxis().set_visible(False)
 
 
     g4_ax1 = fig.add_subplot(gs4[0, i])
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i]) + ".png")
-    g2_ax1.imshow(image)
+    g4_ax1.imshow(image)
     g4_ax1.get_xaxis().set_visible(False)
     g4_ax1.get_yaxis().set_visible(False)
 
     g4_ax2 = fig.add_subplot(gs4[1, i])
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+3]) + ".png")
-    g2_ax1.imshow(image)
+    g4_ax2.imshow(image)
     g4_ax2.get_xaxis().set_visible(False)
     g4_ax2.get_yaxis().set_visible(False)
 
     g4_ax3 = fig.add_subplot(gs4[2, i])
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+6]) + ".png")
-    g2_ax1.imshow(image)
+    g4_ax3.imshow(image)
     g4_ax3.get_xaxis().set_visible(False)
     g4_ax3.get_yaxis().set_visible(False)
 
