@@ -197,7 +197,7 @@ print(group_2_random)
 
 # fig, axs = plt.subplots(3, 6, figsize=(20,10))
 
-fig = plt.figure(constrained_layout=False, figsize=(20, 20))
+fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 
 gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05)
 gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05)
