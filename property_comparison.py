@@ -34,7 +34,7 @@ clusters_k = kmeans.fit_predict(extracted_features)
 centers_k = kmeans.cluster_centers_
 
 # perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=2, affinity="euclidean", linkage="ward")
+hierarchical = AgglomerativeClustering(n_clusters=4, affinity="euclidean", linkage="ward")
 
 # get hierarchical clusters
 clusters_h = hierarchical.fit_predict(extracted_features)
@@ -97,21 +97,21 @@ df["Cluster"] = clusters
 
 group_1 = df.loc[df["Cluster"] == 0]
 group_2 = df.loc[df["Cluster"] == 1]
-# group_3 = df.loc[df["Cluster"] == 2]
-# group_4 = df.loc[df["Cluster"] == 3]
+group_3 = df.loc[df["Cluster"] == 2]
+group_4 = df.loc[df["Cluster"] == 3]
 
 group_1_id = group_1["GalaxyID"]
 group_2_id = group_2["GalaxyID"]
-# group_3_id = group_2["GalaxyID"]
-# group_4_id = group_2["GalaxyID"]
+group_3_id = group_2["GalaxyID"]
+group_4_id = group_2["GalaxyID"]
 
 # print(group_1)
 # print(group_2)
 
 print(np.array(group_1).shape)
 print(np.array(group_2).shape)
-# print(np.array(group_3).shape)
-# print(np.array(group_4).shape)
+print(np.array(group_3).shape)
+print(np.array(group_4).shape)
 
 
 
@@ -179,32 +179,32 @@ print(np.array(group_2).shape)
 
 group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
 group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
-# group_3_random_index = random.sample(range(0, len(group_3_id)), 9)
-# group_4_random_index = random.sample(range(0, len(group_4_id)), 9)
+group_3_random_index = random.sample(range(0, len(group_3_id)), 9)
+group_4_random_index = random.sample(range(0, len(group_4_id)), 9)
 
 group_1_random = group_1_id.iloc[group_1_random_index].tolist()
 group_2_random = group_2_id.iloc[group_2_random_index].tolist()
-# group_3_random = group_3_id.iloc[group_3_random_index].tolist()
-# group_4_random = group_4_id.iloc[group_4_random_index].tolist()
+group_3_random = group_3_id.iloc[group_3_random_index].tolist()
+group_4_random = group_4_id.iloc[group_4_random_index].tolist()
 
 # group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
 # group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
 
 print(group_1_random)
 print(group_2_random)
-# print(group_3_random)
-# print(group_4_random)
+print(group_3_random)
+print(group_4_random)
 
 # fig, axs = plt.subplots(3, 6, figsize=(20,10))
 
-fig = plt.figure(constrained_layout=False, figsize=(20, 10))
+fig = plt.figure(constrained_layout=False, figsize=(20, 20))
 
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05)
-# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05, top=0.98, bottom=0.55)
-# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05, top=0.98, bottom=0.55)
-# gs3 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05, top=0.48, bottom=0.05)
-# gs4 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05, top=0.48, bottom=0.05)
+# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05)
+# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05)
+gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05, top=0.98, bottom=0.55)
+gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05, top=0.98, bottom=0.55)
+gs3 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.48, wspace=0.05, hspace=0.05, top=0.48, bottom=0.05)
+gs4 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.98, wspace=0.05, hspace=0.05, top=0.48, bottom=0.05)
 
 for i in range(0, 3):
 
@@ -246,42 +246,42 @@ for i in range(0, 3):
     g2_ax3.get_yaxis().set_visible(False)
 
 
-    # g3_ax1 = fig.add_subplot(gs3[0, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i]) + ".png")
-    # g3_ax1.imshow(image)
-    # g3_ax1.get_xaxis().set_visible(False)
-    # g3_ax1.get_yaxis().set_visible(False)
-    #
-    # g3_ax2 = fig.add_subplot(gs3[1, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+3]) + ".png")
-    # g3_ax2.imshow(image)
-    # g3_ax2.get_xaxis().set_visible(False)
-    # g3_ax2.get_yaxis().set_visible(False)
-    #
-    # g3_ax3 = fig.add_subplot(gs3[2, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+6]) + ".png")
-    # g3_ax3.imshow(image)
-    # g3_ax3.get_xaxis().set_visible(False)
-    # g3_ax3.get_yaxis().set_visible(False)
-    #
-    #
-    # g4_ax1 = fig.add_subplot(gs4[0, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i]) + ".png")
-    # g4_ax1.imshow(image)
-    # g4_ax1.get_xaxis().set_visible(False)
-    # g4_ax1.get_yaxis().set_visible(False)
-    #
-    # g4_ax2 = fig.add_subplot(gs4[1, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+3]) + ".png")
-    # g4_ax2.imshow(image)
-    # g4_ax2.get_xaxis().set_visible(False)
-    # g4_ax2.get_yaxis().set_visible(False)
-    #
-    # g4_ax3 = fig.add_subplot(gs4[2, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+6]) + ".png")
-    # g4_ax3.imshow(image)
-    # g4_ax3.get_xaxis().set_visible(False)
-    # g4_ax3.get_yaxis().set_visible(False)
+    g3_ax1 = fig.add_subplot(gs3[0, i])
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i]) + ".png")
+    g3_ax1.imshow(image)
+    g3_ax1.get_xaxis().set_visible(False)
+    g3_ax1.get_yaxis().set_visible(False)
+
+    g3_ax2 = fig.add_subplot(gs3[1, i])
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+3]) + ".png")
+    g3_ax2.imshow(image)
+    g3_ax2.get_xaxis().set_visible(False)
+    g3_ax2.get_yaxis().set_visible(False)
+
+    g3_ax3 = fig.add_subplot(gs3[2, i])
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+6]) + ".png")
+    g3_ax3.imshow(image)
+    g3_ax3.get_xaxis().set_visible(False)
+    g3_ax3.get_yaxis().set_visible(False)
+
+
+    g4_ax1 = fig.add_subplot(gs4[0, i])
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i]) + ".png")
+    g4_ax1.imshow(image)
+    g4_ax1.get_xaxis().set_visible(False)
+    g4_ax1.get_yaxis().set_visible(False)
+
+    g4_ax2 = fig.add_subplot(gs4[1, i])
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+3]) + ".png")
+    g4_ax2.imshow(image)
+    g4_ax2.get_xaxis().set_visible(False)
+    g4_ax2.get_yaxis().set_visible(False)
+
+    g4_ax3 = fig.add_subplot(gs4[2, i])
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+6]) + ".png")
+    g4_ax3.imshow(image)
+    g4_ax3.get_xaxis().set_visible(False)
+    g4_ax3.get_yaxis().set_visible(False)
 
 
 
@@ -289,12 +289,12 @@ for i in range(0, 3):
     if i == 1:
         g1_ax1.set_title("Group 1", fontsize=30, pad=20)
         g2_ax1.set_title("Group 2", fontsize=30, pad=20)
-        # g3_ax1.set_title("Group 3", fontsize=30, pad=20)
-        # g4_ax1.set_title("Group 4", fontsize=30, pad=20)
+        g3_ax1.set_title("Group 3", fontsize=30, pad=20)
+        g4_ax1.set_title("Group 4", fontsize=30, pad=20)
 
 
 
-plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.savefig("Plots/4_cluster_" + str(encoding_dim) + "_feature_originals")
 plt.show()
 
 
