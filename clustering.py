@@ -23,8 +23,18 @@ n_clusters = 20
 # load the extracted features
 extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 
-# perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
+# A = [1, 2, 4, 8, 16]
+#
+# for i in A:
+#
+#     # perform hierarchical ward clustering
+#     hierarchical = AgglomerativeClustering(n_clusters=i, metric="euclidean", linkage="ward")
+#
+#     # get hierarchical clusters
+#     clusters = hierarchical.fit_predict(extracted_features)
+#
+#     count = pd.Series(clusters).value_counts()
+#     print(count.tolist())
 
 
 def plot_dendrogram(model, **kwargs):
@@ -54,7 +64,16 @@ def plot_dendrogram(model, **kwargs):
 hierarchical = AgglomerativeClustering(n_clusters=None, distance_threshold=0, affinity="euclidean", linkage="ward")
 hierarchical = hierarchical.fit(extracted_features)
 
-plot_dendrogram(hierarchical, truncate_mode="level", p=5)
+plt.figure(figsize=(15,15))
 
+plot_dendrogram(hierarchical, truncate_mode="lastp", p=7)
+# plot_dendrogram(hierarchical, truncate_mode="level", p=5, color_threshold=0, link_color_func=lambda k:"black")
+
+# plt.axhline(y=375)
+# plt.axhline(y=235)
+# plt.axhline(y=134)
+# plt.axhline(y=93)
+
+plt.savefig("Plots/hierarcial_clustering_dendrogram")
 plt.show()
 
