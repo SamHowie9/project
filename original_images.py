@@ -308,5 +308,5 @@ for i in range(0, 3):
 #         count += 1
 
 
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals_4")
+plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals")
 plt.show()
