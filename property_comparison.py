@@ -9,6 +9,7 @@ from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.neighbors import NearestCentroid
 from matplotlib import image as mpimg
 import random
+import textwrap
 
 
 
@@ -18,7 +19,7 @@ import random
 encoding_dim = 32
 
 # set the number of clusters
-n_clusters = 2
+n_clusters = 17
 
 
 # load the extracted features
@@ -32,16 +33,14 @@ extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
 
 # get hierarchical clusters
-clusters_h = hierarchical.fit_predict(extracted_features)
+clusters = hierarchical.fit_predict(extracted_features)
 
 # get hierarchical centers
 clf = NearestCentroid()
-clf.fit(extracted_features, clusters_h)
-centers_h = clf.centroids_
+clf.fit(extracted_features, clusters)
+centers = clf.centroids_
 
 
-clusters = clusters_h
-centers = centers_h
 
 # print(clusters)
 # print(centers)
@@ -101,6 +100,9 @@ group_1 = df.loc[df["Cluster"] == 0]
 group_2 = df.loc[df["Cluster"] == 1]
 group_3 = df.loc[df["Cluster"] == 2]
 group_4 = df.loc[df["Cluster"] == 3]
+group_5 = df.loc[df["Cluster"] == 4]
+group_6 = df.loc[df["Cluster"] == 5]
+group_7 = df.loc[df["Cluster"] == 6]
 
 group_1_id = group_1["GalaxyID"]
 group_2_id = group_2["GalaxyID"]
@@ -110,15 +112,14 @@ group_4_id = group_2["GalaxyID"]
 # print(group_1)
 # print(group_2)
 
-print(np.array(group_1).shape)
-print(np.array(group_2).shape)
-print(np.array(group_3).shape)
-print(np.array(group_4).shape)
+# print(np.array(group_1).shape[0])
+# print(np.array(group_2).shape[0])
+# print(np.array(group_3).shape[0])
+# print(np.array(group_4).shape[0])
+# print(np.array(group_5).shape[0])
+# print(np.array(group_6).shape[0])
+# print(np.array(group_7).shape[0])
 
-print(np.array(group_1).shape[0])
-print(np.array(group_2).shape[0])
-print(np.array(group_3).shape[0])
-print(np.array(group_4).shape[0])
 
 
 
@@ -131,14 +132,14 @@ print(np.array(group_4).shape[0])
 #     mean_df.loc[i] = mean_cluster
 #
 # mean_df["Cluster"] = list(range(0, n_clusters))
-
-
+#
+#
 # g = sns.pairplot(data=mean_df, hue="Cluster", palette="colorblind", corner=True)
-
+#
 # cmap = sns.color_palette("cubehelix", as_cmap=True)
 # sns.scatterplot(data=mean_df, x="galfit_mag", y="galfit_lmstar", hue="galfit_re", palette=cmap)
 # sns.color_palette("cubehelix", as_cmap=True)
-
+#
 # plt.scatter(x=mean_df["galfit_lmstar"], y=mean_df["galfit_n"], s=100, linewidths=1, edgecolors="black", c=mean_df["galfit_mag"], cmap="plasma")
 # plt.xlabel("Stellar Mass")
 # plt.ylabel("Sersic Index")
@@ -152,56 +153,134 @@ print(np.array(group_4).shape[0])
 
 
 
+mean_df = pd.DataFrame(columns=["galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"])
+
+for i in range(0, n_clusters):
+    mean_cluster = df.loc[df["Cluster"] == i, ["galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"]].mean()
+    mean_df.loc[i] = mean_cluster
+
+mean_df["Cluster"] = list(range(0, n_clusters))
+
+print(mean_df)
+
+centers_switch = np.flipud(np.rot90(centers))
+
+print(centers[0][13])
+print(centers_switch[13][0])
+print(mean_df.iloc[0]["galfit_mag"])
+print(mean_df["galfit_mag"])
+
+extracted_features_switch = np.flipud(np.rot90(extracted_features))
+
+fig, axs = plt.subplots(2, 3, figsize=(15, 10))
+
+bins=50
+
+# axs[0, 0].hist2d(x=extracted_features_switch[13], y=df["galfit_mag"], bins=(bins, bins), cmap=plt.cm.BuPu)
+# axs[0, 1].scatter(x=extracted_features_switch[13], y=df["galfit_mag"], s=2, alpha=0.1, c="black")
+
+# absolute magnitude vs f15
+sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[13], y=df["galfit_mag"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
+g1 = sns.scatterplot(ax=axs[0, 0], x=centers_switch[13], y=mean_df["galfit_mag"], s=100, hue=mean_df["Cluster"], palette="colorblind", legend=False)
+g1.set(xlabel="Feature 13", ylabel="Absolute Magnitude", title="Absolute Magnitude")
+
+# absolute magnitude vs f15
+sns.scatterplot(ax=axs[0, 1], x=extracted_features_switch[15], y=df["galfit_mag"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
+g2 = sns.scatterplot(ax=axs[0, 1], x=centers_switch[15], y=mean_df["galfit_mag"], s=100, hue=mean_df["Cluster"], palette="colorblind", legend=False)
+g2.set(xlabel="Feature 15", ylabel="Absolute Magnitude", title="Absolute Magnitude", xlim=(-60, 5))
+# g2.set(xlabel="Feature 15", ylabel="Absolute Magnitude", title="Absolute Magnitude")
+
+# mass vs f13
+sns.scatterplot(ax=axs[0, 2], x=extracted_features_switch[13], y=df["galfit_lmstar"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
+g3 = sns.scatterplot(ax=axs[0, 2], x=centers_switch[13], y=mean_df["galfit_lmstar"], s=100, hue=mean_df["Cluster"], palette="colorblind", legend=False)
+g3.set(xlabel="Feature 13", ylabel="Stellar Mass", title="Stellar Mass")
+
+# semi-major vs f13
+sns.scatterplot(ax=axs[1, 0], x=extracted_features_switch[13], y=df["galfit_re"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
+g4 = sns.scatterplot(ax=axs[1, 0], x=centers_switch[13], y=mean_df["galfit_re"], s=100, hue=mean_df["Cluster"], palette="colorblind", legend=False)
+g4.set(xlabel="Feature 13", ylabel="Semi-Major Axis", title="Semi-Major Axis", ylim=(0, 12.5))
+# g4.set(xlabel="Feature 13", ylabel="Semi-Major Axis", title="Semi-Major Axis")
+
+# semi-major vs f15
+sns.scatterplot(ax=axs[1, 1], x=extracted_features_switch[15], y=df["galfit_re"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
+g5 = sns.scatterplot(ax=axs[1, 1], x=centers_switch[15], y=mean_df["galfit_re"], s=100, hue=mean_df["Cluster"], palette="colorblind", legend=False)
+g5.set(xlabel="Feature 15", ylabel="Semi-Major Axis", title="Semi-Major Axis", xlim=(-50, 5), ylim=(0, 15))
+# g5.set(xlabel="Feature 15", ylabel="Semi-Major Axis", title="Semi-Major Axis")
+
+# Sersic Index vs f10
+sns.scatterplot(ax=axs[1, 2], x=extracted_features_switch[10], y=df["galfit_n"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
+g6 = sns.scatterplot(ax=axs[1, 2], x=centers_switch[10], y=mean_df["galfit_n"], s=100, hue=mean_df["Cluster"], palette="colorblind", legend=False)
+g6.set(xlabel="Feature 10", ylabel="Sersic Index", title="Sersic Index", xlim=(-20, 50), ylim=(0, 5))
+# g6.set(xlabel="Feature 10", ylabel="Sersic Index", title="Sersic Index")
 
 
-
-
-
-
-
-
-# fig, axs = plt.subplots(2, 6, figsize=(25, 8))
+# # move legend to cover whole plot
+# sns.move_legend(axs[0, 2], "center left", bbox_to_anchor=(1.05, -0.1))
 #
-# h0 = sns.histplot(ax=axs[0, 0], data=df, x="galfit_mag", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
-# h0.set(xlabel=None, ylabel=None, title="Absolute Magnitude")
-# h1 = sns.histplot(ax=axs[0, 1], data=df, x="galfit_lmstar", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
-# h1.set(xlabel=None, ylabel=None, title="Stellar Mass")
-# h2 = sns.histplot(ax=axs[0, 2], data=df, x="galfit_re", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
-# h2.set(xlabel=None, ylabel=None, title="Semi-Major Axis")
-# h3 = sns.histplot(ax=axs[0, 3], data=df, x="galfit_n", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
-# h3.set(xlabel=None, ylabel=None, title="Sersic Index")
-# h4 = sns.histplot(ax=axs[0, 4], data=df, x="galfit_q", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
-# h4.set(xlabel=None, ylabel=None, title="Axis Ratio")
-# h5 = sns.histplot(ax=axs[0, 5], data=df, x="galfit_PA", hue="Cluster", palette="bright", linewidth=0, legend=True, element="poly")
-# h5.set(xlabel=None, ylabel=None, title="Position Angle")
+# new_labels = ["Group 1-2-2", "Group 1-1-2", "Group 2-1", "Group 2-2-2", "Group 1-2-1", "Group 1-1-1", "Group 2-2-1"]
 #
-# b0 = sns.boxplot(ax=axs[1, 0], data=df, x="Cluster", y="galfit_mag", showfliers=False, whis=0, palette="pastel")
-# b0.set(xlabel=None, ylabel=None, xticklabels=[])
-# b1 = sns.boxplot(ax=axs[1, 1], data=df, x="Cluster", y="galfit_lmstar", showfliers=False, whis=0, palette="pastel")
-# b1.set(xlabel=None, ylabel=None, xticklabels=[])
-# b2 = sns.boxplot(ax=axs[1, 2], data=df, x="Cluster", y="galfit_re", showfliers=False, whis=0, palette="pastel")
-# b2.set(xlabel=None, ylabel=None, xticklabels=[])
-# b3 = sns.boxplot(ax=axs[1, 3], data=df, x="Cluster", y="galfit_n", showfliers=False, whis=0, palette="pastel")
-# b3.set(xlabel=None, ylabel=None, xticklabels=[])
-# b4 = sns.boxplot(ax=axs[1, 4], data=df, x="Cluster", y="galfit_q", showfliers=False, whis=0, palette="pastel")
-# b4.set(xlabel=None, ylabel=None, xticklabels=[])
-# b5 = sns.boxplot(ax=axs[1, 5], data=df, x="Cluster", y="galfit_PA", showfliers=False, whis=0, palette="pastel")
-# b5.set(xlabel=None, ylabel=None, xticklabels=[])
-#
-# sns.move_legend(axs[0, 5], "center left", bbox_to_anchor=(1.05, -0.1))
-#
-# labels = []
-# for i in range(1, n_clusters+1):
-#     labels.append("Group " + str(i))
-#
-# legend = axs[0, 5].get_legend()
+# legend = axs[0, 2].get_legend()
 # legend.set_title("Clusters")
-# for current, new in zip(legend.texts, labels):
+# for current, new in zip(legend.texts, new_labels):
 #     current.set_text(new)
+
+
+
+plt.savefig("Plots/" + str(n_clusters) + "_clusters_" + str(encoding_dim) + "_features_property_correlation")
+plt.show()
+
+
+
+
+
+
+# extracted_features_switch = np.flipud(np.rot90(extracted_features))
+#
+# correlation_df = pd.DataFrame(columns=["Absolute Magnitude", "Stellar Mass", "Semi-Major Axis", "Sersic Index", "Axis Ratio", "Position Angle"])
+#
+# for feature in range(0, len(extracted_features_switch)):
+#
+#     # create a list to contain the correlation between that feature and each property
+#     correlation_list = []
+#
+#     # loop through each property
+#     for gal_property in range(1, len(df.columns)-1):
+#
+#         # calculate the correlation between that extracted feature and that property
+#         correlation = np.corrcoef(extracted_features_switch[feature], df.iloc[:, gal_property])[0][1]
+#         correlation_list.append(correlation)
+#
+#     # add the correlation of that feature to the main dataframe
+#     correlation_df.loc[len(correlation_df)] = correlation_list
+#
+# # set the figure size
+# plt.figure(figsize=(12, 16))
+#
+# # sns.set(font_scale = 2)
+#
+# # plot a heatmap for the dataframe (with annotations)
+# ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+#
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=15)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+# ax.figure.axes[-1].yaxis.label.set_size(15)
 #
 #
+# def wrap_labels(ax, width, break_long_words=False):
+#     labels = []
+#     for label in ax.get_xticklabels():
+#         text = label.get_text()
+#         labels.append(textwrap.fill(text, width=width,
+#                       break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
 #
-# plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
+# wrap_labels(ax, 10)
+#
+#
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_correlation")
 # plt.show()
 
 
@@ -211,126 +290,48 @@ print(np.array(group_4).shape[0])
 
 
 
-group_1_random_index = random.sample(range(0, len(group_1_id)), 9)
-group_2_random_index = random.sample(range(0, len(group_2_id)), 9)
-group_3_random_index = random.sample(range(0, len(group_3_id)), 9)
-group_4_random_index = random.sample(range(0, len(group_4_id)), 9)
 
-group_1_random = group_1_id.iloc[group_1_random_index].tolist()
-group_2_random = group_2_id.iloc[group_2_random_index].tolist()
-group_3_random = group_3_id.iloc[group_3_random_index].tolist()
-group_4_random = group_4_id.iloc[group_4_random_index].tolist()
-
-# group_1_random = [3518865, 3533021, 10108400, 10452290, 9195988, 10625818, 17097594, 7164803, 9563813]
-# group_2_random = [12485051, 9599139, 14266206, 9032934, 17858355, 10372952, 15996483, 9542933, 7144268]
-
-print(group_1_random)
-print(group_2_random)
-print(group_3_random)
-print(group_4_random)
-
-# fig, axs = plt.subplots(3, 6, figsize=(20,10))
-
-
-fig = plt.figure(constrained_layout=False, figsize=(20, 10))
-
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
-# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05, top=0.95, bottom=0.55)
-# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05, top=0.95, bottom=0.55)
-# gs3 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05, top=0.45, bottom=0.05)
-# gs4 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05, top=0.45, bottom=0.05)
-
-for i in range(0, 3):
-
-    g1_ax1 = fig.add_subplot(gs1[0, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i]) + ".png")
-    # g1_ax1.imshow(image)
-    g1_ax1.get_xaxis().set_visible(False)
-    g1_ax1.get_yaxis().set_visible(False)
-
-    g1_ax2 = fig.add_subplot(gs1[1, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+3]) + ".png")
-    # g1_ax2.imshow(image)
-    g1_ax2.get_xaxis().set_visible(False)
-    g1_ax2.get_yaxis().set_visible(False)
-
-    g1_ax3 = fig.add_subplot(gs1[2, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[i+6]) + ".png")
-    # g1_ax3.imshow(image)
-    g1_ax3.get_xaxis().set_visible(False)
-    g1_ax3.get_yaxis().set_visible(False)
-
-
-    g2_ax1 = fig.add_subplot(gs2[0, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i]) + ".png")
-    # g2_ax1.imshow(image)
-    g2_ax1.get_xaxis().set_visible(False)
-    g2_ax1.get_yaxis().set_visible(False)
-
-    g2_ax2 = fig.add_subplot(gs2[1, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+3]) + ".png")
-    # g2_ax2.imshow(image)
-    g2_ax2.get_xaxis().set_visible(False)
-    g2_ax2.get_yaxis().set_visible(False)
-
-    g2_ax3 = fig.add_subplot(gs2[2, i])
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[i+6]) + ".png")
-    # g2_ax3.imshow(image)
-    g2_ax3.get_xaxis().set_visible(False)
-    g2_ax3.get_yaxis().set_visible(False)
-
-
-    # g3_ax1 = fig.add_subplot(gs3[0, i])
-    # # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i]) + ".png")
-    # # g3_ax1.imshow(image)
-    # g3_ax1.get_xaxis().set_visible(False)
-    # g3_ax1.get_yaxis().set_visible(False)
-    # #
-    # g3_ax2 = fig.add_subplot(gs3[1, i])
-    # # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+3]) + ".png")
-    # # g3_ax2.imshow(image)
-    # g3_ax2.get_xaxis().set_visible(False)
-    # g3_ax2.get_yaxis().set_visible(False)
-    # #
-    # g3_ax3 = fig.add_subplot(gs3[2, i])
-    # # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[i+6]) + ".png")
-    # # g3_ax3.imshow(image)
-    # g3_ax3.get_xaxis().set_visible(False)
-    # g3_ax3.get_yaxis().set_visible(False)
-    # #
-    # #
-    # g4_ax1 = fig.add_subplot(gs4[0, i])
-    # # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i]) + ".png")
-    # # g4_ax1.imshow(image)
-    # g4_ax1.get_xaxis().set_visible(False)
-    # g4_ax1.get_yaxis().set_visible(False)
-    # #
-    # g4_ax2 = fig.add_subplot(gs4[1, i])
-    # # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+3]) + ".png")
-    # # g4_ax2.imshow(image)
-    # g4_ax2.get_xaxis().set_visible(False)
-    # g4_ax2.get_yaxis().set_visible(False)
-    # #
-    # g4_ax3 = fig.add_subplot(gs4[2, i])
-    # # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[i+6]) + ".png")
-    # # g4_ax3.imshow(image)
-    # g4_ax3.get_xaxis().set_visible(False)
-    # g4_ax3.get_yaxis().set_visible(False)
+# # create figure
+# fig, axs = plt.subplots(2, 4, figsize=(25, 8))
+#
+# # plot probability distribution of each property for each cluster
+# h0 = sns.histplot(ax=axs[0, 0], data=df, x="galfit_mag", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h0.set(xlabel=None, ylabel=None, title="Absolute Magnitude")
+# h1 = sns.histplot(ax=axs[0, 1], data=df, x="galfit_lmstar", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h1.set(xlabel=None, ylabel=None, title="Stellar Mass")
+# h2 = sns.histplot(ax=axs[0, 2], data=df, x="galfit_re", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly", binrange=(0, 25))
+# h2.set(xlabel=None, ylabel=None, title="Semi-Major Axis")
+# h3 = sns.histplot(ax=axs[0, 3], data=df, x="galfit_n", hue="Cluster", palette="bright", linewidth=0, legend=True, element="poly")
+# h3.set(xlabel=None, ylabel=None, title="Sersic Index")
+#
+# # plot mean value of each property for each cluster
+# b0 = sns.boxplot(ax=axs[1, 0], data=df, x="Cluster", y="galfit_mag", showfliers=False, whis=0, palette="pastel")
+# b0.set(xlabel=None, ylabel=None, xticklabels=["1-2-2", "1-1-2", "2-1", "2-2-2", "1-2-1", "1-1-1", "2-2-1"])
+# b1 = sns.boxplot(ax=axs[1, 1], data=df, x="Cluster", y="galfit_lmstar", showfliers=False, whis=0, palette="pastel")
+# b1.set(xlabel=None, ylabel=None, xticklabels=["1-2-2", "1-1-2", "2-1", "2-2-2", "1-2-1", "1-1-1", "2-2-1"])
+# b2 = sns.boxplot(ax=axs[1, 2], data=df, x="Cluster", y="galfit_re", showfliers=False, whis=0, palette="pastel")
+# b2.set(xlabel=None, ylabel=None, xticklabels=["1-2-2", "1-1-2", "2-1", "2-2-2", "1-2-1", "1-1-1", "2-2-1"])
+# b3 = sns.boxplot(ax=axs[1, 3], data=df, x="Cluster", y="galfit_n", showfliers=False, whis=0, palette="pastel")
+# b3.set(xlabel=None, ylabel=None, xticklabels=["1-2-2", "1-1-2", "2-1", "2-2-2", "1-2-1", "1-1-1", "2-2-1"])
+#
+# sns.move_legend(axs[0, 3], "center left", bbox_to_anchor=(1.05, 0.5))
+#
+# labels = []
+# for i in range(1, n_clusters+1):
+#     labels.append("Group " + str(i))
+#
+# legend = axs[0, 3].get_legend()
+# legend.set_title("Clusters")
+# for current, new in zip(legend.texts, labels):
+#     current.set_text(new)
+#
+#
+# plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
+# plt.show()
 
 
 
 
-    if i == 1:
-        g1_ax1.set_title(("Group 1 (" + str(np.array(group_1).shape[0]) + ")"), fontsize=25, pad=20)
-        g2_ax1.set_title(("Group 2 (" + str(np.array(group_2).shape[0]) + ")"), fontsize=25, pad=20)
-        # g3_ax1.set_title(("Group 3 (" + str(np.array(group_3).shape[0]) + ")"), fontsize=25, pad=20)
-        # g4_ax1.set_title(("Group 4 (" + str(np.array(group_4).shape[0]) + ")"), fontsize=25, pad=20)
-
-
-
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals_4")
-plt.show()
 
 
 
@@ -353,6 +354,8 @@ plt.show()
 #
 # plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_features")
 # plt.show()
+
+
 
 
 
@@ -387,6 +390,8 @@ plt.show()
 #
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_comparison")
 # plt.show()
+
+
 
 
 
