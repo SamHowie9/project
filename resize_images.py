@@ -60,7 +60,7 @@ for i in magnitudes:
 
 chosen_images = []
 
-for galaxy in galaxies
+for galaxy in galaxies:
     # get the filename for that galaxy
     filename = "galface_" + galaxy + ".png"
 
