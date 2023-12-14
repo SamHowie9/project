@@ -71,7 +71,7 @@ for galaxy in galaxies:
 
 fig, axs = plt.subplots(2, 10, figsize=(20, 8))
 
-for i in range(len(galaxies))
+for i in range(len(galaxies)):
     axs[0, i].imshow(galaxies[i])
 
 
