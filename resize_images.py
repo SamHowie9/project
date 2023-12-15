@@ -70,17 +70,17 @@ for galaxy in galaxies:
 
 chosen_images = np.array(chosen_images)
 
-print(chosen_images.shape)
-print(chosen_images[0].shape)
-print(chosen_images[0])
+# print(chosen_images.shape)
+# print(chosen_images[0].shape)
+# print(chosen_images[0])
 
 
 
 fig, axs = plt.subplots(2, 10, figsize=(20, 8))
 
 for i in range(len(galaxies)):
-    image = galaxies[0].tolist()
-    axs[0, i].imshow(image)
+    # image = chosen_images[0].tolist()
+    axs[0, i].imshow(chosen_images[0])
 
 
 plt.savefig("Plots/absolute_mag_images")
