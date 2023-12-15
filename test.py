@@ -5,11 +5,17 @@ import pandas as pd
 # import keras
 import os
 from matplotlib import image as mpimg
-# import seaborn as sns
+import seaborn as sns
 import random
 
-for i in range(10, 1, -1):
-    print(i)
+A = [1, 2, 3, 4, 5]
+B = [1, 2, 3, 4, 5]
+C = [2, 4, 6, 8, 10]
+
+sns.scatterplot(x=A, y=B)
+sns.scatterplot(x=A, y=C)
+
+plt.show()
 
 
 
