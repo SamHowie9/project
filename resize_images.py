@@ -15,16 +15,16 @@ df.drop(df.tail(200).index, inplace=True)
 # sns.histplot(data=df, x="galfit_mag")
 
 
-magnitudes = [15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19]
-
-galaxies = []
-
-for i in magnitudes:
-    closest_mag = df.iloc[(df["galfit_mag"]-i).abs().argsort()[0]]
-    closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
-    galaxies.append(closest_galaxy)
-
-print(galaxies)
+# magnitudes = [15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19]
+#
+# galaxies = []
+#
+# for i in magnitudes:
+#     closest_mag = df.iloc[(df["galfit_mag"]-i).abs().argsort()[0]]
+#     closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
+#     galaxies.append(closest_galaxy)
+#
+# print(galaxies)
 
 
 
@@ -50,28 +50,28 @@ print(galaxies)
 
 # print(df)
 # load the data
-# df_ab = pd.read_csv("Galaxy Properties/absolute_magnitudes.csv", comment="#")
-#
-# # print(df_ab)
-#
-# df_ab = df.merge(df_ab, how="left", on="GalaxyID")
-# df_ab = df_ab.dropna()
-#
-# # print(df_ab)
-#
-# df_ab = df_ab[["GalaxyID", "r_nodust"]]
-# # df = df[["GalaxyID", "g_nodust", "r_nodust", "i_nodust"]]
-#
-# # print(df_ab)
-#
-# magnitudes = [-23, -22.5, -22, -21.5, -21.25, -21, -20.75, -20.5, -20, -19.5]
-#
-# galaxies = []
-#
-# for i in magnitudes:
-#     closest_mag = df_ab.iloc[(df_ab["r_nodust"]-i).abs().argsort()[0]]
-#     closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
-#     galaxies.append(closest_galaxy)
+df_ab = pd.read_csv("Galaxy Properties/absolute_magnitudes.csv", comment="#")
+
+# print(df_ab)
+
+df_ab = df.merge(df_ab, how="left", on="GalaxyID")
+df_ab = df_ab.dropna()
+
+# print(df_ab)
+
+df_ab = df_ab[["GalaxyID", "r_nodust"]]
+# df = df[["GalaxyID", "g_nodust", "r_nodust", "i_nodust"]]
+
+# print(df_ab)
+
+magnitudes = [-23, -22.5, -22, -21.5, -21.25, -21, -20.75, -20.5, -20, -19.5]
+
+galaxies = []
+
+for i in magnitudes:
+    closest_mag = df_ab.iloc[(df_ab["r_nodust"]-i).abs().argsort()[0]]
+    closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
+    galaxies.append(closest_galaxy)
 
 
 chosen_images = []
@@ -97,6 +97,10 @@ fig, axs = plt.subplots(2, 8, figsize=(20, 8))
 for i in range(len(galaxies)):
     # image = chosen_images[0].tolist()
     axs[0, i].imshow(chosen_images[i])
+
+    intensity = chosen_images[i].mean(axis=2).flatten()
+    axs[1, i].hist(intensity, 256)
+
 
 
 plt.savefig("Plots/absolute_mag_images")
