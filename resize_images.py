@@ -98,7 +98,7 @@ for i in range(len(galaxies)):
     # image = chosen_images[0].tolist()
     axs[0, i].imshow(chosen_images[i])
 
-    intensity = chosen_images[i].mean(axis=2).flatten()
+    intensity = chosen_images[i].mean(axis=2).mean(axis=0)
     axs[1, i].hist(intensity, bins=256)
     # counts, bins = np.histogram(intensity, range(256))
     # axs[1, i].bar(bins[:-1] - 0.5, counts, width=1, edgecolor='none')

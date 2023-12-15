@@ -9,9 +9,22 @@ from matplotlib import image as mpimg
 import random
 
 
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(1852) + ".png")
-plt.imshow(image)
-plt.savefig("Plots/test")
+A = np.array([[[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]], [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]], [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]])
+
+A = [[[1, 1, 1], [2, 2, 2], [1, 1, 1], [4, 4, 4]], [[3, 3, 3], [5, 5, 5], [1, 1, 1], [2, 2, 2]]]
+
+A = np.array(A)
+
+print(A.shape)
+
+print(A.mean(axis=2))
+
+print(A.mean(axis=2).mean(axis=0))
+
+
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(1852) + ".png")
+# plt.imshow(image)
+# plt.savefig("Plots/test")
 
 
 
