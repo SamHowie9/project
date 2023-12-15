@@ -141,8 +141,8 @@ for i in range(len(galaxies)):
     axs[0, i].axvline(x=start_x, c="blue")
     axs[0, i].axvline(x=end_x, c="blue")
 
-    axs[0, i].axhline(x=start_y, c="blue")
-    axs[0, i].axhline(x=end_y, c="blue")
+    axs[0, i].axhline(y=start_y, c="blue")
+    axs[0, i].axhline(y=end_y, c="blue")
 
 
 
