@@ -104,7 +104,7 @@ for i in range(len(galaxies)):
     axs[1, i].axvline(x=64, c="black")
     axs[1, i].axvline(x=192, c="black")
     axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].set_ylim([0, np.amax(chosen_images)])
+    axs[1, i].set_ylim([0, 0.35])
     # axs[1, i].get_yaxis().set_visible(False)
 
 
