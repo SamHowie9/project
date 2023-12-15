@@ -99,7 +99,9 @@ for i in range(len(galaxies)):
     axs[0, i].imshow(chosen_images[i])
 
     intensity = chosen_images[i].mean(axis=2).flatten()
-    axs[1, i].hist(intensity, 256)
+    counts, bins = plt.hist(intensity, 256)
+    axs[1, i].bar(bins[:-1] - 0.5, counts, width=1, edgecolor='none')
+    axs[1, i].set_xlim([0, 255])
 
 
 
