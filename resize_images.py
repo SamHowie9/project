@@ -143,13 +143,13 @@ def resize_image(image, cutoff,):
 
     # check if image is too large to crop, if no we have to scale it down to 128, 128
     if start_x < 64 or start_y < 64 or end_x > 192 or end_y > 192:
-
+        print("...")
         image = cv2.resize(image, (128, 128))
 
-    # if the image isn't too large, we can do a center crop
-    else:
-
-        image = center_crop(image, (128, 128))
+    # # if the image isn't too large, we can do a center crop
+    # else:
+    #
+    #     image = center_crop(image, (128, 128))
 
     return image
 
