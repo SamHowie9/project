@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import numpy as np
 import pandas as pd
-# import seaborn as sns
+import seaborn as sns
 
 
 
@@ -10,6 +10,23 @@ import pandas as pd
 # load the supplemental file into a dataframe
 df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 df.drop(df.tail(200).index, inplace=True)
+
+
+sns.histplot(data=df, x="galfit_mag")
+
+
+magnitudes = [15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19]
+
+galaxies = []
+
+for i in magnitudes:
+    closest_mag = df.iloc[(df["galfit_mag"]-i).abs().argsort()[0]]
+    closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
+    galaxies.append(closest_galaxy)
+
+print(galaxies)
+
+for galaxy in galaxies:
 
 
 # all_images = []
@@ -34,28 +51,28 @@ df.drop(df.tail(200).index, inplace=True)
 
 # print(df)
 # load the data
-df_ab = pd.read_csv("Galaxy Properties/absolute_magnitudes.csv", comment="#")
-
-# print(df_ab)
-
-df_ab = df.merge(df_ab, how="left", on="GalaxyID")
-df_ab = df_ab.dropna()
-
-# print(df_ab)
-
-df_ab = df_ab[["GalaxyID", "r_nodust"]]
-# df = df[["GalaxyID", "g_nodust", "r_nodust", "i_nodust"]]
-
-# print(df_ab)
-
-magnitudes = [-23, -22.5, -22, -21.5, -21.25, -21, -20.75, -20.5, -20, -19.5]
-
-galaxies = []
-
-for i in magnitudes:
-    closest_mag = df_ab.iloc[(df_ab["r_nodust"]-i).abs().argsort()[0]]
-    closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
-    galaxies.append(closest_galaxy)
+# df_ab = pd.read_csv("Galaxy Properties/absolute_magnitudes.csv", comment="#")
+#
+# # print(df_ab)
+#
+# df_ab = df.merge(df_ab, how="left", on="GalaxyID")
+# df_ab = df_ab.dropna()
+#
+# # print(df_ab)
+#
+# df_ab = df_ab[["GalaxyID", "r_nodust"]]
+# # df = df[["GalaxyID", "g_nodust", "r_nodust", "i_nodust"]]
+#
+# # print(df_ab)
+#
+# magnitudes = [-23, -22.5, -22, -21.5, -21.25, -21, -20.75, -20.5, -20, -19.5]
+#
+# galaxies = []
+#
+# for i in magnitudes:
+#     closest_mag = df_ab.iloc[(df_ab["r_nodust"]-i).abs().argsort()[0]]
+#     closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
+#     galaxies.append(closest_galaxy)
 
 
 chosen_images = []
@@ -70,13 +87,13 @@ for galaxy in galaxies:
 
 chosen_images = np.array(chosen_images)
 
-# print(chosen_images.shape)
-# print(chosen_images[0].shape)
-# print(chosen_images[0])
+print(chosen_images.shape)
+print(chosen_images[0].shape)
+print(chosen_images[0])
 
 
 
-fig, axs = plt.subplots(2, 10, figsize=(20, 8))
+fig, axs = plt.subplots(2, 8, figsize=(20, 8))
 
 for i in range(len(galaxies)):
     # image = chosen_images[0].tolist()
@@ -84,8 +101,6 @@ for i in range(len(galaxies)):
 
 
 plt.savefig("Plots/absolute_mag_images")
-
-
 
 
 
