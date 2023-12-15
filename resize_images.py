@@ -89,25 +89,18 @@ chosen_images = np.array(chosen_images)
 
 
 
-fig, axs = plt.subplots(2, 10, figsize=(20, 8))
+fig, axs = plt.subplots(2, 10, figsize=(25, 5)
 
 for i in range(len(galaxies)):
-    # image = chosen_images[0].tolist()
-    axs[0, i].imshow(chosen_images[i])
 
-    # print(chosen_images[i])
-    # print()
-    # print()
-    # print(chosen_images[i].shape)
+    axs[0, i].imshow(chosen_images[i])
+    axs[0, i].get_xaxis().set_visible(False)
+    axs[0, i].get_yaxis().set_visible(False)
 
     intensity = chosen_images[i].mean(axis=2).mean(axis=0)
-
-    print(intensity)
-
     axs[1, i].bar(x=range(0, len(intensity)), height=intensity, width=1)
-    # counts, bins = np.histogram(intensity, range(256))
-    # axs[1, i].bar(bins[:-1] - 0.5, counts, width=1, edgecolor='none')
-    # axs[1, i].set_xlim([0, 255])
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
 
 
 
