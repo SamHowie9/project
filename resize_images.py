@@ -72,6 +72,7 @@ chosen_images = np.array(chosen_images)
 
 print(chosen_images.shape)
 print(chosen_images[0].shape)
+print(chosen_images[0])
 
 
 
