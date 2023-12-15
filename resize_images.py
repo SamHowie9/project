@@ -110,7 +110,7 @@ def resize_image(image, cutoff,):
     found_end_x = 0
     found_end_y = 0
 
-    for j in range(0, size/2):
+    for j in range(0, int(size/2)):
 
         if (intensity_x[j] > cutoff) and (found_start_x == 0):
             start_x = j
