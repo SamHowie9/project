@@ -130,7 +130,7 @@ def resize_image(image, cutoff,):
             found_start_x = 1
 
         if (intensity_x[-j] > cutoff) and (found_end_x == 0):
-            end_x = j
+            end_x = 255 - j
             found_end_x = 1
 
         if (intensity_y[j] > cutoff) and (found_start_y == 0):
@@ -139,7 +139,7 @@ def resize_image(image, cutoff,):
 
         if (intensity_y[-j] > cutoff) and (found_end_y == 0):
             end_y = j
-            found_end_y = 1
+            found_end_y = 255 - 1
 
     print(start_x, end_x, start_y, end_y)
 
