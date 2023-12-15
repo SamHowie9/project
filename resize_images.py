@@ -94,7 +94,7 @@ fig, axs = plt.subplots(3, 10, figsize=(28, 10))
 
 for i in range(len(galaxies)):
 
-    # axs[0, i].imshow(chosen_images[i])
+    axs[0, i].imshow(chosen_images[i])
     axs[0, i].axvline(x=64, c="white")
     axs[0, i].axvline(x=192, c="white")
     axs[0, i].axhline(y=64, c="white")
@@ -102,7 +102,7 @@ for i in range(len(galaxies)):
     axs[0, i].get_xaxis().set_visible(False)
     axs[0, i].get_yaxis().set_visible(False)
 
-    cutoff = 0.06
+    cutoff = 0.075
 
 
     intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
@@ -129,14 +129,14 @@ for i in range(len(galaxies)):
     for j in range(0, 128):
 
         if intensity_x[j] <= cutoff:
-            start = intensity_x[j]
+            start_x = intensity_x[j]
         if intensity_x[-j] <= cutoff:
-            end = intensity_x[-j]
+            end_x = intensity_x[-j]
 
         if intensity_y[j] <= cutoff:
-            start = intensity_y[j]
+            start_y = intensity_y[j]
         if intensity_y[-j] <= cutoff:
-            end = intensity_y[-j]
+            end_y = intensity_y[-j]
 
     axs[0, i].axvline(x=start_x, c="blue")
     axs[0, i].axvline(x=end_x, c="blue")
