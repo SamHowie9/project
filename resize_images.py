@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import numpy as np
 import pandas as pd
-import seaborn as sns
+# import seaborn as sns
 
 
 
@@ -12,7 +12,7 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 df.drop(df.tail(200).index, inplace=True)
 
 
-sns.histplot(data=df, x="galfit_mag")
+# sns.histplot(data=df, x="galfit_mag")
 
 
 magnitudes = [15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19]
