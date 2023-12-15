@@ -138,6 +138,10 @@ for i in range(len(galaxies)):
         if intensity_y[-j] <= cutoff:
             end_y = intensity_y[-j]
 
+    print(start_x, end_x)
+    print(start_y, end_y)
+    print()
+
     axs[0, i].axvline(x=start_x, c="blue")
     axs[0, i].axvline(x=end_x, c="blue")
 
