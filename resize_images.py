@@ -148,10 +148,10 @@ def resize_image(image, cutoff,):
         print("...")
         image = cv2.resize(image, (128, 128))
 
-    # # if the image isn't too large, we can do a center crop
-    # else:
-    #
-    #     image = center_crop(image, (128, 128))
+    # if the image isn't too large, we can do a center crop
+    else:
+
+        image = center_crop(image, (128, 128))
 
     return image
 
