@@ -8,36 +8,8 @@ from matplotlib import image as mpimg
 # import seaborn as sns
 import random
 
-cutoff = 3
-
-intensity_x = [1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1]
-intensity_y = [1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1]
-
-start_x = 0
-start_y = 0
-end_x = 15
-end_y = 15
-
-for j in range(0, 8):
-    print(intensity_x[j])
-    if intensity_x[j] > cutoff:
-        start_x = intensity_x[j]
-        break
-for j in range(0, 8):
-    if intensity_x[-j] > cutoff:
-        end_x = intensity_x[-j]
-        break
-for j in range(0, 8):
-    if intensity_y[j] > cutoff:
-        start_y = intensity_y[j]
-        break
-for j in range(0, 8):
-    if intensity_y[-j] > cutoff:
-        end_y = intensity_y[-j]
-        break
-
-print(start_x, end_x)
-print(start_y, end_y)
+for i in range(10, 1, -1):
+    print(i)
 
 
 
