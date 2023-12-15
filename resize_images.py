@@ -147,11 +147,11 @@ for i in range(len(galaxies)):
     print(start_y, end_y)
     print()
 
-    axs[0, i].axvline(x=start_x, c="blue")
-    axs[0, i].axvline(x=end_x, c="blue")
+    axs[0, i].axvline(x=start_x, c="yellow")
+    axs[0, i].axvline(x=end_x, c="yellow")
 
-    axs[0, i].axhline(y=start_y, c="blue")
-    axs[0, i].axhline(y=end_y, c="blue")
+    axs[0, i].axhline(y=start_y, c="yellow")
+    axs[0, i].axhline(y=end_y, c="yellow")
 
 
 
