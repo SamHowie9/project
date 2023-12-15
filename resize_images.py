@@ -145,14 +145,14 @@ def resize_image(image, cutoff,):
 
     # check if image is too large to crop, if no we have to scale it down to 128, 128
     if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
-        print("...")
         image = cv2.resize(image, (128, 128))
 
     # if the image isn't too large, we can do a center crop
     else:
-
         image = center_crop(image, (128, 128))
+        print(".")
 
+    print()
     return image
 
 
@@ -174,12 +174,12 @@ for i in range(len(galaxies)):
     axs[0, i].get_yaxis().set_visible(False)
 
     image = resize_image(image=chosen_images[i], cutoff=0.075)
-    axs[1, i].imshow(chosen_images[i])
+    axs[1, i].imshow(image)
     # axs[1, i].get_xaxis().set_visible(False)
     # axs[1, i].get_yaxis().set_visible(False)
 
     image = resize_image(image=chosen_images[i], cutoff=0.06)
-    axs[2, i].imshow(chosen_images[i])
+    axs[2, i].imshow(image)
 
     # cutoff = 0.075
     #
