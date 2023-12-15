@@ -127,19 +127,19 @@ for i in range(len(galaxies)):
     end_y = 255
 
     for j in range(0, 128):
-        if intensity_x[j] <= cutoff:
+        if intensity_x[j] > cutoff:
             start_x = intensity_x[j]
             break
     for j in range(0, 128):
-        if intensity_x[-j] <= cutoff:
+        if intensity_x[-j] > cutoff:
             end_x = intensity_x[-j]
             break
     for j in range(0, 128):
-        if intensity_y[j] <= cutoff:
+        if intensity_y[j] > cutoff:
             start_y = intensity_y[j]
             break
     for j in range(0, 128):
-        if intensity_y[-j] <= cutoff:
+        if intensity_y[-j] > cutoff:
             end_y = intensity_y[-j]
             break
 

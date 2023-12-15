@@ -8,22 +8,37 @@ from matplotlib import image as mpimg
 # import seaborn as sns
 import random
 
+cutoff = 3
 
-A = np.array([[[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]], [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]], [[1, 2, 3, 4], [1, 2, 3, 4], [1, 2, 3, 4]]])
+intensity_x = [1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1]
+intensity_y = [1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1]
 
-A = [[[1, 1, 1], [2, 2, 2], [1, 1, 1], [4, 4, 4]], [[3, 3, 3], [5, 5, 5], [1, 1, 1], [2, 2, 2]]]
+start_x = 0
+start_y = 0
+end_x = 15
+end_y = 15
 
-A = np.array(A)
+for j in range(0, 8):
+    print(intensity_x[j])
+    if intensity_x[j] > cutoff:
+        start_x = intensity_x[j]
+        break
+for j in range(0, 8):
+    if intensity_x[-j] > cutoff:
+        end_x = intensity_x[-j]
+        break
+for j in range(0, 8):
+    if intensity_y[j] > cutoff:
+        start_y = intensity_y[j]
+        break
+for j in range(0, 8):
+    if intensity_y[-j] > cutoff:
+        end_y = intensity_y[-j]
+        break
 
-print(A.shape)
+print(start_x, end_x)
+print(start_y, end_y)
 
-print(A.mean(axis=2))
-
-intensity = A.mean(axis=2).mean(axis=0)
-
-plt.bar(x=range(0, len(intensity)), height=intensity, width=1)
-
-plt.show()
 
 
 # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(1852) + ".png")
