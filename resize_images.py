@@ -81,9 +81,9 @@ for galaxy in galaxies:
     filename = "galface_" + galaxy + ".png"
 
     # open the image and append it to the main list
-    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
 
-    # chosen_images.append(image)
+    chosen_images.append(image)
 
 chosen_images = np.array(chosen_images)
 
