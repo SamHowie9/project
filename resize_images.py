@@ -92,7 +92,7 @@ print(chosen_images[0])
 
 
 
-fig, axs = plt.subplots(2, 8, figsize=(20, 8))
+fig, axs = plt.subplots(2, 10, figsize=(20, 8))
 
 for i in range(len(galaxies)):
     # image = chosen_images[0].tolist()
