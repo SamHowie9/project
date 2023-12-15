@@ -89,7 +89,7 @@ chosen_images = np.array(chosen_images)
 
 
 
-fig, axs = plt.subplots(2, 10, figsize=(25, 5)
+fig, axs = plt.subplots(2, 10, figsize=(25, 5))
 
 for i in range(len(galaxies)):
 
