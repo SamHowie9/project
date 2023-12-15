@@ -19,7 +19,11 @@ print(A.shape)
 
 print(A.mean(axis=2))
 
-print(A.mean(axis=2).mean(axis=0))
+intensity = A.mean(axis=2).mean(axis=0)
+
+plt.bar(x=range(0, len(intensity)), height=intensity, width=1)
+
+plt.show()
 
 
 # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(1852) + ".png")

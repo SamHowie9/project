@@ -104,7 +104,7 @@ for i in range(len(galaxies)):
 
     print(intensity)
 
-    axs[1, i].hist(intensity, bins=256)
+    axs[1, i].bar(x=range(0, len(intensity)), height=intensity, width=1)
     # counts, bins = np.histogram(intensity, range(256))
     # axs[1, i].bar(bins[:-1] - 0.5, counts, width=1, edgecolor='none')
     # axs[1, i].set_xlim([0, 255])
