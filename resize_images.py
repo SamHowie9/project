@@ -79,7 +79,8 @@ print(chosen_images[0])
 fig, axs = plt.subplots(2, 10, figsize=(20, 8))
 
 for i in range(len(galaxies)):
-    axs[0, i].imshow(galaxies[i])
+    image = galaxies[0].tolist()
+    axs[0, i].imshow(image)
 
 
 plt.savefig("Plots/absolute_mag_images")
