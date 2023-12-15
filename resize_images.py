@@ -106,7 +106,7 @@ for i in range(len(galaxies)):
 
 
     intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
-    axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity, width=1)
+    axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
     axs[1, i].axvline(x=64, c="black")
     axs[1, i].axvline(x=192, c="black")
     axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
@@ -114,10 +114,10 @@ for i in range(len(galaxies)):
     axs[1, i].set_ylim([0, 0.35])
 
     intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
-    axs[2, i].bar(x=range(0, len(intensity_y)), height=intensity, width=1)
-    axs[2, i].axvline(x=64, c="black")
-    axs[2, i].axvline(x=192, c="black")
-    axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
+    axs[2, i].barh(y=range(0, len(intensity_y)), width=intensity_y, height=1)
+    axs[2, i].axhline(y=64, c="black")
+    axs[2, i].axhline(y=192, c="black")
+    axs[2, i].axvline(x=0.06, c="black", alpha=0.2)
     axs[2, i].get_xaxis().set_visible(False)
     axs[2, i].set_ylim([0, 0.35])
 
