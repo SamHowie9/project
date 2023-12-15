@@ -68,7 +68,7 @@ for galaxy in galaxies:
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
     chosen_images.append(image)
 
-
+chosen_images = np.array(chosen_images)
 
 print(chosen_images.shape)
 print(chosen_images[0].shape)
