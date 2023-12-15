@@ -19,6 +19,55 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 
+def resize_image(image, cutoff,):
+
+    intensity_x = image.mean(axis=2).mean(axis=0)
+    intensity_y = image.mean(axis=2).mean(axis=1)
+
+    size = len(intensity_x)
+
+    start_x = 0
+    start_y = 0
+    end_x = 255
+    end_y = 255
+
+    found_start_x = 0
+    found_start_y = 0
+    found_end_x = 0
+    found_end_y = 0
+
+    for j in range(0, int(size/2)):
+
+        if (intensity_x[j] > cutoff) and (found_start_x == 0):
+            start_x = j
+            found_start_x = 1
+
+        if (intensity_x[-j] > cutoff) and (found_end_x == 0):
+            end_x = 255 - j
+            found_end_x = 1
+
+        if (intensity_y[j] > cutoff) and (found_start_y == 0):
+            start_y = j
+            found_start_y = 1
+
+        if (intensity_y[-j] > cutoff) and (found_end_y == 0):
+            end_y = 255 - j
+            found_end_y = 1
+
+    # check if image is too large to crop, if no we have to scale it down to 128, 128
+    if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
+        image = cv2.resize(image, (128, 128))
+
+    # if the image isn't too large, we can do a center crop
+    else:
+        image = center_crop(image, (128, 128))
+
+    print()
+    return image
+
+
+
+
 
 # stores an empty list to contain all the image data to train the model
 all_images = []
@@ -34,6 +83,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+    image = resize_image(image=image, cutoff=0.075)
     all_images.append(image)
 
 
@@ -55,7 +105,7 @@ encoding_dim = 32
 
 
 # Define keras tensor for the encoder
-input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
+input_image = keras.Input(shape=(128, 128, 3))                                                      # (256, 256, 3)
 
 # layers for the encoder
 x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
@@ -76,7 +126,7 @@ x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padd
 x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
 x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
-x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
+# x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
 decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (256, 256, 3)
 
 
@@ -116,14 +166,14 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-# model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
 
 # save the weights
-# autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
 
 
 # load the weights
-autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
+# autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
 
 
 
