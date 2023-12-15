@@ -26,7 +26,6 @@ for i in magnitudes:
 
 print(galaxies)
 
-for galaxy in galaxies:
 
 
 # all_images = []
