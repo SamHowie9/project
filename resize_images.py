@@ -1,8 +1,11 @@
+from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
+import keras.layers
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import numpy as np
 import pandas as pd
 # import seaborn as sns
+import cv2
 
 
 
@@ -90,6 +93,59 @@ chosen_images = np.array(chosen_images)
 
 
 
+def resize_image(image, cutoff,):
+
+    intensity_x = image.mean(axis=2).mean(axis=0)
+    intensity_y = image.mean(axis=2).mean(axis=1)
+
+    size = len(intensity_x)
+
+    start_x = 0
+    start_y = 0
+    end_x = 255
+    end_y = 255
+
+    found_start_x = 0
+    found_start_y = 0
+    found_end_x = 0
+    found_end_y = 0
+
+    for j in range(0, size/2):
+
+        if (intensity_x[j] > cutoff) and (found_start_x == 0):
+            start_x = j
+            found_start_x = 1
+
+        if (intensity_x[-j] > cutoff) and (found_end_x == 0):
+            end_x = j
+            found_end_x = 1
+
+        if (intensity_y[j] > cutoff) and (found_start_y == 0):
+            start_y = j
+            found_start_y = 1
+
+        if (intensity_y[-j] > cutoff) and (found_end_y == 0):
+            end_y = j
+            found_end_y = 1
+
+    # check if image is too large to crop, if no we have to scale it down to 128, 128
+    if start_x < 64 or start_y < 64 or end_x > 192 or end_y > 192:
+
+        image = cv2.resize(image, (128, 128))
+
+    # if the image isn't too large, we can do a center crop
+    else:
+
+        image = cv2.center_crop(image, (128, 128))
+
+    return image
+
+
+
+
+
+
+
 fig, axs = plt.subplots(3, 10, figsize=(28, 10))
 
 for i in range(len(galaxies)):
@@ -102,56 +158,68 @@ for i in range(len(galaxies)):
     axs[0, i].get_xaxis().set_visible(False)
     axs[0, i].get_yaxis().set_visible(False)
 
-    cutoff = 0.075
+    image = resize_image(image=chosen_images[i], cutoff=0.075)
+    axs[1, i].imshow(chosen_images[i])
+    # axs[1, i].get_xaxis().set_visible(False)
+    # axs[1, i].get_yaxis().set_visible(False)
 
+    image = resize_image(image=chosen_images[i], cutoff=0.06)
+    axs[2, i].imshow(chosen_images[i])
 
-    intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
-    axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
-    axs[1, i].axvline(x=64, c="black")
-    axs[1, i].axvline(x=192, c="black")
-    axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].set_ylim([0, 0.35])
+    # cutoff = 0.075
+    #
+    #
+    # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
+    # axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
+    # axs[1, i].axvline(x=64, c="black")
+    # axs[1, i].axvline(x=192, c="black")
+    # axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
+    # axs[1, i].get_xaxis().set_visible(False)
+    # axs[1, i].set_ylim([0, 0.35])
+    #
+    # intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
+    # axs[2, i].barh(y=range(0, len(intensity_y)), width=intensity_y, height=1)
+    # axs[2, i].axhline(y=64, c="black")
+    # axs[2, i].axhline(y=192, c="black")
+    # axs[2, i].axvline(x=0.06, c="black", alpha=0.2)
+    # axs[2, i].get_yaxis().set_visible(False)
+    # axs[2, i].set_xlim([0, 0.35])
 
-    intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
-    axs[2, i].barh(y=range(0, len(intensity_y)), width=intensity_y, height=1)
-    axs[2, i].axhline(y=64, c="black")
-    axs[2, i].axhline(y=192, c="black")
-    axs[2, i].axvline(x=0.06, c="black", alpha=0.2)
-    axs[2, i].get_yaxis().set_visible(False)
-    axs[2, i].set_xlim([0, 0.35])
-
-    start_x = 0
-    start_y = 0
-    end_x = 255
-    end_y = 255
-
-    for j in range(0, 129):
-        if intensity_x[j] > cutoff:
-            start_x = j
-            break
-    for j in range(255, 127, -1):
-        if intensity_x[j] > cutoff:
-            end_x = j
-            break
-    for j in range(0, 129):
-        if intensity_y[j] > cutoff:
-            start_y = j
-            break
-    for j in range(255, 127, -1):
-        if intensity_y[j] > cutoff:
-            end_y = j
-            break
-
-    print(start_x, end_x)
-    print(start_y, end_y)
-    print()
-
-    axs[0, i].axvline(x=start_x, c="yellow")
-    axs[0, i].axvline(x=end_x, c="yellow")
-
-    axs[0, i].axhline(y=start_y, c="yellow")
-    axs[0, i].axhline(y=end_y, c="yellow")
+    # start_x = 0
+    # start_y = 0
+    # end_x = 255
+    # end_y = 255
+    # found_start_x = False
+    # found_start_y = False
+    # found_end_x = False
+    # found_end_y = False
+    #
+    # for j in range(0, 129):
+    #     if intensity_x[j] > cutoff:
+    #         start_x = j
+    #         break
+    # for j in range(255, 127, -1):
+    #     if intensity_x[j] > cutoff:
+    #         end_x = j
+    #         break
+    # for j in range(0, 129):
+    #     if intensity_y[j] > cutoff:
+    #         start_y = j
+    #         break
+    # for j in range(255, 127, -1):
+    #     if intensity_y[j] > cutoff:
+    #         end_y = j
+    #         break
+    #
+    # print(start_x, end_x)
+    # print(start_y, end_y)
+    # print()
+    #
+    # axs[0, i].axvline(x=start_x, c="yellow")
+    # axs[0, i].axvline(x=end_x, c="yellow")
+    #
+    # axs[0, i].axhline(y=start_y, c="yellow")
+    # axs[0, i].axhline(y=end_y, c="yellow")
 
 
 
