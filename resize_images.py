@@ -118,7 +118,7 @@ for i in range(len(galaxies)):
     axs[2, i].axhline(y=64, c="black")
     axs[2, i].axhline(y=192, c="black")
     axs[2, i].axvline(x=0.06, c="black", alpha=0.2)
-    axs[2, i].get_xaxis().set_visible(False)
+    axs[2, i].get_yaxis().set_visible(False)
     axs[2, i].set_ylim([0, 0.35])
 
     start_x = 0
