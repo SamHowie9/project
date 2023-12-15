@@ -32,21 +32,21 @@ df.drop(df.tail(200).index, inplace=True)
 
 
 
-print(df)
+# print(df)
 # load the data
 df_ab = pd.read_csv("Galaxy Properties/absolute_magnitudes.csv", comment="#")
 
-print(df_ab)
+# print(df_ab)
 
 df_ab = df.merge(df_ab, how="left", on="GalaxyID")
 df_ab = df_ab.dropna()
 
-print(df_ab)
+# print(df_ab)
 
 df_ab = df_ab[["GalaxyID", "r_nodust"]]
 # df = df[["GalaxyID", "g_nodust", "r_nodust", "i_nodust"]]
 
-print(df_ab)
+# print(df_ab)
 
 magnitudes = [-23, -22.5, -22, -21.5, -21.25, -21, -20.75, -20.5, -20, -19.5]
 
@@ -69,6 +69,12 @@ for galaxy in galaxies:
     chosen_images.append(image)
 
 
+
+print(chosen_images.shape)
+print(chosen_images[0].shape)
+
+
+
 fig, axs = plt.subplots(2, 10, figsize=(20, 8))
 
 for i in range(len(galaxies)):
@@ -76,6 +82,7 @@ for i in range(len(galaxies)):
 
 
 plt.savefig("Plots/absolute_mag_images")
+
 
 
 
