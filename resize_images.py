@@ -94,11 +94,15 @@ fig, axs = plt.subplots(2, 10, figsize=(25, 6))
 for i in range(len(galaxies)):
 
     axs[0, i].imshow(chosen_images[i])
+    axs[0, i].axvline(x=64, c="white")
+    axs[0, i].axvline(x=192, c="white")
     axs[0, i].get_xaxis().set_visible(False)
     axs[0, i].get_yaxis().set_visible(False)
 
     intensity = chosen_images[i].mean(axis=2).mean(axis=0)
     axs[1, i].bar(x=range(0, len(intensity)), height=intensity, width=1)
+    axs[1, i].axvline(x=64, c="black")
+    axs[1, i].axvline(x=192, c="black")
     axs[1, i].get_xaxis().set_visible(False)
     axs[1, i].get_yaxis().set_visible(False)
 
