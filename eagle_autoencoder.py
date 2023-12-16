@@ -176,11 +176,10 @@ encoder.summary()
 decoder = keras.Sequential()
 for i in range(9, 16):
     decoder.add(autoencoder.layers[i])
-decoder.summary()
 
 # build the decoder
 decoder.build(input_shape=(None, encoding_dim))
-
+decoder.summary()
 
 
 
