@@ -168,12 +168,12 @@ autoencoder = keras.Model(input_image, decoded)
 
 # create the encoder using the autoencoder layers
 encoder = keras.Sequential()
-for i in range(0, 7):
+for i in range(0, 9):
     encoder.add(autoencoder.layers[i])
 
 # create the decoder using the autoencoder layers
 decoder = keras.Sequential()
-for i in range(7, 16):
+for i in range(9, 16):
     decoder.add(autoencoder.layers[i])
 
 # build the decoder
