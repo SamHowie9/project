@@ -234,54 +234,54 @@ plt.show()
 
 
 
-# extracted_features_switch = np.flipud(np.rot90(extracted_features))
-#
-# correlation_df = pd.DataFrame(columns=["Absolute Magnitude", "Stellar Mass", "Semi-Major Axis", "Sersic Index", "Axis Ratio", "Position Angle"])
-#
-# for feature in range(0, len(extracted_features_switch)):
-#
-#     # create a list to contain the correlation between that feature and each property
-#     correlation_list = []
-#
-#     # loop through each property
-#     for gal_property in range(1, len(df.columns)-1):
-#
-#         # calculate the correlation between that extracted feature and that property
-#         correlation = np.corrcoef(extracted_features_switch[feature], df.iloc[:, gal_property])[0][1]
-#         correlation_list.append(correlation)
-#
-#     # add the correlation of that feature to the main dataframe
-#     correlation_df.loc[len(correlation_df)] = correlation_list
-#
-# # set the figure size
-# plt.figure(figsize=(12, 16))
-#
-# # sns.set(font_scale = 2)
-#
-# # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-#
-# plt.yticks(rotation=0)
-# plt.ylabel("Extracted Features", fontsize=15)
-# ax.xaxis.tick_top() # x axis on top
-# ax.xaxis.set_label_position('top')
-# ax.tick_params(length=0)
-# ax.figure.axes[-1].yaxis.label.set_size(15)
-#
-#
-# def wrap_labels(ax, width, break_long_words=False):
-#     labels = []
-#     for label in ax.get_xticklabels():
-#         text = label.get_text()
-#         labels.append(textwrap.fill(text, width=width,
-#                       break_long_words=break_long_words))
-#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
-#
-# wrap_labels(ax, 10)
-#
-#
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_correlation")
-# plt.show()
+extracted_features_switch = np.flipud(np.rot90(extracted_features))
+
+correlation_df = pd.DataFrame(columns=["Absolute Magnitude", "Stellar Mass", "Semi-Major Axis", "Sersic Index", "Axis Ratio", "Position Angle"])
+
+for feature in range(0, len(extracted_features_switch)):
+
+    # create a list to contain the correlation between that feature and each property
+    correlation_list = []
+
+    # loop through each property
+    for gal_property in range(1, len(df.columns)-1):
+
+        # calculate the correlation between that extracted feature and that property
+        correlation = np.corrcoef(extracted_features_switch[feature], df.iloc[:, gal_property])[0][1]
+        correlation_list.append(correlation)
+
+    # add the correlation of that feature to the main dataframe
+    correlation_df.loc[len(correlation_df)] = correlation_list
+
+# set the figure size
+plt.figure(figsize=(12, 16))
+
+# sns.set(font_scale = 2)
+
+# plot a heatmap for the dataframe (with annotations)
+ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+plt.yticks(rotation=0)
+plt.ylabel("Extracted Features", fontsize=15)
+ax.xaxis.tick_top() # x axis on top
+ax.xaxis.set_label_position('top')
+ax.tick_params(length=0)
+ax.figure.axes[-1].yaxis.label.set_size(15)
+
+
+def wrap_labels(ax, width, break_long_words=False):
+    labels = []
+    for label in ax.get_xticklabels():
+        text = label.get_text()
+        labels.append(textwrap.fill(text, width=width,
+                      break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+
+wrap_labels(ax, 10)
+
+
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_correlation")
+plt.show()
 
 
 
