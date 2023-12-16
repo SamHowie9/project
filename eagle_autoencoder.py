@@ -162,7 +162,7 @@ decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", paddin
 
 # crate autoencoder
 autoencoder = keras.Model(input_image, decoded)
-
+autoencoder.summary()
 
 
 
@@ -170,11 +170,13 @@ autoencoder = keras.Model(input_image, decoded)
 encoder = keras.Sequential()
 for i in range(0, 9):
     encoder.add(autoencoder.layers[i])
+encoder.summary()
 
 # create the decoder using the autoencoder layers
 decoder = keras.Sequential()
 for i in range(9, 16):
     decoder.add(autoencoder.layers[i])
+decoder.summary()
 
 # build the decoder
 decoder.build(input_shape=(None, encoding_dim))
