@@ -19,37 +19,50 @@ import cv2
 os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
+# crop to the center of an image
 def center_crop(img, dim):
+
+    # find the image dimensions
     width, height = img.shape[1], img.shape[0]
+
     # process crop width and height for max available dimension
     crop_width = dim[0] if dim[0] < img.shape[1] else img.shape[1]
     crop_height = dim[1] if dim[1] < img.shape[0] else img.shape[0]
 
+    # center of the image
     mid_x, mid_y = int(width / 2), int(height / 2)
     cw2, ch2 = int(crop_width / 2), int(crop_height / 2)
     crop_img = img[mid_y - ch2:mid_y + ch2, mid_x - cw2:mid_x + cw2]
+
     return crop_img
 
 
-
+# resize every image (center crop if we have a small image, scale larger images down
 def resize_image(image, cutoff,):
 
+    # calculate the average itensity for each pixel across each channel of the x and y axis
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
 
+    # fnd the size of the images
     size = len(intensity_x)
 
+    # define initial points for where the intensity meats the cutoff point
     start_x = 0
     start_y = 0
     end_x = 255
     end_y = 255
 
+    # define variables to mark if we have found the cutoff point for each direction
     found_start_x = 0
     found_start_y = 0
     found_end_x = 0
     found_end_y = 0
 
+    # loop through half the image
     for j in range(0, int(size/2)):
+
+        # check if the intensity is larger than the cutoff point (only if it hasn't already been found)
 
         if (intensity_x[j] > cutoff) and (found_start_x == 0):
             start_x = j
@@ -75,7 +88,6 @@ def resize_image(image, cutoff,):
     else:
         image = center_crop(image, (128, 128))
 
-    print()
     return image
 
 
@@ -152,12 +164,12 @@ autoencoder = keras.Model(input_image, decoded)
 
 # create the encoder using the autoencoder layers
 encoder = keras.Sequential()
-for i in range(0, 9):
+for i in range(0, 8):
     encoder.add(autoencoder.layers[i])
 
 # create the decoder using the autoencoder layers
 decoder = keras.Sequential()
-for i in range(9, 18):
+for i in range(8, 16):
     decoder.add(autoencoder.layers[i])
 
 # build the decoder
