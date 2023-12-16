@@ -31,16 +31,20 @@ def center_crop(img, dim):
 
     # center of the image
     mid_x, mid_y = int(width / 2), int(height / 2)
-    cw2, ch2 = int(crop_width / 2), int(crop_height / 2)
-    crop_img = img[mid_y - ch2:mid_y + ch2, mid_x - cw2:mid_x + cw2]
 
+    # start and end points of new image
+    cw2, ch2 = int(crop_width / 2), int(crop_height / 2)
+
+    # crop the image to the center and return it
+    crop_img = img[mid_y - ch2:mid_y + ch2, mid_x - cw2:mid_x + cw2]
     return crop_img
+
 
 
 # resize every image (center crop if we have a small image, scale larger images down
 def resize_image(image, cutoff,):
 
-    # calculate the average itensity for each pixel across each channel of the x and y axis
+    # calculate the average intensity for each pixel across each channel of the x and y axis
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
 
@@ -164,12 +168,12 @@ autoencoder = keras.Model(input_image, decoded)
 
 # create the encoder using the autoencoder layers
 encoder = keras.Sequential()
-for i in range(0, 8):
+for i in range(0, 7):
     encoder.add(autoencoder.layers[i])
 
 # create the decoder using the autoencoder layers
 decoder = keras.Sequential()
-for i in range(8, 16):
+for i in range(7, 16):
     decoder.add(autoencoder.layers[i])
 
 # build the decoder
