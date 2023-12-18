@@ -124,8 +124,8 @@ def half_max_range(image):
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
 
-    half_max_intensity_x = np.max(intensity_x/mean_intensity) / 2
-    half_max_intensity_y = np.max(intensity_y/mean_intensity) / 2
+    half_max_intensity_x = np.max(intensity_x/mean_intensity) / 3
+    half_max_intensity_y = np.max(intensity_y/mean_intensity) / 3
 
     print()
     print(half_max_intensity_x, half_max_intensity_y)
@@ -245,28 +245,28 @@ for i in range(len(galaxies)):
     intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
     intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
 
-    half_max_intensity_x = np.max(intensity_x) / 2
-    half_max_intensity_y = np.max(intensity_y) / 2
+    # half_max_intensity_x = np.max(intensity_x) / 3
+    # half_max_intensity_y = np.max(intensity_y) / 3
 
     x_min, x_max, y_min, y_max = half_max_range(chosen_images[i])
 
-    # # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
-    # axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
-    # # axs[1, i].axvline(x=64, c="black")
-    # # axs[1, i].axvline(x=192, c="black")
-    # # axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
-    # axs[1, i].get_xaxis().set_visible(False)
-    # # axs[1, i].set_ylim([0, 0.35])
-
-    # axs[1, i].bar(x=range(0, len(intensity_x)), height=(intensity_x/mean_intensity), width=1)
-    # # axs[2, i].axvline(x=64, c="black")
-    # # axs[2, i].axvline(x=192, c="black")
-    # # axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
-    # axs[1, i].get_xaxis().set_visible(False)
-    # axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
+    # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
+    axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
     # axs[1, i].axvline(x=64, c="black")
     # axs[1, i].axvline(x=192, c="black")
-    # # axs[2, i].set_ylim([0, 0.35])
+    # axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
+    axs[1, i].get_xaxis().set_visible(False)
+    # axs[1, i].set_ylim([0, 0.35])
+
+    axs[1, i].bar(x=range(0, len(intensity_x)), height=(intensity_x/mean_intensity), width=1)
+    # axs[2, i].axvline(x=64, c="black")
+    # axs[2, i].axvline(x=192, c="black")
+    # axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
+    axs[1, i].axvline(x=64, c="black")
+    axs[1, i].axvline(x=192, c="black")
+    # axs[2, i].set_ylim([0, 0.35])
     #
     #
     # intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
@@ -316,7 +316,7 @@ for i in range(len(galaxies)):
 
 
 
-plt.savefig("Plots/resizing_images")
+plt.savefig("Plots/resizing_images_2")
 
 
 
