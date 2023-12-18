@@ -115,16 +115,18 @@ def center_crop(img, dim):
 
 
 
-
-def resize_image(image, cutoff):
+def half_max_range(image):
 
     mean_intensity = image.mean()
 
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
 
-    half_max_intensity_x = np.max(intensity_x)/2
-    half_max_intensity_y = np.max(intensity_y)/2
+    half_max_intensity_x = np.max(intensity_x) / 2
+    half_max_intensity_y = np.max(intensity_y) / 2
+
+    print()
+    print(half_max_intensity_x, half_max_intensity_y)
 
     size = len(intensity_x)
 
@@ -139,30 +141,41 @@ def resize_image(image, cutoff):
     found_end_y = False
 
     # loop through half of the image
-    for j in range(0, int(size/2)):
+    for j in range(0, int(size / 2)):
 
         # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
-        if found_start_x is False and intensity_x[j]/mean_intensity < half_max_intensity_x:
+        if found_start_x is False and intensity_x[j] / mean_intensity < half_max_intensity_x:
             start_x += 1
         else:
             found_start_x = True
 
-        if found_end_x is False and intensity_x[j]/mean_intensity < half_max_intensity_x:
+        if found_end_x is False and intensity_x[j] / mean_intensity < half_max_intensity_x:
             end_x -= 1
         else:
             found_end_x = True
 
-        if found_start_y is False and intensity_y[j]/mean_intensity < half_max_intensity_y:
+        if found_start_y is False and intensity_y[j] / mean_intensity < half_max_intensity_y:
             start_x += 1
         else:
             found_start_y = True
 
-        if found_end_y is False and intensity_y[j]/mean_intensity < half_max_intensity_y:
+        if found_end_y is False and intensity_y[j] / mean_intensity < half_max_intensity_y:
             end_y -= 1
         else:
             found_end_y = True
 
-    return start_x, end_x
+    print(start_x, end_x, start_y, end_y)
+    return start_x, end_x, start_y, end_y
+
+
+
+def resize_image(image, cutoff):
+
+    # get the fill width half maximum (for x and y direction)
+    start_x, end_x, start_y, end_y = half_max_range(image)
+
+
+
 
     # for j in range(0, int(size/2)):
     #
@@ -181,18 +194,18 @@ def resize_image(image, cutoff):
     #     if (intensity_y[-j] > cutoff) and (found_end_y == 0):
     #         end_y = 255 - j
     #         found_end_y = 1
-    #
-    #
-    # # check if image is too large to crop, if no we have to scale it down to 128, 128
-    # if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
-    #     image = cv2.resize(image, (128, 128))
-    #
-    # # if the image isn't too large, we can do a center crop
-    # else:
-    #     image = center_crop(image, (128, 128))
-    #
-    # print()
-    # return image
+
+
+    # check if image is too large to crop, if no we have to scale it down to 128, 128
+    if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
+        image = cv2.resize(image, (128, 128))
+
+    # if the image isn't too large, we can do a center crop
+    else:
+        image = center_crop(image, (128, 128))
+
+    print()
+    return image
 
 
 
@@ -232,7 +245,7 @@ for i in range(len(galaxies)):
     half_max_intensity_x = np.max(intensity_x) / 2
     half_max_intensity_y = np.max(intensity_y) / 2
 
-    x_min, x_max = resize_image(chosen_images[i], cutoff=0.075)
+    x_min, x_max, y_min, y_max = half_max_range(chosen_images[i])
 
     # # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
     # axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
