@@ -82,10 +82,12 @@ def resize_image(image, cutoff,):
 
     # check if image is too large to crop, if no we have to scale it down to 128, 128
     if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
+        print("b")
         image = cv2.resize(image, (128, 128))
 
     # if the image isn't too large, we can do a center crop
     else:
+        print("small")
         image = center_crop(image, (128, 128))
 
     print()
@@ -224,10 +226,12 @@ for i in range(0, 3):
         g1_ax.get_yaxis().set_visible(False)
 
         g2_ax = fig.add_subplot(gs2[i, j])
+        print(".................")
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[count]) + ".png")
         g2_ax.imshow(resize_image(image, 0.075))
         g2_ax.get_xaxis().set_visible(False)
         g2_ax.get_yaxis().set_visible(False)
+        print("................")
 
         g3_ax = fig.add_subplot(gs3[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[count]) + ".png")
