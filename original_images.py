@@ -30,6 +30,68 @@ clusters = hierarchical.fit_predict(extracted_features)
 
 
 
+def center_crop(img, dim):
+    width, height = img.shape[1], img.shape[0]
+    # process crop width and height for max available dimension
+    crop_width = dim[0] if dim[0] < img.shape[1] else img.shape[1]
+    crop_height = dim[1] if dim[1] < img.shape[0] else img.shape[0]
+
+    mid_x, mid_y = int(width / 2), int(height / 2)
+    cw2, ch2 = int(crop_width / 2), int(crop_height / 2)
+    crop_img = img[mid_y - ch2:mid_y + ch2, mid_x - cw2:mid_x + cw2]
+    return crop_img
+
+
+
+
+def resize_image(image, cutoff,):
+
+    intensity_x = image.mean(axis=2).mean(axis=0)
+    intensity_y = image.mean(axis=2).mean(axis=1)
+
+    size = len(intensity_x)
+
+    start_x = 0
+    start_y = 0
+    end_x = 255
+    end_y = 255
+
+    found_start_x = 0
+    found_start_y = 0
+    found_end_x = 0
+    found_end_y = 0
+
+    for j in range(0, int(size/2)):
+
+        if (intensity_x[j] > cutoff) and (found_start_x == 0):
+            start_x = j
+            found_start_x = 1
+
+        if (intensity_x[-j] > cutoff) and (found_end_x == 0):
+            end_x = 255 - j
+            found_end_x = 1
+
+        if (intensity_y[j] > cutoff) and (found_start_y == 0):
+            start_y = j
+            found_start_y = 1
+
+        if (intensity_y[-j] > cutoff) and (found_end_y == 0):
+            end_y = 255 - j
+            found_end_y = 1
+
+    # check if image is too large to crop, if no we have to scale it down to 128, 128
+    if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
+        image = cv2.resize(image, (128, 128))
+
+    # if the image isn't too large, we can do a center crop
+    else:
+        image = center_crop(image, (128, 128))
+
+    print()
+    return image
+
+
+
 
 
 
@@ -156,25 +218,25 @@ for i in range(0, 3):
 
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[count]) + ".png")
-        g1_ax.imshow(image)
+        g1_ax.imshow(resize_image(image, 0.075))
         g1_ax.get_xaxis().set_visible(False)
         g1_ax.get_yaxis().set_visible(False)
 
         g2_ax = fig.add_subplot(gs2[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[count]) + ".png")
-        g2_ax.imshow(image)
+        g2_ax.imshow(resize_image(image, 0.075))
         g2_ax.get_xaxis().set_visible(False)
         g2_ax.get_yaxis().set_visible(False)
 
         g3_ax = fig.add_subplot(gs3[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[count]) + ".png")
-        g3_ax.imshow(image)
+        g3_ax.imshow(resize_image(image, 0.075))
         g3_ax.get_xaxis().set_visible(False)
         g3_ax.get_yaxis().set_visible(False)
 
         g4_ax = fig.add_subplot(gs4[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[count]) + ".png")
-        g4_ax.imshow(image)
+        g4_ax.imshow(resize_image(image, 0.075))
         g4_ax.get_xaxis().set_visible(False)
         g4_ax.get_yaxis().set_visible(False)
 
