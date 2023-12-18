@@ -65,20 +65,28 @@ def resize_image(image, cutoff,):
     for j in range(0, int(size/2)):
 
         if (intensity_x[j] > cutoff) and (found_start_x == 0):
-            start_x = j
+            # start_x = j
             found_start_x = 1
+        else:
+            start_x = j
 
         if (intensity_x[-j] > cutoff) and (found_end_x == 0):
-            end_x = 255 - j
+            # end_x = 255 - j
             found_end_x = 1
+        else:
+            end_x = 255 - j
 
         if (intensity_y[j] > cutoff) and (found_start_y == 0):
-            start_y = j
+            # start_y = j
             found_start_y = 1
+        else:
+            start_y = j
 
         if (intensity_y[-j] > cutoff) and (found_end_y == 0):
-            end_y = 255 - j
+            # end_y = 255 - j
             found_end_y = 1
+        else:
+            end_y = 255 - j
 
     print(start_x, end_x, start_y, end_y)
 
