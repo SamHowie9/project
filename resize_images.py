@@ -141,6 +141,8 @@ def resize_image(image, cutoff):
             end_y = 255 - j
             found_end_y = 1
 
+    print(start_x, end_x, start_y, end_y)
+
     # check if image is too large to crop, if no we have to scale it down to 128, 128
     if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
         image = cv2.resize(image, (128, 128))
