@@ -140,22 +140,22 @@ def resize_image(image, cutoff):
     for j in range(0, int(size/2)):
 
         # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
-        if found_start_x is False and intensity_x[j]/mean_intensity > half_max_intensity_x:
+        if found_start_x is False and intensity_x[j]/mean_intensity < half_max_intensity_x:
             start_x += 1
         else:
             found_start_x = True
 
-        if found_end_x is False and intensity_x[j]/mean_intensity > half_max_intensity_x:
+        if found_end_x is False and intensity_x[j]/mean_intensity < half_max_intensity_x:
             end_x -= 1
         else:
             found_end_x = True
 
-        if found_start_y is False and intensity_y[j]/mean_intensity > half_max_intensity_y:
+        if found_start_y is False and intensity_y[j]/mean_intensity < half_max_intensity_y:
             start_x += 1
         else:
             found_start_y = True
 
-        if found_end_y is False and intensity_y[j]/mean_intensity > half_max_intensity_y:
+        if found_end_y is False and intensity_y[j]/mean_intensity < half_max_intensity_y:
             end_y -= 1
         else:
             found_end_y = True
@@ -245,7 +245,7 @@ for i in range(len(galaxies)):
     # axs[2, i].axvline(x=192, c="black")
     # axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
     axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
+    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.2)
     axs[1, i].axvline(x=64, c="black")
     axs[1, i].axvline(x=192, c="black")
     # axs[2, i].set_ylim([0, 0.35])
