@@ -90,7 +90,6 @@ def resize_image(image, cutoff,):
         print("small")
         image = center_crop(image, (128, 128))
 
-    print()
     return image
 
 
