@@ -85,6 +85,8 @@ galaxies = df["GalaxyID"].iloc[random_index].tolist()
 galaxies[3] = 2065457
 galaxies[7] = 5341887
 
+galaxies = [9793595, 16696731, 16238798, 2065457, 9279688, 13681352, 10138699, 5341887, 14949191, 9231886, 8132671, 13174674]
+
 print(galaxies)
 
 chosen_images = []
@@ -143,23 +145,24 @@ def half_max_range(image):
     # loop through half of the image
     for j in range(0, int(size / 2)):
 
+
         # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
-        if found_start_x is False and intensity_x[j] / mean_intensity < half_max_intensity_x:
+        if (found_start_x is False) and ((intensity_x[j] / mean_intensity) < half_max_intensity_x):
             start_x += 1
         else:
             found_start_x = True
 
-        if found_end_x is False and intensity_x[j] / mean_intensity < half_max_intensity_x:
+        if (found_end_x is False) and ((intensity_x[-j] / mean_intensity) < half_max_intensity_x):
             end_x -= 1
         else:
             found_end_x = True
 
-        if found_start_y is False and intensity_y[j] / mean_intensity < half_max_intensity_y:
+        if (found_start_y is False) and ((intensity_y[j] / mean_intensity) < half_max_intensity_y):
             start_x += 1
         else:
             found_start_y = True
 
-        if found_end_y is False and intensity_y[j] / mean_intensity < half_max_intensity_y:
+        if (found_end_y is False) and ((intensity_y[-j] / mean_intensity) < half_max_intensity_y):
             end_y -= 1
         else:
             found_end_y = True
