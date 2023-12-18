@@ -224,10 +224,10 @@ for i in range(len(galaxies)):
     #
     #
 
-    mean_intensity = image.mean()
+    mean_intensity = chosen_images.mean()
 
-    intensity_x = image.mean(axis=2).mean(axis=0)
-    intensity_y = image.mean(axis=2).mean(axis=1)
+    intensity_x = chosen_images.mean(axis=2).mean(axis=0)
+    intensity_y = chosen_images.mean(axis=2).mean(axis=1)
 
     half_max_intensity_x = np.max(intensity_x) / 2
     half_max_intensity_y = np.max(intensity_y) / 2
@@ -247,7 +247,7 @@ for i in range(len(galaxies)):
     # axs[2, i].axvline(x=192, c="black")
     # axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
     axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.2)
+    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
     axs[1, i].axvline(x=64, c="black")
     axs[1, i].axvline(x=192, c="black")
     # axs[2, i].set_ylim([0, 0.35])
