@@ -12,9 +12,13 @@ A = [1, 2, 3, 4, 5]
 B = [1, 2, 3, 4, 5]
 C = [2, 4, 6, 8, 10]
 
-sns.scatterplot(x=A, y=B)
-sns.scatterplot(x=A, y=C)
+plt.scatter(A, B)
 
+plt.savefig("Test/one")
+plt.show()
+
+plt.scatter(B, C)
+plt.savefig("Test/two")
 plt.show()
 
 
