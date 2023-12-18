@@ -158,7 +158,7 @@ def half_max_range(image):
             found_end_x = True
 
         if (found_start_y is False) and ((intensity_y[j] / mean_intensity) < half_max_intensity_y):
-            start_x += 1
+            start_y += 1
         else:
             found_start_y = True
 
