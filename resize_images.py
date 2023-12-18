@@ -172,7 +172,7 @@ def half_max_range(image):
 
 
 
-def resize_image(image, cutoff):
+def resize_image(image):
 
     # get the fill width half maximum (for x and y direction)
     start_x, end_x, start_y, end_y = half_max_range(image)
@@ -228,8 +228,8 @@ for i in range(len(galaxies)):
     axs[0, i].get_xaxis().set_visible(False)
     axs[0, i].get_yaxis().set_visible(False)
 
-    image = resize_image(image=chosen_images[i], cutoff=0.075)
-    axs[1, i].imshow(image)
+    # image = resize_image(image=chosen_images[i], cutoff=0.075)
+    axs[1, i].imshow(resize_image(image))
     axs[1, i].get_xaxis().set_visible(False)
     axs[1, i].get_yaxis().set_visible(False)
 
