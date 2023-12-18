@@ -106,7 +106,7 @@ def center_crop(img, dim):
 
 
 
-def resize_image(image, cutoff,):
+def resize_image(image, cutoff):
 
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
