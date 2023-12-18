@@ -230,7 +230,7 @@ for i in range(len(galaxies)):
     half_max_intensity_x = np.max(intensity_x) / 2
     half_max_intensity_y = np.max(intensity_y) / 2
 
-    x_min, x_max = resize_image(chosen_images[i])
+    x_min, x_max = resize_image(chosen_images[i], cutoff=0.075)
 
     # # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
     # axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
