@@ -85,6 +85,8 @@ galaxies = df["GalaxyID"].iloc[random_index].tolist()
 galaxies[3] = 2065457
 galaxies[7] = 5341887
 
+print(galaxies)
+
 chosen_images = []
 
 for galaxy in galaxies:
