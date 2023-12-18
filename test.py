@@ -8,18 +8,15 @@ from matplotlib import image as mpimg
 import seaborn as sns
 import random
 
-A = [1, 2, 3, 4, 5]
-B = [1, 2, 3, 4, 5]
-C = [2, 4, 6, 8, 10]
+A = [[[1, 2, 9], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]]
 
-plt.scatter(A, B)
+A = np.array(A)
 
-plt.savefig("Test/one")
-plt.show()
-
-plt.scatter(B, C)
-plt.savefig("Test/two")
-plt.show()
+print(A.shape)
+print(A.mean())
+print(A.mean(axis=2))
+print(A.mean(axis=2).mean(axis=1))
+print(A.mean(axis=2).mean(axis=0))
 
 
 

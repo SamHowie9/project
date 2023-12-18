@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 # import seaborn as sns
 import cv2
+import random
 
 
 
@@ -51,31 +52,37 @@ df.drop(df.tail(200).index, inplace=True)
 
 
 
-# print(df)
-# load the data
-df_ab = pd.read_csv("Galaxy Properties/absolute_magnitudes.csv", comment="#")
+# # print(df)
+# # load the data
+# df_ab = pd.read_csv("Galaxy Properties/absolute_magnitudes.csv", comment="#")
+#
+# # print(df_ab)
+#
+# df_ab = df.merge(df_ab, how="left", on="GalaxyID")
+# df_ab = df_ab.dropna()
+#
+# # print(df_ab)
+#
+# df_ab = df_ab[["GalaxyID", "r_nodust"]]
+# # df = df[["GalaxyID", "g_nodust", "r_nodust", "i_nodust"]]
+#
+# # print(df_ab)
+#
+# magnitudes = [-23, -22.5, -22, -21.5, -21.25, -21, -20.75, -20.5, -20, -19.5]
+#
+# galaxies = []
+#
+# for i in magnitudes:
+#     closest_mag = df_ab.iloc[(df_ab["r_nodust"]-i).abs().argsort()[0]]
+#     closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
+#     galaxies.append(closest_galaxy)
 
-# print(df_ab)
 
-df_ab = df.merge(df_ab, how="left", on="GalaxyID")
-df_ab = df_ab.dropna()
+# get a list of 12 random indices for each group
+random_index = random.sample(range(0, len(df), 12))
 
-# print(df_ab)
-
-df_ab = df_ab[["GalaxyID", "r_nodust"]]
-# df = df[["GalaxyID", "g_nodust", "r_nodust", "i_nodust"]]
-
-# print(df_ab)
-
-magnitudes = [-23, -22.5, -22, -21.5, -21.25, -21, -20.75, -20.5, -20, -19.5]
-
-galaxies = []
-
-for i in magnitudes:
-    closest_mag = df_ab.iloc[(df_ab["r_nodust"]-i).abs().argsort()[0]]
-    closest_galaxy = str(int(closest_mag["GalaxyID"].tolist()))
-    galaxies.append(closest_galaxy)
-
+# get the galaxy id of each of the random indices for each group
+galaxies = df["GalaxyID"].iloc[random_index].tolist()
 
 chosen_images = []
 
@@ -108,8 +115,11 @@ def center_crop(img, dim):
 
 def resize_image(image, cutoff):
 
+    mean_intensity = image.mean()
+
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
+
 
     size = len(intensity_x)
 
@@ -123,23 +133,30 @@ def resize_image(image, cutoff):
     found_end_x = 0
     found_end_y = 0
 
-    for j in range(0, int(size/2)):
+    # # loop through half of the image
+    # for j in range(0, int(size/2)):
+    #
+    #     # check if we are below the cutoff, if so, increment the pointer
+    #     if (intensity_x[j]/mean_intensity > )
 
-        if (intensity_x[j] > cutoff) and (found_start_x == 0):
-            start_x = j
-            found_start_x = 1
 
-        if (intensity_x[-j] > cutoff) and (found_end_x == 0):
-            end_x = 255 - j
-            found_end_x = 1
-
-        if (intensity_y[j] > cutoff) and (found_start_y == 0):
-            start_y = j
-            found_start_y = 1
-
-        if (intensity_y[-j] > cutoff) and (found_end_y == 0):
-            end_y = 255 - j
-            found_end_y = 1
+    # for j in range(0, int(size/2)):
+    #
+    #     if (intensity_x[j] > cutoff) and (found_start_x == 0):
+    #         start_x = j
+    #         found_start_x = 1
+    #
+    #     if (intensity_x[-j] > cutoff) and (found_end_x == 0):
+    #         end_x = 255 - j
+    #         found_end_x = 1
+    #
+    #     if (intensity_y[j] > cutoff) and (found_start_y == 0):
+    #         start_y = j
+    #         found_start_y = 1
+    #
+    #     if (intensity_y[-j] > cutoff) and (found_end_y == 0):
+    #         end_y = 255 - j
+    #         found_end_y = 1
 
 
     # check if image is too large to crop, if no we have to scale it down to 128, 128
@@ -159,7 +176,7 @@ def resize_image(image, cutoff):
 
 
 
-fig, axs = plt.subplots(3, 10, figsize=(28, 10))
+fig, axs = plt.subplots(3, 12, figsize=(35, 10))
 
 for i in range(len(galaxies)):
 
@@ -182,14 +199,24 @@ for i in range(len(galaxies)):
     # cutoff = 0.075
     #
     #
-    # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
-    # axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
-    # axs[1, i].axvline(x=64, c="black")
-    # axs[1, i].axvline(x=192, c="black")
-    # axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
-    # axs[1, i].get_xaxis().set_visible(False)
-    # axs[1, i].set_ylim([0, 0.35])
-    #
+
+    mean_intensity = chosen_images[i].mean()
+
+    intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
+    axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
+    axs[1, i].axvline(x=64, c="black")
+    axs[1, i].axvline(x=192, c="black")
+    axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].set_ylim([0, 0.35])
+
+    axs[2, i].bar(x=range(0, len(intensity_x)), height=intensity_x/mean_intensity, width=1)
+    axs[2, i].axvline(x=64, c="black")
+    axs[2, i].axvline(x=192, c="black")
+    axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
+    axs[2, i].get_xaxis().set_visible(False)
+    axs[2, i].set_ylim([0, 0.35])
+
     # intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
     # axs[2, i].barh(y=range(0, len(intensity_y)), width=intensity_y, height=1)
     # axs[2, i].axhline(y=64, c="black")
