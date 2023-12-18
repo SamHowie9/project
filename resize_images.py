@@ -1,4 +1,3 @@
-import keras.layers
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import numpy as np
@@ -87,7 +86,7 @@ chosen_images = []
 
 for galaxy in galaxies:
     # get the filename for that galaxy
-    filename = "galface_" + galaxy + ".png"
+    filename = "galface_" + str(galaxy) + ".png"
 
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
