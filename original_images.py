@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.neighbors import NearestCentroid
 from matplotlib import image as mpimg
 import random
+import cv2
 
 
 
