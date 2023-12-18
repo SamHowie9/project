@@ -263,7 +263,7 @@ for i in range(len(galaxies)):
 
 
 
-plt.savefig("Plots/absolute_mag_images")
+plt.savefig("Plots/resizing_images")
 
 
 
