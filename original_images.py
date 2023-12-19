@@ -191,7 +191,7 @@ for i in range(0, 5):
         g2_ax.get_yaxis().set_visible(False)
 
         # set group title for middle plot of each group
-        if i == 0 and j == 1:
+        if i == 0 and j == 2:
             g1_ax.set_title(("Group 1 (" + str(np.array(group_2).shape[0]) + ")"), fontsize=25, pad=20)
             g2_ax.set_title(("Group 2 (" + str(np.array(group_1).shape[0]) + ")"), fontsize=25, pad=20)
 
