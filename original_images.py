@@ -156,8 +156,8 @@ group_1 = df.loc[df["Cluster"] == 0]
 group_2 = df.loc[df["Cluster"] == 1]
 
 # get a list of 9 random indices for each group
-group_1_random_index = random.sample(range(0, len(group_1)), 9)
-group_2_random_index = random.sample(range(0, len(group_2)), 9)
+group_1_random_index = random.sample(range(0, len(group_1)), 25)
+group_2_random_index = random.sample(range(0, len(group_2)), 25)
 
 # get the galaxy id of each of the random indices for each group
 group_1_random = group_1["GalaxyID"].iloc[group_1_random_index].tolist()
@@ -175,8 +175,8 @@ gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hsp
 
 count = 0
 
-for i in range(0, 3):
-    for j in range(0, 3):
+for i in range(0, 5):
+    for j in range(0, 5):
 
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[count]) + ".png")
@@ -399,5 +399,5 @@ for i in range(0, 3):
 
 
 
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals_25")
 plt.show()
