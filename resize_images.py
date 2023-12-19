@@ -196,7 +196,7 @@ def resize_image(image, cutoff=60):
 
 
 
-fig, axs = plt.subplots((3, 2))
+fig, axs = plt.subplots(3, 2, figsize=(15, 20))
 
 for i in range(0, 2):
 
