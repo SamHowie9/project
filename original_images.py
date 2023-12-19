@@ -14,7 +14,7 @@ import cv2
 encoding_dim = 32
 
 # set the number of clusters
-n_clusters = 4
+n_clusters = 2
 
 
 # load the extracted features
@@ -44,11 +44,16 @@ def center_crop(img, dim):
 
 
 
+def half_max_range(image):
 
-def resize_image(image, cutoff,):
+    mean_intensity = image.mean()
 
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
+
+    half_max_intensity_x = np.max(intensity_x/mean_intensity) / 2
+    half_max_intensity_y = np.max(intensity_y/mean_intensity) / 2
+
 
     size = len(intensity_x)
 
@@ -57,49 +62,56 @@ def resize_image(image, cutoff,):
     end_x = 255
     end_y = 255
 
-    found_start_x = 0
-    found_start_y = 0
-    found_end_x = 0
-    found_end_y = 0
+    found_start_x = False
+    found_start_y = False
+    found_end_x = False
+    found_end_y = False
 
-    for j in range(0, int(size/2)):
+    # loop through half of the image
+    for j in range(0, int(size / 2)):
 
-        if (intensity_x[j] > cutoff) and (found_start_x == 0):
-            # start_x = j
-            found_start_x = 1
+
+        # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
+        if (found_start_x is False) and ((intensity_x[j] / mean_intensity) < half_max_intensity_x):
+            start_x += 1
         else:
-            start_x = j
+            found_start_x = True
 
-        if (intensity_x[-j] > cutoff) and (found_end_x == 0):
-            # end_x = 255 - j
-            found_end_x = 1
+        if (found_end_x is False) and ((intensity_x[-j] / mean_intensity) < half_max_intensity_x):
+            end_x -= 1
         else:
-            end_x = 255 - j
+            found_end_x = True
 
-        if (intensity_y[j] > cutoff) and (found_start_y == 0):
-            # start_y = j
-            found_start_y = 1
+        if (found_start_y is False) and ((intensity_y[j] / mean_intensity) < half_max_intensity_y):
+            start_y += 1
         else:
-            start_y = j
+            found_start_y = True
 
-        if (intensity_y[-j] > cutoff) and (found_end_y == 0):
-            # end_y = 255 - j
-            found_end_y = 1
+        if (found_end_y is False) and ((intensity_y[-j] / mean_intensity) < half_max_intensity_y):
+            end_y -= 1
         else:
-            end_y = 255 - j
+            found_end_y = True
 
-    print(start_x, end_x, start_y, end_y)
+    return start_x, end_x, start_y, end_y
 
-    # check if image is too large to crop, if no we have to scale it down to 128, 128
-    if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
-        print("b")
+
+
+def resize_image(image, cutoff=60):
+
+    # get the fill width half maximum (for x and y direction)
+    start_x, end_x, start_y, end_y = half_max_range(image)
+
+    # calculate the full width half maximum
+    range_x = end_x - start_x
+    range_y = end_y - start_y
+
+    # check if the majority of out image is within the cutoff range, if so, center crop, otherwise, scale image down
+    if (range_x <= cutoff) and (range_y <= cutoff):
+        image = center_crop(image, (128, 128))
+    else:
         image = cv2.resize(image, (128, 128))
 
-    # if the image isn't too large, we can do a center crop
-    else:
-        print("s")
-        image = center_crop(image, (128, 128))
-
+    # return the resized image
     return image
 
 
@@ -139,89 +151,27 @@ df["Cluster"] = clusters
 
 
 
-# # separate the dataframe into groups based on their cluster
-# group_1 = df.loc[df["Cluster"] == 0]
-# group_2 = df.loc[df["Cluster"] == 1]
-#
-# # get a list of 9 random indices for each group
-# group_1_random_index = random.sample(range(0, len(group_1)), 9)
-# group_2_random_index = random.sample(range(0, len(group_2)), 9)
-#
-# # get the galaxy id of each of the random indices for each group
-# group_1_random = group_1["GalaxyID"].iloc[group_1_random_index].tolist()
-# group_2_random = group_2["GalaxyID"].iloc[group_2_random_index].tolist()
-#
-# print(group_1_random)
-# print(group_2_random)
-#
-# # create the figure for the plot
-# fig = plt.figure(constrained_layout=False, figsize=(20, 10))
-#
-# # create the subfigures for the plot (each group)
-# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
-# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
-#
-# count = 0
-#
-# for i in range(0, 3):
-#     for j in range(0, 3):
-#
-#         g1_ax = fig.add_subplot(gs1[i, j])
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[count]) + ".png")
-#         g1_ax.imshow(image)
-#         g1_ax.get_xaxis().set_visible(False)
-#         g1_ax.get_yaxis().set_visible(False)
-#
-#         g2_ax = fig.add_subplot(gs2[i, j])
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[count]) + ".png")
-#         g2_ax.imshow(image)
-#         g2_ax.get_xaxis().set_visible(False)
-#         g2_ax.get_yaxis().set_visible(False)
-#
-#         # set group title for middle plot of each group
-#         if i == 0 and j == 1:
-#             g1_ax.set_title(("Group 1 (" + str(np.array(group_2).shape[0]) + ")"), fontsize=25, pad=20)
-#             g2_ax.set_title(("Group 2 (" + str(np.array(group_1).shape[0]) + ")"), fontsize=25, pad=20)
-#
-#         count += 1
-
-
-
-
-
-
-
 # separate the dataframe into groups based on their cluster
 group_1 = df.loc[df["Cluster"] == 0]
 group_2 = df.loc[df["Cluster"] == 1]
-group_3 = df.loc[df["Cluster"] == 2]
-group_4 = df.loc[df["Cluster"] == 3]
 
 # get a list of 9 random indices for each group
 group_1_random_index = random.sample(range(0, len(group_1)), 9)
 group_2_random_index = random.sample(range(0, len(group_2)), 9)
-group_3_random_index = random.sample(range(0, len(group_3)), 9)
-group_4_random_index = random.sample(range(0, len(group_4)), 9)
 
 # get the galaxy id of each of the random indices for each group
 group_1_random = group_1["GalaxyID"].iloc[group_1_random_index].tolist()
 group_2_random = group_2["GalaxyID"].iloc[group_2_random_index].tolist()
-group_3_random = group_3["GalaxyID"].iloc[group_3_random_index].tolist()
-group_4_random = group_4["GalaxyID"].iloc[group_4_random_index].tolist()
 
 print(group_1_random)
 print(group_2_random)
-print(group_3_random)
-print(group_4_random)
 
-# create figure
-fig = plt.figure(constrained_layout=False, figsize=(20, 20))
+# create the figure for the plot
+fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 
-# create sub figures within main figure, specify their location
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05, top=0.95, bottom=0.55)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05, top=0.95, bottom=0.55)
-gs3 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05, top=0.45, bottom=0.05)
-gs4 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05, top=0.45, bottom=0.05)
+# create the subfigures for the plot (each group)
+gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
+gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
 
 count = 0
 
@@ -230,38 +180,100 @@ for i in range(0, 3):
 
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[count]) + ".png")
-        g1_ax.imshow(resize_image(image, 0.06))
+        g1_ax.imshow(image)
         g1_ax.get_xaxis().set_visible(False)
         g1_ax.get_yaxis().set_visible(False)
 
         g2_ax = fig.add_subplot(gs2[i, j])
-        print(".................")
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[count]) + ".png")
-        g2_ax.imshow(resize_image(image, 0.06))
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[count]) + ".png")
+        g2_ax.imshow(image)
         g2_ax.get_xaxis().set_visible(False)
         g2_ax.get_yaxis().set_visible(False)
-        print("................")
-
-        g3_ax = fig.add_subplot(gs3[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[count]) + ".png")
-        g3_ax.imshow(resize_image(image, 0.06))
-        g3_ax.get_xaxis().set_visible(False)
-        g3_ax.get_yaxis().set_visible(False)
-
-        g4_ax = fig.add_subplot(gs4[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[count]) + ".png")
-        g4_ax.imshow(resize_image(image, 0.06))
-        g4_ax.get_xaxis().set_visible(False)
-        g4_ax.get_yaxis().set_visible(False)
 
         # set group title for middle plot of each group
         if i == 0 and j == 1:
-            g1_ax.set_title(("Group 1-1 (" + str(np.array(group_2).shape[0]) + ")"), fontsize=30, pad=20)
-            g2_ax.set_title(("Group 2-1 (" + str(np.array(group_3).shape[0]) + ")"), fontsize=30, pad=20)
-            g3_ax.set_title(("Group 1-2 (" + str(np.array(group_1).shape[0]) + ")"), fontsize=30, pad=20)
-            g4_ax.set_title(("Group 2-2 (" + str(np.array(group_4).shape[0]) + ")"), fontsize=30, pad=20)
+            g1_ax.set_title(("Group 1 (" + str(np.array(group_2).shape[0]) + ")"), fontsize=25, pad=20)
+            g2_ax.set_title(("Group 2 (" + str(np.array(group_1).shape[0]) + ")"), fontsize=25, pad=20)
 
         count += 1
+
+
+
+
+
+
+
+# # separate the dataframe into groups based on their cluster
+# group_1 = df.loc[df["Cluster"] == 0]
+# group_2 = df.loc[df["Cluster"] == 1]
+# group_3 = df.loc[df["Cluster"] == 2]
+# group_4 = df.loc[df["Cluster"] == 3]
+#
+# # get a list of 9 random indices for each group
+# group_1_random_index = random.sample(range(0, len(group_1)), 9)
+# group_2_random_index = random.sample(range(0, len(group_2)), 9)
+# group_3_random_index = random.sample(range(0, len(group_3)), 9)
+# group_4_random_index = random.sample(range(0, len(group_4)), 9)
+#
+# # get the galaxy id of each of the random indices for each group
+# group_1_random = group_1["GalaxyID"].iloc[group_1_random_index].tolist()
+# group_2_random = group_2["GalaxyID"].iloc[group_2_random_index].tolist()
+# group_3_random = group_3["GalaxyID"].iloc[group_3_random_index].tolist()
+# group_4_random = group_4["GalaxyID"].iloc[group_4_random_index].tolist()
+#
+# print(group_1_random)
+# print(group_2_random)
+# print(group_3_random)
+# print(group_4_random)
+#
+# # create figure
+# fig = plt.figure(constrained_layout=False, figsize=(20, 20))
+#
+# # create sub figures within main figure, specify their location
+# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05, top=0.95, bottom=0.55)
+# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05, top=0.95, bottom=0.55)
+# gs3 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05, top=0.45, bottom=0.05)
+# gs4 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05, top=0.45, bottom=0.05)
+#
+# count = 0
+#
+# for i in range(0, 3):
+#     for j in range(0, 3):
+#
+#         g1_ax = fig.add_subplot(gs1[i, j])
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[count]) + ".png")
+#         g1_ax.imshow(resize_image(image, 0.06))
+#         g1_ax.get_xaxis().set_visible(False)
+#         g1_ax.get_yaxis().set_visible(False)
+#
+#         g2_ax = fig.add_subplot(gs2[i, j])
+#         print(".................")
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3_random[count]) + ".png")
+#         g2_ax.imshow(resize_image(image, 0.06))
+#         g2_ax.get_xaxis().set_visible(False)
+#         g2_ax.get_yaxis().set_visible(False)
+#         print("................")
+#
+#         g3_ax = fig.add_subplot(gs3[i, j])
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[count]) + ".png")
+#         g3_ax.imshow(resize_image(image, 0.06))
+#         g3_ax.get_xaxis().set_visible(False)
+#         g3_ax.get_yaxis().set_visible(False)
+#
+#         g4_ax = fig.add_subplot(gs4[i, j])
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4_random[count]) + ".png")
+#         g4_ax.imshow(resize_image(image, 0.06))
+#         g4_ax.get_xaxis().set_visible(False)
+#         g4_ax.get_yaxis().set_visible(False)
+#
+#         # set group title for middle plot of each group
+#         if i == 0 and j == 1:
+#             g1_ax.set_title(("Group 1-1 (" + str(np.array(group_2).shape[0]) + ")"), fontsize=30, pad=20)
+#             g2_ax.set_title(("Group 2-1 (" + str(np.array(group_3).shape[0]) + ")"), fontsize=30, pad=20)
+#             g3_ax.set_title(("Group 1-2 (" + str(np.array(group_1).shape[0]) + ")"), fontsize=30, pad=20)
+#             g4_ax.set_title(("Group 2-2 (" + str(np.array(group_4).shape[0]) + ")"), fontsize=30, pad=20)
+#
+#         count += 1
 
 
 
