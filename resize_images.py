@@ -187,7 +187,7 @@ def resize_image(image, cutoff=60):
     else:
         image = cv2.resize(image, (128, 128))
 
-    # retur the resized image
+    # return the resized image
     return image
 
 

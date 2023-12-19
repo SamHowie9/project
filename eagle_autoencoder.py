@@ -18,79 +18,91 @@ import cv2
 os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
-# crop to the center of an image
+
 def center_crop(img, dim):
-
-    # find the image dimensions
     width, height = img.shape[1], img.shape[0]
-
     # process crop width and height for max available dimension
     crop_width = dim[0] if dim[0] < img.shape[1] else img.shape[1]
     crop_height = dim[1] if dim[1] < img.shape[0] else img.shape[0]
 
-    # center of the image
     mid_x, mid_y = int(width / 2), int(height / 2)
-
-    # start and end points of new image
     cw2, ch2 = int(crop_width / 2), int(crop_height / 2)
-
-    # crop the image to the center and return it
     crop_img = img[mid_y - ch2:mid_y + ch2, mid_x - cw2:mid_x + cw2]
     return crop_img
 
 
 
-# resize every image (center crop if we have a small image, scale larger images down
-def resize_image(image, cutoff,):
+def half_max_range(image):
 
-    # calculate the average intensity for each pixel across each channel of the x and y axis
+    mean_intensity = image.mean()
+
     intensity_x = image.mean(axis=2).mean(axis=0)
     intensity_y = image.mean(axis=2).mean(axis=1)
 
-    # fnd the size of the images
+    half_max_intensity_x = np.max(intensity_x/mean_intensity) / 2
+    half_max_intensity_y = np.max(intensity_y/mean_intensity) / 2
+
+    print()
+    print(half_max_intensity_x, half_max_intensity_y)
+
     size = len(intensity_x)
 
-    # define initial points for where the intensity meats the cutoff point
     start_x = 0
     start_y = 0
     end_x = 255
     end_y = 255
 
-    # define variables to mark if we have found the cutoff point for each direction
-    found_start_x = 0
-    found_start_y = 0
-    found_end_x = 0
-    found_end_y = 0
+    found_start_x = False
+    found_start_y = False
+    found_end_x = False
+    found_end_y = False
 
-    # loop through half the image
-    for j in range(0, int(size/2)):
+    # loop through half of the image
+    for j in range(0, int(size / 2)):
 
-        # check if the intensity is larger than the cutoff point (only if it hasn't already been found)
 
-        if (intensity_x[j] > cutoff) and (found_start_x == 0):
-            start_x = j
-            found_start_x = 1
+        # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
+        if (found_start_x is False) and ((intensity_x[j] / mean_intensity) < half_max_intensity_x):
+            start_x += 1
+        else:
+            found_start_x = True
 
-        if (intensity_x[-j] > cutoff) and (found_end_x == 0):
-            end_x = 255 - j
-            found_end_x = 1
+        if (found_end_x is False) and ((intensity_x[-j] / mean_intensity) < half_max_intensity_x):
+            end_x -= 1
+        else:
+            found_end_x = True
 
-        if (intensity_y[j] > cutoff) and (found_start_y == 0):
-            start_y = j
-            found_start_y = 1
+        if (found_start_y is False) and ((intensity_y[j] / mean_intensity) < half_max_intensity_y):
+            start_y += 1
+        else:
+            found_start_y = True
 
-        if (intensity_y[-j] > cutoff) and (found_end_y == 0):
-            end_y = 255 - j
-            found_end_y = 1
+        if (found_end_y is False) and ((intensity_y[-j] / mean_intensity) < half_max_intensity_y):
+            end_y -= 1
+        else:
+            found_end_y = True
 
-    # check if image is too large to crop, if no we have to scale it down to 128, 128
-    if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
+    print(start_x, end_x, start_y, end_y)
+    return start_x, end_x, start_y, end_y
+
+
+
+def resize_image(image, cutoff=60):
+
+    # get the fill width half maximum (for x and y direction)
+    start_x, end_x, start_y, end_y = half_max_range(image)
+
+    # calculate the full width half maximum
+    range_x = end_x - start_x
+    range_y = end_y - start_y
+
+    # check if the majority of out image is within the cutoff range, if so, center crop, otherwise, scale image down
+    if (range_x <= cutoff) and (range_y <= cutoff):
+        image = center_crop(image, (128, 128))
+    else:
         image = cv2.resize(image, (128, 128))
 
-    # if the image isn't too large, we can do a center crop
-    else:
-        image = center_crop(image, (128, 128))
-
+    # return the resized image
     return image
 
 
@@ -111,7 +123,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-    image = resize_image(image=image, cutoff=0.075)
+    image = resize_image(image=image)
     all_images.append(image)
 
 
