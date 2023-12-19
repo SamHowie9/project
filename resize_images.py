@@ -87,7 +87,7 @@ df.drop(df.tail(200).index, inplace=True)
 
 # galaxies = [9793595, 16696731, 16238798, 2065457, 9279688, 13681352, 10138699, 5341887, 14949191, 9231886, 8132671, 13174674]
 
-galaxies = [13681352, 2065457]
+galaxies = [13681352, 2065457, 14949191]
 
 print(galaxies)
 
@@ -196,9 +196,9 @@ def resize_image(image, cutoff=60):
 
 
 
-fig, axs = plt.subplots(3, 2, figsize=(15, 20))
+fig, axs = plt.subplots(3, 3, figsize=(20, 20))
 
-for i in range(0, 2):
+for i in range(0, 3):
 
     # display the original image
     axs[0, i].imshow(chosen_images[i])
