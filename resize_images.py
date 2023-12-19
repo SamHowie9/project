@@ -172,42 +172,22 @@ def half_max_range(image):
 
 
 
-def resize_image(image):
+def resize_image(image, cutoff=60):
 
     # get the fill width half maximum (for x and y direction)
     start_x, end_x, start_y, end_y = half_max_range(image)
 
+    # calculate the full width half maximum
+    range_x = end_x - start_x
+    range_y = end_y - start_y
 
-
-
-    # for j in range(0, int(size/2)):
-    #
-    #     if (intensity_x[j] > cutoff) and (found_start_x == 0):
-    #         start_x = j
-    #         found_start_x = 1
-    #
-    #     if (intensity_x[-j] > cutoff) and (found_end_x == 0):
-    #         end_x = 255 - j
-    #         found_end_x = 1
-    #
-    #     if (intensity_y[j] > cutoff) and (found_start_y == 0):
-    #         start_y = j
-    #         found_start_y = 1
-    #
-    #     if (intensity_y[-j] > cutoff) and (found_end_y == 0):
-    #         end_y = 255 - j
-    #         found_end_y = 1
-
-
-    # check if image is too large to crop, if no we have to scale it down to 128, 128
-    if start_x < 64 and start_y < 64 and end_x > 192 and end_y > 192:
+    # check if the majority of out image is within the cutoff range, if so, center crop, otherwise, scale image down
+    if (range_x <= cutoff) and (range_y <= cutoff):
+        image = center_crop(image, (128, 128))
+    else:
         image = cv2.resize(image, (128, 128))
 
-    # if the image isn't too large, we can do a center crop
-    else:
-        image = center_crop(image, (128, 128))
-
-    print()
+    # retur the resized image
     return image
 
 
@@ -228,10 +208,10 @@ for i in range(len(galaxies)):
     axs[0, i].get_xaxis().set_visible(False)
     axs[0, i].get_yaxis().set_visible(False)
 
-    # image = resize_image(image=chosen_images[i], cutoff=0.075)
-    # axs[1, i].imshow(resize_image(image))
-    # axs[1, i].get_xaxis().set_visible(False)
-    # axs[1, i].get_yaxis().set_visible(False)
+    image = resize_image(image=chosen_images[i])
+    axs[1, i].imshow(resize_image(image))
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
 
     # image = resize_image(image=chosen_images[i], cutoff=0.06)
     # axs[2, i].imshow(image)
@@ -240,33 +220,32 @@ for i in range(len(galaxies)):
     #
     #
 
-    mean_intensity = chosen_images[i].mean()
-
-    intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
-    intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
+    # mean_intensity = chosen_images[i].mean()
+    #
+    # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
+    # intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
 
     # half_max_intensity_x = np.max(intensity_x) / 3
     # half_max_intensity_y = np.max(intensity_y) / 3
 
-    x_min, x_max, y_min, y_max = half_max_range(chosen_images[i])
+    # x_min, x_max, y_min, y_max = half_max_range(chosen_images[i])
 
-    # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
-    axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
+    # # intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
+    # axs[1, i].bar(x=range(0, len(intensity_x)), height=intensity_x, width=1)
+    # # axs[1, i].axvline(x=64, c="black")
+    # # axs[1, i].axvline(x=192, c="black")
+    # # axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
+    # axs[1, i].get_xaxis().set_visible(False)
+    # # axs[1, i].set_ylim([0, 0.35])
+    #
+    # axs[1, i].bar(x=range(0, len(intensity_x)), height=(intensity_x/mean_intensity), width=1)
+    # # axs[2, i].axvline(x=64, c="black")
+    # # axs[2, i].axvline(x=192, c="black")
+    # # axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
+    # axs[1, i].get_xaxis().set_visible(False)
+    # axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
     # axs[1, i].axvline(x=64, c="black")
     # axs[1, i].axvline(x=192, c="black")
-    # axs[1, i].axhline(y=0.06, c="black", alpha=0.2)
-    axs[1, i].get_xaxis().set_visible(False)
-    # axs[1, i].set_ylim([0, 0.35])
-
-    axs[1, i].bar(x=range(0, len(intensity_x)), height=(intensity_x/mean_intensity), width=1)
-    # axs[2, i].axvline(x=64, c="black")
-    # axs[2, i].axvline(x=192, c="black")
-    # axs[2, i].axhline(y=0.06, c="black", alpha=0.2)
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
-    axs[1, i].axvline(x=64, c="black")
-    axs[1, i].axvline(x=192, c="black")
-    # axs[2, i].set_ylim([0, 0.35])
     #
     #
     # intensity_y = chosen_images[i].mean(axis=2).mean(axis=1)
@@ -276,7 +255,6 @@ for i in range(len(galaxies)):
     # axs[2, i].axhline(y=192, c="black")
     # axs[2, i].axvline(x=0.06, c="black", alpha=0.2)
     # axs[2, i].get_yaxis().set_visible(False)
-    # axs[2, i].set_xlim([0, 0.35])
 
     # start_x = 0
     # start_y = 0
@@ -316,7 +294,7 @@ for i in range(len(galaxies)):
 
 
 
-plt.savefig("Plots/resizing_images_2")
+plt.savefig("Plots/resizing_images")
 
 
 
