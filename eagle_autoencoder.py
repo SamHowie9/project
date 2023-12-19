@@ -82,7 +82,6 @@ def half_max_range(image):
         else:
             found_end_y = True
 
-    print(start_x, end_x, start_y, end_y)
     return start_x, end_x, start_y, end_y
 
 
