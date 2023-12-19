@@ -170,8 +170,8 @@ print(group_2_random)
 fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 
 # create the subfigures for the plot (each group)
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
+gs1 = fig.add_gridspec(nrows=5, ncols=5, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
+gs2 = fig.add_gridspec(nrows=5, ncols=5, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
 
 count = 0
 
