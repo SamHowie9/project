@@ -66,8 +66,8 @@ hierarchical = hierarchical.fit(extracted_features)
 
 plt.figure(figsize=(15,15))
 
-plot_dendrogram(hierarchical, truncate_mode="lastp", p=7)
-# plot_dendrogram(hierarchical, truncate_mode="level", p=5, color_threshold=0, link_color_func=lambda k:"black")
+plot_dendrogram(hierarchical, truncate_mode="lastp", p=4)
+# plot_dendrogram(hierarchical, truncate_mode="level", p=4, color_threshold=0, link_color_func=lambda k:"black")
 
 # plt.axhline(y=375)
 # plt.axhline(y=235)
