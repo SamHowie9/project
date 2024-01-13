@@ -214,16 +214,16 @@ for i in range(0, 3):
 
     # plot intensity as a ratio of mean intensity
     axs[1, i].bar(x=range(0, len(intensity_x)), height=(intensity_x/mean_intensity), width=1)
-    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
-    axs[1, i].axvline(x=98, c="black")
-    axs[1, i].axvline(x=158, c="black")
+    # axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
+    # axs[1, i].axvline(x=98, c="black")
+    # axs[1, i].axvline(x=158, c="black")
 
     # display the resizd image
     axs[2, i].imshow(resize_image(chosen_images[i]))
     axs[2, i].get_xaxis().set_visible(False)
     axs[2, i].get_yaxis().set_visible(False)
 
-plt.savefig("Plots/resize_image_demo")
+plt.savefig("Plots/resize_image_demo_empty")
 plt.show()
 
 
