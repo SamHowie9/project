@@ -140,7 +140,6 @@ test_images = np.array(all_images[-200:])
 encoding_dim = 32
 
 
-
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(128, 128, 3))                                                      # (256, 256, 3)
 
@@ -204,14 +203,14 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
-
-# save the weights
-autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
-
+# model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
-# autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
+autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
+
+# save the weights
+# autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
+
 
 
 
@@ -221,6 +220,21 @@ extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
 np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
+
+
+
+extracted_features_switch = np.flipud(np.rot90(extracted_features))
+
+mean_features = []
+
+for i in range(encoding_dim):
+    mean_features[i] = median(extracted_features_switch[i])
+
+print(mean_features)
+
+latent_features = []
+
+for i in range(encoding_dim):
 
 
 
@@ -265,10 +279,10 @@ np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 
 
 
-# plot the training and validation loss
-plt.plot(model_data.history["loss"], label="training data")
-plt.plot(model_data.history["val_loss"], label="validation data")
-plt.legend()
-
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_loss")
-plt.show()
+# # plot the training and validation loss
+# plt.plot(model_data.history["loss"], label="training data")
+# plt.plot(model_data.history["val_loss"], label="validation data")
+# plt.legend()
+#
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_loss")
+# plt.show()
