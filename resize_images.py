@@ -196,7 +196,34 @@ def resize_image(image, cutoff=60):
 
 
 
-fig, axs = plt.subplots(3, 3, figsize=(20, 20))
+# fig, axs = plt.subplots(3, 3, figsize=(20, 20))
+#
+# for i in range(0, 3):
+#
+#     # display the original image
+#     axs[0, i].imshow(chosen_images[i])
+#     axs[0, i].get_xaxis().set_visible(False)
+#     axs[0, i].get_yaxis().set_visible(False)
+#
+#     # find the mean intensity and mean intensity along the x axis for that image
+#     mean_intensity = chosen_images[i].mean()
+#     intensity_x = chosen_images[i].mean(axis=2).mean(axis=0)
+#
+#     # get the cutoff points for that image
+#     x_min, x_max, y_min, y_max = half_max_range(chosen_images[i])
+#
+#     # plot intensity as a ratio of mean intensity
+#     axs[1, i].bar(x=range(0, len(intensity_x)), height=(intensity_x/mean_intensity), width=1)
+#     axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
+#     # axs[1, i].axvline(x=98, c="black")
+#     # axs[1, i].axvline(x=158, c="black")
+#
+#     # display the resizd image
+#     axs[2, i].imshow(resize_image(chosen_images[i]))
+#     axs[2, i].get_xaxis().set_visible(False)
+#     axs[2, i].get_yaxis().set_visible(False)
+
+fig, axs = plt.subplots(2, 3, figsize=(20, 15))
 
 for i in range(0, 3):
 
@@ -214,16 +241,16 @@ for i in range(0, 3):
 
     # plot intensity as a ratio of mean intensity
     axs[1, i].bar(x=range(0, len(intensity_x)), height=(intensity_x/mean_intensity), width=1)
-    axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
+    # axs[1, i].axvspan(x_min, x_max, facecolor="yellow", alpha=0.5)
     # axs[1, i].axvline(x=98, c="black")
     # axs[1, i].axvline(x=158, c="black")
 
     # display the resizd image
-    axs[2, i].imshow(resize_image(chosen_images[i]))
-    axs[2, i].get_xaxis().set_visible(False)
-    axs[2, i].get_yaxis().set_visible(False)
+    # axs[2, i].imshow(resize_image(chosen_images[i]))
+    # axs[2, i].get_xaxis().set_visible(False)
+    # axs[2, i].get_yaxis().set_visible(False)
 
-plt.savefig("Plots/resize_image_demo_fwhm")
+plt.savefig("Plots/resize_image_demo_empty")
 plt.show()
 
 
