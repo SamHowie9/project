@@ -157,6 +157,9 @@ print(6, np.array(group_7).shape[0])
 
 
 
+
+
+
 # # Apparent Magnitude, Stellar Mass, Semi-Major Axis, Sersic Index
 # columns = ["galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"]
 #
@@ -255,6 +258,9 @@ print(6, np.array(group_7).shape[0])
 #
 # plt.savefig("Plots/" + str(n_clusters) + "_clusters_" + str(encoding_dim) + "_features_property_correlation")
 # plt.show()
+
+
+
 
 
 
