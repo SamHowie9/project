@@ -280,7 +280,7 @@ np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 # print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
 loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
 print(loss)
-np.save("Loss/" + str(encoding_dim) + "_feature_loss")
+np.save("Loss/" + str(encoding_dim) + "_feature_loss", loss)
 
 
 # # plot the training and validation loss
