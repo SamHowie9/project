@@ -15,7 +15,7 @@ import cv2
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "7"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 
@@ -137,7 +137,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 40
+encoding_dim = 41
 
 
 # Define keras tensor for the encoder
@@ -280,12 +280,15 @@ plt.show()
 
 
 
-# print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
-# loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
-# print()
-# print(encoding_dim)
-# print(loss)
-# np.save("Loss/" + str(encoding_dim) + "_feature_loss", loss)
+print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
+loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
+print()
+print(encoding_dim)
+print(loss)
+np.save("Loss/" + str(encoding_dim) + "_feature_loss", loss)
+
+
+
 
 
 # # plot the training and validation loss
