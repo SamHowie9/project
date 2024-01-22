@@ -137,7 +137,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 32
+encoding_dim = 33
 
 
 # Define keras tensor for the encoder
@@ -203,13 +203,13 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-# model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
 autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
 
 # save the weights
-# autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
 
 
 
@@ -223,18 +223,18 @@ np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 
 
 
-extracted_features_switch = np.flipud(np.rot90(extracted_features))
-
-mean_features = []
-
-for i in range(encoding_dim):
-    mean_features[i] = median(extracted_features_switch[i])
-
-print(mean_features)
-
-latent_features = []
-
-for i in range(encoding_dim):
+# extracted_features_switch = np.flipud(np.rot90(extracted_features))
+#
+# mean_features = []
+#
+# for i in range(encoding_dim):
+#     mean_features[i] = median(extracted_features_switch[i])
+#
+# print(mean_features)
+#
+# latent_features = []
+#
+# for i in range(encoding_dim):
 
 
 
@@ -277,6 +277,7 @@ for i in range(encoding_dim):
 
 
 
+print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
 
 
 # # plot the training and validation loss
