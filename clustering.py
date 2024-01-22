@@ -23,16 +23,6 @@ n_clusters = 4
 # load the extracted features
 extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 
-biased_extracted_features = extracted_features.tolist()
-
-for i in range(len(biased_extracted_features)):
-    for j in range(10):
-        biased_extracted_features[i].append(biased_extracted_features[i][14])
-
-biased_extracted_features = np.array(biased_extracted_features)
-
-print(biased_extracted_features.shape)
-
 # A = [1, 2, 4, 8, 16]
 #
 # for i in A:
@@ -50,8 +40,8 @@ print(biased_extracted_features.shape)
 
 # perform hierarchical ward clustering
 hierarchical = AgglomerativeClustering(n_clusters=None, distance_threshold=0, affinity="euclidean", linkage="ward")
-# hierarchical = hierarchical.fit(extracted_features)
-hierarchical = hierarchical.fit(biased_extracted_features)
+hierarchical = hierarchical.fit(extracted_features)
+# hierarchical = hierarchical.fit(biased_extracted_features)
 
 
 
@@ -85,17 +75,24 @@ plt.figure(figsize=(15,15))
 # plot_dendrogram(hierarchical, truncate_mode="lastp", p=464 )
 plot_dendrogram(hierarchical, truncate_mode="level", p=5, color_threshold=0, link_color_func=lambda k:"black")
 
-plt.axhline(y=95)
+plt.ylabel("Dissimilarity", fontsize=25, labelpad=10)
+plt.xlabel("Number of Images in Clusters", fontsize=25, labelpad=15)
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=15)
+
+plt.axhline(y=95, label="Cutoff Points")
 plt.axhline(y=120)
 plt.axhline(y=135)
 plt.axhline(y=180)
 plt.axhline(y=250)
+
+plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', fontsize=20)
 
 # plt.axhline(y=375)
 # plt.axhline(y=235)
 # plt.axhline(y=134)
 # plt.axhline(y=93)
 
-plt.savefig("Plots/hierarcial_clustering_dendrogram_biased")
+plt.savefig("Plots/hierarcial_clustering_dendrogram.eps")
 plt.show()
 

@@ -2,6 +2,7 @@ from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSam
 import keras
 from keras import backend as K
 import numpy as np
+# import IPython
 import pandas as pd
 import os
 from matplotlib import pyplot as plt
@@ -83,95 +84,101 @@ extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 
-median_features = []
-for i in range(encoding_dim):
-    median_features.append(np.median(extracted_features_switch[i]))
-# median_features = np.array(median_features)
 
-
-# number of latent images per feature
-latent_num = 15
-
-# prepare the latent images for every feature
-latent_features = []
-
-# loop through every feature
-for i in range(encoding_dim):
-
-    latent_images = []
-
-    # sample equally spaced values of that feature
-    feature_values = np.linspace(min(extracted_features_switch[i]), max(extracted_features_switch[i]), latent_num)
-
-    # loop through each image for that feature
-    for j in range(latent_num):
-
-        # create a list of the features which make up each image for that feature
-        latent_image_features = median_features[:]
-        latent_image_features[i] = feature_values[j]
-        latent_images.append(latent_image_features)
-
-    latent_features.append(latent_images)
-
-latent_features = np.array(latent_features)
+keras.utils.plot_model(model=autoencoder, to_file="Plots/autoencoder_layers.png")
 
 
 
 
-
-
-a = [median_features, median_features]
-
-image = decoder.predict(np.array(a))
-
-# fig, axs = plt.subplots(encoding_dim, latent_num, figsize=(10, 20))
-
-width = latent_num + 2
-height = encoding_dim + ((encoding_dim - 1) * 0.1) + 2
-
-fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
-
-gs = fig.add_gridspec(nrows=encoding_dim, ncols=latent_num, hspace=0.1, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
-
-
-# fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
-
-for i in range(encoding_dim):
-
-    latent_images = decoder.predict(latent_features[i])
-
-    for j in range(latent_num):
-
-        ax = fig.add_subplot(gs[i, j])
-
-        ax.imshow(latent_images[j])
-
-        ax.set_yticklabels([])
-        ax.set_xticklabels([])
-
-        ax.set_yticks([])
-        ax.set_xticks([])
-
-
-        # ax.get_yaxis().set_visible(False)
-        # ax.get_xaxis().set_visible(False)
-
-
-        if j == 0:
-            ax.set_ylabel(i, fontsize=50, rotation=0, labelpad=40)
-
-        # axs[i][j].imshow(latent_images[j], aspect="equal")
-        # axs[i][j].get_xaxis().set_visible(False)
-        # axs[i][j].get_yaxis().set_visible(False)
-
-
-
-
-plt.savefig("Plots/latent_" + str(encoding_dim) + "_features")
-
-# print()
-# print(latent_features[0][0].tolist())
-# print(latent_features[0][4].tolist())
-
-
-plt.show()
+# median_features = []
+# for i in range(encoding_dim):
+#     median_features.append(np.median(extracted_features_switch[i]))
+# # median_features = np.array(median_features)
+#
+#
+# # number of latent images per feature
+# latent_num = 15
+#
+# # prepare the latent images for every feature
+# latent_features = []
+#
+# # loop through every feature
+# for i in range(encoding_dim):
+#
+#     latent_images = []
+#
+#     # sample equally spaced values of that feature
+#     feature_values = np.linspace(min(extracted_features_switch[i]), max(extracted_features_switch[i]), latent_num)
+#
+#     # loop through each image for that feature
+#     for j in range(latent_num):
+#
+#         # create a list of the features which make up each image for that feature
+#         latent_image_features = median_features[:]
+#         latent_image_features[i] = feature_values[j]
+#         latent_images.append(latent_image_features)
+#
+#     latent_features.append(latent_images)
+#
+# latent_features = np.array(latent_features)
+#
+#
+#
+#
+#
+#
+# a = [median_features, median_features]
+#
+# image = decoder.predict(np.array(a))
+#
+# # fig, axs = plt.subplots(encoding_dim, latent_num, figsize=(10, 20))
+#
+# width = latent_num + 2
+# height = encoding_dim + ((encoding_dim - 1) * 0.1) + 2
+#
+# fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
+#
+# gs = fig.add_gridspec(nrows=encoding_dim, ncols=latent_num, hspace=0.1, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
+#
+#
+# # fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
+#
+# for i in range(encoding_dim):
+#
+#     latent_images = decoder.predict(latent_features[i])
+#
+#     for j in range(latent_num):
+#
+#         ax = fig.add_subplot(gs[i, j])
+#
+#         ax.imshow(latent_images[j])
+#
+#         ax.set_yticklabels([])
+#         ax.set_xticklabels([])
+#
+#         ax.set_yticks([])
+#         ax.set_xticks([])
+#
+#
+#         # ax.get_yaxis().set_visible(False)
+#         # ax.get_xaxis().set_visible(False)
+#
+#
+#         if j == 0:
+#             ax.set_ylabel(i, fontsize=50, rotation=0, labelpad=40)
+#
+#         # axs[i][j].imshow(latent_images[j], aspect="equal")
+#         # axs[i][j].get_xaxis().set_visible(False)
+#         # axs[i][j].get_yaxis().set_visible(False)
+#
+#
+#
+#
+# plt.savefig("Plots/latent_" + str(encoding_dim) + "_features")
+#
+# # print()
+# # print(latent_features[0][0].tolist())
+# # print(latent_features[0][4].tolist())
+#
+#
+# plt.show()
