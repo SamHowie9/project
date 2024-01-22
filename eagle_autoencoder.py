@@ -206,7 +206,7 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
-autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
+# autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
 
 # save the weights
 autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
