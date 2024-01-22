@@ -15,7 +15,7 @@ import cv2
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
 
 
@@ -137,7 +137,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 45
+encoding_dim = 46
 
 
 # Define keras tensor for the encoder
