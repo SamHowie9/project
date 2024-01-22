@@ -15,7 +15,7 @@ import cv2
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 
@@ -203,7 +203,7 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=3, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
 # autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
