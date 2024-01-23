@@ -4,9 +4,13 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 
-encoding_dim = 24
 
-extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+
+# encoding_dim = 24
+#
+# extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+
+
 
 df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 
@@ -41,6 +45,60 @@ print(structure_properties)
 # physical propeties: stellar mass, star formation rate, halo mass, black hole mass, merger history
 
 
+relevant_feature_number = []
+relevant_feature_ratio = []
+
+
+for encoding_dim in range(17, 41):
+
+    extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+
+    extracted_features_switch = np.flipud(np.rot90(extracted_features))
+
+    structure_correlation_df = pd.DataFrame(columns=["Sersic - r", "Sersic - star", "Axis Ratio - r", "Axis Ratio - star", "Semi-Major - r", "Semi-Major - star", "AB Magnitude"])
+
+    for feature in range(0, len(extracted_features_switch)):
+
+        # create a list to contain the correlation between that feature and each property
+        correlation_list = []
+
+        # loop through each property
+        for gal_property in range(1, len(structure_properties.columns)):
+
+            # calculate the correlation between that extracted feature and that property
+            correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
+            correlation_list.append(correlation)
+
+        # add the correlation of that feature to the main dataframe
+        structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
+
+    # find the number of features at least slightly correlating with a property
+    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.2).sum()
+
+
+    relevant_feature_number.append(relevant_features)
+    relevant_feature_ratio.append(relevant_features/encoding_dim)
+
+
+plt.scatter(x=range(17, 41), y=relevant_feature_number)
+plt.show()
+
+
+
+# sns.histplot(data=structure_properties, x="q_r", bins=300)
+# plt.show()
+
+
+
+
+
+
+
+encoding_dim=29
+
+
+extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 structure_correlation_df = pd.DataFrame(columns=["Sersic - r", "Sersic - star", "Axis Ratio - r", "Axis Ratio - star", "Semi-Major - r", "Semi-Major - star", "AB Magnitude"])
@@ -57,18 +115,8 @@ for feature in range(0, len(extracted_features_switch)):
         correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
         correlation_list.append(correlation)
 
-    print(correlation_list)
-
     # add the correlation of that feature to the main dataframe
     structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
-
-print(structure_correlation_df)
-
-
-
-# sns.histplot(data=structure_properties, x="q_r", bins=300)
-# plt.show()
-
 
 
 
@@ -99,5 +147,6 @@ def wrap_labels(ax, width, break_long_words=False):
 wrap_labels(ax, 10)
 
 
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_correlation")
+
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_correlation")
 plt.show()
