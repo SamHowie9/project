@@ -137,7 +137,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 18
+encoding_dim = 20
 
 
 # Define keras tensor for the encoder
