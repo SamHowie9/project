@@ -40,9 +40,18 @@ for i in range(17, 41):
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
 
-plt.scatter(x=range(17, 41), y=loss)
-plt.scatter(x=range(17, 41), y=val_loss)
+plt.scatter(x=range(17, 41), y=loss, label="Training Loss")
+plt.scatter(x=range(17, 41), y=val_loss, label="Validation Loss")
 
+# plt.plot(range(17, 41), loss)
+# plt.plot(range(17, 41), val_loss)
+
+plt.xlabel("Number of Extracted Features")
+plt.ylabel("Root-Mean-Squared Error")
+
+plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
+
+plt.savefig("Plots/extracted_feat_vs_loss")
 plt.show()
 
 
@@ -52,44 +61,48 @@ plt.show()
 
 
 
-# relevant_feature_number = []
-# relevant_feature_ratio = []
-#
-#
-# for encoding_dim in range(17, 41):
-#
-#     extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
-#
-#     extracted_features_switch = np.flipud(np.rot90(extracted_features))
-#
-#     structure_correlation_df = pd.DataFrame(columns=["Sersic - r", "Sersic - star", "Axis Ratio - r", "Axis Ratio - star", "Semi-Major - r", "Semi-Major - star", "AB Magnitude"])
-#
-#     for feature in range(0, len(extracted_features_switch)):
-#
-#         # create a list to contain the correlation between that feature and each property
-#         correlation_list = []
-#
-#         # loop through each property
-#         for gal_property in range(1, len(structure_properties.columns)):
-#
-#             # calculate the correlation between that extracted feature and that property
-#             correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
-#             correlation_list.append(correlation)
-#
-#         # add the correlation of that feature to the main dataframe
-#         structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
-#
-#     # find the number of features at least slightly correlating with a property
-#     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.2).sum()
-#
-#
-#     relevant_feature_number.append(relevant_features)
-#     relevant_feature_ratio.append(relevant_features/encoding_dim)
-#
-#
-# plt.scatter(x=range(17, 41), y=relevant_feature_number)
-# plt.savefig("Plots/relevant_extracted_features")
-# plt.show()
+relevant_feature_number = []
+relevant_feature_ratio = []
+
+
+for encoding_dim in range(17, 41):
+
+    extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+
+    extracted_features_switch = np.flipud(np.rot90(extracted_features))
+
+    structure_correlation_df = pd.DataFrame(columns=["Sersic - r", "Sersic - star", "Axis Ratio - r", "Axis Ratio - star", "Semi-Major - r", "Semi-Major - star", "AB Magnitude"])
+
+    for feature in range(0, len(extracted_features_switch)):
+
+        # create a list to contain the correlation between that feature and each property
+        correlation_list = []
+
+        # loop through each property
+        for gal_property in range(1, len(structure_properties.columns)):
+
+            # calculate the correlation between that extracted feature and that property
+            correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
+            correlation_list.append(correlation)
+
+        # add the correlation of that feature to the main dataframe
+        structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
+
+    # find the number of features at least slightly correlating with a property
+    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.2).sum()
+
+
+    relevant_feature_number.append(relevant_features)
+    relevant_feature_ratio.append(relevant_features/encoding_dim)
+
+
+plt.scatter(x=range(17, 41), y=relevant_feature_number)
+
+plt.xlabel("Total Number of Extracted Features")
+plt.ylabel("Number of Meaningful Extracted Features")
+
+plt.savefig("Plots/meaningful_extracted_features")
+plt.show()
 
 
 
@@ -102,7 +115,7 @@ plt.show()
 
 
 
-# encoding_dim=26
+# encoding_dim=39
 #
 #
 # extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
@@ -156,5 +169,5 @@ plt.show()
 #
 #
 #
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_property_correlation")
+# plt.savefig("Correlation Plots/" + str(encoding_dim) + "_feature_property_correlation")
 # plt.show()
