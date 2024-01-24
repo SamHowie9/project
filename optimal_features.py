@@ -30,6 +30,8 @@ print(structure_properties)
 
 # physical propeties: stellar mass, star formation rate, halo mass, black hole mass, merger history
 
+# stellar mass, gas mass, dm_mass, bh_mass (subgrid), mean age, sfr,
+# MassType_Star, Mass_Type_Gas, Mass_Type_DM, Mass_Type_BH, BlackHoleMass, InitialMassWeightedStellarAge, StarFormationRate
 
 loss = []
 val_loss = []
