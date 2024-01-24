@@ -139,6 +139,7 @@ test_images = np.array(all_images[-200:])
 encoding_dim = 15
 
 
+
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(128, 128, 3))                                                      # (256, 256, 3)
 
