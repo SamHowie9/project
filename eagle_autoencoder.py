@@ -15,7 +15,7 @@ import cv2
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 def center_crop(img, dim):
@@ -136,7 +136,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 13
+encoding_dim = 11
 
 
 
