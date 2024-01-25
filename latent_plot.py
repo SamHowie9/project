@@ -11,7 +11,7 @@ import cv2
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 39
+encoding_dim = 10
 
 
 # Define keras tensor for the encoder
