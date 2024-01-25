@@ -18,6 +18,8 @@ df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv", comment="#")
 
+print(structure_properties)
+
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
 
@@ -47,14 +49,14 @@ physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 loss = []
 val_loss = []
 
-for i in range(12, 41):
+for i in range(5, 42):
     feature_loss = np.load("Loss/" + str(i) + "_feature_loss.npy")
 
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
 
-plt.scatter(x=range(12, 41), y=loss, label="Training Loss")
-plt.scatter(x=range(12, 41), y=val_loss, label="Validation Loss")
+plt.scatter(x=range(5, 42), y=loss, label="Training Loss")
+plt.scatter(x=range(5, 42), y=val_loss, label="Validation Loss")
 
 # plt.plot(range(17, 41), loss)
 # plt.plot(range(17, 41), val_loss)
@@ -78,13 +80,13 @@ relevant_feature_number = []
 relevant_feature_ratio = []
 
 
-for encoding_dim in range(12, 41):
+for encoding_dim in range(5, 42):
 
     extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
-    structure_correlation_df = pd.DataFrame(columns=["Sersic - r", "Sersic - star", "Axis Ratio - r", "Axis Ratio - star", "Semi-Major - r", "Semi-Major - star", "AB Magnitude"])
+    structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
 
     for feature in range(0, len(extracted_features_switch)):
 
@@ -109,7 +111,7 @@ for encoding_dim in range(12, 41):
     relevant_feature_ratio.append(relevant_features/encoding_dim)
 
 
-plt.scatter(x=range(12, 41), y=relevant_feature_number)
+plt.scatter(x=range(5, 42), y=relevant_feature_number)
 
 plt.xlabel("Total Number of Extracted Features")
 plt.ylabel("Number of Meaningful Extracted Features")
@@ -128,16 +130,16 @@ plt.show()
 
 
 
-encoding_dim=39
+encoding_dim=10
 
 
 extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
-structure_correlation_df = pd.DataFrame(columns=["Sersic - r", "Sersic - star", "Axis Ratio - r", "Axis Ratio - star", "Semi-Major - r", "Semi-Major - star", "AB Magnitude"])
+structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
 physical_correlation_df = pd.DataFrame(columns=["Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
-correlation_df = pd.DataFrame(columns=["Sersic - r", "Sersic - star", "Axis Ratio - r", "Axis Ratio - star", "Semi-Major - r", "Semi-Major - star", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
 
 for feature in range(0, len(extracted_features_switch)):
 
@@ -152,6 +154,9 @@ for feature in range(0, len(extracted_features_switch)):
         structure_correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
         structure_correlation_list.append(structure_correlation)
 
+    for gal_property in range(1, len(physical_properties.columns)):
+
+        # calculate the correlation between that extracted feature and that property
         physical_correlation = np.corrcoef(extracted_features_switch[feature], physical_properties.iloc[:, gal_property])[0][1]
         physical_correlation_list.append(physical_correlation)
 
@@ -167,15 +172,17 @@ print(correlation_df)
 
 
 
+
+
+
+
 # set the figure size
 plt.figure(figsize=(12, 16))
 
 # sns.set(font_scale = 2)
 
 # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(structure_correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-ax = sns.heatmap(abs(physical_correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-# ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+ax = sns.heatmap(abs(structure_correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
 
 
 plt.yticks(rotation=0)
@@ -198,5 +205,76 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Correlation Plots/" + str(encoding_dim) + "_feature_property_correlation")
+plt.savefig("Correlation Plots/" + str(encoding_dim) + "_feature_structure_property_correlation")
+plt.show()
+
+
+
+
+# set the figure size
+plt.figure(figsize=(15, 16))
+
+# sns.set(font_scale = 2)
+
+# plot a heatmap for the dataframe (with annotations)
+ax = sns.heatmap(abs(physical_correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+plt.yticks(rotation=0)
+plt.ylabel("Extracted Features", fontsize=15)
+ax.xaxis.tick_top() # x axis on top
+ax.xaxis.set_label_position('top')
+ax.tick_params(length=0)
+ax.figure.axes[-1].yaxis.label.set_size(15)
+
+
+def wrap_labels(ax, width, break_long_words=False):
+    labels = []
+    for label in ax.get_xticklabels():
+        text = label.get_text()
+        labels.append(textwrap.fill(text, width=width,
+                      break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+
+wrap_labels(ax, 10)
+
+
+
+plt.savefig("Correlation Plots/" + str(encoding_dim) + "_feature_physical_property_correlation")
+plt.show()
+
+
+
+
+
+# set the figure size
+plt.figure(figsize=(20, 16))
+
+# sns.set(font_scale = 2)
+
+# plot a heatmap for the dataframe (with annotations)
+ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+plt.yticks(rotation=0)
+plt.ylabel("Extracted Features", fontsize=15)
+ax.xaxis.tick_top() # x axis on top
+ax.xaxis.set_label_position('top')
+ax.tick_params(length=0)
+ax.figure.axes[-1].yaxis.label.set_size(15)
+
+
+def wrap_labels(ax, width, break_long_words=False):
+    labels = []
+    for label in ax.get_xticklabels():
+        text = label.get_text()
+        labels.append(textwrap.fill(text, width=width,
+                      break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+
+wrap_labels(ax, 10)
+
+
+
+plt.savefig("Correlation Plots/" + str(encoding_dim) + "_feature_all_property_correlation")
 plt.show()
