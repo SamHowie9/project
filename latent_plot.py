@@ -11,7 +11,7 @@ import cv2
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 10
+encoding_dim = 3
 
 
 # Define keras tensor for the encoder
@@ -181,4 +181,4 @@ plt.savefig("Latent Plots/latent_" + str(encoding_dim) + "_features")
 # print(latent_features[0][4].tolist())
 
 
-plt.show()
+# plt.show()

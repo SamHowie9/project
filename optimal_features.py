@@ -49,14 +49,14 @@ physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 loss = []
 val_loss = []
 
-for i in range(5, 42):
+for i in range(1, 45):
     feature_loss = np.load("Loss/" + str(i) + "_feature_loss.npy")
 
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
 
-plt.scatter(x=range(5, 42), y=loss, label="Training Loss")
-plt.scatter(x=range(5, 42), y=val_loss, label="Validation Loss")
+plt.scatter(x=range(1, 45), y=loss, label="Training Loss")
+plt.scatter(x=range(1, 45), y=val_loss, label="Validation Loss")
 
 # plt.plot(range(17, 41), loss)
 # plt.plot(range(17, 41), val_loss)
@@ -80,7 +80,7 @@ relevant_feature_number = []
 relevant_feature_ratio = []
 
 
-for encoding_dim in range(5, 42):
+for encoding_dim in range(1, 45):
 
     extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
 
@@ -111,7 +111,7 @@ for encoding_dim in range(5, 42):
     relevant_feature_ratio.append(relevant_features/encoding_dim)
 
 
-plt.scatter(x=range(5, 42), y=relevant_feature_number)
+plt.scatter(x=range(1, 45), y=relevant_feature_number)
 
 plt.xlabel("Total Number of Extracted Features")
 plt.ylabel("Number of Meaningful Extracted Features")
@@ -130,7 +130,7 @@ plt.show()
 
 
 
-encoding_dim=10
+encoding_dim=5
 
 
 extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
