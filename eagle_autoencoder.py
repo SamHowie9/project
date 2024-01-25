@@ -136,7 +136,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 3
+encoding_dim = 16
 
 
 
@@ -190,7 +190,6 @@ decoder.summary()
 
 
 
-
 # root means squared loss function
 def root_mean_squared_error(y_true, y_pred):
     return K.sqrt(K.mean(K.square(y_pred - y_true)))
@@ -220,6 +219,7 @@ extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
 np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
+
 
 
 
