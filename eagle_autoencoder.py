@@ -57,7 +57,6 @@ def half_max_range(image):
     # loop through half of the image
     for j in range(0, int(size / 2)):
 
-
         # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
         if (found_start_x is False) and ((intensity_x[j] / mean_intensity) < half_max_intensity_x):
             start_x += 1
@@ -136,7 +135,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 46
+encoding_dim = 44
 
 
 
@@ -202,10 +201,10 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
+# model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
-# autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
+autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
 
 # save the weights
 autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
@@ -241,51 +240,51 @@ np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 
 
 
-# # create a subset of the validation data to reconstruct (first 10 images)
-# images_to_reconstruct = test_images[:10]
-#
-# # number of images to reconstruct
-# n = 10
-#
-# # reconstruct the images
-# reconstructed_images = autoencoder.predict(test_images[:n])
-#
-# # create figure to hold subplots
-# fig, axs = plt.subplots(3, n-1, figsize=(20,5))
-#
-# # plot each subplot
-# for i in range(0, n-1):
-#
-#     # show the original image (remove axes)
-#     axs[0,i].imshow(test_images[i])
-#     axs[0,i].get_xaxis().set_visible(False)
-#     axs[0,i].get_yaxis().set_visible(False)
-#
-#     # show the reconstructed image (remove axes)
-#     axs[1,i].imshow(reconstructed_images[i])
-#     axs[1,i].get_xaxis().set_visible(False)
-#     axs[1,i].get_yaxis().set_visible(False)
-#
-#     # calculate residue (difference between two images) and show this
-#     residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-#     axs[2,i].imshow(residue_image)
-#     axs[2,i].get_xaxis().set_visible(False)
-#     axs[2,i].get_yaxis().set_visible(False)
-#
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction_2")
-# plt.show()
+# create a subset of the validation data to reconstruct (first 10 images)
+images_to_reconstruct = test_images[:10]
+
+# number of images to reconstruct
+n = 10
+
+# reconstruct the images
+reconstructed_images = autoencoder.predict(test_images[:n])
+
+# create figure to hold subplots
+fig, axs = plt.subplots(3, n-1, figsize=(20,5))
+
+# plot each subplot
+for i in range(0, n-1):
+
+    # show the original image (remove axes)
+    axs[0,i].imshow(test_images[i])
+    axs[0,i].get_xaxis().set_visible(False)
+    axs[0,i].get_yaxis().set_visible(False)
+
+    # show the reconstructed image (remove axes)
+    axs[1,i].imshow(reconstructed_images[i])
+    axs[1,i].get_xaxis().set_visible(False)
+    axs[1,i].get_yaxis().set_visible(False)
+
+    # calculate residue (difference between two images) and show this
+    residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+    axs[2,i].imshow(residue_image)
+    axs[2,i].get_xaxis().set_visible(False)
+    axs[2,i].get_yaxis().set_visible(False)
+
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction_2")
+plt.show()
 
 
 
 
 
 
-print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
-loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
-print()
-print(encoding_dim)
-print(loss)
-np.save("Loss/" + str(encoding_dim) + "_feature_loss", loss)
+# print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
+# loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
+# print()
+# print(encoding_dim)
+# print(loss)
+# np.save("Loss/" + str(encoding_dim) + "_feature_loss", loss)
 
 
 
