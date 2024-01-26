@@ -15,7 +15,7 @@ import random
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 32
+encoding_dim = 44
 
 # set the number of clusters
 n_clusters = 4
