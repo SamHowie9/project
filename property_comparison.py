@@ -467,19 +467,32 @@ centers_switch = np.flipud(np.rot90(centers))
 order = med_df["galfit_n"].sort_values(ascending=False).index.to_list()
 
 
-fig, axs = plt.subplots(1, 2, figsize=(20, 10))
+fig, axs = plt.subplots(2, 2, figsize=(20, 10))
 
-sns.scatterplot(ax=axs[0], x=extracted_features_switch[14], y=df["galfit_n"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
-g1 = sns.scatterplot(ax=axs[0], x=centers_switch[14], y=med_df["galfit_n"], s=100, hue=med_df["Cluster"], palette="colorblind", legend=False, hue_order=order)
-g1.set(xlabel="Feature 14", ylabel="Sersic Index", title="Sersic Index vs Feature 14", xlim=(-35, 12), ylim=(0, 5))
-# g1.set(xlabel="Feature 14", ylabel="Sersic Index", title="Sersic Index vs Feature 14")
+# sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[19], y=df["galfit_n"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
+# g1 = sns.scatterplot(ax=axs[0, 0], x=centers_switch[19], y=med_df["galfit_n"], s=100, hue=med_df["Cluster"], palette="colorblind", legend=False, hue_order=order)
+# # g1.set(xlabel="Feature 19", ylabel="Sersic Index", title="Sersic Index vs Feature 19", xlim=(-35, 12), ylim=(0, 5))
+# g1.set(xlabel="Feature 19", ylabel="Sersic Index", title="Sersic Index vs Feature 19")
+#
+# b2 = sns.boxplot(ax=axs[0, 1], data=df, x="Cluster", y="galfit_n", showfliers=False, whis=1, palette="colorblind", order=order)
+# # b2.set(xlabel=None, ylabel=None, title="Sersic Index", xticklabels=["Group 2", "Group 1"])
+# b2.set(xlabel=None, ylabel=None, title="Sersic Index")
+#
+#
+# sns.scatterplot(ax=axs[1, 0], x=extracted_features_switch[42], y=df["galfit_n"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
+# g1 = sns.scatterplot(ax=axs[1, 0], x=centers_switch[42], y=med_df["galfit_n"], s=100, hue=med_df["Cluster"], palette="colorblind", legend=False, hue_order=order)
+# # g1.set(xlabel="Feature 42", ylabel="Sersic Index", title="Sersic Index vs Feature 42", xlim=(-35, 12), ylim=(0, 5))
+# g1.set(xlabel="Feature 42", ylabel="Sersic Index", title="Sersic Index vs Feature 42")
+#
+# b2 = sns.boxplot(ax=axs[1, 1], data=df, x="Cluster", y="galfit_n", showfliers=False, whis=1, palette="colorblind", order=order)
+# # b2.set(xlabel=None, ylabel=None, title="Sersic Index", xticklabels=["Group 2", "Group 1"])
+# b2.set(xlabel=None, ylabel=None, title="Sersic Index")
 
-b3 = sns.boxplot(ax=axs[1], data=df, x="Cluster", y="galfit_n", showfliers=False, whis=1, palette="colorblind", order=order)
-# b3.set(xlabel=None, ylabel=None, title="Sersic Index", xticklabels=["Group 2", "Group 1"])
-b3.set(xlabel=None, ylabel=None, title="Sersic Index")
+sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[19], y=extracted_features_switch[42], alpha=0.5, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
 
 
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
+
+# plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
 plt.show()
 
 
