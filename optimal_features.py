@@ -130,7 +130,7 @@ plt.show()
 
 
 
-encoding_dim=5
+encoding_dim=44
 
 
 extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
