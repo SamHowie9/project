@@ -488,7 +488,7 @@ fig, axs = plt.subplots(2, 2, figsize=(20, 10))
 # # b2.set(xlabel=None, ylabel=None, title="Sersic Index", xticklabels=["Group 2", "Group 1"])
 # b2.set(xlabel=None, ylabel=None, title="Sersic Index")
 
-sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[19], y=extracted_features_switch[42], alpha=0.5, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
+# sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[19], y=extracted_features_switch[42], alpha=0.5, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
 
 
 
