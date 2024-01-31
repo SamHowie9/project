@@ -55,8 +55,8 @@ for i in range(1, 47):
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
 
-plt.scatter(x=range(1, 47), y=loss, label="Training Loss")
-plt.scatter(x=range(1, 47), y=val_loss, label="Validation Loss")
+plt.scatter(x=range(1, 47), y=loss, label="Training Images")
+plt.scatter(x=range(1, 47), y=val_loss, label="Validation Images")
 
 # plt.plot(range(17, 41), loss)
 # plt.plot(range(17, 41), val_loss)

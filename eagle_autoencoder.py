@@ -135,7 +135,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 44
+encoding_dim = 43
 
 
 
