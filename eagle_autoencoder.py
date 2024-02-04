@@ -16,7 +16,7 @@ import cv2
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 
 def center_crop(img, dim):
@@ -136,7 +136,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 43
+encoding_dim = 1
 
 
 
@@ -202,13 +202,13 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-# model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
-autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
+# autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
 
 # save the weights
-autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights_2.h5", overwrite=True)
 
 
 
@@ -218,7 +218,7 @@ autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_wei
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
+np.save("Features/" + str(encoding_dim) + "_features_2.npy", extracted_features)
 
 
 
@@ -241,51 +241,51 @@ np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 
 
 
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[:10]
-
-# number of images to reconstruct
-n = 10
-
-# reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[:n])
-
-# create figure to hold subplots
-fig, axs = plt.subplots(3, n-1, figsize=(20,5))
-
-# plot each subplot
-for i in range(0, n-1):
-
-    # show the original image (remove axes)
-    axs[0,i].imshow(test_images[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
-
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
-
-    # calculate residue (difference between two images) and show this
-    residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    axs[2,i].imshow(residue_image)
-    axs[2,i].get_xaxis().set_visible(False)
-    axs[2,i].get_yaxis().set_visible(False)
-
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction")
-plt.show()
-
-
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[:10]
+#
+# # number of images to reconstruct
+# n = 10
+#
+# # reconstruct the images
+# reconstructed_images = autoencoder.predict(test_images[:n])
+#
+# # create figure to hold subplots
+# fig, axs = plt.subplots(3, n-1, figsize=(20,5))
+#
+# # plot each subplot
+# for i in range(0, n-1):
+#
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(test_images[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
+#
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
+#
+#     # calculate residue (difference between two images) and show this
+#     residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+#     axs[2,i].imshow(residue_image)
+#     axs[2,i].get_xaxis().set_visible(False)
+#     axs[2,i].get_yaxis().set_visible(False)
+#
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction")
+# plt.show()
 
 
 
 
-# print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
-# loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
-# print()
-# print(encoding_dim)
-# print(loss)
-# np.save("Loss/" + str(encoding_dim) + "_feature_loss", loss)
+
+
+print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
+loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
+print()
+print(encoding_dim)
+print(loss)
+np.save("Loss/" + str(encoding_dim) + "_feature_loss_2", loss)
 
 
 
