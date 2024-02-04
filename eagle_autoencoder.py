@@ -12,6 +12,7 @@ import cv2
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
+plt.switch_backend('agg')
 
 
 
