@@ -209,7 +209,7 @@ model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=
 # autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights.h5")
 
 # save the weights
-autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights_2.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights.h5", overwrite=True)
 
 
 
@@ -219,7 +219,7 @@ autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_wei
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/" + str(encoding_dim) + "_features_2.npy", extracted_features)
+np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 
 
 
@@ -286,7 +286,7 @@ loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][
 print()
 print(encoding_dim)
 print(loss)
-np.save("Loss/" + str(encoding_dim) + "_feature_loss_2", loss)
+np.save("Loss/" + str(encoding_dim) + "_feature_loss", loss)
 
 
 
