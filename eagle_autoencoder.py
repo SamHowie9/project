@@ -1,7 +1,7 @@
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 # import tensorflow.compat.v2 as tf
-import keras
-from keras import backend as K
+import tensorflow.keras as keras
+from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
 import os
