@@ -79,6 +79,13 @@ mean_df["Cluster"] = list(range(0, n_clusters))
 print(mean_df)
 
 
+
+
+
+
+
+
+
 # fig, axs = plt.subplots(2, 3, figsize=(15, 10))
 #
 # # absolute magnitude vs f15
