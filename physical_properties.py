@@ -25,7 +25,7 @@ pd.set_option('display.width', 500)
 encoding_dim = 44
 
 # set the number of clusters
-n_clusters = 2
+n_clusters = 10
 
 
 # load the extracted features
@@ -44,25 +44,53 @@ clf.fit(extracted_features, clusters)
 centers = clf.centroids_
 
 
-
+# load the physical properties and add the clusters
 physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv")
 physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 physical_properties["Cluster"] = clusters
+
+# load the structural measurements and add the clusters
+structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
+structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+structure_properties["Cluster"] = clusters
+
+print(structure_properties)
+
 
 
 physical_properties["Log_Stellar_Mass"] = np.log10(physical_properties["MassType_Star"])
 physical_properties["Stellar_Mass/DM_Mass"] = physical_properties["MassType_Star"]/physical_properties["MassType_DM"]
 
 
+med_physical_properties = pd.DataFrame(columns=["MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate", "Log_Stellar_Mass", "Stellar_Mass/DM_Mass"])
+med_structure_properties = pd.DataFrame(columns=["n_r", "q_r", "re_r", "mag_r"])
+
+
+for i in range(0, n_clusters):
+    med_physical_cluster = physical_properties.loc[physical_properties["Cluster"] == i, ["MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate", "Log_Stellar_Mass", "Stellar_Mass/DM_Mass"]].median()
+    med_physical_properties.loc[i] = med_physical_cluster.tolist()
+
+    med_structure_cluster = structure_properties.loc[structure_properties["Cluster"] == i, ["n_r", "q_r", "re_r", "mag_r"]].median()
+    med_structure_properties.loc[i] = med_structure_cluster.tolist()
+
+# print(med_physical_properties)
+
+
+
+
+
 print(physical_properties)
+print(med_physical_properties)
+print(med_structure_properties)
 
 
 
-# sns.scatterplot(data=physical_properties, x="Log_Stellar_Mass", y="Stellar_Mass/DM_Mass")
+# sns.scatterplot(data=physical_properties, x="Log_Stellar_Mass", y="Stellar_Mass/DM_Mass", hue=structure_properties["re_r"])
+sns.scatterplot(data=med_physical_properties, x="Log_Stellar_Mass", y="Stellar_Mass/DM_Mass", hue=med_structure_properties["re_r"])
 # plt.ylim(-0.1, 3)
 
-sns.histplot(data=physical_properties, x="Stellar_Mass/DM_Mass")
-plt.xlim(-0.1, 0.5)
+# sns.histplot(data=physical_properties, x="Stellar_Mass/DM_Mass")
+# plt.xlim(-0.1, 0.5)
 
 # plt.scatter(physical_properties["MassType_Star"], physical_properties["MassType_Star"])
 
