@@ -91,7 +91,10 @@ print(med_structure_properties)
 # plt.ylim(-0.1, 3)
 
 # sns.histplot(data=physical_properties, x="Stellar_Mass/DM_Mass")
+sns.histplot(data=physical_properties, x="MassType_DM", bins=5000)
 # plt.xlim(-0.1, 0.5)
+# plt.ylim(-0.1, 5)
+plt.xlim(-0.1, 1.5e+12)
 
 # plt.scatter(physical_properties["MassType_Star"], physical_properties["MassType_Star"])
 
