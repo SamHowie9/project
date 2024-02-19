@@ -17,9 +17,9 @@ plt.switch_backend('agg')
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
-encoding_dim = 29
+encoding_dim = 30
 
 
 def center_crop(img, dim):
