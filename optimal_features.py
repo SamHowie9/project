@@ -101,8 +101,12 @@ for i in range(1, 5):
 relevant_feature_number = []
 relevant_feature_ratio = []
 
+med_relevant_feature_number = []
+max_relevant_feature_number = []
+min_relevant_feature_number = []
 
-for encoding_dim in range(1, 46):
+
+for encoding_dim in range(1, 5):
 
     extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
@@ -117,9 +121,11 @@ for encoding_dim in range(1, 46):
     extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
     extracted_features_switch_3 = np.flipud(np.rot90(extracted_features_3))
 
-    correlation_df_1 = pd.DataFrame(columns=all_properties.columns)
-    correlation_df_2 = pd.DataFrame(columns=all_properties.columns)
-    correlation_df_3 = pd.DataFrame(columns=all_properties.columns)
+    correlation_df_1 = pd.DataFrame(columns=all_properties.columns[1:])
+    correlation_df_2 = pd.DataFrame(columns=all_properties.columns[1:])
+    correlation_df_3 = pd.DataFrame(columns=all_properties.columns[1:])
+
+    print(correlation_df_1)
 
     for feature in range(0, len(extracted_features_switch)):
 
@@ -131,7 +137,7 @@ for encoding_dim in range(1, 46):
         correlation_list_3 = []
 
         # loop through each property
-        for gal_property in range(1, len(structure_properties.columns)):
+        for gal_property in range(1, len(all_properties.columns)):
 
             # calculate the correlation between that extracted feature and that property
             # correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
@@ -151,6 +157,8 @@ for encoding_dim in range(1, 46):
         # add the correlation of that feature to the main dataframe
         structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
 
+        print(correlation_list_1)
+
         correlation_df_1.loc[len(correlation_df_1)] = correlation_list_1
         correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
@@ -158,18 +166,32 @@ for encoding_dim in range(1, 46):
     # find the number of features at least slightly correlating with a property
     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.2).sum()
 
+    relevant_features_1 = (abs(correlation_df_1).max(axis=1) > 0.2).sum()
+    relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.2).sum()
+    relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.2).sum()
+
+
 
     relevant_feature_number.append(relevant_features)
     relevant_feature_ratio.append(relevant_features/encoding_dim)
 
+    med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
+    max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
+    min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
 
-plt.scatter(x=range(1, 46), y=relevant_feature_number)
 
-plt.xlabel("Total Number of Extracted Features")
-plt.ylabel("Number of Meaningful Extracted Features")
+print(med_relevant_feature_number)
+print(max_relevant_feature_number)
+print(min_relevant_feature_number)
 
-# plt.savefig("Plots/meaningful_extracted_features")
-plt.show()
+
+# plt.scatter(x=range(1, 46), y=relevant_feature_number)
+#
+# plt.xlabel("Total Number of Extracted Features")
+# plt.ylabel("Number of Meaningful Extracted Features")
+#
+# # plt.savefig("Plots/meaningful_extracted_features")
+# plt.show()
 
 
 
