@@ -16,6 +16,7 @@ import math
 
 
 pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
 pd.set_option('display.width', 500)
 
 
@@ -54,7 +55,7 @@ structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", 
 structure_properties.drop(structure_properties.tail(200).index, inplace=True)
 structure_properties["Cluster"] = clusters
 
-print(structure_properties)
+# print(structure_properties)
 
 
 
@@ -80,9 +81,13 @@ for i in range(0, n_clusters):
 
 
 
-print(physical_properties)
+# print(physical_properties)
 print(med_physical_properties)
-print(med_structure_properties)
+# print(med_structure_properties)
+
+
+
+print(physical_properties.sort_values(by="Stellar_Mass/DM_Mass")[["GalaxyID", "MassType_DM", "MassType_Star", "Stellar_Mass/DM_Mass", "Cluster"]])
 
 
 
@@ -91,16 +96,18 @@ print(med_structure_properties)
 # plt.ylim(-0.1, 3)
 
 # sns.histplot(data=physical_properties, x="Stellar_Mass/DM_Mass")
-sns.histplot(data=physical_properties, x="MassType_DM", bins=5000)
+# sns.histplot(data=physical_properties, x="MassType_DM", bins=5000)
+# sns.violinplot(data=physical_properties, y=["MassType_DM", "MassType_Star"])
+# plt.ylim(-2e+12, 1.4e+13)
 # plt.xlim(-0.1, 0.5)
 # plt.ylim(-0.1, 5)
-plt.xlim(-0.1, 1.5e+12)
+# plt.xlim(-0.001e+14, 0.2e+13)
 
 # plt.scatter(physical_properties["MassType_Star"], physical_properties["MassType_Star"])
 
-plt.figure(figsize=(10, 8))
+# plt.figure(figsize=(10, 8))
 
-# plt.scatter(x=med_physical_properties["Log_Stellar_Mass"], y=med_physical_properties["Stellar_Mass/DM_Mass"], c=med_structure_properties["n_r"], cmap="inferno_r", s=150, ec="black", lw=0.5)
+# # plt.scatter(x=med_physical_properties["Log_Stellar_Mass"], y=med_physical_properties["Stellar_Mass/DM_Mass"], c=med_structure_properties["n_r"], cmap="inferno_r", s=150, ec="black", lw=0.5)
 plt.scatter(x=med_physical_properties["Log_DM_Mass"], y=med_physical_properties["Stellar_Mass/DM_Mass"], c=med_structure_properties["n_r"], cmap="inferno_r", s=150, ec="black", lw=0.5)
 
 
@@ -109,8 +116,8 @@ cbar.set_label(label="Sersic Index", size=18, labelpad=20)
 cbar.ax.tick_params(labelsize=12)
 
 
-plt.ylim(0.01, 0.05)
-plt.xlim(11.65, 12.3)
+# plt.ylim(0.01, 0.05)
+# plt.xlim(11.65, 12.3)
 
 # plt.xlabel("Log(Stellar Mass)", fontsize=18, labelpad=20)
 plt.xlabel("Log(Dark Matter Halo Mass)", fontsize=18, labelpad=20)
@@ -119,4 +126,6 @@ plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
 plt.savefig("Plots/Stellar_Mass_DM_Mass_Sersic_crop")
+
+
 plt.show()
