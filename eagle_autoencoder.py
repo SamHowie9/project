@@ -22,6 +22,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 encoding_dim = 25
 
 
+
 def center_crop(img, dim):
     width, height = img.shape[1], img.shape[0]
     # process crop width and height for max available dimension
