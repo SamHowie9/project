@@ -56,12 +56,12 @@ med_val_loss = []
 max_val_loss = []
 min_val_loss = []
 
-# 16, 26, 36
-# 25, 35, 45
+# 16, 26, 36    7, 9, 13, 20, 21, 22, 25, 30, 38, 41
+# 25, 35, 45    1, 6, 7, 8, 27
 
 
-for i in range(36, 46):
-    feature_loss = np.load("Loss/" + str(i) + "_feature_loss_3.npy")
+for i in range(1, 25):
+    feature_loss = np.load("Loss/" + str(i) + "_feature_loss.npy")
 
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
@@ -99,8 +99,8 @@ for i in range(36, 46):
 # plt.show()
 
 
-plt.scatter(x=range(1, 46), y=loss, label="Training Images")
-plt.scatter(x=range(1, 46), y=val_loss, label="Validation Images")
+plt.scatter(x=range(1, 25), y=loss, label="Training Images")
+plt.scatter(x=range(1, 25), y=val_loss, label="Validation Images")
 
 # plt.plot(range(17, 41), loss)
 # plt.plot(range(17, 41), val_loss)
