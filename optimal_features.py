@@ -60,173 +60,174 @@ min_val_loss = []
 # 25, 35, 45    1, 6, 7, 8, 27
 
 
-for i in range(1, 25):
+for i in range(1, 46):
     feature_loss = np.load("Loss/" + str(i) + "_feature_loss.npy")
 
-    loss.append(feature_loss[0])
-    val_loss.append(feature_loss[1])
+    # loss.append(feature_loss[0])
+    # val_loss.append(feature_loss[1])
 
-    # feature_loss_1 = np.load("Loss/" + str(i) + "_feature_loss.npy")
-    # feature_loss_2 = np.load("Loss/" + str(i) + "_feature_loss_2.npy")
-    # feature_loss_3 = np.load("Loss/" + str(i) + "_feature_loss_3.npy")
-    #
-    # med_loss.append(np.median((feature_loss_1[0], feature_loss_2[0], feature_loss_3[0])))
-    # max_loss.append(max(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-    # min_loss.append(min(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-    #
-    # med_val_loss.append(np.median((feature_loss_1[1], feature_loss_2[1], feature_loss_3[1])))
-    # max_val_loss.append(max(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-    # min_val_loss.append(min(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-#
-#
-# loss_err = []
-# val_loss_err = []
-#
-# for i in range(len(med_loss)):
-#
-#     loss_err.append([(med_loss[i] - min_loss[i]), (max_loss[i] - med_loss[i])])
-#     val_loss_err.append([(med_val_loss[i] - min_val_loss[i]), (max_val_loss[i] - med_val_loss[i])])
-#
-# loss_err = np.array(loss_err).T
-#
-# print(loss_err)
-# print(val_loss_err)
-#
-#
-# plt.scatter(x=range(1, 5), y=med_loss, label="Training Images")
-# plt.errorbar(x=range(1, 5), y=med_loss, yerr=loss_err, ls="none")
-#
-# plt.show()
+    feature_loss_1 = np.load("Loss/" + str(i) + "_feature_loss.npy")
+    feature_loss_2 = np.load("Loss/" + str(i) + "_feature_loss_2.npy")
+    feature_loss_3 = np.load("Loss/" + str(i) + "_feature_loss_3.npy")
+
+    med_loss.append(np.median((feature_loss_1[0], feature_loss_2[0], feature_loss_3[0])))
+    max_loss.append(max(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
+    min_loss.append(min(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
+
+    med_val_loss.append(np.median((feature_loss_1[1], feature_loss_2[1], feature_loss_3[1])))
+    max_val_loss.append(max(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
+    min_val_loss.append(min(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
 
 
-plt.scatter(x=range(1, 25), y=loss, label="Training Images")
-plt.scatter(x=range(1, 25), y=val_loss, label="Validation Images")
+loss_err = []
+val_loss_err = []
 
-# plt.plot(range(17, 41), loss)
-# plt.plot(range(17, 41), val_loss)
+for i in range(len(med_loss)):
 
-plt.xlabel("Number of Extracted Features")
-plt.ylabel("Root-Mean-Squared Error")
+    loss_err.append([(med_loss[i] - min_loss[i]), (max_loss[i] - med_loss[i])])
+    val_loss_err.append([(med_val_loss[i] - min_val_loss[i]), (max_val_loss[i] - med_val_loss[i])])
 
-plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
+loss_err = np.array(loss_err).T
+val_loss_err = np.array(val_loss_err).T
 
-# plt.savefig("Plots/extracted_feat_vs_loss")
+print(loss_err)
+print(val_loss_err)
+
+
+plt.scatter(x=range(1, 46), y=med_loss, label="Training Images")
+plt.errorbar(x=range(1, 46), y=med_loss, yerr=loss_err, ls="none")
+
+plt.scatter(x=range(1, 46), y=med_val_loss, label="Validation Images")
+plt.errorbar(x=range(1, 46), y=med_val_loss, yerr=val_loss_err, ls="none")
+
 plt.show()
 
 
-
-
-
-
-
-
-# relevant_feature_number = []
-# relevant_feature_ratio = []
+# plt.scatter(x=range(1, 25), y=loss, label="Training Images")
+# plt.scatter(x=range(1, 25), y=val_loss, label="Validation Images")
 #
-# med_relevant_feature_number = []
-# max_relevant_feature_number = []
-# min_relevant_feature_number = []
+# # plt.plot(range(17, 41), loss)
+# # plt.plot(range(17, 41), val_loss)
 #
+# plt.xlabel("Number of Extracted Features")
+# plt.ylabel("Root-Mean-Squared Error")
 #
-# for encoding_dim in range(1, 15):
+# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
 #
-#     extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
-#     extracted_features_switch = np.flipud(np.rot90(extracted_features))
-#
-#     structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
-#
-#     extracted_features_1 = np.load("Features/" + str(encoding_dim) + "_features.npy")
-#     extracted_features_2 = np.load("Features/" + str(encoding_dim) + "_features_2.npy")
-#     extracted_features_3 = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
-#
-#     extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
-#     extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
-#     extracted_features_switch_3 = np.flipud(np.rot90(extracted_features_3))
-#
-#     correlation_df_1 = pd.DataFrame(columns=all_properties.columns[1:])
-#     correlation_df_2 = pd.DataFrame(columns=all_properties.columns[1:])
-#     correlation_df_3 = pd.DataFrame(columns=all_properties.columns[1:])
-#
-#     print(correlation_df_1)
-#
-#     for feature in range(0, len(extracted_features_switch)):
-#
-#         # create a list to contain the correlation between that feature and each property
-#         correlation_list = []
-#
-#         correlation_list_1 = []
-#         correlation_list_2 = []
-#         correlation_list_3 = []
-#
-#         # loop through each property
-#         for gal_property in range(1, len(all_properties.columns)):
-#
-#             # calculate the correlation between that extracted feature and that property
-#             # correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
-#             correlation = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
-#             correlation_list.append(correlation)
-#
-#             correlation_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
-#             correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
-#             correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
-#
-#             correlation_list_1.append(correlation_1)
-#             correlation_list_2.append(correlation_2)
-#             correlation_list_3.append(correlation_3)
-#
-#
-#
-#         # add the correlation of that feature to the main dataframe
-#         # structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
-#
-#         print(correlation_list_1)
-#
-#         correlation_df_1.loc[len(correlation_df_1)] = correlation_list_1
-#         correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
-#         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
-#
-#     # find the number of features at least slightly correlating with a property
-#     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.2).sum()
-#
-#     relevant_features_1 = (abs(correlation_df_1).max(axis=1) > 0.2).sum()
-#     relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.2).sum()
-#     relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.2).sum()
-#
-#
-#
-#     relevant_feature_number.append(relevant_features)
-#     relevant_feature_ratio.append(relevant_features/encoding_dim)
-#
-#     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
-#     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
-#     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
-#
-#
-#
-# print(med_relevant_feature_number)
-# print(max_relevant_feature_number)
-# print(min_relevant_feature_number)
-#
-# relevant_err = []
-#
-# for i in range(len(med_relevant_feature_number)):
-#     relevant_err.append([(med_relevant_feature_number[i] - min_relevant_feature_number[i]), (max_relevant_feature_number[i] - med_relevant_feature_number[i])])
-#
-# relevant_err = np.array(relevant_err).T
-#
-# plt.scatter(x=range(1, 15), y=med_relevant_feature_number)
-# plt.errorbar(x=range(1, 15), y=med_relevant_feature_number, yerr=relevant_err, ls="none")
-#
+# # plt.savefig("Plots/extracted_feat_vs_loss")
 # plt.show()
-#
-#
-# # plt.scatter(x=range(1, 46), y=relevant_feature_number)
-# #
-# # plt.xlabel("Total Number of Extracted Features")
-# # plt.ylabel("Number of Meaningful Extracted Features")
-# #
-# # # plt.savefig("Plots/meaningful_extracted_features")
-# # plt.show()
+
+
+
+
+
+
+
+
+relevant_feature_number = []
+relevant_feature_ratio = []
+
+med_relevant_feature_number = []
+max_relevant_feature_number = []
+min_relevant_feature_number = []
+
+
+for encoding_dim in range(1, 46):
+
+    extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+    extracted_features_switch = np.flipud(np.rot90(extracted_features))
+
+    structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
+
+    extracted_features_1 = np.load("Features/" + str(encoding_dim) + "_features.npy")
+    extracted_features_2 = np.load("Features/" + str(encoding_dim) + "_features_2.npy")
+    extracted_features_3 = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
+
+    extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
+    extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
+    extracted_features_switch_3 = np.flipud(np.rot90(extracted_features_3))
+
+    correlation_df_1 = pd.DataFrame(columns=all_properties.columns[1:])
+    correlation_df_2 = pd.DataFrame(columns=all_properties.columns[1:])
+    correlation_df_3 = pd.DataFrame(columns=all_properties.columns[1:])
+
+    print(correlation_df_1)
+
+    for feature in range(0, len(extracted_features_switch)):
+
+        # create a list to contain the correlation between that feature and each property
+        correlation_list = []
+
+        correlation_list_1 = []
+        correlation_list_2 = []
+        correlation_list_3 = []
+
+        # loop through each property
+        for gal_property in range(1, len(all_properties.columns)):
+
+            # calculate the correlation between that extracted feature and that property
+            # correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
+            correlation = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
+            correlation_list.append(correlation)
+
+            correlation_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
+            correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
+            correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
+
+            correlation_list_1.append(correlation_1)
+            correlation_list_2.append(correlation_2)
+            correlation_list_3.append(correlation_3)
+
+
+
+        # add the correlation of that feature to the main dataframe
+        # structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
+
+        print(correlation_list_1)
+
+        correlation_df_1.loc[len(correlation_df_1)] = correlation_list_1
+        correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
+        correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
+
+    # find the number of features at least slightly correlating with a property
+    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.2).sum()
+
+    relevant_features_1 = (abs(correlation_df_1).max(axis=1) > 0.2).sum()
+    relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.2).sum()
+    relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.2).sum()
+
+
+
+    relevant_feature_number.append(relevant_features)
+    relevant_feature_ratio.append(relevant_features/encoding_dim)
+
+    med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
+    max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
+    min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
+
+
+
+print(med_relevant_feature_number)
+print(max_relevant_feature_number)
+print(min_relevant_feature_number)
+
+relevant_err = []
+
+for i in range(len(med_relevant_feature_number)):
+    relevant_err.append([(med_relevant_feature_number[i] - min_relevant_feature_number[i]), (max_relevant_feature_number[i] - med_relevant_feature_number[i])])
+
+relevant_err = np.array(relevant_err).T
+
+plt.scatter(x=range(1, 46), y=med_relevant_feature_number)
+plt.errorbar(x=range(1, 46), y=med_relevant_feature_number, yerr=relevant_err, ls="none")
+
+# plt.scatter(x=range(1, 46), y=relevant_feature_number)
+
+plt.xlabel("Total Number of Extracted Features")
+plt.ylabel("Number of Meaningful Extracted Features")
+
+# plt.savefig("Plots/meaningful_extracted_features")
+plt.show()
 
 
 
