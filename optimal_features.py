@@ -131,6 +131,10 @@ med_relevant_feature_number = []
 max_relevant_feature_number = []
 min_relevant_feature_number = []
 
+med_relevant_feature_ratio = []
+max_relevant_feature_ratio = []
+min_relevant_feature_ratio = []
+
 
 for encoding_dim in range(1, 46):
 
@@ -205,6 +209,10 @@ for encoding_dim in range(1, 46):
     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
 
+    med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
+    max_relevant_feature_ratio.append(max(relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim))
+    min_relevant_feature_ratio.append(min(relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim))
+
 
 
 print(med_relevant_feature_number)
@@ -212,11 +220,14 @@ print(max_relevant_feature_number)
 print(min_relevant_feature_number)
 
 relevant_err = []
+ratio_err = []
 
 for i in range(len(med_relevant_feature_number)):
-    relevant_err.append([(med_relevant_feature_number[i] - min_relevant_feature_number[i]), (max_relevant_feature_number[i] - med_relevant_feature_number[i])])
+    relevant_err.append([(med_relevant_feature_ratio[i] - min_relevant_feature_ratio[i]), (max_relevant_feature_ratio[i] - med_relevant_feature_ratio[i])])
+    ratio_err.append([(med_relevant_feature_ratio[i] - min_relevant_feature_ratio[i]), (max_relevant_feature_ratio[i] - med_relevant_feature_ratio[i])])
 
 relevant_err = np.array(relevant_err).T
+ratio_err = np.array(ratio_err).T
 
 plt.scatter(x=range(1, 46), y=med_relevant_feature_number)
 plt.errorbar(x=range(1, 46), y=med_relevant_feature_number, yerr=relevant_err, ls="none")
@@ -227,6 +238,15 @@ plt.xlabel("Total Number of Extracted Features")
 plt.ylabel("Number of Meaningful Extracted Features")
 
 # plt.savefig("Plots/meaningful_extracted_features")
+plt.show()
+
+
+plt.scatter(x=range(1, 46), y=med_relevant_feature_ratio)
+plt.errorbar(x=range(1, 46), y=med_relevant_feature_ratio, yerr=ratio_err, ls="none")
+
+plt.xlabel("Total Number of Extracted Features")
+plt.ylabel("Ratio of Meaningful to Total Number")
+
 plt.show()
 
 
