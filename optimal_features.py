@@ -56,13 +56,13 @@ med_val_loss = []
 max_val_loss = []
 min_val_loss = []
 
-# 16, 26, 36    7, 9, 13, 20, 21, 22, 25, 30, 38, 41
+# 16, 26, 36    25, 41
 # 25, 35, 45    1, 8, 27, 35
 
 
 for i in range(1, 46):
 
-    feature_loss = np.load("Loss/" + str(i) + "_feature_loss_3.npy")
+    feature_loss = np.load("Loss/" + str(i) + "_feature_loss_2.npy")
 
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
