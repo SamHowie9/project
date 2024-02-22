@@ -255,7 +255,7 @@ n = 6
 reconstructed_images = autoencoder.predict(test_images[:n])
 
 # create figure to hold subplots
-fig, axs = plt.subplots(3, n-1, figsize=(20,5))
+fig, axs = plt.subplots(2, n-1, figsize=(12,5))
 
 # plot each subplot
 for i in range(0, n-1):
@@ -271,10 +271,12 @@ for i in range(0, n-1):
     axs[1,i].get_yaxis().set_visible(False)
 
     # calculate residue (difference between two images) and show this
-    residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    axs[2,i].imshow(residue_image)
-    axs[2,i].get_xaxis().set_visible(False)
-    axs[2,i].get_yaxis().set_visible(False)
+    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+    # axs[2,i].imshow(residue_image)
+    # axs[2,i].get_xaxis().set_visible(False)
+    # axs[2,i].get_yaxis().set_visible(False)
+
+
 
 plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction")
 plt.show()
