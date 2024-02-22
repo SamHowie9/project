@@ -19,7 +19,7 @@ plt.switch_backend('agg')
 # select which GPU to use
 os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 
-encoding_dim = 1
+encoding_dim = 16
 
 
 
@@ -280,7 +280,7 @@ for i in range(0, n-1):
 
 
 
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction_4")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction")
 plt.show()
 
 
