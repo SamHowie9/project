@@ -263,7 +263,7 @@ fig, axs = plt.subplots(2, n-1, figsize=(12,5))
 for i in range(0, n-1):
 
     # show the original image (remove axes)
-    axs[0,i].imshow(test_images[i])
+    axs[0,i].imshow(images_to_reconstruct[i])
     axs[0,i].get_xaxis().set_visible(False)
     axs[0,i].get_yaxis().set_visible(False)
 
