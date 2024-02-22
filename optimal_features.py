@@ -94,6 +94,7 @@ val_loss_err = np.array(val_loss_err).T
 # print(loss_err)
 # print(val_loss_err)
 
+plt.figure(figsize=(10, 8))
 
 plt.scatter(x=range(1, 46), y=med_loss, label="Training Images")
 plt.errorbar(x=range(1, 46), y=med_loss, yerr=loss_err, ls="none", capsize=3)
@@ -101,6 +102,10 @@ plt.errorbar(x=range(1, 46), y=med_loss, yerr=loss_err, ls="none", capsize=3)
 plt.scatter(x=range(1, 46), y=med_val_loss, label="Validation Images")
 plt.errorbar(x=range(1, 46), y=med_val_loss, yerr=val_loss_err, ls="none", capsize=3)
 
+plt.xlabel("Extracted Features", fontsize=15)
+plt.ylabel("Loss", fontsize=15)
+
+plt.savefig("Plots/extracted_feat_vs_loss")
 plt.show()
 
 
@@ -230,24 +235,33 @@ for i in range(len(med_relevant_feature_number)):
 relevant_err = np.array(relevant_err).T
 ratio_err = np.array(ratio_err).T
 
+
+
+plt.figure(figsize=(10, 8))
+
 plt.scatter(x=range(1, 46), y=med_relevant_feature_number)
 plt.errorbar(x=range(1, 46), y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3)
 
 # plt.scatter(x=range(1, 46), y=relevant_feature_number)
 
-plt.xlabel("Total Number of Extracted Features")
-plt.ylabel("Number of Meaningful Extracted Features")
 
-# plt.savefig("Plots/meaningful_extracted_features")
+
+plt.xlabel("Total Number of Extracted Features", fontsize=15)
+plt.ylabel("Number of Meaningful Extracted Features", fontsize=15)
+
+plt.savefig("Plots/meaningful_extracted_features")
 plt.show()
 
+
+plt.figure(figsize=(10, 8))
 
 plt.scatter(x=range(1, 46), y=med_relevant_feature_ratio)
 plt.errorbar(x=range(1, 46), y=med_relevant_feature_ratio, yerr=ratio_err, ls="none", capsize=3)
 
-plt.xlabel("Total Number of Extracted Features")
-plt.ylabel("Ratio of Meaningful to Total Number")
+plt.xlabel("Total Number of Extracted Features", fontsize=15)
+plt.ylabel("Ratio of Meaningful to Total Number", fontsize=15)
 
+plt.savefig("Plots/meaningful_extracted_features_ratio")
 plt.show()
 
 
