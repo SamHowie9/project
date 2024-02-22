@@ -249,10 +249,10 @@ np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 n = 6
 
 # create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[:n]
+# images_to_reconstruct = test_images[:n]
 
 # reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[:n])
+reconstructed_images = autoencoder.predict(test_images[n:])
 
 # create figure to hold subplots
 fig, axs = plt.subplots(2, n-1, figsize=(12,5))
