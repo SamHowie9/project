@@ -250,9 +250,11 @@ n = 6
 
 # create a subset of the validation data to reconstruct (first 10 images)
 # images_to_reconstruct = test_images[:n]
+images_to_reconstruct = test_images[0], test_images[5], test_images[20], test_images[50], test_images[98], test_images[120]
 
 # reconstruct the images
-reconstructed_images = autoencoder.predict(test_images[n:])
+# reconstructed_images = autoencoder.predict(test_images[n:])
+reconstructed_images = autoencoder.predict(images_to_reconstruct)
 
 # create figure to hold subplots
 fig, axs = plt.subplots(2, n-1, figsize=(12,5))
