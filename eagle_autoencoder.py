@@ -280,7 +280,7 @@ for i in range(0, n-1):
 
 
 
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction_3")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction_4")
 plt.show()
 
 
