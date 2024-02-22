@@ -246,7 +246,7 @@ np.save("Features/" + str(encoding_dim) + "_features.npy", extracted_features)
 
 
 # create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[:10]
+images_to_reconstruct = test_images[:n]
 
 # number of images to reconstruct
 n = 6
