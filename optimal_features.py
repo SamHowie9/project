@@ -71,7 +71,7 @@ for i in range(1, 46):
     feature_loss_2 = np.load("Loss/" + str(i) + "_feature_loss_2.npy")
     feature_loss_3 = np.load("Loss/" + str(i) + "_feature_loss_3.npy")
 
-    if i == 23 or i == 26:
+    if i == 23 or i == 26 or i == 45:
         print(feature_loss_1[0])
         print(feature_loss_2[0])
         print(feature_loss_3[0])
@@ -212,7 +212,7 @@ for encoding_dim in range(1, 46):
     relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.2).sum()
     relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.2).sum()
 
-    if encoding_dim == 23 or encoding_dim == 26:
+    if encoding_dim == 23 or encoding_dim == 26 or encoding_dim == 45:
         print(relevant_features_1)
         print(relevant_features_2)
         print(relevant_features_3)

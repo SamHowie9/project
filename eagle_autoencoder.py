@@ -19,7 +19,7 @@ plt.switch_backend('agg')
 # select which GPU to use
 os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 
-encoding_dim = 23
+encoding_dim = 45
 
 
 
@@ -209,10 +209,10 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 # model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
-autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights_3.h5")
+autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights_2.h5")
 
 # save the weights
-# autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights_3.h5", overwrite=True)
+# autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights_2.h5", overwrite=True)
 
 
 
@@ -222,7 +222,7 @@ autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights_3.h5
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/" + str(encoding_dim) + "_features_3.npy", extracted_features)
+np.save("Features/" + str(encoding_dim) + "_features_2.npy", extracted_features)
 
 
 
