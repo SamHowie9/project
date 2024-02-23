@@ -96,7 +96,7 @@ print(physical_properties.sort_values(by="Stellar_Mass/DM_Mass")[["GalaxyID", "M
 # plt.ylim(-0.1, 3)
 
 # sns.histplot(data=physical_properties, x="Stellar_Mass/DM_Mass")
-# sns.histplot(data=physical_properties, x="MassType_DM", bins=5000)
+sns.histplot(data=physical_properties, x=np.log10(physical_properties["MassType_DM"]), bins=1000)
 # sns.violinplot(data=physical_properties, y=["MassType_DM", "MassType_Star"])
 # plt.ylim(-2e+12, 1.4e+13)
 # plt.xlim(-0.1, 0.5)
@@ -108,24 +108,24 @@ print(physical_properties.sort_values(by="Stellar_Mass/DM_Mass")[["GalaxyID", "M
 # plt.figure(figsize=(10, 8))
 
 # # plt.scatter(x=med_physical_properties["Log_Stellar_Mass"], y=med_physical_properties["Stellar_Mass/DM_Mass"], c=med_structure_properties["n_r"], cmap="inferno_r", s=150, ec="black", lw=0.5)
-plt.scatter(x=med_physical_properties["Log_DM_Mass"], y=med_physical_properties["Stellar_Mass/DM_Mass"], c=med_structure_properties["n_r"], cmap="inferno_r", s=150, ec="black", lw=0.5)
-
-
-cbar = plt.colorbar()
-cbar.set_label(label="Sersic Index", size=18, labelpad=20)
-cbar.ax.tick_params(labelsize=12)
+# plt.scatter(x=med_physical_properties["Log_DM_Mass"], y=med_physical_properties["Stellar_Mass/DM_Mass"], c=med_structure_properties["n_r"], cmap="inferno_r", s=150, ec="black", lw=0.5)
+#
+#
+# cbar = plt.colorbar()
+# cbar.set_label(label="Sersic Index", size=18, labelpad=20)
+# cbar.ax.tick_params(labelsize=12)
 
 
 # plt.ylim(0.01, 0.05)
 # plt.xlim(11.65, 12.3)
 
 # plt.xlabel("Log(Stellar Mass)", fontsize=18, labelpad=20)
-plt.xlabel("Log(Dark Matter Halo Mass)", fontsize=18, labelpad=20)
-plt.ylabel("Stellar Mass / Dark Matter Halo Mass", fontsize=18, labelpad=20)
-plt.xticks(fontsize=12)
-plt.yticks(fontsize=12)
+# plt.xlabel("Log(Dark Matter Halo Mass)", fontsize=18, labelpad=20)
+# plt.ylabel("Stellar Mass / Dark Matter Halo Mass", fontsize=18, labelpad=20)
+# plt.xticks(fontsize=12)
+# plt.yticks(fontsize=12)
 
-plt.savefig("Plots/Stellar_Mass_DM_Mass_Sersic_crop")
+# plt.savefig("Plots/Stellar_Mass_DM_Mass_Sersic_crop")
 
 
 plt.show()

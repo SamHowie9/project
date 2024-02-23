@@ -15,7 +15,7 @@ import random
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 44
+encoding_dim = 16
 
 # set the number of clusters
 n_clusters = 4
@@ -70,7 +70,7 @@ def plot_dendrogram(model, **kwargs):
     dendrogram(linkage_matrix, **kwargs)
 
 
-plt.figure(figsize=(15,15))
+plt.figure(figsize=(20,15))
 
 # plot_dendrogram(hierarchical, truncate_mode="lastp", p=464 )
 plot_dendrogram(hierarchical, truncate_mode="level", p=5, color_threshold=0, link_color_func=lambda k:"black")
@@ -80,11 +80,11 @@ plt.xlabel("Number of Images in Clusters", fontsize=25, labelpad=15)
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=15)
 
-plt.axhline(y=95, label="Cutoff Points")
-plt.axhline(y=120)
-plt.axhline(y=135)
-plt.axhline(y=180)
-plt.axhline(y=250)
+# plt.axhline(y=95, label="Cutoff Points")
+# plt.axhline(y=120)
+# plt.axhline(y=135)
+# plt.axhline(y=180)
+# plt.axhline(y=250)
 
 plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', fontsize=20)
 
@@ -93,6 +93,6 @@ plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', fontsize=20)
 # plt.axhline(y=134)
 # plt.axhline(y=93)
 
-plt.savefig("Plots/hierarcial_clustering_dendrogram.eps")
+plt.savefig("Plots/hierarcial_clustering_dendrogram")
 plt.show()
 
