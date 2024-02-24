@@ -180,11 +180,14 @@ gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hsp
 gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
 
 # high sersic
-galaxies_1 = [8119056, 30903, 43262, 61600, 4477698, 5321154, 137389, 138873, 8238669]
-# low (and stripped) sersic
-galaxies_2 = [1383229, 1427448, 2331971, 16490608, 13869651, 13985849, 15827462, 14402768, 15037053]
+galaxies_1 = [217859, 234331, 244671, 629180, 1008743, 1732243, 1774857, 2425267, 2446634]
+# low sersic
+galaxies_2 = [34157, 35658, 43262, 130678, 138061, 178838, 641392, 1049778, 2047699]
+
 # high stripped sersic
-galaxies_3 = [5994742, 65696, 68767, 246800, 966292, 1028772, 14865035, 17228327, 1738146]
+galaxies_3 = [50759, 65696, 68767, 246800, 966292, 1028772, 1406432, 1704972, 1738146]
+# low stripped sersic
+galaxies_4 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
 
 
 count = 0
@@ -193,7 +196,7 @@ for i in range(0, 3):
     for j in range(0, 3):
 
         g1_ax = fig.add_subplot(gs1[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_3[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
         g1_ax.imshow(image)
         g1_ax.get_xaxis().set_visible(False)
         g1_ax.get_yaxis().set_visible(False)
@@ -208,11 +211,15 @@ for i in range(0, 3):
         if i == 0 and j == 1:
             # g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
             # g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
-            g1_ax.set_title("Stripped - High Sersic (Elliptical-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("Stripped - Low Sersic (Spiral-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("High Sersic Index (Elliptical-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("Low Sersic Index (Spiral-Like)", fontsize=25, pad=20)
 
         count += 1
 
+
+
+plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_sersic")
+plt.show()
 
 
 
@@ -415,8 +422,8 @@ for i in range(0, 3):
 #             g7_ax.set_title(("Group 2-2-2 (" + str(np.array(group_4).shape[0]) + ")"), fontsize=15, pad=20)
 #
 #         count += 1
-
-
-
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_stripped")
-plt.show()
+#
+#
+#
+# plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_stripped")
+# plt.show()

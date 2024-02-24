@@ -484,8 +484,8 @@ b3 = sns.boxplot(data=df, x="Cluster", y="galfit_n", showfliers=False, whis=1, p
 
 b3.set_xlabel("Cluster", fontsize=15)
 b3.set_ylabel("Sersic Index", fontsize=15)
-b3.set_xticklabels(b3.get_xticks(), size=12)
-b3.set_yticklabels(b3.get_yticks(), size=12)
+# b3.set_xticklabels(b3.get_xticks(), size=12)
+# b3.set_yticklabels(b3.get_yticks(), size=12)
 
 
 plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
@@ -516,7 +516,7 @@ plt.show()
 
 
 # plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
-plt.show()
+# plt.show()
 
 
 
