@@ -179,7 +179,7 @@ fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
 gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
 
-galaxies_1 = [23302, 30903, 43262, 61600, 4477698, 5321154, 137389, 138873, 140114]
+galaxies_1 = [8119056, 30903, 43262, 61600, 4477698, 5321154, 137389, 138873, 8238669]
 galaxies_2 = [1383229, 1427448, 2331971, 16490608, 13869651, 13985849, 15827462, 14402768, 15037053]
 
 count = 0
