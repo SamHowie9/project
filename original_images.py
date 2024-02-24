@@ -193,7 +193,7 @@ for i in range(0, 3):
     for j in range(0, 3):
 
         g1_ax = fig.add_subplot(gs1[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_3[count]) + ".png")
         g1_ax.imshow(image)
         g1_ax.get_xaxis().set_visible(False)
         g1_ax.get_yaxis().set_visible(False)
@@ -206,8 +206,10 @@ for i in range(0, 3):
 
         # set group title for middle plot of each group
         if i == 0 and j == 1:
-            g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
+            # g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
+            # g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("Stripped - High Sersic (Elliptical-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("Stripped - Low Sersic (Spiral-Like)", fontsize=25, pad=20)
 
         count += 1
 
@@ -416,5 +418,5 @@ for i in range(0, 3):
 
 
 
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_sersic")
+plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_stripped")
 plt.show()
