@@ -200,7 +200,7 @@ for i in range(0, 3):
         g2_ax.get_yaxis().set_visible(False)
 
         # set group title for middle plot of each group
-        if i == 0 and j == 2:
+        if i == 0 and j == 1:
             g1_ax.set_title("High Sersic Index (Spiral-Like)", fontsize=25, pad=20)
             g2_ax.set_title("Low Sersic Index (Elliptical-Like)", fontsize=25, pad=20)
 
