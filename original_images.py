@@ -411,5 +411,5 @@ for i in range(0, 3):
 
 
 
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_high_low_sersic")
 plt.show()
