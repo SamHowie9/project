@@ -10,13 +10,15 @@ import cv2
 
 
 
-# # set the encoding dimension (number of extracted features)
-# encoding_dim = 26
-#
-# # set the number of clusters
-# n_clusters = 4
-#
-#
+# set the encoding dimension (number of extracted features)
+encoding_dim = 26
+
+# set the number of clusters
+n_clusters = 16
+
+
+
+
 # # load the extracted features
 # extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
 #
