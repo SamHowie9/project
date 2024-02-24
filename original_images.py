@@ -179,8 +179,12 @@ fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
 gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
 
+# high sersic
 galaxies_1 = [8119056, 30903, 43262, 61600, 4477698, 5321154, 137389, 138873, 8238669]
+# low (and stripped) sersic
 galaxies_2 = [1383229, 1427448, 2331971, 16490608, 13869651, 13985849, 15827462, 14402768, 15037053]
+# high stripped sersic
+galaxies_3 = [50759, 65696, 68767, 246800, 966292, 1028772, 1406432, 1704972, 1738146, 2062484]
 
 
 count = 0
@@ -189,7 +193,7 @@ for i in range(0, 3):
     for j in range(0, 3):
 
         g1_ax = fig.add_subplot(gs1[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_3[count]) + ".png")
         g1_ax.imshow(image)
         g1_ax.get_xaxis().set_visible(False)
         g1_ax.get_yaxis().set_visible(False)
@@ -202,8 +206,8 @@ for i in range(0, 3):
 
         # set group title for middle plot of each group
         if i == 0 and j == 1:
-            g1_ax.set_title("High Sersic Index (Elliptical-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("Low Sersic Index (Spiral-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("High Sersic Index Stripped Galaxies", fontsize=25, pad=20)
+            g2_ax.set_title("Low Sersic Index Stripped Galaxies", fontsize=25, pad=20)
 
         count += 1
 
