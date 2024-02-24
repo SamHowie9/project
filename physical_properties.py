@@ -193,6 +193,6 @@ for i in range(0, n_clusters):
 
 
 print("High Sersic: ", physical_properties.loc[physical_properties["Cluster"] == 0]["GalaxyID"].tolist())
-print("Low Sersic: ",  physical_properties.loc[physical_properties["Cluster"] == 15]["GalaxyID"].tolist())
+print("Low Sersic (Stripped): ",  physical_properties.loc[physical_properties["Cluster"] == 15]["GalaxyID"].tolist())
 print("Stripped High Sersic:", physical_properties.loc[physical_properties["Cluster"] == 3]["GalaxyID"].tolist())
 
