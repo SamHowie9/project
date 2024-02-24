@@ -194,7 +194,7 @@ for i in range(0, 3):
         g1_ax.get_yaxis().set_visible(False)
 
         g2_ax = fig.add_subplot(gs2[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_2[count]) + ".png")
         g2_ax.imshow(image)
         g2_ax.get_xaxis().set_visible(False)
         g2_ax.get_yaxis().set_visible(False)
