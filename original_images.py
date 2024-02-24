@@ -174,16 +174,16 @@ import cv2
 fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 
 # create the subfigures for the plot (each group)
-gs1 = fig.add_gridspec(nrows=5, ncols=5, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=5, ncols=5, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
+gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
+gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
 
 galaxies_1 = [23302, 30903, 43262, 61600, 122971, 130678, 137389, 138873, 140114]
 galaxies_2 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
 
 count = 0
 
-for i in range(0, 5):
-    for j in range(0, 5):
+for i in range(0, 3):
+    for j in range(0, 3):
 
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
