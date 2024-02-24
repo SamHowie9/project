@@ -23,10 +23,10 @@ pd.set_option('display.width', 500)
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 44
+encoding_dim = 26
 
 # set the number of clusters
-n_clusters = 12
+n_clusters = 16
 
 
 # load the extracted features
@@ -82,12 +82,12 @@ for i in range(0, n_clusters):
 
 
 # print(physical_properties)
-print(med_physical_properties)
+# print(med_physical_properties)
 # print(med_structure_properties)
 
 
 
-print(physical_properties.sort_values(by="Stellar_Mass/DM_Mass")[["GalaxyID", "MassType_DM", "MassType_Star", "Stellar_Mass/DM_Mass", "Cluster"]])
+# print(physical_properties.sort_values(by="Stellar_Mass/DM_Mass")[["GalaxyID", "MassType_DM", "MassType_Star", "Stellar_Mass/DM_Mass", "Cluster"]])
 
 
 
@@ -96,7 +96,7 @@ print(physical_properties.sort_values(by="Stellar_Mass/DM_Mass")[["GalaxyID", "M
 # plt.ylim(-0.1, 3)
 
 # sns.histplot(data=physical_properties, x="Stellar_Mass/DM_Mass")
-sns.histplot(data=physical_properties, x=np.log10(physical_properties["MassType_DM"]), bins=1000)
+# sns.histplot(data=physical_properties, x=np.log10(physical_properties["MassType_DM"]), bins=1000)
 # sns.violinplot(data=physical_properties, y=["MassType_DM", "MassType_Star"])
 # plt.ylim(-2e+12, 1.4e+13)
 # plt.xlim(-0.1, 0.5)
@@ -126,6 +126,72 @@ sns.histplot(data=physical_properties, x=np.log10(physical_properties["MassType_
 # plt.yticks(fontsize=12)
 
 # plt.savefig("Plots/Stellar_Mass_DM_Mass_Sersic_crop")
+# plt.show()
 
 
-plt.show()
+
+
+
+
+
+# med_df = pd.merge(med_structure_properties, med_physical_properties, left_index=True, right_index=True)
+# med_df["Cluster"] = list(range(0, n_clusters))
+#
+#
+# ab_mag = med_df["mag_r"].sort_values(ascending=False).index.to_list()
+# semi_major = med_df["re_r"].sort_values(ascending=False).index.to_list()
+# sfr = med_df["StarFormationRate"].sort_values(ascending=False).index.to_list()
+# stellar_mass = med_df["MassType_Star"].sort_values(ascending=False).index.to_list()
+# dm_mass = med_df["MassType_DM"].sort_values(ascending=False).index.to_list()
+# bh_mass = med_df["MassType_BH"].sort_values(ascending=False).index.to_list()
+#
+# fig, axs = plt.subplots(1, 3, figsize=(30, 8))
+#
+# b1 = sns.boxplot(ax=axs[0], data=structure_properties, x="Cluster", y="mag_r", showfliers=False, whis=1, palette="colorblind", order=ab_mag, hue="Cluster", dodge=False)
+# b1.set_title("AB Magnitude", fontsize=20)
+# b1.set_xlabel("Cluster", fontsize=15)
+# b1.set_ylabel("AB Magnitude", fontsize=15)
+# b1.tick_params(labelsize=12)
+#
+# b2 = sns.boxplot(ax=axs[1], data=structure_properties, x="Cluster", y="re_r", showfliers=False, whis=1, palette="colorblind", order=semi_major, hue="Cluster", dodge=False)
+# b2.set_title("Semi-Major Axis", fontsize=20)
+# b2.set_xlabel("Cluster", fontsize=15)
+# b2.set_ylabel("Semi-Major Axis", fontsize=15)
+# b2.tick_params(labelsize=12)
+#
+# b3 = sns.boxplot(ax=axs[2], data=physical_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, palette="colorblind", order=sfr, hue="Cluster", dodge=False)
+# b3.set_title("Star Formation Rate", fontsize=20)
+# b3.set_xlabel("Cluster", fontsize=15)
+# b3.set_ylabel("Star Formation Rate", fontsize=15)
+# b3.tick_params(labelsize=12)
+#
+# # b4 = sns.boxplot(ax=axs[0], data=physical_properties, x="Cluster", y="MassType_Star", showfliers=False, whis=1, palette="colorblind", order=stellar_mass, hue="Cluster", dodge=False)
+# # b4.set_title("Stellar Mass", fontsize=20)
+# # b4.set_xlabel("Cluster", fontsize=15)
+# # b4.set_ylabel("Stellar Mass", fontsize=15)
+# # b4.tick_params(labelsize=12)
+# #
+# # b5 = sns.boxplot(ax=axs[1], data=physical_properties, x="Cluster", y="MassType_DM", showfliers=False, whis=1, palette="colorblind", order=dm_mass, hue="Cluster", dodge=False)
+# # b5.set_title("Dark Matter Mass", fontsize=20)
+# # b5.set_xlabel("Cluster", fontsize=15)
+# # b5.set_ylabel("Dark Matter Mass", fontsize=15)
+# # b5.tick_params(labelsize=12)
+# #
+# # b6 = sns.boxplot(ax=axs[2], data=physical_properties, x="Cluster", y="MassType_BH", showfliers=False, whis=1, palette="colorblind", order=bh_mass, hue="Cluster", dodge=False)
+# # b6.set_title("Black Hole Mass", fontsize=20)
+# # b6.set_xlabel("Cluster", fontsize=15)
+# # b6.set_ylabel("Black Hole Mass", fontsize=15)
+# # b6.tick_params(labelsize=12)
+#
+# for ax in axs:
+#     ax.legend([], [], frameon=False)
+#
+# plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties_half_1.png")
+# plt.show()
+
+
+
+
+print("High Sersic: ", physical_properties.loc[physical_properties["Cluster"] == 0]["GalaxyID"].tolist())
+print("Low Sersic: ",  physical_properties.loc[physical_properties["Cluster"] == 15]["GalaxyID"].tolist())
+

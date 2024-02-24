@@ -15,7 +15,7 @@ import random
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 16
+encoding_dim = 26
 
 # set the number of clusters
 n_clusters = 4
@@ -85,6 +85,7 @@ plt.yticks(fontsize=15)
 # plt.axhline(y=135)
 # plt.axhline(y=180)
 # plt.axhline(y=250)
+plt.axhline(y=26)
 
 plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', fontsize=20)
 

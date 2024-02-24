@@ -19,14 +19,14 @@ pd.set_option('display.width', 1000)
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 44
+encoding_dim = 26
 
 # set the number of clusters
-n_clusters = 2
+n_clusters = 16
 
 
 # load the extracted features
-extracted_features = np.load("Features/" + str(encoding_dim) + "_features.npy")
+extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
 
 # print(extracted_features)
 
@@ -408,9 +408,9 @@ centers_switch = np.flipud(np.rot90(centers))
 
 
 # fig, axs = plt.subplots(2, 3, figsize=(15, 10))
-#
-# # apparent magnitude vs f29
-# # sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[29], y=df["galfit_mag"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
+
+# apparent magnitude vs f29
+# sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[29], y=df["galfit_mag"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False)
 # sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[29], y=df["galfit_mag"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=[3, 1, 2, 0])
 # g1 = sns.scatterplot(ax=axs[0, 0], x=centers_switch[29], y=med_df["galfit_mag"], s=100, hue=med_df["Cluster"], palette="colorblind", legend=False, hue_order=[3, 1, 2, 0])
 # g1.set(xlabel="Feature 29", ylabel="Apparent Magnitude", title="Apparent Magnitude vs Feature 29")
@@ -426,15 +426,17 @@ centers_switch = np.flipud(np.rot90(centers))
 # sns.scatterplot(ax=axs[0, 2], x=extracted_features_switch[14], y=df["galfit_n"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=[3, 1, 2, 0])
 # g1 = sns.scatterplot(ax=axs[0, 2], x=centers_switch[14], y=med_df["galfit_n"], s=100, hue=med_df["Cluster"], palette="colorblind", legend=True, hue_order=[3, 1, 2, 0])
 # g1.set(xlabel="Feature 14", ylabel="Sersic Index", title="Sersic Index vs Feature 14", xlim=(-30, 10), ylim=(0, 5))
+
+# h0 = sns.histplot(ax=axs[0, 0], data=df, x="galfit_mag", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h0.set(xlabel=None, ylabel=None, title="Apparent Magnitude")
+# h1 = sns.histplot(ax=axs[0, 1], data=df, x="galfit_lmstar", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
+# h1.set(xlabel=None, ylabel=None, title="Stellar Mass")
+# h2 = sns.histplot(ax=axs[0, 2], data=df, x="galfit_re", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly", binrange=(0, 25))
+# h2.set(xlabel=None, ylabel=None, title="Semi-Major Axis")
+# h3 = sns.histplot(ax=axs[0, 3], data=df, x="galfit_n", hue="Cluster", palette="bright", linewidth=0, legend=True, element="poly")
+# h3.set(xlabel=None, ylabel=None, title="Sersic Index")
 #
-# # h0 = sns.histplot(ax=axs[0, 0], data=df, x="galfit_mag", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
-# # h0.set(xlabel=None, ylabel=None, title="Apparent Magnitude")
-# # h1 = sns.histplot(ax=axs[0, 1], data=df, x="galfit_lmstar", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly")
-# # h1.set(xlabel=None, ylabel=None, title="Stellar Mass")
-# # h2 = sns.histplot(ax=axs[0, 2], data=df, x="galfit_re", hue="Cluster", palette="bright", linewidth=0, legend=False, element="poly", binrange=(0, 25))
-# # h2.set(xlabel=None, ylabel=None, title="Semi-Major Axis")
-# # h3 = sns.histplot(ax=axs[0, 3], data=df, x="galfit_n", hue="Cluster", palette="bright", linewidth=0, legend=True, element="poly")
-# # h3.set(xlabel=None, ylabel=None, title="Sersic Index")
+# plt.figure()
 #
 # # plot mean value of each property for each cluster
 # b0 = sns.boxplot(ax=axs[1, 0], data=df, x="Cluster", y="galfit_mag", showfliers=False, whis=1, palette="colorblind", order=[3, 1, 2, 0])
@@ -467,7 +469,28 @@ centers_switch = np.flipud(np.rot90(centers))
 order = med_df["galfit_n"].sort_values(ascending=False).index.to_list()
 
 
-fig, axs = plt.subplots(2, 2, figsize=(20, 10))
+# fig, axs = plt.subplots(2, 2, figsize=(20, 10))
+
+plt.figure(figsize=(10, 10))
+
+# sns.scatterplot(ax=axs[0], x=extracted_features_switch[14], y=df["galfit_n"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
+# g1 = sns.scatterplot(ax=axs[0], x=centers_switch[14], y=med_df["galfit_n"], s=100, hue=med_df["Cluster"], palette="colorblind", legend=False, hue_order=order)
+# g1.set(xlabel="Feature 14", ylabel="Sersic Index", title="Sersic Index vs Feature 14", xlim=(-35, 12), ylim=(0, 5))
+# g1.set(xlabel="Feature 14", ylabel="Sersic Index", title="Sersic Index vs Feature 14")
+
+b3 = sns.boxplot(data=df, x="Cluster", y="galfit_n", showfliers=False, whis=1, palette="colorblind", order=order)
+# b3.set(xlabel=None, ylabel=None, title="Sersic Index", xticklabels=["Group 2", "Group 1"])
+# b3.set(xlabel="Cluster", ylabel="Sersic Index", fontsize=15)
+
+b3.set_xlabel("Cluster", fontsize=15)
+b3.set_ylabel("Sersic Index", fontsize=15)
+b3.set_xticklabels(b3.get_xticks(), size=12)
+b3.set_yticklabels(b3.get_yticks(), size=12)
+
+
+plt.savefig("Plots/" + str(n_clusters) + "_cluster_properties.png")
+plt.show()
+
 
 # sns.scatterplot(ax=axs[0, 0], x=extracted_features_switch[19], y=df["galfit_n"], alpha=0.05, linewidth=0, hue=df["Cluster"], palette="pastel", legend=False, hue_order=order)
 # g1 = sns.scatterplot(ax=axs[0, 0], x=centers_switch[19], y=med_df["galfit_n"], s=100, hue=med_df["Cluster"], palette="colorblind", legend=False, hue_order=order)

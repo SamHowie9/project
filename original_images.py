@@ -10,147 +10,147 @@ import cv2
 
 
 
-# set the encoding dimension (number of extracted features)
-encoding_dim = 26
-
-# set the number of clusters
-n_clusters = 4
-
-
-# load the extracted features
-extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
-
-
-# perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
-
-# get hierarchical clusters
-clusters = hierarchical.fit_predict(extracted_features)
-
-
-
-
-
-def center_crop(img, dim):
-    width, height = img.shape[1], img.shape[0]
-    # process crop width and height for max available dimension
-    crop_width = dim[0] if dim[0] < img.shape[1] else img.shape[1]
-    crop_height = dim[1] if dim[1] < img.shape[0] else img.shape[0]
-
-    mid_x, mid_y = int(width / 2), int(height / 2)
-    cw2, ch2 = int(crop_width / 2), int(crop_height / 2)
-    crop_img = img[mid_y - ch2:mid_y + ch2, mid_x - cw2:mid_x + cw2]
-    return crop_img
-
-
-
-def half_max_range(image):
-
-    mean_intensity = image.mean()
-
-    intensity_x = image.mean(axis=2).mean(axis=0)
-    intensity_y = image.mean(axis=2).mean(axis=1)
-
-    half_max_intensity_x = np.max(intensity_x/mean_intensity) / 2
-    half_max_intensity_y = np.max(intensity_y/mean_intensity) / 2
-
-
-    size = len(intensity_x)
-
-    start_x = 0
-    start_y = 0
-    end_x = 255
-    end_y = 255
-
-    found_start_x = False
-    found_start_y = False
-    found_end_x = False
-    found_end_y = False
-
-    # loop through half of the image
-    for j in range(0, int(size / 2)):
-
-
-        # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
-        if (found_start_x is False) and ((intensity_x[j] / mean_intensity) < half_max_intensity_x):
-            start_x += 1
-        else:
-            found_start_x = True
-
-        if (found_end_x is False) and ((intensity_x[-j] / mean_intensity) < half_max_intensity_x):
-            end_x -= 1
-        else:
-            found_end_x = True
-
-        if (found_start_y is False) and ((intensity_y[j] / mean_intensity) < half_max_intensity_y):
-            start_y += 1
-        else:
-            found_start_y = True
-
-        if (found_end_y is False) and ((intensity_y[-j] / mean_intensity) < half_max_intensity_y):
-            end_y -= 1
-        else:
-            found_end_y = True
-
-    return start_x, end_x, start_y, end_y
-
-
-
-def resize_image(image, cutoff=60):
-
-    # get the fill width half maximum (for x and y direction)
-    start_x, end_x, start_y, end_y = half_max_range(image)
-
-    # calculate the full width half maximum
-    range_x = end_x - start_x
-    range_y = end_y - start_y
-
-    # check if the majority of out image is within the cutoff range, if so, center crop, otherwise, scale image down
-    if (range_x <= cutoff) and (range_y <= cutoff):
-        image = center_crop(image, (128, 128))
-    else:
-        image = cv2.resize(image, (128, 128))
-
-    # return the resized image
-    return image
-
-
-
-
-
-
-# load the two excel files into dataframes
-df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
-df2 = pd.read_csv("stab3510_supplemental_file/table2.csv", comment="#")
-
-# account for hte validation data and remove final 200 elements
-df1.drop(df1.tail(200).index, inplace=True)
-df2.drop(df2.tail(200).index, inplace=True)
-
-# extract relevant properties
-galaxy_id = df1["GalaxyID"]
-ab_magnitude = df1["galfit_mag"]
-mass = df2["galfit_lmstar"]
-semi_major = (df1["galfit_re"] + df2["galfit_re"]) / 2
-sersic = (df1["galfit_n"] + df2["galfit_n"]) / 2
-axis_ratio = (df1["galfit_q"] + df2["galfit_q"]) / 2
-position_angle = (df1["galfit_PA"] + df2["galfit_PA"]) / 2
-
-# create a new dataframe to contain all the relevant information about each galaxy
-df = pd.DataFrame(columns=["GalaxyID", "galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA", "Cluster"])
-df["GalaxyID"] = galaxy_id
-df["galfit_mag"] = ab_magnitude
-df["galfit_lmstar"] = mass
-df["galfit_re"] = semi_major
-df["galfit_n"] = sersic
-df["galfit_q"] = axis_ratio
-df["galfit_PA"] = position_angle
-df["Cluster"] = clusters
-
-
-
-
-
+# # set the encoding dimension (number of extracted features)
+# encoding_dim = 26
+#
+# # set the number of clusters
+# n_clusters = 4
+#
+#
+# # load the extracted features
+# extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
+#
+#
+# # perform hierarchical ward clustering
+# hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
+#
+# # get hierarchical clusters
+# clusters = hierarchical.fit_predict(extracted_features)
+#
+#
+#
+#
+#
+# def center_crop(img, dim):
+#     width, height = img.shape[1], img.shape[0]
+#     # process crop width and height for max available dimension
+#     crop_width = dim[0] if dim[0] < img.shape[1] else img.shape[1]
+#     crop_height = dim[1] if dim[1] < img.shape[0] else img.shape[0]
+#
+#     mid_x, mid_y = int(width / 2), int(height / 2)
+#     cw2, ch2 = int(crop_width / 2), int(crop_height / 2)
+#     crop_img = img[mid_y - ch2:mid_y + ch2, mid_x - cw2:mid_x + cw2]
+#     return crop_img
+#
+#
+#
+# def half_max_range(image):
+#
+#     mean_intensity = image.mean()
+#
+#     intensity_x = image.mean(axis=2).mean(axis=0)
+#     intensity_y = image.mean(axis=2).mean(axis=1)
+#
+#     half_max_intensity_x = np.max(intensity_x/mean_intensity) / 2
+#     half_max_intensity_y = np.max(intensity_y/mean_intensity) / 2
+#
+#
+#     size = len(intensity_x)
+#
+#     start_x = 0
+#     start_y = 0
+#     end_x = 255
+#     end_y = 255
+#
+#     found_start_x = False
+#     found_start_y = False
+#     found_end_x = False
+#     found_end_y = False
+#
+#     # loop through half of the image
+#     for j in range(0, int(size / 2)):
+#
+#
+#         # if we haven't previously found the cutoff point and are still below the cutoff, increment the pointer
+#         if (found_start_x is False) and ((intensity_x[j] / mean_intensity) < half_max_intensity_x):
+#             start_x += 1
+#         else:
+#             found_start_x = True
+#
+#         if (found_end_x is False) and ((intensity_x[-j] / mean_intensity) < half_max_intensity_x):
+#             end_x -= 1
+#         else:
+#             found_end_x = True
+#
+#         if (found_start_y is False) and ((intensity_y[j] / mean_intensity) < half_max_intensity_y):
+#             start_y += 1
+#         else:
+#             found_start_y = True
+#
+#         if (found_end_y is False) and ((intensity_y[-j] / mean_intensity) < half_max_intensity_y):
+#             end_y -= 1
+#         else:
+#             found_end_y = True
+#
+#     return start_x, end_x, start_y, end_y
+#
+#
+#
+# def resize_image(image, cutoff=60):
+#
+#     # get the fill width half maximum (for x and y direction)
+#     start_x, end_x, start_y, end_y = half_max_range(image)
+#
+#     # calculate the full width half maximum
+#     range_x = end_x - start_x
+#     range_y = end_y - start_y
+#
+#     # check if the majority of out image is within the cutoff range, if so, center crop, otherwise, scale image down
+#     if (range_x <= cutoff) and (range_y <= cutoff):
+#         image = center_crop(image, (128, 128))
+#     else:
+#         image = cv2.resize(image, (128, 128))
+#
+#     # return the resized image
+#     return image
+#
+#
+#
+#
+#
+#
+# # load the two excel files into dataframes
+# df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+# df2 = pd.read_csv("stab3510_supplemental_file/table2.csv", comment="#")
+#
+# # account for hte validation data and remove final 200 elements
+# df1.drop(df1.tail(200).index, inplace=True)
+# df2.drop(df2.tail(200).index, inplace=True)
+#
+# # extract relevant properties
+# galaxy_id = df1["GalaxyID"]
+# ab_magnitude = df1["galfit_mag"]
+# mass = df2["galfit_lmstar"]
+# semi_major = (df1["galfit_re"] + df2["galfit_re"]) / 2
+# sersic = (df1["galfit_n"] + df2["galfit_n"]) / 2
+# axis_ratio = (df1["galfit_q"] + df2["galfit_q"]) / 2
+# position_angle = (df1["galfit_PA"] + df2["galfit_PA"]) / 2
+#
+# # create a new dataframe to contain all the relevant information about each galaxy
+# df = pd.DataFrame(columns=["GalaxyID", "galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA", "Cluster"])
+# df["GalaxyID"] = galaxy_id
+# df["galfit_mag"] = ab_magnitude
+# df["galfit_lmstar"] = mass
+# df["galfit_re"] = semi_major
+# df["galfit_n"] = sersic
+# df["galfit_q"] = axis_ratio
+# df["galfit_PA"] = position_angle
+# df["Cluster"] = clusters
+#
+#
+#
+#
+#
 # separate the dataframe into groups based on their cluster
 # group_1 = df.loc[df["Cluster"] == 0]
 # group_2 = df.loc[df["Cluster"] == 1]
@@ -166,36 +166,43 @@ df["Cluster"] = clusters
 # print(group_1_random)
 # print(group_2_random)
 #
-# # create the figure for the plot
-# fig = plt.figure(constrained_layout=False, figsize=(20, 10))
-#
-# # create the subfigures for the plot (each group)
-# gs1 = fig.add_gridspec(nrows=5, ncols=5, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
-# gs2 = fig.add_gridspec(nrows=5, ncols=5, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
-#
-# count = 0
-#
-# for i in range(0, 5):
-#     for j in range(0, 5):
-#
-#         g1_ax = fig.add_subplot(gs1[i, j])
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2_random[count]) + ".png")
-#         g1_ax.imshow(image)
-#         g1_ax.get_xaxis().set_visible(False)
-#         g1_ax.get_yaxis().set_visible(False)
-#
-#         g2_ax = fig.add_subplot(gs2[i, j])
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1_random[count]) + ".png")
-#         g2_ax.imshow(image)
-#         g2_ax.get_xaxis().set_visible(False)
-#         g2_ax.get_yaxis().set_visible(False)
-#
-#         # set group title for middle plot of each group
-#         if i == 0 and j == 2:
-#             g1_ax.set_title(("Group 1 (" + str(np.array(group_2).shape[0]) + ")"), fontsize=25, pad=20)
-#             g2_ax.set_title(("Group 2 (" + str(np.array(group_1).shape[0]) + ")"), fontsize=25, pad=20)
-#
-#         count += 1
+
+
+
+
+# create the figure for the plot
+fig = plt.figure(constrained_layout=False, figsize=(20, 10))
+
+# create the subfigures for the plot (each group)
+gs1 = fig.add_gridspec(nrows=5, ncols=5, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
+gs2 = fig.add_gridspec(nrows=5, ncols=5, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
+
+galaxies_1 = [23302, 30903, 43262, 61600, 122971, 130678, 137389, 138873, 140114]
+galaxies_2 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
+
+count = 0
+
+for i in range(0, 5):
+    for j in range(0, 5):
+
+        g1_ax = fig.add_subplot(gs1[i, j])
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
+        g1_ax.imshow(image)
+        g1_ax.get_xaxis().set_visible(False)
+        g1_ax.get_yaxis().set_visible(False)
+
+        g2_ax = fig.add_subplot(gs2[i, j])
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
+        g2_ax.imshow(image)
+        g2_ax.get_xaxis().set_visible(False)
+        g2_ax.get_yaxis().set_visible(False)
+
+        # set group title for middle plot of each group
+        if i == 0 and j == 2:
+            g1_ax.set_title("High Sersic Index (Spiral-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("Low Sersic Index (Elliptical-Like)", fontsize=25, pad=20)
+
+        count += 1
 
 
 
@@ -399,8 +406,6 @@ df["Cluster"] = clusters
 #             g7_ax.set_title(("Group 2-2-2 (" + str(np.array(group_4).shape[0]) + ")"), fontsize=15, pad=20)
 #
 #         count += 1
-
-
 
 
 
