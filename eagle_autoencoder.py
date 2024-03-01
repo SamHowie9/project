@@ -15,14 +15,14 @@ import cv2
 plt.switch_backend('agg')
 
 
-tf.config.list_physical_devices('GPU')
+# tf.config.list_physical_devices('GPU')
 
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "45"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-encoding_dim = 0
+encoding_dim = 45
 
 
 
