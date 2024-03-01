@@ -17,9 +17,9 @@ plt.switch_backend('agg')
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "7"
+os.environ["CUDA_VISIBLE_DEVICES"] = "45"
 
-encoding_dim = 10
+encoding_dim = 0
 
 
 
@@ -119,7 +119,8 @@ df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     # get the filename for that galaxy
-    filename = "galface_" + str(galaxy) + ".png"
+    # filename = "galface_" + str(galaxy) + ".png"
+    filename = "galrand_" + str(galaxy) + ".png"
 
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
@@ -206,13 +207,13 @@ autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 
 # train the model
-# model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
+model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=1, validation_data=(test_images, test_images))
 
 # load the weights
-autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights_2.h5")
+# autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5")
 
 # save the weights
-# autoencoder.save_weights(filepath="Weights/" + str(encoding_dim) + "_feature_weights_2.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5", overwrite=True)
 
 
 
@@ -222,7 +223,7 @@ autoencoder.load_weights("Weights/" + str(encoding_dim) + "_feature_weights_2.h5
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features/" + str(encoding_dim) + "_features_2.npy", extracted_features)
+np.save("Features Rand/" + str(encoding_dim) + "_features_1.npy", extracted_features)
 
 
 
@@ -245,55 +246,55 @@ np.save("Features/" + str(encoding_dim) + "_features_2.npy", extracted_features)
 
 
 
-# number of images to reconstruct
-n = 6
-
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[n:]
-# images_to_reconstruct = np.array([test_images[0], test_images[5], test_images[20], test_images[50], test_images[98], test_images[120]])
-
-# reconstruct the images
-# reconstructed_images = autoencoder.predict(test_images[n:])
-reconstructed_images = autoencoder.predict(images_to_reconstruct)
-
-# create figure to hold subplots
-fig, axs = plt.subplots(2, n-1, figsize=(12,5))
-
-# plot each subplot
-for i in range(0, n-1):
-
-    # show the original image (remove axes)
-    axs[0,i].imshow(images_to_reconstruct[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
-
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
-
-    # calculate residue (difference between two images) and show this
-    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    # axs[2,i].imshow(residue_image)
-    # axs[2,i].get_xaxis().set_visible(False)
-    # axs[2,i].get_yaxis().set_visible(False)
-
-
-
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction")
-plt.show()
-
-
+# # number of images to reconstruct
+# n = 6
+#
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[n:]
+# # images_to_reconstruct = np.array([test_images[0], test_images[5], test_images[20], test_images[50], test_images[98], test_images[120]])
+#
+# # reconstruct the images
+# # reconstructed_images = autoencoder.predict(test_images[n:])
+# reconstructed_images = autoencoder.predict(images_to_reconstruct)
+#
+# # create figure to hold subplots
+# fig, axs = plt.subplots(2, n-1, figsize=(12,5))
+#
+# # plot each subplot
+# for i in range(0, n-1):
+#
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(images_to_reconstruct[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
+#
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
+#
+#     # calculate residue (difference between two images) and show this
+#     # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+#     # axs[2,i].imshow(residue_image)
+#     # axs[2,i].get_xaxis().set_visible(False)
+#     # axs[2,i].get_yaxis().set_visible(False)
+#
+#
+#
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_reconstruction")
+# plt.show()
 
 
 
 
-# print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
-# loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
-# print()
-# print(encoding_dim)
-# print(loss)
-# np.save("Loss/" + str(encoding_dim) + "_feature_loss_2.npy", loss)
+
+
+print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
+loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
+print()
+print(encoding_dim)
+print(loss)
+np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
 
 
 
