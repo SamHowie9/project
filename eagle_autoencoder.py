@@ -1,5 +1,5 @@
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
-# import tensorflow.compat.v2 as tf
+import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.keras import backend as K
 import numpy as np
@@ -13,6 +13,9 @@ import cv2
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 plt.switch_backend('agg')
+
+
+tf.config.list_physical_devices('GPU')
 
 
 
