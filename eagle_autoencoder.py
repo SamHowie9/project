@@ -17,9 +17,9 @@ plt.switch_backend('agg')
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "43"
+os.environ["CUDA_VISIBLE_DEVICES"] = "42"
 
-encoding_dim = 2
+encoding_dim = 3
 
 
 
