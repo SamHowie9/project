@@ -231,12 +231,12 @@ np.save("Features Rand/" + str(encoding_dim) + "_features_1.npy", extracted_feat
 
 
 
-print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
-loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
-print()
-print(encoding_dim)
-print(loss)
-np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
+# print(model_data.history["loss"][-1], model_data.history["val_loss"][-1])
+# loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][-1]])
+# print()
+# print(encoding_dim)
+# print(loss)
+# np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
 
 
 
