@@ -22,7 +22,7 @@ plt.switch_backend('agg')
 # select which GPU to use
 os.environ["CUDA_VISIBLE_DEVICES"] = "8"
 
-encoding_dim = 26
+encoding_dim = 40
 
 
 
@@ -260,7 +260,7 @@ np.save("Features Rand/" + str(encoding_dim) + "_features_1.npy", extracted_feat
 
 
 # number of images to reconstruct
-n = 10
+n = 12
 
 # create a subset of the validation data to reconstruct (first 10 images)
 images_to_reconstruct = test_images[n:]
@@ -271,7 +271,7 @@ images_to_reconstruct = test_images[n:]
 reconstructed_images = autoencoder.predict(images_to_reconstruct)
 
 # create figure to hold subplots
-fig, axs = plt.subplots(2, n-1, figsize=(12,5))
+fig, axs = plt.subplots(2, n-1, figsize=(18,5))
 
 # plot each subplot
 for i in range(0, n-1):
