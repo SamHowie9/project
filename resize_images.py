@@ -76,8 +76,8 @@ def half_max_range(image):
     half_max_intensity_x = np.max(intensity_x/mean_intensity) / 2
     half_max_intensity_y = np.max(intensity_y/mean_intensity) / 2
 
-    print()
-    print(half_max_intensity_x, half_max_intensity_y)
+    # print()
+    # print(half_max_intensity_x, half_max_intensity_y)
 
     size = len(intensity_x)
 
@@ -116,7 +116,7 @@ def half_max_range(image):
         else:
             found_end_y = True
 
-    print(start_x, end_x, start_y, end_y)
+    # print(start_x, end_x, start_y, end_y)
     return start_x, end_x, start_y, end_y
 
 
