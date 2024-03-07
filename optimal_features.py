@@ -65,7 +65,7 @@ min_val_loss = []
 
 for i in range(1, 46):
 
-    feature_loss = np.load("Loss Rand/" + str(i) + "_feature_loss_1.npy")
+    feature_loss = np.load("Loss Rand/" + str(i) + "_feature_loss_2.npy")
 
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
