@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import numpy as np
 import pandas as pd
-import seaborn as sns
+# import seaborn as sns
 import cv2
 import random
 
