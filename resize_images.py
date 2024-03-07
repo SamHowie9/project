@@ -41,7 +41,7 @@ chosen_images = []
 
 for galaxy in galaxies:
     # get the filename for that galaxy
-    filename = "galface_" + str(galaxy) + ".png"
+    filename = "galrand_" + str(galaxy) + ".png"
 
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
@@ -54,21 +54,21 @@ chosen_images = np.array(chosen_images)
 
 fig, axs = plt.subplots(4, 3, figsize=(15, 20))
 
-axs[0, 0] = plt.imshow(chosen_images[0])
-axs[0, 1] = plt.imshow(chosen_images[1])
-axs[0, 2] = plt.imshow(chosen_images[2])
+axs[0, 0].imshow(chosen_images[0])
+axs[0, 1].imshow(chosen_images[1])
+axs[0, 2].imshow(chosen_images[2])
 
-axs[1, 0] = plt.imshow(chosen_images[3])
-axs[1, 1] = plt.imshow(chosen_images[4])
-axs[1, 2] = plt.imshow(chosen_images[5])
+axs[1, 0].imshow(chosen_images[3])
+axs[1, 1].imshow(chosen_images[4])
+axs[1, 2].imshow(chosen_images[5])
 
-axs[2, 0] = plt.imshow(chosen_images[6])
-axs[2, 1] = plt.imshow(chosen_images[7])
-axs[2, 2] = plt.imshow(chosen_images[8])
+axs[2, 0].imshow(chosen_images[6])
+axs[2, 1].imshow(chosen_images[7])
+axs[2, 2].imshow(chosen_images[8])
 
-axs[3, 0] = plt.imshow(chosen_images[9])
-axs[3, 1] = plt.imshow(chosen_images[10])
-axs[3, 2] = plt.imshow(chosen_images[11])
+axs[3, 0].imshow(chosen_images[9])
+axs[3, 1].imshow(chosen_images[10])
+axs[3, 2].imshow(chosen_images[11])
 
 plt.savefig("Plots/different_fwhm")
 plt.show()
