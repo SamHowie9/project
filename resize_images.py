@@ -166,13 +166,19 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
 
 
+print(range_x)
+print()
+print()
+print(range_y)
 
-fig, axs = plt.subplots(1, 2, figsize=(20, 10))
 
-sns.histplot(ax=axs[0], x=range_x)
-sns.histplot(ax=axs[1], x=range_y)
 
-plt.savefig("Plots/fwhm_distribution")
+# fig, axs = plt.subplots(1, 2, figsize=(20, 10))
+#
+# sns.histplot(ax=axs[0], x=range_x)
+# sns.histplot(ax=axs[1], x=range_y)
+#
+# plt.savefig("Plots/fwhm_distribution")
 
 
 
