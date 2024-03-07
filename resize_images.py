@@ -145,8 +145,8 @@ def resize_image(image, cutoff=60):
 
 
 all_images = []
-range_x = []
-range_y = []
+fwhm_x = []
+fwhm_y = []
 
 # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
@@ -158,18 +158,20 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
     all_images.append(image)
 
+    # get the fill width half maximum (for x and y direction)
     start_x, end_x, start_y, end_y = half_max_range(image)
 
     # calculate the full width half maximum
-    range_x.append(end_x - end_y)
-    range_y.append(end_y - start_y)
+    range_x = end_x - start_x
+    range_y = end_y - start_y
 
+    fwhm_x.append(range_x)
+    fwhm_y.append(range_y)
 
-
-print(range_x)
+print(fwhm_x)
 print()
 print()
-print(range_y)
+print(fwhm_y)
 
 
 
