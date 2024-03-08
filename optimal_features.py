@@ -60,13 +60,10 @@ med_val_loss = []
 max_val_loss = []
 min_val_loss = []
 
-# 1, 6, 17, 19, 26, 28, 31, 32, 35, 44
+# 1, 34, 44
 
 
-for i in range(29, 46):
-
-    if i == 28:
-        continue
+for i in range(1, 46):
 
     feature_loss = np.load("Loss Rand/" + str(i) + "_feature_loss_2.npy")
 
@@ -129,8 +126,8 @@ for i in range(29, 46):
 # plt.show()
 
 
-plt.scatter(x=range(29, 46), y=loss, label="Training Images")
-plt.scatter(x=range(29, 46), y=val_loss, label="Validation Images")
+plt.scatter(x=range(1, 46), y=loss, label="Training Images")
+plt.scatter(x=range(1, 46), y=val_loss, label="Validation Images")
 
 # plt.plot(range(17, 41), loss)
 # plt.plot(range(17, 41), val_loss)
