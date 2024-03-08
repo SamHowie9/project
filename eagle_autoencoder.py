@@ -20,9 +20,9 @@ plt.switch_backend('agg')
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
-encoding_dim = 44
+encoding_dim = 1
 
 
 
@@ -216,7 +216,7 @@ model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=
 # autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5")
 
 # save the weights
-autoencoder.save_weights(filepath="Weights Rand/" + str(encoding_dim) + "_feature_weights_2.h5", overwrite=True)
+autoencoder.save_weights(filepath="Weights Rand/" + str(encoding_dim) + "_feature_weights_3.h5", overwrite=True)
 
 
 
@@ -226,7 +226,7 @@ autoencoder.save_weights(filepath="Weights Rand/" + str(encoding_dim) + "_featur
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features Rand/" + str(encoding_dim) + "_features_2.npy", extracted_features)
+np.save("Features Rand/" + str(encoding_dim) + "_features_3.npy", extracted_features)
 
 
 
@@ -236,7 +236,7 @@ loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][
 print()
 print(encoding_dim)
 print(loss)
-np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_2.npy", loss)
+np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_3.npy", loss)
 
 
 
