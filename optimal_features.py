@@ -61,11 +61,12 @@ max_val_loss = []
 min_val_loss = []
 
 # 1, 34, 44
+# 9, 19, 20, 26, 34, 35, 45
 
 
 for i in range(1, 46):
 
-    feature_loss = np.load("Loss Rand/" + str(i) + "_feature_loss_2.npy")
+    feature_loss = np.load("Loss Rand/" + str(i) + "_feature_loss_3.npy")
 
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
