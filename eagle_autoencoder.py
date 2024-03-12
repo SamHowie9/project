@@ -20,9 +20,9 @@ plt.switch_backend('agg')
 
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-encoding_dim = 45
+encoding_dim = 9
 
 
 
@@ -153,7 +153,7 @@ input_image = keras.Input(shape=(128, 128, 3))                                  
 
 # layers for the encoder
 x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
-x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 128, 32)
+x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 64, 32)
 x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
 x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
