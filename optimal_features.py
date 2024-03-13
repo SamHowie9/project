@@ -8,7 +8,12 @@ from yellowbrick.cluster import KElbowVisualizer
 
 
 
-encoding_dim = 24
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 500)
+
+
+
+encoding_dim = 25
 
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
 
@@ -66,81 +71,81 @@ min_val_loss = []
 
 for i in range(1, 46):
 
-    feature_loss = np.load("Loss Rand/" + str(i) + "_feature_loss_1.npy")
+    # feature_loss = np.load("Loss Rand/" + str(i) + "_feature_loss_1.npy")
+    #
+    # loss.append(feature_loss[0])
+    # val_loss.append(feature_loss[1])
 
-    loss.append(feature_loss[0])
-    val_loss.append(feature_loss[1])
+    feature_loss_1 = np.load("Loss Rand/" + str(i) + "_feature_loss_1.npy")
+    feature_loss_2 = np.load("Loss Rand/" + str(i) + "_feature_loss_2.npy")
+    feature_loss_3 = np.load("Loss Rand/" + str(i) + "_feature_loss_3.npy")
 
-#     feature_loss_1 = np.load("Loss Rand/" + str(i) + "_feature_loss_1.npy")
-#     feature_loss_2 = np.load("Loss Rand/" + str(i) + "_feature_loss_2.npy")
-#     feature_loss_3 = np.load("Loss Rand/" + str(i) + "_feature_loss_3.npy")
-#
-#     if i == 23 or i == 26 or i == 45:
-#         print(feature_loss_1[0])
-#         print(feature_loss_2[0])
-#         print(feature_loss_3[0])
-#         print()
-#
-#     med_loss.append(np.median((feature_loss_1[0], feature_loss_2[0], feature_loss_3[0])))
-#     max_loss.append(max(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-#     min_loss.append(min(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-#
-#     med_val_loss.append(np.median((feature_loss_1[1], feature_loss_2[1], feature_loss_3[1])))
-#     max_val_loss.append(max(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-#     min_val_loss.append(min(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-#
-#
-# loss_err = []
-# val_loss_err = []
-#
-# for i in range(len(med_loss)):
-#
-#     loss_err.append([(med_loss[i] - min_loss[i]), (max_loss[i] - med_loss[i])])
-#     val_loss_err.append([(med_val_loss[i] - min_val_loss[i]), (max_val_loss[i] - med_val_loss[i])])
-#
-# loss_err = np.array(loss_err).T
-# val_loss_err = np.array(val_loss_err).T
-#
-# print(loss_err)
-# print(val_loss_err)
-#
-# plt.figure(figsize=(10, 8))
-#
-# plt.scatter(x=range(1, 46), y=med_loss, label="Training Images", zorder=10)
-# plt.errorbar(x=range(1, 46), y=med_loss, yerr=loss_err, ls="none", capsize=3, alpha=0.6, zorder=0)
-#
-# plt.scatter(x=range(1, 46), y=med_val_loss, label="Validation Images", zorder=11)
-# plt.errorbar(x=range(1, 46), y=med_val_loss, yerr=val_loss_err, ls="none", capsize=3, alpha=0.6, zorder=1)
-#
-# plt.xlabel("Extracted Features", fontsize=15)
-# plt.ylabel("Loss", fontsize=15)
-#
-# plt.tick_params(labelsize=12)
-#
-# # plt.grid(False)
-#
-#
-#
-# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
-#
-# plt.savefig("Plots/rand_extracted_feat_vs_loss")
-# plt.show()
+    if i == 23 or i == 26 or i == 45:
+        print(feature_loss_1[0])
+        print(feature_loss_2[0])
+        print(feature_loss_3[0])
+        print()
+
+    med_loss.append(np.median((feature_loss_1[0], feature_loss_2[0], feature_loss_3[0])))
+    max_loss.append(max(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
+    min_loss.append(min(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
+
+    med_val_loss.append(np.median((feature_loss_1[1], feature_loss_2[1], feature_loss_3[1])))
+    max_val_loss.append(max(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
+    min_val_loss.append(min(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
 
 
+loss_err = []
+val_loss_err = []
 
-plt.scatter(x=range(1, 46), y=loss, label="Training Images")
-plt.scatter(x=range(1, 46), y=val_loss, label="Validation Images")
+for i in range(len(med_loss)):
 
-# plt.plot(range(17, 41), loss)
-# plt.plot(range(17, 41), val_loss)
+    loss_err.append([(med_loss[i] - min_loss[i]), (max_loss[i] - med_loss[i])])
+    val_loss_err.append([(med_val_loss[i] - min_val_loss[i]), (max_val_loss[i] - med_val_loss[i])])
 
-plt.xlabel("Number of Extracted Features")
-plt.ylabel("Root-Mean-Squared Error")
+loss_err = np.array(loss_err).T
+val_loss_err = np.array(val_loss_err).T
+
+print(loss_err)
+print(val_loss_err)
+
+plt.figure(figsize=(10, 8))
+
+plt.scatter(x=range(1, 46), y=med_loss, label="Training Images", zorder=10)
+plt.errorbar(x=range(1, 46), y=med_loss, yerr=loss_err, ls="none", capsize=3, alpha=0.6, zorder=0)
+
+plt.scatter(x=range(1, 46), y=med_val_loss, label="Validation Images", zorder=11)
+plt.errorbar(x=range(1, 46), y=med_val_loss, yerr=val_loss_err, ls="none", capsize=3, alpha=0.6, zorder=1)
+
+plt.xlabel("Extracted Features", fontsize=15)
+plt.ylabel("Loss", fontsize=15)
+
+plt.tick_params(labelsize=12)
+
+# plt.grid(False)
+
+
 
 plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
 
-# plt.savefig("Plots/extracted_feat_vs_loss")
+plt.savefig("Plots/rand_extracted_feat_vs_loss")
 plt.show()
+
+
+
+# plt.scatter(x=range(1, 46), y=loss, label="Training Images")
+# plt.scatter(x=range(1, 46), y=val_loss, label="Validation Images")
+#
+# # plt.plot(range(17, 41), loss)
+# # plt.plot(range(17, 41), val_loss)
+#
+# plt.xlabel("Number of Extracted Features")
+# plt.ylabel("Root-Mean-Squared Error")
+#
+# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
+#
+# # plt.savefig("Plots/extracted_feat_vs_loss")
+# plt.show()
 
 
 
@@ -224,7 +229,7 @@ for encoding_dim in range(1, 46):
     relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.2).sum()
     relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.2).sum()
 
-    if encoding_dim == 23 or encoding_dim == 26 or encoding_dim == 45:
+    if encoding_dim == 24 or encoding_dim == 25 or encoding_dim == 26:
         print(relevant_features_1)
         print(relevant_features_2)
         print(relevant_features_3)
@@ -305,18 +310,18 @@ plt.show()
 
 
 
-encoding_dim = 26
+encoding_dim = 25
 
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
-
-
-model = AgglomerativeClustering()
-
-visualizer = KElbowVisualizer(model, k=(1, 40), timings=False)
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_2.npy")
 
 
-visualizer.fit(extracted_features)        # Fit the data to the visualizer
-visualizer.show()
+# model = AgglomerativeClustering()
+#
+# visualizer = KElbowVisualizer(model, k=(1, 40), timings=False)
+#
+#
+# visualizer.fit(extracted_features)        # Fit the data to the visualizer
+# visualizer.show()
 
 
 
@@ -470,5 +475,5 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation")
+plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_2")
 plt.show()
