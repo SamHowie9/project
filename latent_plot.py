@@ -75,12 +75,12 @@ def root_mean_squared_error(y_true, y_pred):
 autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 # load the weights
-autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5")
+autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights_2.h5")
 
 
 
 # load the extracted features
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_2.npy")
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 
@@ -174,7 +174,7 @@ for i in range(encoding_dim):
 
 
 
-plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features")
+plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_2")
 
 # print()
 # print(latent_features[0][0].tolist())
