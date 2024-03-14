@@ -13,9 +13,9 @@ pd.set_option('display.width', 500)
 
 
 
-encoding_dim = 25
-
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
+# encoding_dim = 25
+#
+# extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
 
 
 plt.style.use("default")
@@ -128,7 +128,7 @@ plt.tick_params(labelsize=12)
 
 plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
 
-plt.savefig("Plots/rand_extracted_feat_vs_loss")
+plt.savefig("Plots/rand_extracted_feat_vs_loss.eps")
 plt.show()
 
 
@@ -229,7 +229,7 @@ for encoding_dim in range(1, 46):
     relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.2).sum()
     relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.2).sum()
 
-    if encoding_dim == 24 or encoding_dim == 25 or encoding_dim == 26:
+    if encoding_dim == 40:
         print(relevant_features_1)
         print(relevant_features_2)
         print(relevant_features_3)
@@ -279,8 +279,9 @@ plt.ylabel("Number of Meaningful Extracted Features", fontsize=15)
 
 plt.tick_params(labelsize=12)
 
-plt.savefig("Plots/meaningful_extracted_features.eps")
+plt.savefig("Plots/rand_meaningful_extracted_features.eps")
 plt.show()
+
 
 
 plt.figure(figsize=(10, 8))
@@ -293,7 +294,7 @@ plt.ylabel("Ratio of Meaningful to Total Extracted Features", fontsize=15)
 
 plt.tick_params(labelsize=12)
 
-plt.savefig("Plots/meaningful_extracted_features_ratio.eps")
+plt.savefig("Plots/rand_meaningful_extracted_features_ratio.eps")
 plt.show()
 
 

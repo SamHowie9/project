@@ -7,10 +7,10 @@ from sklearn.cluster import AgglomerativeClustering
 from yellowbrick.cluster import KElbowVisualizer
 
 
-encoding_dim = 24
+encoding_dim = 40
 
 
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_2.npy")
 
 
 # load structural and physical properties into dataframes
@@ -187,5 +187,5 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_3")
+plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_2")
 plt.show()
