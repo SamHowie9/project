@@ -7,7 +7,7 @@ from sklearn.cluster import AgglomerativeClustering
 from yellowbrick.cluster import KElbowVisualizer
 
 
-encoding_dim = 40
+encoding_dim = 25
 
 
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_2.npy")
@@ -85,18 +85,24 @@ print(correlation_df)
 # # set the figure size
 # plt.figure(figsize=(12, 16))
 #
-# # sns.set(font_scale = 2)
+# sns.set(font_scale=1.5)
 #
 # # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(structure_correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+# ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Position Angle", "Axis Ratio"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation Coefficient'})
 #
 #
 # plt.yticks(rotation=0)
-# plt.ylabel("Extracted Features", fontsize=15)
+# plt.ylabel("Extracted Features", fontsize=22, labelpad=10)
 # ax.xaxis.tick_top() # x axis on top
 # ax.xaxis.set_label_position('top')
 # ax.tick_params(length=0)
-# ax.figure.axes[-1].yaxis.label.set_size(15)
+#
+# ax.figure.axes[-1].yaxis.label.set_size(22)
+# ax.figure.axes[-1].yaxis.labelpad = 15
+#
+#
+# # colorbar = plt.colorbar(ax)
+# # colorbar.setlabel("Correlation Coefficient", fontsize=22, labelpad=10)
 #
 #
 # def wrap_labels(ax, width, break_long_words=False):
@@ -105,51 +111,14 @@ print(correlation_df)
 #         text = label.get_text()
 #         labels.append(textwrap.fill(text, width=width,
 #                       break_long_words=break_long_words))
-#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
+#     ax.set_xticklabels(labels, rotation=0, fontsize=22)
 #
 # wrap_labels(ax, 10)
 #
 #
 #
-# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_structure_property_correlation")
+# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_structure_property_correlation_2.eps")
 # plt.show()
-
-
-
-
-# # set the figure size
-# plt.figure(figsize=(15, 16))
-#
-# # sns.set(font_scale = 2)
-#
-# # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(physical_correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-#
-#
-# plt.yticks(rotation=0)
-# plt.ylabel("Extracted Features", fontsize=15)
-# ax.xaxis.tick_top() # x axis on top
-# ax.xaxis.set_label_position('top')
-# ax.tick_params(length=0)
-# ax.figure.axes[-1].yaxis.label.set_size(15)
-#
-#
-# def wrap_labels(ax, width, break_long_words=False):
-#     labels = []
-#     for label in ax.get_xticklabels():
-#         text = label.get_text()
-#         labels.append(textwrap.fill(text, width=width,
-#                       break_long_words=break_long_words))
-#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
-#
-# wrap_labels(ax, 10)
-#
-#
-#
-# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_physical_property_correlation")
-# plt.show()
-
-
 
 
 
@@ -157,22 +126,20 @@ print(correlation_df)
 # set the figure size
 plt.figure(figsize=(20, 16))
 
-# sns.set(font_scale = 2)
-
-# ["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"]
+sns.set(font_scale=1.5)
 
 # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Semi - Major Axis", "AB Magnitude", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-
+ax = sns.heatmap(abs(correlation_df[["Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation Coefficient'})
 
 
 plt.yticks(rotation=0)
-plt.ylabel("Extracted Features", fontsize=15)
+plt.ylabel("Extracted Features", fontsize=22)
 ax.xaxis.tick_top() # x axis on top
 ax.xaxis.set_label_position('top')
 ax.tick_params(length=0)
-ax.figure.axes[-1].yaxis.label.set_size(15)
+
+ax.figure.axes[-1].yaxis.label.set_size(22)
+ax.figure.axes[-1].yaxis.labelpad = 15
 
 
 def wrap_labels(ax, width, break_long_words=False):
@@ -181,11 +148,52 @@ def wrap_labels(ax, width, break_long_words=False):
         text = label.get_text()
         labels.append(textwrap.fill(text, width=width,
                       break_long_words=break_long_words))
-    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+    ax.set_xticklabels(labels, rotation=0, fontsize=22)
 
 wrap_labels(ax, 10)
 
 
 
-plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_2")
+plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_physical_property_correlation_2")
 plt.show()
+
+
+
+
+
+
+# # set the figure size
+# plt.figure(figsize=(20, 16))
+#
+# # sns.set(font_scale = 2)
+#
+# # ["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"]
+#
+# # plot a heatmap for the dataframe (with annotations)
+# # ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Semi - Major Axis", "AB Magnitude", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+# ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+#
+#
+#
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=15)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+# ax.figure.axes[-1].yaxis.label.set_size(15)
+#
+#
+# def wrap_labels(ax, width, break_long_words=False):
+#     labels = []
+#     for label in ax.get_xticklabels():
+#         text = label.get_text()
+#         labels.append(textwrap.fill(text, width=width,
+#                       break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
+#
+# wrap_labels(ax, 10)
+#
+#
+#
+# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_2")
+# plt.show()
