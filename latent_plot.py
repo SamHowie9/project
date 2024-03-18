@@ -11,7 +11,7 @@ import cv2
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 40
+encoding_dim = 35
 
 
 # Define keras tensor for the encoder
@@ -75,12 +75,12 @@ def root_mean_squared_error(y_true, y_pred):
 autoencoder.compile(optimizer="adam", loss=root_mean_squared_error)
 
 # load the weights
-autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights_2.h5")
+autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5")
 
 
 
 # load the extracted features
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_2.npy")
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 
@@ -131,7 +131,12 @@ a = [median_features, median_features]
 
 image = decoder.predict(np.array(a))
 
-# fig, axs = plt.subplots(encoding_dim, latent_num, figsize=(10, 20))
+
+
+
+
+
+fig, axs = plt.subplots(encoding_dim, latent_num, figsize=(10, 20))
 
 width = latent_num + 2
 height = encoding_dim + ((encoding_dim - 1) * 0.1) + 2
@@ -174,11 +179,51 @@ for i in range(encoding_dim):
 
 
 
-plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_2")
-
-# print()
-# print(latent_features[0][0].tolist())
-# print(latent_features[0][4].tolist())
+plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_1")
+plt.show()
 
 
+
+
+# width = latent_num + 2
+# height = 3 + ((3 - 1) * 0.1) + 2
+#
+# fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
+#
+# gs = fig.add_gridspec(nrows=3, ncols=latent_num, hspace=0.1, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
+#
+#
+# # fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
+#
+# for index, image in enumerate([21, 23, 3]):
+#
+#
+#     latent_images = decoder.predict(latent_features[image])
+#
+#     for j in range(latent_num):
+#
+#         ax = fig.add_subplot(gs[index, j])
+#
+#         ax.imshow(latent_images[j])
+#
+#         ax.set_yticklabels([])
+#         ax.set_xticklabels([])
+#
+#         ax.set_yticks([])
+#         ax.set_xticks([])
+#
+#
+#         # ax.get_yaxis().set_visible(False)
+#         # ax.get_xaxis().set_visible(False)
+#
+#
+#         if j == 0:
+#             ax.set_ylabel(image, fontsize=50, rotation=0, labelpad=40)
+#
+#         # axs[i][j].imshow(latent_images[j], aspect="equal")
+#         # axs[i][j].get_xaxis().set_visible(False)
+#         # axs[i][j].get_yaxis().set_visible(False)
+#
+#
+# plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_2_sersic.eps")
 # plt.show()

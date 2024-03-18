@@ -165,7 +165,7 @@ max_relevant_feature_ratio = []
 min_relevant_feature_ratio = []
 
 
-for encoding_dim in range(1, 46):
+for encoding_dim in range(1, 44):
 
     extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
@@ -200,12 +200,31 @@ for encoding_dim in range(1, 46):
 
             # calculate the correlation between that extracted feature and that property
             # correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
-            correlation = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
-            correlation_list.append(correlation)
+            # correlation = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
+            # correlation_list.append(correlation)
 
-            correlation_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
-            correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
-            correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
+            correlation_1_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
+            correlation_1_2 = np.corrcoef(extracted_features_switch_1[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+            correlation_1_3 = np.corrcoef(abs(extracted_features_switch_1[feature]), all_properties.iloc[:, gal_property])[0][1]
+            correlation_1_4 = np.corrcoef(abs(extracted_features_switch_1[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+            correlation_1 = max(abs(correlation_1_1), abs(correlation_1_2), abs(correlation_1_3), abs(correlation_1_4))
+
+            correlation_2_1 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
+            correlation_2_2 = np.corrcoef(extracted_features_switch_2[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+            correlation_2_3 = np.corrcoef(abs(extracted_features_switch_2[feature]), all_properties.iloc[:, gal_property])[0][1]
+            correlation_2_4 = np.corrcoef(abs(extracted_features_switch_2[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+            correlation_2 = max(abs(correlation_2_1), abs(correlation_2_2), abs(correlation_2_3), abs(correlation_2_4))
+
+            correlation_3_1 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
+            correlation_3_2 = np.corrcoef(extracted_features_switch_3[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+            correlation_3_3 = np.corrcoef(abs(extracted_features_switch_3[feature]), all_properties.iloc[:, gal_property])[0][1]
+            correlation_3_4 = np.corrcoef(abs(extracted_features_switch_3[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+            correlation_3 = max(abs(correlation_3_1), abs(correlation_3_2), abs(correlation_3_3), abs(correlation_3_4))
+
+
+            # correlation_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
+            # correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
+            # correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
 
             correlation_list_1.append(correlation_1)
             correlation_list_2.append(correlation_2)
@@ -222,18 +241,19 @@ for encoding_dim in range(1, 46):
         correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
 
+
     # find the number of features at least slightly correlating with a property
-    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.2).sum()
+    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.3).sum()
 
-    relevant_features_1 = (abs(correlation_df_1).max(axis=1) > 0.2).sum()
-    relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.2).sum()
-    relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.2).sum()
+    relevant_features_1 = (abs(correlation_df_1).max(axis=1) > 0.3).sum()
+    relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.3).sum()
+    relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.3).sum()
 
-    if encoding_dim == 40:
-        print(relevant_features_1)
-        print(relevant_features_2)
-        print(relevant_features_3)
-        print()
+    # if encoding_dim == 40:
+    #     print(relevant_features_1)
+    #     print(relevant_features_2)
+    #     print(relevant_features_3)
+    #     print()
 
     relevant_feature_number.append(relevant_features)
     relevant_feature_ratio.append(relevant_features/encoding_dim)
@@ -267,8 +287,8 @@ ratio_err = np.array(ratio_err).T
 
 plt.figure(figsize=(10, 8))
 
-plt.scatter(x=range(1, 46), y=med_relevant_feature_number)
-plt.errorbar(x=range(1, 46), y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
+plt.scatter(x=range(1, 44), y=med_relevant_feature_number)
+plt.errorbar(x=range(1, 44), y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
 
 # plt.scatter(x=range(1, 46), y=relevant_feature_number)
 
@@ -279,23 +299,23 @@ plt.ylabel("Number of Meaningful Extracted Features", fontsize=15)
 
 plt.tick_params(labelsize=12)
 
-plt.savefig("Plots/rand_meaningful_extracted_features.eps")
+plt.savefig("Plots/rand_meaningful_extracted_features_0-3_abs")
 plt.show()
 
 
 
-plt.figure(figsize=(10, 8))
-
-plt.scatter(x=range(1, 46), y=med_relevant_feature_ratio)
-plt.errorbar(x=range(1, 46), y=med_relevant_feature_ratio, yerr=ratio_err, ls="none", capsize=3, alpha=0.6)
-
-plt.xlabel("Total Number of Extracted Features", fontsize=15)
-plt.ylabel("Ratio of Meaningful to Total Extracted Features", fontsize=15)
-
-plt.tick_params(labelsize=12)
-
-plt.savefig("Plots/rand_meaningful_extracted_features_ratio.eps")
-plt.show()
+# plt.figure(figsize=(10, 8))
+#
+# plt.scatter(x=range(1, 46), y=med_relevant_feature_ratio)
+# plt.errorbar(x=range(1, 46), y=med_relevant_feature_ratio, yerr=ratio_err, ls="none", capsize=3, alpha=0.6)
+#
+# plt.xlabel("Total Number of Extracted Features", fontsize=15)
+# plt.ylabel("Ratio of Meaningful to Total Extracted Features", fontsize=15)
+#
+# plt.tick_params(labelsize=12)
+#
+# plt.savefig("Plots/rand_meaningful_extracted_features_ratio_abs")
+# plt.show()
 
 
 
