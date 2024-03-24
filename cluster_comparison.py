@@ -216,8 +216,8 @@ for i, cluster in enumerate(order):
 
     count = 0
 
-    for j in range(0, 3):
-        for k in range(0, 3):
+    for j in range(0, 4):
+        for k in range(0, 4):
 
             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
 
