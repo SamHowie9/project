@@ -439,7 +439,7 @@ order = [4, 6, 0, 2, 1, 3, 9, 8, 7, 5]
 for i, cluster in enumerate(order):
     print(i, cluster)
 
-    galaxy_ids = np.load("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster))
+    galaxy_ids = np.load("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster) + ".npy")
 
     fig, axs = plt.subplots(5, 5, figsize=(20, 20))
 
