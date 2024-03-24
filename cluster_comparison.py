@@ -212,12 +212,12 @@ for i, cluster in enumerate(order):
 
     galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
 
-    fig, axs = plt.subplots(4, 4, figsize=(20, 20))
+    fig, axs = plt.subplots(5, 5, figsize=(20, 20))
 
     count = 0
 
-    for j in range(0, 4):
-        for k in range(0, 4):
+    for j in range(0, 5):
+        for k in range(0, 5):
 
             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
 
