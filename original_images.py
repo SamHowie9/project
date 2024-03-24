@@ -17,6 +17,18 @@ encoding_dim = 28
 n_clusters = 10
 
 
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv", comment="#")
+
+# account for hte validation data and remove final 200 elements
+structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+physical_properties.drop(physical_properties.tail(200).index, inplace=True)
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+
 
 
 # # load the extracted features
@@ -450,10 +462,12 @@ for i, cluster in enumerate(order):
 
             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
 
+            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"])
+
             axs[j, k].imshow(image)
             axs[j, k].get_xaxis().set_visible(False)
             axs[j, k].get_yaxis().set_visible(False)
-            axs[k, k].set_title(galaxy_ids[count])
+            axs[j, k].set_title(galaxy_ids[count], sersic)
 
             count += 1
 
