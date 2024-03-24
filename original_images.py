@@ -11,10 +11,10 @@ import cv2
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 26
+encoding_dim = 28
 
 # set the number of clusters
-n_clusters = 16
+n_clusters = 10
 
 
 
@@ -457,4 +457,4 @@ for i, cluster in enumerate(order):
 
             count += 1
 
-    plt.savefig("Plots/" + str(encoding_dim) + "_cluster_" + str(i) + "_" + str(cluster))
+    plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(i) + "_" + str(cluster))
