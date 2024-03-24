@@ -462,12 +462,13 @@ for i, cluster in enumerate(order):
 
             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy_ids[count]) + ".png")
 
-            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist())
+            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist()[0])
+            stellar_mass = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["MassType_Star"].tolist()[0])
 
             axs[j, k].imshow(image)
             axs[j, k].get_xaxis().set_visible(False)
             axs[j, k].get_yaxis().set_visible(False)
-            axs[j, k].set_title((str(galaxy_ids[count]) + " " + sersic))
+            axs[j, k].set_title((sersic, stellar_mass))
 
             count += 1
 
