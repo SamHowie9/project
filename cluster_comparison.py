@@ -212,23 +212,25 @@ for i, cluster in enumerate(order):
 
     galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
 
-    fig, axs = plt.subplots(5, 5, figsize=(20, 20))
+    np.save("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster), np.array(galaxy_ids[:25]))
 
-    count = 0
-
-    for j in range(0, 5):
-        for k in range(0, 5):
-
-            image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
-
-            axs[j, k].imshow(image)
-            axs[j, k].get_xaxis().set_visible(False)
-            axs[j, k].get_yaxis().set_visible(False)
-            axs[k, k].set_title(galaxy_ids[count])
-
-            count += 1
-
-    plt.savefig("Plots/" + str(encoding_dim) + "_cluster_" + str(i), + "_" + str(cluster))
+    # fig, axs = plt.subplots(5, 5, figsize=(20, 20))
+    #
+    # count = 0
+    #
+    # for j in range(0, 5):
+    #     for k in range(0, 5):
+    #
+    #         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
+    #
+    #         axs[j, k].imshow(image)
+    #         axs[j, k].get_xaxis().set_visible(False)
+    #         axs[j, k].get_yaxis().set_visible(False)
+    #         axs[k, k].set_title(galaxy_ids[count])
+    #
+    #         count += 1
+    #
+    # plt.savefig("Plots/" + str(encoding_dim) + "_cluster_" + str(i), + "_" + str(cluster))
 
 
 

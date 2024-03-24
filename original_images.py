@@ -432,3 +432,29 @@ fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 #
 # plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_stripped")
 # plt.show()
+
+
+order = [4, 6, 0, 2, 1, 3, 9, 8, 7, 5]
+
+for i, cluster in enumerate(order):
+    print(i, cluster)
+
+    galaxy_ids = np.load("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster))
+
+    fig, axs = plt.subplots(5, 5, figsize=(20, 20))
+
+    count = 0
+
+    for j in range(0, 5):
+        for k in range(0, 5):
+
+            image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
+
+            axs[j, k].imshow(image)
+            axs[j, k].get_xaxis().set_visible(False)
+            axs[j, k].get_yaxis().set_visible(False)
+            axs[k, k].set_title(galaxy_ids[count])
+
+            count += 1
+
+    plt.savefig("Plots/" + str(encoding_dim) + "_cluster_" + str(i) + "_" + str(cluster))
