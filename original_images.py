@@ -462,7 +462,7 @@ for i, cluster in enumerate(order):
 
             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
 
-            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"])
+            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist())
 
             axs[j, k].imshow(image)
             axs[j, k].get_xaxis().set_visible(False)
