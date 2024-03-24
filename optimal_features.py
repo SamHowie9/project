@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
+from scipy.optimize import curve_fit
 import textwrap
 from sklearn.cluster import AgglomerativeClustering
 from yellowbrick.cluster import KElbowVisualizer
@@ -19,6 +20,7 @@ pd.set_option('display.width', 500)
 
 
 plt.style.use("default")
+sns.set_style("ticks")
 
 
 df1 = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
@@ -109,26 +111,29 @@ val_loss_err = np.array(val_loss_err).T
 print(loss_err)
 print(val_loss_err)
 
-plt.figure(figsize=(10, 8))
+plt.figure(figsize=(12, 8))
 
-plt.scatter(x=range(1, 46), y=med_loss, label="Training Images", zorder=10)
-plt.errorbar(x=range(1, 46), y=med_loss, yerr=loss_err, ls="none", capsize=3, alpha=0.6, zorder=0)
 
-plt.scatter(x=range(1, 46), y=med_val_loss, label="Validation Images", zorder=11)
-plt.errorbar(x=range(1, 46), y=med_val_loss, yerr=val_loss_err, ls="none", capsize=3, alpha=0.6, zorder=1)
 
-plt.xlabel("Extracted Features", fontsize=15)
-plt.ylabel("Loss", fontsize=15)
 
-plt.tick_params(labelsize=12)
+plt.scatter(x=range(1, 46), y=np.exp(med_loss), label="Training Images", zorder=10)
+# plt.errorbar(x=range(1, 46), y=med_loss, yerr=loss_err, ls="none", capsize=3, alpha=0.6, zorder=0)
+
+# plt.scatter(x=range(1, 46), y=med_val_loss, label="Validation Images", zorder=11)
+# plt.errorbar(x=range(1, 46), y=med_val_loss, yerr=val_loss_err, ls="none", capsize=3, alpha=0.6, zorder=1)
+
+plt.xlabel("Extracted Features", fontsize=20)
+plt.ylabel("Loss", fontsize=20)
+
+plt.tick_params(labelsize=20)
 
 # plt.grid(False)
 
 
 
-plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
+plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
 
-plt.savefig("Plots/rand_extracted_feat_vs_loss.eps")
+plt.savefig("Plots/rand_extracted_feat_vs_loss", bbox_inches='tight')
 plt.show()
 
 
@@ -165,7 +170,7 @@ max_relevant_feature_ratio = []
 min_relevant_feature_ratio = []
 
 
-for encoding_dim in range(1, 44):
+for encoding_dim in range(1, 46):
 
     extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
@@ -285,21 +290,71 @@ ratio_err = np.array(ratio_err).T
 
 
 
-plt.figure(figsize=(10, 8))
+# plt.figure(figsize=(10, 8))
 
-plt.scatter(x=range(1, 44), y=med_relevant_feature_number)
-plt.errorbar(x=range(1, 44), y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
+# x_values = range(1, 46)
+
+# plt.scatter(x=x_values, y=med_relevant_feature_number)
+# plt.errorbar(x=x_values, y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
+
+# sns.lmplot(x=list(range(1, 46))*3, y=(min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number))
+
+df = pd.DataFrame()
+df["Extracted Features"] = list(range(1, 46))*3
+df["med_relevant_feature_number"] = min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number
+print(df)
+
+# sns.set_style("ticks")
+
+# plt.figure(figsize=(10, 8))
+
+with sns.axes_style("ticks"):
+    sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
+
+# with sns.axes_style("ticks"):
+#     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", order=2, ci=0, height=8, aspect=1.25, line_kws={"color": "black"}, scatter_kws={"s": 0})
+
+
+sns.despine(left=False, bottom=False, top=False, right=False)
+
+plt.scatter(x=range(1, 46), y=med_relevant_feature_number)
+plt.errorbar(x=range(1, 46), y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
+
+
+plt.xlabel("Total Extracted Features", fontsize=20)
+plt.ylabel("Meaningful Extracted Features", fontsize=20)
+
+plt.tick_params(labelsize=20)
+
+
+# sns.lmplot(data=all_properties, x=list(range(1, 46)), y=med_relevant_feature_number)
+
+
+# fit = np.polyfit(x=np.log(x_values), y=med_relevant_feature_number, deg=1)
+#
+# y_fit = fit[0] * np.log(x_values) + fit[1]
+#
+# plt.plot(x_values, y_fit, c="black")
+
+
+
+# linear = np.polyfit(x=x_values, y=np.log(med_relevant_feature_number), deg=1)
+# quadratic = np.polyfit(x=x_values, y=np.log(med_relevant_feature_number), deg=2)
+# cubic = np.polyfit(x=x_values, y=np.log(med_relevant_feature_number), deg=3)
+#
+# v1 = np.polyval(linear, x_values)
+# v2 = np.polyval(quadratic, x_values)
+# v3 = np.polyval(cubic, x_values)
+#
+# plt.plot(x_values, v1, c="black")
+# plt.plot(x_values, v2, c="yellow")
+# plt.plot(x_values, v3, c="red")
+
+
 
 # plt.scatter(x=range(1, 46), y=relevant_feature_number)
 
-
-
-plt.xlabel("Total Number of Extracted Features", fontsize=15)
-plt.ylabel("Number of Meaningful Extracted Features", fontsize=15)
-
-plt.tick_params(labelsize=12)
-
-plt.savefig("Plots/rand_meaningful_extracted_features_0-3_abs")
+plt.savefig("Plots/rand_meaningful_extracted_features_0-3_abs", bbox_inches='tight')
 plt.show()
 
 

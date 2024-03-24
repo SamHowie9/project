@@ -8,10 +8,23 @@ import os
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import cv2
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.neighbors import NearestCentroid
+
+
+pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
+pd.set_option('display.width', 1000)
+
+
 
 
 # set the encoding dimension (number of extracted features)
 encoding_dim = 28
+
+# set the number of clusters
+n_clusters = 10
+
 
 
 # Define keras tensor for the encoder
@@ -79,151 +92,80 @@ autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights
 
 
 
+
+
 # load the extracted features
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 
 
-# keras.utils.plot_model(model=autoencoder, to_file="Plots/autoencoder_layers.png")
+
+
+
+extracted_features_switch = extracted_features.T
+
+
+# chose which features to use for clustering
+meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]  # 24
+
+chosen_features = []
+
+for feature in meaningful_features:
+    chosen_features.append(list(extracted_features_switch[feature]))
+
+chosen_features = np.array(chosen_features).T
+
+
+# chosen_features = extracted_features
+
+
+# perform hierarchical ward clustering
+hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
+
+# get hierarchical clusters
+clusters = hierarchical.fit_predict(chosen_features)
+
+# get hierarchical centers
+clf = NearestCentroid()
+clf.fit(chosen_features, clusters)
+centers = clf.centroids_
 
 
 
 
-median_features = []
-for i in range(encoding_dim):
-    median_features.append(np.median(extracted_features_switch[i]))
-# median_features = np.array(median_features)
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv", comment="#")
 
+# account for hte validation data and remove final 200 elements
+structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 
-# number of latent images per feature
-latent_num = 15
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
-# prepare the latent images for every feature
-latent_features = []
-
-# loop through every feature
-for i in range(encoding_dim):
-
-    latent_images = []
-
-    # sample equally spaced values of that feature
-    feature_values = np.linspace(min(extracted_features_switch[i]), max(extracted_features_switch[i]), latent_num)
-
-    # loop through each image for that feature
-    for j in range(latent_num):
-
-        # create a list of the features which make up each image for that feature
-        latent_image_features = median_features[:]
-        latent_image_features[i] = feature_values[j]
-        latent_images.append(latent_image_features)
-
-    latent_features.append(latent_images)
-
-latent_features = np.array(latent_features)
+all_properties["Cluster"] = clusters
 
 
 
 
+med_extracted_feature = pd.DataFrame()
 
 
-a = [median_features, median_features]
+print(extracted_features[0].shape)
 
-image = decoder.predict(np.array(a))
+for i in range(0, n_clusters):
 
+    cluster_indices = all_properties.index[all_properties["Cluster"] == i].tolist()
 
+    med_features = []
 
+     for feature in range(encoding_dim):
 
+         for index in cluster_indices:
 
-
-fig, axs = plt.subplots(encoding_dim, latent_num, figsize=(10, 20))
-
-width = latent_num + 2
-height = encoding_dim + ((encoding_dim - 1) * 0.1) + 2
-
-fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
-
-gs = fig.add_gridspec(nrows=encoding_dim, ncols=latent_num, hspace=0.1, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
-
-
-# fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
-
-for i in range(encoding_dim):
-
-    latent_images = decoder.predict(latent_features[i])
-
-    for j in range(latent_num):
-
-        ax = fig.add_subplot(gs[i, j])
-
-        ax.imshow(latent_images[j])
-
-        ax.set_yticklabels([])
-        ax.set_xticklabels([])
-
-        ax.set_yticks([])
-        ax.set_xticks([])
-
-
-        # ax.get_yaxis().set_visible(False)
-        # ax.get_xaxis().set_visible(False)
-
-
-        if j == 0:
-            ax.set_ylabel(i, fontsize=50, rotation=0, labelpad=40)
-
-        # axs[i][j].imshow(latent_images[j], aspect="equal")
-        # axs[i][j].get_xaxis().set_visible(False)
-        # axs[i][j].get_yaxis().set_visible(False)
+             feature = extracted_features[index][feature]
 
 
 
-
-plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3")
-# plt.show()
-
-
-
-
-# width = latent_num + 2
-# height = 3 + ((3 - 1) * 0.1) + 2
-#
-# fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
-#
-# gs = fig.add_gridspec(nrows=3, ncols=latent_num, hspace=0.1, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
-#
-#
-# # fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
-#
-# for index, image in enumerate([21, 23, 3]):
-#
-#
-#     latent_images = decoder.predict(latent_features[image])
-#
-#     for j in range(latent_num):
-#
-#         ax = fig.add_subplot(gs[index, j])
-#
-#         ax.imshow(latent_images[j])
-#
-#         ax.set_yticklabels([])
-#         ax.set_xticklabels([])
-#
-#         ax.set_yticks([])
-#         ax.set_xticks([])
-#
-#
-#         # ax.get_yaxis().set_visible(False)
-#         # ax.get_xaxis().set_visible(False)
-#
-#
-#         if j == 0:
-#             ax.set_ylabel(image, fontsize=50, rotation=0, labelpad=40)
-#
-#         # axs[i][j].imshow(latent_images[j], aspect="equal")
-#         # axs[i][j].get_xaxis().set_visible(False)
-#         # axs[i][j].get_yaxis().set_visible(False)
-#
-#
-# plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_2_sersic.eps")
-# plt.show()

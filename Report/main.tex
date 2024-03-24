@@ -35,7 +35,7 @@
 \makeatletter
 \patchcmd{\frontmatter@RRAP@format}{(}{}{}{}
 \patchcmd{\frontmatter@RRAP@format}{)}{}{}{}
-\renewcommand\Dated@name{}
+% \renewcommand\Dated@name{}
 \makeatother
 
 \usepackage{fancyhdr}
@@ -296,6 +296,10 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
 
         To make these images more representative of observed galaxy images, the effects of dust have been taken into account utilizing the SKIRT code \cite{trayford}.
 
+        Gravitational softening (angular resolution) ******
+
+        how many images
+
         \vspace{5mm}
         ************************************
         
@@ -404,7 +408,7 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
     
     In this project, I use an unsupervised learning approach which requires the model to train on an unlabelled dataset. This kind of approach involves extracting representative features from data (i.e. galaxy images in our case) and identifying a pattern that can help grouping samples in the feature space.
 
-    For feature extraction, I have developed an autoencoder. An autoencoder is essentially the combination of two models, an encoder and a decoder. The encoder takes the data, in our case, images of galaxies, and breaks each down into a one-dimensional latent representation. The decoder does the opposite, it builds back up from that one-dimensional representation to form a reconstruction of the original image. The middle layer of the autoencoder contains the latent representation (features) of images. Each image can then be described by a set of latent features
+    For feature extraction, I have developed an autoencoder. An autoencoder is essentially the combination of two models, an encoder and a decoder. The encoder takes the data, in our case, images of galaxies, and breaks each down into a one-dimensional latent representation. The decoder does the opposite, it builds back up from that one-dimensional representation to form a reconstruction of the original image. The middle layer of the autoencoder contains the latent representation (extracted features) of images. Each image can then be described by a set of latent features
 
     The performance of an autoencoder is assessed based on the similarity between the model's reconstructions and the original images. Accurate reconstructions imply that the model has extracted accurate representations of the original images.
 
@@ -423,7 +427,7 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
     \subsection{Feature Extraction}
     \label{Feature Extraction}
 
-        As discussed in Section \ref{Dataset}, I am transforming 3-band, 128$\times$128 images down to a one-dimensional latent representation of size 
+        As discussed in Section \ref{Dataset}, I am transforming 3-band, 128$\times$128 images (giving an image shape of 128$\times$128$\times$3) down to a one-dimensional latent representation of size 
         
         \vspace{5mm}
         *******************
@@ -431,106 +435,8 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
         *******************
         \vspace{5mm}
         
-        . To do this, I will be using the layers shown in Figure \ref{network_layers}  to gradually reduce the dimensionality from 128$\times$128$\times$3 down to 32. Gradual dimensionality reduction is very important as it allows the model to pick out more accurate and relevant features \cite{dnn_feature_extraction}.
-        
-        \vspace{5mm}
+        . To do this, I will be using the layers shown in Figure \ref{autoencoder_layers} to gradually reduce the dimensionality from 128$\times$128$\times$3 down to 32. Gradual dimensionality reduction is very important as it allows the model to pick out more intricate patterns leading to more scientifically meaningful extracted features \cite{dnn_feature_extraction}.
 
-        % \begin{tabular}{|c c c c c c|}
-
-        %     \hline
-            
-        %     Type & Output Shape & Filters & Kernal Size & Stride Size & Activation Function  \\
-
-        %     \hline\hline
-            
-        %     Convolutional Layer & 128$\times$128$\times$64 & 64 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Convolutional Layer & 64$\times$64$\times$32 & 32 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Convolutional Layer & 32$\times$32$\times$16 & 16 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Convolutional Layer & 16$\times$16$\times$8 & 8 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Convolutional Layer & 8$\times$8$\times$4 & 4 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Flatten & 256 & & & & \\
-
-        %     Dense & ******* & & & & \\
-
-        %     \hline\hline
-
-        %     Dense & 64 & & & & \\
-
-        %     Dense & 256 & & & & \\
-
-        %     Reshape & 8$\times$8$\times$4 & & & & \\
-
-        %     Transposed \\ Convolutional Layer & 16$\times$16$\times$4 & 4 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Transposed \\ Convolutional Layer & 32$\times$32$\times$8 & 8 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Transposed \\ Convolutional Layer & 64$\times$64$\times$16 & 16 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Transposed \\ Convolutional Layer & 128$\times$128$\times$32 & 4 & 3$\times$3 & 2$\times$2 & ReLu \\
-
-        %     Transposed \\ Convolutional Layer & 128$\times$128$\times$3 & 3 & 3$\times$3 & 1$\times$1 & Sigmoid \\
-            
-        % \end{tabular}
-
-
-        \begin{table}[H]
-            \centering
-            % \begin{tabular}{|p{0.2\linewidth} p{0.2\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.1\linewidth} p{0.15\linewidth}|}
-
-            \begin{tabular}{|c c c c c|}
-
-
-                \hline
-                
-                Layer Type & Output Shape & Filters & Stride Size & Activation Function  \\
-    
-                \hline
-                
-                Convolutional & 128$\times$128$\times$64 & 64 & 2$\times$2 & ReLu \\
-    
-                Convolutional & 64$\times$64$\times$32 & 32 & 2$\times$2 & ReLu \\
-    
-                Convolutional & 32$\times$32$\times$16 & 16 & 2$\times$2 & ReLu \\
-    
-                Convolutional & 16$\times$16$\times$8 & 8 & 2$\times$2 & ReLu \\
-    
-                Convolutional & 8$\times$8$\times$4 & 4 & 2$\times$2 & ReLu \\
-    
-                Flatten & 256 & & & \\
-
-                Dense & 64 & & & \\
-                
-                Dense & ******* & & & \\
-    
-                \hline
-    
-                Dense & 64 & & & \\
-    
-                Dense & 256 & & & \\
-    
-                Reshape & 8$\times$8$\times$4 & & & \\
-    
-                Transposed Convolutional & 16$\times$16$\times$4 & 4 & 2$\times$2 & ReLu \\
-    
-                Transposed Convolutional & 32$\times$32$\times$8 & 8 & 2$\times$2 & ReLu \\
-    
-                Transposed Convolutional & 64$\times$64$\times$16 & 16 & 2$\times$2 & ReLu \\
-    
-                Transposed Convolutional & 128$\times$128$\times$32 & 4 & 2$\times$2 & ReLu \\
-    
-                Transposed Convolutional & 128$\times$128$\times$3 & 3 & 1$\times$1 & Sigmoid \\
-
-                \hline
-
-            \end{tabular}
-            \caption{Description of each of the layers of the autoencoder. The top half is the encoder and the bottom half is the decoder. All convolution and transposed convolution layers have a kernel size of 3$\times$3}
-            \label{autoencoder_layers}
-        \end{table}
 
         \begin{table}[H]
             \centering
@@ -538,43 +444,43 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
 
             \begin{tabular}{c c c c c}
                 
-                Layer Type & Output Shape & Filters & Stride Size & Activation Function  \\
+                Layer Type & Output Shape & Stride Size & Activation Function  \\
     
-                \hline
+                \hline\hline
                 
-                Convolutional & 128$\times$128$\times$64 & 64 & 2$\times$2 & ReLu \\
+                Convolutional & 128$\times$128$\times$64 & 2$\times$2 & ReLu \\
     
-                Convolutional & 64$\times$64$\times$32 & 32 & 2$\times$2 & ReLu \\
+                Convolutional & 64$\times$64$\times$32 & 2$\times$2 & ReLu \\
     
-                Convolutional & 32$\times$32$\times$16 & 16 & 2$\times$2 & ReLu \\
+                Convolutional & 32$\times$32$\times$16 & 2$\times$2 & ReLu \\
     
-                Convolutional & 16$\times$16$\times$8 & 8 & 2$\times$2 & ReLu \\
+                Convolutional & 16$\times$16$\times$8 & 2$\times$2 & ReLu \\
     
-                Convolutional & 8$\times$8$\times$4 & 4 & 2$\times$2 & ReLu \\
+                Convolutional & 8$\times$8$\times$4 & 2$\times$2 & ReLu \\
     
-                Flatten & 256 & & & \\
+                Flatten & 256 & & \\
 
-                Dense & 64 & & & \\
+                Dense & 64 & & \\
                 
-                Dense & ******* & & & \\
+                Dense & ******* & & \\
     
                 \hline
     
-                Dense & 64 & & & \\
+                Dense & 64 & & \\
     
-                Dense & 256 & & & \\
+                Dense & 256 & & \\
     
-                Reshape & 8$\times$8$\times$4 & & & \\
+                Reshape & 8$\times$8$\times$4 & & \\
     
-                Transposed Convolutional & 16$\times$16$\times$4 & 4 & 2$\times$2 & ReLu \\
+                Transposed Convolutional & 16$\times$16$\times$4 & 2$\times$2 & ReLu \\
     
-                Transposed Convolutional & 32$\times$32$\times$8 & 8 & 2$\times$2 & ReLu \\
+                Transposed Convolutional & 32$\times$32$\times$8 & 2$\times$2 & ReLu \\
     
-                Transposed Convolutional & 64$\times$64$\times$16 & 16 & 2$\times$2 & ReLu \\
+                Transposed Convolutional & 64$\times$64$\times$16 & 2$\times$2 & ReLu \\
     
-                Transposed Convolutional & 128$\times$128$\times$32 & 4 & 2$\times$2 & ReLu \\
+                Transposed Convolutional & 128$\times$128$\times$32 & 2$\times$2 & ReLu \\
     
-                Transposed Convolutional & 128$\times$128$\times$3 & 3 & 1$\times$1 & Sigmoid \\
+                Transposed Convolutional & 128$\times$128$\times$3 & 1$\times$1 & Sigmoid \\
 
 
             \end{tabular}
@@ -633,12 +539,12 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
 
         One key benefit of HC is the ability to create uneven-sized clusters. Other algorithms, like the more common k-means algorithm for example, create much more even-sized clusters and this indicates an underlying assumption about the structure of the data \cite{hc_clustering_benefit}. Given the key aim of this unsupervised learning approach is to remove bias, HC is a ***************************8
     
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=1\textwidth]{Images/hierarcial_clustering_dendrogram.eps}
-            \caption{Schematic diagram representing the tree-like structure of hierarchical clustering where the vertical lines represent the various clusters and the horizontal lines represent the points at which these clusters come together. The horizontal blue lines represent various cutoff points, splitting our galaxy images into 4, 7, 12, 14 and 22 groups. The y-axis represents the dissimilarity of the images within each cluster.}
-            \label{Dendrogram}
-        \end{figure}
+        % \begin{figure}[H]
+        %     \centering
+        %     \includegraphics[width=1\textwidth]{Images/hierarcial_clustering_dendrogram.eps}
+        %     \caption{Schematic diagram representing the tree-like structure of hierarchical clustering where the vertical lines represent the various clusters and the horizontal lines represent the points at which these clusters come together. The horizontal blue lines represent various cutoff points, splitting our galaxy images into 4, 7, 12, 14 and 22 groups. The y-axis represents the dissimilarity of the images within each cluster.}
+        %     \label{Dendrogram}
+        % \end{figure}
         
         % In Figure \ref{Dendrogram}, we can see how hierarchical clustering is working for our images. Because we have so many in our dataset, I have cut this diagram off to show 6 layers, showing 64 clusters. The numbers across the x-axis represent the number of images in each of those 64 clusters. The y-axis represents the dissimilarity of the images, the lower the value, the closer in our 32-dimensional space, and therefore more similar the images within that cluster are. 
         
@@ -657,31 +563,46 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
     
     To find the optimal number of extracted features, we must strike a balance between extracting enough features to produce accurate reconstructions while ensuring that they are astronomically and scientifically meaningful.
 
-    \begin{figure}[H]
-        \centering
-        \begin{subfigure}[b]{0.49\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{Images/rand_extracted_feat_vs_loss.eps}
-            \caption{}
-            \label{extracted_feature_loss}
-        \end{subfigure}
-        % \hfill
-        \begin{subfigure}[b]{0.49\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{Images/rand_meaningful_extracted_features.eps}
-            \caption{}
-            \label{meaningful_extracted_features_ratio}
-        \end{subfigure}
-        % \hfill
-        \caption{\ref{extracted_feature_loss} shows the loss of reconstructions (root-mean-squared loss between the original images and their reconstructions) against the number of extracted features. This is plotted for both the training data and validation data (a subset of the dataaset (200 images) not used to train the model). \ref{meaningful_extracted_features_ratio} shows the ratio of meaningful to total number of extracted features against the total number of extracted features. I have defined a meaningful extracted feature as a feature with a correlation coefficienct $\rho \geq 0.2$ with at least one of the galaxy properties mentioned in sections \ref{structual_measurements} and \ref{physical_propeties}).}
-        \label{optimal_exracted_features}
-    \end{figure}
+%    \begin{figure}[H]
+%        \centering
+%        \begin{subfigure}[b]{0.48\textwidth}
+%            \centering
+%            \includegraphics[width=\textwidth]{Images/rand_extracted_feat_vs_loss.eps}
+%            \caption{}
+%            \label{extracted_feature_loss}
+%        \end{subfigure}
+%        % \hfill
+%        \begin{subfigure}[b]{0.48\textwidth}
+%            \centering
+%            \includegraphics[width=\textwidth]{Images/rand_meaningful_extracted_features_0-3_abs.eps}
+%            \caption{}
+%            \label{meaningful_extracted_features}
+%        \end{subfigure}
+%        \caption{\ref{extracted_feature_loss} shows the loss of reconstructions (root-mean-squared loss between the original images and their reconstructions) against the number of extracted features. This is plotted for both the training data and validation data (a subset of the dataaset (200 images) not used to train the model). \ref{meaningful_extracted_features} shows the number of meaningful extracted features against the total number of extracted features. I have defined a meaningful extracted feature as a feature with a correlation coefficient $\rho \geq 0.2$ with at least one of the galaxy properties discussed in sections \ref{structual_measurements} and \ref{physical_propeties}). Error bars are obtained by training the model 3 times for each extracted feature. The points represent the median value of the 3 runs.}
+%        \label{optimal_exracted_features}
+%    \end{figure}
 
-    Figure \ref{extracted_feature_loss} shows that the more extracted features we have, the more accurate our model is. This is expected as more extracted features means the decoder has more information about each image so should be able to form more accurate reconstructions.
 
-    Meanwhile, \ref{meaningful_extracted_features_ratio} shows that as more features are extracted, the proportion of meaningful extracted features decreases. This means that for high numbers of extracted features, the majority aren't related to any structural or physical galaxy properties. Given the galaxies will be categorised by their extracted features (see section \ref{Categorising Galaxies}) and we want the model to categorise the galaxies based on their morphology, we have to ensure that the majority of the extracted features are scientifically meaningful.
+    % \begin{figure}[H]
+    %     \centering
+    %     \includegraphics[width=\textwidth]{Images/rand_extracted_feat_vs_loss.eps}
+    %     \caption{loss of reconstructions (root-mean-squared loss between the original images and their reconstructions) against the number of extracted features. This is plotted for both the training data and validation data (a subset of the dataaset (200 images) not used to train the model). Error bars are obtained by training the model 3 times for each extracted feature. The points represent the median value of the 3 runs.}
+    %     \label{extracted_feature_loss}
+    % \end{figure}
 
-    To strike a balance between these two considerations, I have chosen to configure the model to extract 26 features.
+    % \begin{figure}[H]
+    %     \centering
+    %     \includegraphics[width=\textwidth]{Images/rand_meaningful_extracted_features.eps}
+    %     \caption{the number of meaningful extracted features against the total number of extracted features. I have defined a meaningful extracted feature as a feature with a correlation coefficient $\rho \geq 0.2$ with at least one of the galaxy properties discussed in sections \ref{structual_measurements} and \ref{physical_propeties}). Error bars are obtained by training the model 3 times for each extracted feature. The points represent the median value of the 3 runs.}
+    %     \label{meaningful_extracted_features}
+    % \end{figure}
+    
+    
+    Figure \ref{extracted_feature_loss} shows that the more extracted features we have, the more accurate our model is. This is expected as more extracted features means the decoder has more information about each image so should be able to form more accurate reconstructions. However, the rate at which accuracy increases with extracted features, starts to decrease at higher numbers.
+
+    Figure \ref{meaningful_extracted_features} shows that as more features are extracted, the number of meaningful extracted features (an extracted feature with a correlation coefficient $\rho \geq 0.2$ with at least one of the galaxy properties discussed in sections \ref{structual_measurements} and \ref{physical_propeties}) increases as the model extracts more features. However, again, the rate of extracting meaningful features starts to decrease for higher numbers of extracted features showing that we aren't actually getting any more astronomical or scientific information out of the images, meaning some of the extracted features start to become meaningless. Given the galaxies will be categorised by their extracted features (see section \ref{Clustering Results}) and we want the model to categorise the galaxies based on their morphology, we have to ensure that the majority of the extracted features are scientifically meaningful.
+
+    To strike a balance between these two considerations, I have chosen to configure the model to extract ************************ features.
 
 
     \subsection{Representation of the Machine Features}
@@ -692,27 +613,25 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
         \label{structual_measurements}
 
         Structural measurements represent the observable characteristics and appearance of galaxies \cite{structure_measurement}. One key structure measurement is the Sersic Index \cite{sersic_index}. The Sersic index is a scale representing the light profile of a galaxy. The more the light is centrally concentrated, the higher the Sersic index and the more spread out the light profile is, the lower the Sersic index. This means bulge-dominated galaxies, such as ellipticals typically have higher Sersic indices than disk structures such as spiral galaxies.
-
         
         The EAGLE database \cite{eagle_catalogue_public_release} provides 3 images for each galaxy in each simulation. This includes a face-on perspective, an edge-on perspective and a random orientation. To better match real observational data, I have chosen to sample the images with random orientations. This introduces another key structure measurement - the position angle. The position angle is the angle between the line of sight and the plane of the galaxy. Position angles close to 0$^{\circ}$ represent face-on images, and values closer to 90$^{\circ}$ (or -90$^{\circ}$) represent edge-on images.
+
+        Another key structural measurement is the axis ratio. This is the ratio between the semi-major and semi-minor axes and is a measure of how elongated the galaxy is.
+
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{Images/25_feature_structure_property_correlation_2.png}
+            \caption{Correlation coefficient, $\rho$ between each of the 25 extracted features and the Sersic index, position angle and axis ratio. Structural measurements were obtained from the EAGLE database \cite{eagle_catalogue_public_release}. The numbers corresponding to each extracted feature have no scientific meaning, they are simply used to identify each feature.}
+            \label{structure_correlation}
+        \end{figure}
+
         
-        \vspace{5mm}
+        Structure measurements can be obtained directly from images so we would expect to see some correlation between the extracted features and the Sersic index, position angle and axis ratio.
 
-        ***********
-        Ellipticity
-        ***********
+        ***************
 
-        \vspace{5mm}
-
-        \vspace{5mm}
-
-        **********************
-        Correlation Plot
-        **********************
-
-        \vspace{5mm}
         
-        Structure measurements can be obtained directly from images so we would expect to see some correlation between the extracted features and both the Sersic index and position angle.
 
 
         
@@ -724,15 +643,14 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
 
         We compare the extracted features to the following galaxy properties, semi-major axis, star formation rate, *************************************** from the EAGLE database \cite{eagle_catalogue_public_release}.
 
-        \vspace{5mm}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{Images/25_feature_physical_property_correlation_2.png}
+            \caption{Correlation coefficient, $\rho$ between each of the 25 extracted features and the semi-major axis, stellar age, star formation rate, stellar mass, dark matter mass and black hole mass.}
+            \label{physical_correlation}
+        \end{figure}
 
-        **********************
-        Correlation Plot
-        **********************
-
-        \vspace{5mm}
-
-        Although these physical properties can't normally be obtained directly from the images, we can actually see some strong correlation ......................
+        Although these physical properties can't normally be obtained directly from the images, we can actually see some correlation ......................
 
         
 
@@ -741,15 +659,14 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
         \subsubsection{Comparison with Visual Inspection}
         \label{visual_inspection}
 
-        By holding all extracted features constant (at the mean values for all galaxy images) apart from one, we can get a visual representation of each of the extracted features.
+        By holding all extracted features constant (at the median values for all galaxy images) apart from one, we can use the decoder to form reconstructions to get a visual representation of each of the extracted features.
 
-        \vspace{5mm}
-
-        **********************
-        Varying Sersic Features
-        **********************
-
-        \vspace{5mm}
+%        \begin{figure}[H]
+%            \centering
+%            \includegraphics[width=\textwidth]{Images/latent_25_features_2_sersic.eps}
+%            \caption{Reconstructions by varying features 21, 23 and 3 individually while holding all others constant}
+%            \label{sersic_reconstructions}
+%        \end{figure}
 
         \vspace{5mm}
 
@@ -783,20 +700,22 @@ Abstract abstract abstract abstract abstract abstract abstract abstract abstract
     \subsection{Catagorisation of Galaxies}
 
         \subsubsection{Clustering Results}
+        \label{Clustering Results}
 
         Number of clusters, dendrogram?. Emmiting certain features for position angle. Why we can't remove the effect of other rotations.
         
         \subsubsection{Comparison with Structural Measurements}
+        \label{Structual Clusters}
 
 
         
         \subsubsection{Copmarison with Physical Properties}
-
+        \label{Physical Clusters}
 
         
-        \subsubsection{*** Comparison with Visual Morphology ***}
+        % \subsubsection{*** Comparison with Visual Morphology ***}
 
-        *** May not have time to include ***
+        % *** May not have time to include ***
 
     
 

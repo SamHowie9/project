@@ -11,7 +11,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 35
+encoding_dim = 28
 
 
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
@@ -115,6 +115,8 @@ for feature in range(0, len(extracted_features_switch)):
     correlation_df.loc[len(correlation_df)] = correlation_list
 
 
+
+
 # print(structure_correlation_df)
 # print(physical_correlation_df)
 # print(correlation_df)
@@ -202,8 +204,9 @@ for feature in range(0, len(extracted_features_switch)):
 # plt.show()
 
 
+selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
 
-
+print(correlation_df)
 
 
 # set the figure size
@@ -215,7 +218,7 @@ plt.figure(figsize=(20, 16))
 
 # plot a heatmap for the dataframe (with annotations)
 # ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Semi - Major Axis", "AB Magnitude", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
 
 
 
@@ -241,8 +244,12 @@ wrap_labels(ax, 10)
 
 plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_3_abs")
 plt.show()
-
-
+#
+#
+#
+# plt.figure(figsize=(10,10))
+# plt.scatter(x=extracted_features_switch[9], y=all_properties["q_r"])
+# plt.show()
 
 
 
@@ -270,11 +277,21 @@ plt.show()
 #
 #     for feature in range(encoding_dim):
 #
-#         axs[feature][i].scatter(x=abs(extracted_features_switch[feature]), y=abs(all_properties[property]))
+#         # axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property])
+#
+#         sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
 #
 #         axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=75)
 #         axs[feature][i].set_ylabel(property_labels[i], fontsize=75)
 #
-# plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_2_abs_xy")
+# plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_3_abs_density")
 # # plt.show()
+
+
+
+# # sns.kdeplot(data=all_properties, x=extracted_features_switch[4], y=all_properties["MassType_Star"], levels=200, fill=True, cmap="mako")
+#
+# plt.hist2d(x=extracted_features_switch[4], y=all_properties["MassType_Star"], bins=50, cmap="jet")
+#
+# plt.show()
 
