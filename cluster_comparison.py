@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-# import seaborn as sns
+import seaborn as sns
 import pandas as pd
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 # import keras
@@ -203,34 +203,48 @@ centers_switch = np.flipud(np.rot90(centers))
 
 
 
+# order = med_df["n_r"].sort_values(ascending=False).index.to_list()
+#
+# print(order)
+#
+# for i, cluster in enumerate(order):
+#     print(i, cluster)
+#
+#     galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
+#
+#     np.save("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster), np.array(galaxy_ids[:25]))
+
+
+
 order = med_df["n_r"].sort_values(ascending=False).index.to_list()
 
-print(order)
+for cluster in order:
 
-for i, cluster in enumerate(order):
-    print(i, cluster)
+    print((cluster, all_properties[all_properties["Cluster"] == cluster].shape[0]))
 
-    galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
 
-    np.save("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster), np.array(galaxy_ids[:25]))
 
-    # fig, axs = plt.subplots(5, 5, figsize=(20, 20))
-    #
-    # count = 0
-    #
-    # for j in range(0, 5):
-    #     for k in range(0, 5):
-    #
-    #         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy_ids[count]) + ".png")
-    #
-    #         axs[j, k].imshow(image)
-    #         axs[j, k].get_xaxis().set_visible(False)
-    #         axs[j, k].get_yaxis().set_visible(False)
-    #         axs[k, k].set_title(galaxy_ids[count])
-    #
-    #         count += 1
-    #
-    # plt.savefig("Plots/" + str(encoding_dim) + "_cluster_" + str(i), + "_" + str(cluster))
+
+
+# order = med_df["n_r"].sort_values(ascending=False).index.to_list()
+#
+# # print(order)
+#
+# fig, axs = plt.subplots(2, 5, figsize=(50, 20))
+#
+# count = 0
+#
+# for i in range(0, 2):
+#     for j in range(0, 5):
+#
+#         sns.histplot(ax=axs[i, j], data=all_properties[all_properties["Cluster"] == order[count]], y="n_r", element="poly")
+#
+#         axs[i, j].set_ylim([0, 8])
+#
+#         count += 1
+#
+# plt.show()
+
 
 
 
