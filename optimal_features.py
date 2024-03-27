@@ -247,12 +247,16 @@ for encoding_dim in range(1, 46):
         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
 
 
+
+    relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+
+
     # find the number of features at least slightly correlating with a property
     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.3).sum()
 
-    relevant_features_1 = (abs(correlation_df_1).max(axis=1) > 0.3).sum()
-    relevant_features_2 = (abs(correlation_df_2).max(axis=1) > 0.3).sum()
-    relevant_features_3 = (abs(correlation_df_3).max(axis=1) > 0.3).sum()
+    relevant_features_1 = (abs(correlation_df_1[relevant_properties]).max(axis=1) > 0.3).sum()
+    relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.3).sum()
+    relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.3).sum()
 
     # if encoding_dim == 40:
     #     print(relevant_features_1)
@@ -270,6 +274,7 @@ for encoding_dim in range(1, 46):
     med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
     max_relevant_feature_ratio.append(max((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
     min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
+
 
 
 

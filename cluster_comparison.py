@@ -19,13 +19,13 @@ pd.set_option('display.width', 1000)
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 28
+encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 10
+n_clusters = 2
 
 # load the extracted features
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
 
 
 print(extracted_features[0].shape)
@@ -35,7 +35,8 @@ extracted_features_switch = extracted_features.T
 
 
 # chose which features to use for clustering
-meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]  # 24
+# meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]  # 24
+meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36] # 19
 
 chosen_features = []
 
@@ -100,18 +101,19 @@ centers_switch = np.flipud(np.rot90(centers))
 
 
 
-# order_property = "n_r"
-# property = "n_r"
-#
-# order = med_df[order_property].sort_values(ascending=False).index.to_list()
-#
-#
-# # single property
+order_property = "n_r"
+property = "n_r"
+
+order = med_df[order_property].sort_values(ascending=False).index.to_list()
+
+
+# single property
 # a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
-#
-# # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_axis_ratio_distribution_all_features")
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_select_features")
-# plt.show()
+a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind")
+
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_all_features_hist")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hist")
+plt.show()
 
 
 
@@ -180,9 +182,10 @@ centers_switch = np.flipud(np.rot90(centers))
 
 
 
-# print(med_df)
-#
-# # sns.scatterplot(data=med_df, x="n_r", y="MassType_Star", hue="Cluster", palette="colorblind", s=75)
+print(med_df)
+
+# # sns.scatterplot(data=med_df, x=med_df["n_r"], y=np.log(med_df["MassType_Star"], hue="Cluster", palette="colorblind", s=75)
+# sns.scatterplot(data=med_df, x=med_df["n_r"], y=np.log10(med_df["MassType_Star"]), s=75)
 # # sns.scatterplot(data=med_df, x="n_r", y="MassType_Star", s=100)
 #
 # # sns.kdeplot(data=all_properties, x="n_r", y="MassType_Star", hue="Cluster", fill=True)
@@ -190,13 +193,17 @@ centers_switch = np.flipud(np.rot90(centers))
 #
 #
 # # sns.scatterplot(data=all_properties, x="n_r", y="MassType_Star", alpha=0.3)
-# sns.scatterplot(data=all_properties, x="n_r", y="MassType_Star", alpha=0.3, hue="Cluster", palette="colorblind")
+# # sns.scatterplot(data=all_properties, x="n_r", y="MassType_Star", alpha=0.3, hue="Cluster", palette="colorblind")
+#
 #
 # # plt.scatter(x=all_properties["n_r"], y=all_properties["MassType_Star"], alpha=0.3, s=5)
+# # plt.scatter(x=all_properties["n_r"], y=np.log10(all_properties["MassType_Star"]), alpha=1, s=5)
 # # plt.hist2d(x=all_properties["n_r"], y=all_properties["MassType_Star"], bins=1000, cmap="Blues")
-# # sns.kdeplot(data=all_properties, x="n_r", y="MassType_Star", fill=True, levels=100, cmap="Blues", thresh=0)
+# # sns.kdeplot(data=all_properties, x=all_properties["n_r"], y=np.log10(all_properties["MassType_Star"]), fill=True, levels=100, cmap="Blues", thresh=0)
+#
 # plt.xlabel("Sersic Index")
-# plt.ylabel("Stellar Mass")
+# # plt.ylabel("Stellar Mass")
+# plt.ylabel("Log(Stellar Mass)")
 #
 # plt.show()
 
@@ -216,11 +223,13 @@ centers_switch = np.flipud(np.rot90(centers))
 
 
 
-order = med_df["n_r"].sort_values(ascending=False).index.to_list()
 
-for cluster in order:
 
-    print((cluster, all_properties[all_properties["Cluster"] == cluster].shape[0]))
+# order = med_df["n_r"].sort_values(ascending=False).index.to_list()
+#
+# for cluster in order:
+#
+#     print((cluster, all_properties[all_properties["Cluster"] == cluster].shape[0]))
 
 
 
