@@ -5,7 +5,7 @@ import pandas as pd
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 # import keras
 import os
-from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import AgglomerativeClustering, HDBSCAN
 from sklearn.neighbors import NearestCentroid
 from matplotlib import image as mpimg
 import random
@@ -49,16 +49,26 @@ chosen_features = np.array(chosen_features).T
 # chosen_features = extracted_features
 
 
-# perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
+# # perform hierarchical ward clustering
+# hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
+#
+# # get hierarchical clusters
+# clusters = hierarchical.fit_predict(chosen_features)
 
-# get hierarchical clusters
-clusters = hierarchical.fit_predict(chosen_features)
+
+hdbscan = HDBSCAN(min_cluster_size=n_clusters, metric="euclidean")
+
+clusters = hdbscan.fit_predict(chosen_features)
+
 
 # get hierarchical centers
 clf = NearestCentroid()
 clf.fit(chosen_features, clusters)
 centers = clf.centroids_
+
+
+
+
 
 
 
@@ -108,11 +118,11 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 # single property
-# a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
-a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind")
+a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
+# a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind")
 
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_all_features_hist")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hist")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_all_features_hdbscan")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hdbscan")
 plt.show()
 
 
