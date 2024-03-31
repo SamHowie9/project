@@ -22,7 +22,7 @@ pd.set_option('display.width', 1000)
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 2
+n_clusters = 11
 
 # load the extracted features
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
@@ -129,7 +129,7 @@ a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False,
 # a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
 
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_all_features")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_spectral")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features")
 plt.show()
 
 
@@ -174,21 +174,21 @@ plt.show()
 
 
 
-# # number in elliptical cluster
-# elliptical_cluster_count = all_properties[(all_properties["Cluster"] == 0)].shape[0]
-#
-# # number of ellipticals in elliptical cluster
-# elliptical_in_elliptical = all_properties[((all_properties["Cluster"] == 0) & (all_properties["n_r"] <= 2.5))].shape[0]
-#
-# # number in spiral cluster
-# spiral_cluster_count = all_properties[(all_properties["Cluster"] == 1)].shape[0]
-#
-# # number of spirals in spiral cluster
-# spiral_in_spiral = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] >= 2.5))].shape[0]
-#
-#
-# print(spiral_in_spiral, "of", spiral_cluster_count, "spirals in spiral cluster", spiral_in_spiral/spiral_cluster_count)
-# print(elliptical_in_elliptical, "of", elliptical_cluster_count, "ellipticals in elliptical cluster", elliptical_in_elliptical/elliptical_cluster_count)
+# number in elliptical cluster
+elliptical_cluster_count = all_properties[(all_properties["Cluster"] == 0)].shape[0]
+
+# number of ellipticals in elliptical cluster
+elliptical_in_elliptical = all_properties[((all_properties["Cluster"] == 0) & (all_properties["n_r"] <= 2.5))].shape[0]
+
+# number in spiral cluster
+spiral_cluster_count = all_properties[(all_properties["Cluster"] == 1)].shape[0]
+
+# number of spirals in spiral cluster
+spiral_in_spiral = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] >= 2.5))].shape[0]
+
+
+print(spiral_in_spiral, "of", spiral_cluster_count, "spirals in spiral cluster", spiral_in_spiral/spiral_cluster_count)
+print(elliptical_in_elliptical, "of", elliptical_cluster_count, "ellipticals in elliptical cluster", elliptical_in_elliptical/elliptical_cluster_count)
 
 
 # elliptical_count = all_properties[(all_properties["n_r"] >= 2.5)].shape[0]
