@@ -469,7 +469,7 @@ for i, cluster in enumerate(order):
             axs[j, k].imshow(image)
             axs[j, k].get_xaxis().set_visible(False)
             axs[j, k].get_yaxis().set_visible(False)
-            axs[j, k].set_title((galaxy_ids[count], sersic))
+            axs[j, k].set_title(sersic, fontsize=18)
 
             count += 1
 
