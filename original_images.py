@@ -14,7 +14,7 @@ import cv2
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 2
+n_clusters = 11
 
 
 # load structural and physical properties into dataframes
