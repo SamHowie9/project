@@ -48,7 +48,7 @@ chosen_features = np.array(chosen_features).T
 
 
 
-chosen_features = extracted_features
+# chosen_features = extracted_features
 
 
 # perform hierarchical ward clustering
