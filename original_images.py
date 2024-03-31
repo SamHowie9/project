@@ -469,8 +469,8 @@ for i, cluster in enumerate(order):
             axs[j, k].imshow(image)
             axs[j, k].get_xaxis().set_visible(False)
             axs[j, k].get_yaxis().set_visible(False)
-            axs[j, k].set_title((sersic, stellar_mass))
+            axs[j, k].set_title((galaxy_ids[count], sersic))
 
             count += 1
 
-    plt.savefig("Plots/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
+    plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
