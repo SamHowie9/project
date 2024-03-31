@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import scipy.optimize
 from matplotlib import pyplot as plt
 import seaborn as sns
 from scipy.optimize import curve_fit
@@ -79,79 +80,79 @@ for i in range(1, 51):
     loss.append(feature_loss[0])
     val_loss.append(feature_loss[1])
 
-#     feature_loss_1 = np.load("Loss Rand/" + str(i) + "_feature_loss_1.npy")
-#     feature_loss_2 = np.load("Loss Rand/" + str(i) + "_feature_loss_2.npy")
-#     feature_loss_3 = np.load("Loss Rand/" + str(i) + "_feature_loss_3.npy")
-#
-#     if i == 23 or i == 26 or i == 45:
-#         print(feature_loss_1[0])
-#         print(feature_loss_2[0])
-#         print(feature_loss_3[0])
-#         print()
-#
-#     med_loss.append(np.median((feature_loss_1[0], feature_loss_2[0], feature_loss_3[0])))
-#     max_loss.append(max(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-#     min_loss.append(min(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-#
-#     med_val_loss.append(np.median((feature_loss_1[1], feature_loss_2[1], feature_loss_3[1])))
-#     max_val_loss.append(max(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-#     min_val_loss.append(min(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-#
-#
-# loss_err = []
-# val_loss_err = []
-#
-# for i in range(len(med_loss)):
-#
-#     loss_err.append([(med_loss[i] - min_loss[i]), (max_loss[i] - med_loss[i])])
-#     val_loss_err.append([(med_val_loss[i] - min_val_loss[i]), (max_val_loss[i] - med_val_loss[i])])
-#
-# loss_err = np.array(loss_err).T
-# val_loss_err = np.array(val_loss_err).T
-#
-# print(loss_err)
-# print(val_loss_err)
-#
-# plt.figure(figsize=(12, 8))
-#
-#
-#
-#
-# plt.scatter(x=range(1, 51), y=med_loss, label="Training Images", zorder=10)
-# plt.errorbar(x=range(1, 51), y=med_loss, yerr=loss_err, ls="none", alpha=0.6, zorder=0)
-#
-# plt.scatter(x=range(1, 51), y=med_val_loss, label="Validation Images", zorder=11)
-# plt.errorbar(x=range(1, 51), y=med_val_loss, yerr=val_loss_err, ls="none", alpha=0.6, zorder=1)
-#
-# plt.xlabel("Extracted Features", fontsize=20)
-# plt.ylabel("Loss", fontsize=20)
-#
-# plt.tick_params(labelsize=20)
-#
-# # plt.grid(False)
-#
-#
-#
-# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
-#
-# plt.savefig("Plots/rand_extracted_feat_vs_loss", bbox_inches='tight')
-# plt.show()
+    feature_loss_1 = np.load("Loss Rand/" + str(i) + "_feature_loss_1.npy")
+    feature_loss_2 = np.load("Loss Rand/" + str(i) + "_feature_loss_2.npy")
+    feature_loss_3 = np.load("Loss Rand/" + str(i) + "_feature_loss_3.npy")
+
+    if i == 23 or i == 26 or i == 45:
+        print(feature_loss_1[0])
+        print(feature_loss_2[0])
+        print(feature_loss_3[0])
+        print()
+
+    med_loss.append(np.median((feature_loss_1[0], feature_loss_2[0], feature_loss_3[0])))
+    max_loss.append(max(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
+    min_loss.append(min(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
+
+    med_val_loss.append(np.median((feature_loss_1[1], feature_loss_2[1], feature_loss_3[1])))
+    max_val_loss.append(max(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
+    min_val_loss.append(min(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
+
+
+loss_err = []
+val_loss_err = []
+
+for i in range(len(med_loss)):
+
+    loss_err.append([(med_loss[i] - min_loss[i]), (max_loss[i] - med_loss[i])])
+    val_loss_err.append([(med_val_loss[i] - min_val_loss[i]), (max_val_loss[i] - med_val_loss[i])])
+
+loss_err = np.array(loss_err).T
+val_loss_err = np.array(val_loss_err).T
+
+print(loss_err)
+print(val_loss_err)
+
+plt.figure(figsize=(12, 8))
 
 
 
-plt.scatter(x=range(1, 51), y=loss, label="Training Images")
-plt.scatter(x=range(1, 51), y=val_loss, label="Validation Images")
 
-# plt.plot(range(17, 41), loss)
-# plt.plot(range(17, 41), val_loss)
+plt.scatter(x=range(1, 51), y=med_loss, label="Training Images", zorder=10)
+plt.errorbar(x=range(1, 51), y=med_loss, yerr=loss_err, ls="none", alpha=0.6, zorder=0)
 
-plt.xlabel("Number of Extracted Features")
-plt.ylabel("Root-Mean-Squared Error")
+plt.scatter(x=range(1, 51), y=med_val_loss, label="Validation Images", zorder=11)
+plt.errorbar(x=range(1, 51), y=med_val_loss, yerr=val_loss_err, ls="none", alpha=0.6, zorder=1)
 
-plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
+plt.xlabel("Extracted Features", fontsize=20)
+plt.ylabel("Loss", fontsize=20)
 
-# plt.savefig("Plots/extracted_feat_vs_loss")
+plt.tick_params(labelsize=20)
+
+# plt.grid(False)
+
+
+
+plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
+
+plt.savefig("Plots/rand_extracted_feat_vs_loss", bbox_inches='tight')
 plt.show()
+
+
+
+# plt.scatter(x=range(1, 51), y=loss, label="Training Images")
+# plt.scatter(x=range(1, 51), y=val_loss, label="Validation Images")
+#
+# # plt.plot(range(17, 41), loss)
+# # plt.plot(range(17, 41), val_loss)
+#
+# plt.xlabel("Number of Extracted Features")
+# plt.ylabel("Root-Mean-Squared Error")
+#
+# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
+#
+# # plt.savefig("Plots/extracted_feat_vs_loss")
+# plt.show()
 
 
 
@@ -259,11 +260,11 @@ for encoding_dim in range(1, 51):
     relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.3).sum()
     relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.3).sum()
 
-    # if encoding_dim == 40:
-    #     print(relevant_features_1)
-    #     print(relevant_features_2)
-    #     print(relevant_features_3)
-    #     print()
+    if encoding_dim == 28 or encoding_dim == 38:
+        print(relevant_features_1)
+        print(relevant_features_2)
+        print(relevant_features_3)
+        print()
 
     relevant_feature_number.append(relevant_features)
     relevant_feature_ratio.append(relevant_features/encoding_dim)
@@ -275,6 +276,8 @@ for encoding_dim in range(1, 51):
     med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
     max_relevant_feature_ratio.append(max((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
     min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
+
+
 
 
 
@@ -314,11 +317,25 @@ print(df)
 
 # plt.figure(figsize=(10, 8))
 
-# with sns.axes_style("ticks"):
-#     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
+
+with sns.axes_style("ticks"):
+    sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
 
 # with sns.axes_style("ticks"):
-#     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", order=2, ci=0, height=8, aspect=1.25, line_kws={"color": "black"}, scatter_kws={"s": 0})
+#     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", order=2, ci=0, height=8, aspect=1.25, line_kws={"color": "red"}, scatter_kws={"s": 0})
+
+logfit = scipy.optimize.curve_fit(lambda t, a, b: a*np.log(t), range(1, 51), med_relevant_feature_number, p0=(0.6, 2.3))
+a = logfit[0]
+b = logfit[1]
+
+yfit = []
+
+for i in range(1, 51):
+    yfit.append(a * np.log(i))
+
+print(logfit)
+
+# plt.plot(range(1, 51), yfit, c="red")
 
 
 sns.despine(left=False, bottom=False, top=False, right=False)

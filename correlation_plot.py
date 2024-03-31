@@ -11,10 +11,10 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 32
+encoding_dim = 38
 
 
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_2.npy")
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 
@@ -242,7 +242,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_3_abs")
+plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_2_abs")
 plt.show()
 
 
@@ -255,37 +255,39 @@ plt.show()
 
 
 
-# "n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_DM", "MassType_BH", "InitialMassWeightedStellarAge", "StarFormationRate"
+# # "n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_DM", "MassType_BH", "InitialMassWeightedStellarAge", "StarFormationRate"
+#
+# # properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+# properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
+#
+#
+# all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
+#
+# print(all_properties)
+#
+# property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
+#
+# fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(200, 500))
+#
+# sns.set(font_scale=10)
+#
+# for i, property in enumerate(properties):
+#
+#     axs[0][i].set_title(property_labels[i])
+#
+#     for feature in range(encoding_dim):
+#
+#         axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property])
+#
+#         # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
+#
+#         axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=75)
+#         axs[feature][i].set_ylabel(property_labels[i], fontsize=75)
+#
+# plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_2_abs")
+# # plt.show()
 
-# properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
 
-
-all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
-
-print(all_properties)
-
-property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
-
-fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(200, 500))
-
-sns.set(font_scale=10)
-
-for i, property in enumerate(properties):
-
-    axs[0][i].set_title(property_labels[i])
-
-    for feature in range(encoding_dim):
-
-        axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property])
-
-        # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
-
-        axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=75)
-        axs[feature][i].set_ylabel(property_labels[i], fontsize=75)
-
-plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_3_abs")
-# plt.show()
 
 
 

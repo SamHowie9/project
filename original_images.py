@@ -11,10 +11,10 @@ import cv2
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 28
+encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 10
+n_clusters = 2
 
 
 # load structural and physical properties into dataframes
@@ -446,12 +446,13 @@ fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 # plt.show()
 
 
-order = [4, 6, 0, 2, 1, 3, 9, 8, 7, 5]
+# order = [4, 6, 0, 2, 1, 3, 9, 8, 7, 5]
+order = [1, 0]
 
 for i, cluster in enumerate(order):
     print(i, cluster)
 
-    galaxy_ids = np.load("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster) + ".npy")
+    galaxy_ids = np.load("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy")
 
     fig, axs = plt.subplots(5, 5, figsize=(20, 20))
 
@@ -472,4 +473,4 @@ for i, cluster in enumerate(order):
 
             count += 1
 
-    plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(i) + "_" + str(cluster))
+    plt.savefig("Plots/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))

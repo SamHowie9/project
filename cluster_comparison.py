@@ -25,7 +25,7 @@ encoding_dim = 38
 n_clusters = 2
 
 # load the extracted features
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
 
 
 print(extracted_features[0].shape)
@@ -36,7 +36,8 @@ extracted_features_switch = extracted_features.T
 
 # chose which features to use for clustering
 # meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]  # 24
-meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36] # 19
+# meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36] # 19
+meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28] # 26
 
 chosen_features = []
 
@@ -46,19 +47,19 @@ for feature in meaningful_features:
 chosen_features = np.array(chosen_features).T
 
 
-# chosen_features = extracted_features
+chosen_features = extracted_features
 
 
-# # perform hierarchical ward clustering
-# hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
+# perform hierarchical ward clustering
+hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
+
+# get hierarchical clusters
+clusters = hierarchical.fit_predict(chosen_features)
+
+
+# hdbscan = HDBSCAN(min_cluster_size=n_clusters, metric="euclidean")
 #
-# # get hierarchical clusters
-# clusters = hierarchical.fit_predict(chosen_features)
-
-
-hdbscan = HDBSCAN(min_cluster_size=n_clusters, metric="euclidean")
-
-clusters = hdbscan.fit_predict(chosen_features)
+# clusters = hdbscan.fit_predict(chosen_features)
 
 
 # get hierarchical centers
@@ -118,27 +119,31 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 # single property
-a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
-# a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind")
+# a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
+a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
 
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_all_features_hdbscan")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hdbscan")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_all_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hist")
 plt.show()
 
 
 
 
-# # structure measurements
-# fig, axs = plt.subplots(1, 3, figsize=(30, 10))
-#
-# a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette="colorblind", order=order)
-# a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y="pa_r", showfliers=False, whis=1, palette="colorblind", order=order)
-# a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette="colorblind", order=order)
-#
-#
-# # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
-# plt.show()
+# structure measurements
+fig, axs = plt.subplots(1, 3, figsize=(30, 10))
+
+a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="n_r", showfliers=False, whis=1, palette="colorblind", order=order)
+a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y="pa_r", showfliers=False, whis=1, palette="colorblind", order=order)
+a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette="colorblind", order=order)
+
+# a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+
+
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
+plt.show()
 
 
 
@@ -220,16 +225,16 @@ print(med_df)
 
 
 
-# order = med_df["n_r"].sort_values(ascending=False).index.to_list()
-#
-# print(order)
-#
-# for i, cluster in enumerate(order):
-#     print(i, cluster)
-#
-#     galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
-#
-#     np.save("Clusters/" + str(n_clusters) + "_cluster_" + str(cluster), np.array(galaxy_ids[:25]))
+order = med_df["n_r"].sort_values(ascending=False).index.to_list()
+
+print(order)
+
+for i, cluster in enumerate(order):
+    print(i, cluster)
+
+    galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
+
+    np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(galaxy_ids[:25]))
 
 
 
