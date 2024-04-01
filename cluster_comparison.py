@@ -174,23 +174,23 @@ plt.show()
 
 
 
-# number in elliptical cluster
-elliptical_cluster_count = all_properties[(all_properties["Cluster"] == 0)].shape[0]
-
-# number of ellipticals in elliptical cluster
-elliptical_in_elliptical = all_properties[((all_properties["Cluster"] == 0) & (all_properties["n_r"] <= 2.5))].shape[0]
-
-# number in spiral cluster
-spiral_cluster_count = all_properties[(all_properties["Cluster"] == 1)].shape[0]
-
-# number of spirals in spiral cluster
-spiral_in_spiral = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] >= 2.5))].shape[0]
-
-
-print(spiral_in_spiral, "of", spiral_cluster_count, "spirals in spiral cluster", spiral_in_spiral/spiral_cluster_count)
-print(elliptical_in_elliptical, "of", elliptical_cluster_count, "ellipticals in elliptical cluster", elliptical_in_elliptical/elliptical_cluster_count)
-
-
+# # number in elliptical cluster
+# elliptical_cluster_count = all_properties[(all_properties["Cluster"] == 0)].shape[0]
+#
+# # number of ellipticals in elliptical cluster
+# elliptical_in_elliptical = all_properties[((all_properties["Cluster"] == 0) & (all_properties["n_r"] <= 2.5))].shape[0]
+#
+# # number in spiral cluster
+# spiral_cluster_count = all_properties[(all_properties["Cluster"] == 1)].shape[0]
+#
+# # number of spirals in spiral cluster
+# spiral_in_spiral = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] >= 2.5))].shape[0]
+#
+#
+# print(spiral_in_spiral, "of", spiral_cluster_count, "spirals in spiral cluster", spiral_in_spiral/spiral_cluster_count)
+# print(elliptical_in_elliptical, "of", elliptical_cluster_count, "ellipticals in elliptical cluster", elliptical_in_elliptical/elliptical_cluster_count)
+#
+#
 # elliptical_count = all_properties[(all_properties["n_r"] >= 2.5)].shape[0]
 # spiral_count = all_properties[(all_properties["n_r"] <= 2.5)].shape[0]
 #
@@ -203,7 +203,7 @@ print(elliptical_in_elliptical, "of", elliptical_cluster_count, "ellipticals in 
 
 
 
-print(med_df)
+
 
 # # sns.scatterplot(data=med_df, x=med_df["n_r"], y=np.log(med_df["MassType_Star"], hue="Cluster", palette="colorblind", s=75)
 # sns.scatterplot(data=med_df, x=med_df["n_r"], y=np.log10(med_df["MassType_Star"]), s=75)
@@ -231,25 +231,43 @@ print(med_df)
 
 
 
+
+
+print(med_df)
+print()
+
 order = med_df["n_r"].sort_values(ascending=False).index.to_list()
-
 print(order)
+print()
 
-for i, cluster in enumerate(order):
-    print(i, cluster)
+
+# for i, cluster in enumerate(order):
+for cluster in range(0, n_clusters):
+
 
     galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
+    sample = random.sample(galaxy_ids, 25)
 
-    np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(galaxy_ids[:25]))
+    print(sample)
+
+    # np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(galaxy_ids[:25]))
+    np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(sample))
+
+
+# 2 Clusters
+# [9279688, 11546706, 11564243, 13296286, 8536493, 10088971, 15336992, 966292, 9747706, 17100831, 8986033, 9224716, 139400, 9478262, 9388126, 17592249, 12728081, 9126772, 16420095, 9469843, 16720414, 10487263, 17686442, 10806034, 9187925]
+# [18359999, 13873825, 32367, 4518274, 9532695, 8686633, 9484896, 8216841, 9684480, 13698384, 11533908, 8128032, 16231498, 14653070, 16062295, 12701693, 8122788, 9920747, 3436085, 13715538, 10733159, 15328474, 16677355, 3523446, 8961773]
+
+# 11 Clusters
 
 
 
 
 
-order = med_df["n_r"].sort_values(ascending=False).index.to_list()
 
-for cluster in order:
+print()
 
+for cluster in range(0, n_clusters):
     print((cluster, all_properties[all_properties["Cluster"] == cluster].shape[0]))
 
 
