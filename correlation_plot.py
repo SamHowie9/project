@@ -11,10 +11,10 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 38
+encoding_dim = 36
 
 
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_2.npy")
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 
@@ -242,7 +242,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_2_abs")
+plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_3_abs")
 plt.show()
 
 

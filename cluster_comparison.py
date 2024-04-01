@@ -22,7 +22,7 @@ pd.set_option('display.width', 1000)
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 11
+n_clusters = 9
 
 # load the extracted features
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
@@ -37,7 +37,8 @@ extracted_features_switch = extracted_features.T
 # chose which features to use for clustering
 # meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]   # 24
 # meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36]  # 19
-meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
+# meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
+meaningful_features = [2, 3, 4, 7, 12, 20, 24, 26, 28]
 
 chosen_features = []
 
@@ -135,21 +136,21 @@ plt.show()
 
 
 
-# # structure measurements
-# fig, axs = plt.subplots(1, 3, figsize=(30, 10))
-#
-# a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="n_r", showfliers=False, whis=1, palette="colorblind", order=order)
-# a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y="pa_r", showfliers=False, whis=1, palette="colorblind", order=order)
-# a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette="colorblind", order=order)
-#
-# # a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-# # a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-# # a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-#
-#
-# # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
-# plt.show()
+# structure measurements
+fig, axs = plt.subplots(1, 3, figsize=(30, 10))
+
+a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="n_r", showfliers=False, whis=1, palette="colorblind", order=order)
+a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y=abs(all_properties["pa_r"]), showfliers=False, whis=1, palette="colorblind", order=order)
+a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette="colorblind", order=order)
+
+# a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+
+
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
+plt.show()
 
 
 
@@ -241,6 +242,8 @@ print(order)
 print()
 
 
+
+
 # for i, cluster in enumerate(order):
 for cluster in range(0, n_clusters):
 
@@ -252,6 +255,7 @@ for cluster in range(0, n_clusters):
 
     # np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(galaxy_ids[:25]))
     np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(sample))
+
 
 
 # 2 Clusters
@@ -271,6 +275,16 @@ for cluster in range(0, n_clusters):
 # [2513876, 15595159, 10603735, 5990641, 9759527, 18342109, 9219351, 8707374, 13702204, 8779628, 13305071, 9309358, 8937440, 3545253, 18367234, 6602359, 8425845, 17969166, 15134529, 8615267, 4534539, 15424769, 10001176, 9319535, 9040800]
 # [9384897, 9857344, 17763272, 8730963, 9015914, 8318303, 10653919, 9724896, 10334457, 16135805, 8819793, 8858658, 11457293, 9220513, 18390235, 17485459, 10738667, 9848106, 17921916, 15885743, 9362531, 18385553, 11658789, 15614725, 17704712]
 
+# 9 Clusters
+# [17316116, 10567567, 18096816, 18230284, 9164674, 13859488, 17845684, 9176118, 8903544, 9848106, 10092169, 10193361, 17379782, 8111398, 15827462, 8391631, 16517497, 17213206, 9806843, 9615539, 14202038, 10391043, 9658285, 18000128, 16472250]
+# [13848162, 15457920, 9189661, 17835495, 17948664, 10159085, 14115666, 17868998, 8483646, 10479082, 12785592, 16664982, 9214339, 3538779, 13825637, 15927500, 13700898, 15386755, 13156706, 10495333, 9256846, 9938601, 9133843, 13683867, 16750450]
+# [10467986, 12711010, 3539991, 10344939, 2948351, 9011155, 8894369, 9201926, 8670585, 8269571, 9368071, 10187399, 17691609, 17509947, 3458705, 12659357, 13773122, 12654694, 8791779, 16475748, 13851369, 13688474, 13809907, 9683063, 8472770]
+# [17853027, 14109686, 2304937, 17242991, 13215580, 11318263, 16647246, 10080502, 10195407, 13935855, 10545920, 7182472, 7629051, 17369519, 8503366, 10161161, 10108400, 8638279, 12167142, 9336486, 15964287, 7653318, 234331, 2804983, 9059235]
+# [8139480, 11106875, 18043221, 2658206, 17886931, 9817539, 11568392, 18051512, 138061, 9668254, 10890785, 16565965, 17585533, 18387573, 13639821, 17866289, 14449268, 4209798, 13945982, 16668993, 11361114, 10149790, 10651124, 17871232, 10058550]
+# [13195729, 9181451, 9268384, 16244165, 8505438, 14974620, 10408026, 8406315, 8624088, 9639907, 10868197, 17307029, 9026380, 13640612, 9627417, 10399381, 17981471, 13796727, 8649269, 16467494, 17339025, 9987253, 10776576, 9759527, 127772]
+# [11559220, 9532695, 15601461, 3537758, 8789334, 13293366, 9872799, 9955910, 9410625, 9435793, 4580964, 12129529, 2631022, 9455775, 5309323, 65696, 3528962, 10038409, 8652246, 14384640, 8131927, 5959322, 9517737, 965536, 10939324]
+# [10001965, 8850936, 15535362, 17464778, 12198852, 16268672, 9446777, 9537912, 12715080, 8274107, 15973150, 17363053, 16150066, 11419698, 14623009, 16403899, 18143519, 16736005, 17483370, 18135698, 15367781, 6066836, 18215143, 14841935, 15250310]
+# [17357223, 8729072, 17795988, 8409334, 18359999, 14308492, 8358441, 8292328, 14607788, 8799478, 14895219, 2663001, 14459774, 8071906, 9284260, 10620766, 8206768, 16561331, 9508203, 15157618, 16281215, 13873825, 17432571, 17523255, 11448053]
 
 
 
