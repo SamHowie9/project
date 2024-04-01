@@ -14,7 +14,7 @@ import cv2
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 11
+n_clusters = 2
 
 
 # load structural and physical properties into dataframes
@@ -447,8 +447,8 @@ fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 
 
 # order = [4, 6, 0, 2, 1, 3, 9, 8, 7, 5]
-order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
-# order = [1, 0]
+# order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
+order = [1, 0]
 
 for i, cluster in enumerate(order):
     print(i, cluster)

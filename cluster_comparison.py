@@ -22,7 +22,7 @@ pd.set_option('display.width', 1000)
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 11
+n_clusters = 2
 
 # load the extracted features
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
