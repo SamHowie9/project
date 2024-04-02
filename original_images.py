@@ -447,8 +447,8 @@ fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 
 
 # order = [1, 0]
-# order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
-order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
+order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
+# order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
 
 
 for i, cluster in enumerate(order):
