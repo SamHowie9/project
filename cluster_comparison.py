@@ -22,7 +22,7 @@ pd.set_option('display.width', 1000)
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 9
+n_clusters = 20
 
 # load the extracted features
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
@@ -37,8 +37,8 @@ extracted_features_switch = extracted_features.T
 # chose which features to use for clustering
 # meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]   # 24
 # meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36]  # 19
-# meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
-meaningful_features = [2, 3, 4, 7, 12, 20, 24, 26, 28]
+meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
+# meaningful_features = [2, 3, 4, 7, 12, 20, 24, 26, 28]
 
 chosen_features = []
 
@@ -49,7 +49,7 @@ chosen_features = np.array(chosen_features).T
 
 
 
-# chosen_features = extracted_features
+chosen_features = extracted_features
 
 
 # perform hierarchical ward clustering
@@ -126,11 +126,12 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 # single property
-a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
-# a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
+a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
 
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_all_features")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hist")
 plt.show()
 
 
@@ -143,33 +144,35 @@ a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="n_r", showflier
 a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y=abs(all_properties["pa_r"]), showfliers=False, whis=1, palette="colorblind", order=order)
 a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette="colorblind", order=order)
 
-# a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-# a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-# a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", stat="probability", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", stat="probability", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+# a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", stat="probability", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
 
 
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features_hist")
+
 plt.show()
 
 
 
 
-# # physical properties
-# fig, axs = plt.subplots(2, 3, figsize=(30, 20))
-#
-# a1 = sns.boxplot(ax=axs[0, 0], data=all_properties, x="Cluster", y="re_r", showfliers=False, whis=1, palette="colorblind", order=order)
-# a2 = sns.boxplot(ax=axs[0, 1], data=all_properties, x="Cluster", y="InitialMassWeightedStellarAge", showfliers=False, whis=1, palette="colorblind", order=order)
-# a3 = sns.boxplot(ax=axs[0, 2], data=all_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, palette="colorblind", order=order)
-#
-# b1 = sns.boxplot(ax=axs[1, 0], data=all_properties, x="Cluster", y="MassType_Star", showfliers=False, whis=1, palette="colorblind", order=order)
-# b2 = sns.boxplot(ax=axs[1, 1], data=all_properties, x="Cluster", y="MassType_DM", showfliers=False, whis=1, palette="colorblind", order=order)
-# b3 = sns.boxplot(ax=axs[1, 2], data=all_properties, x="Cluster", y="MassType_BH", showfliers=False, whis=1, palette="colorblind", order=order)
-#
-#
-# # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
+# physical properties
+fig, axs = plt.subplots(2, 3, figsize=(30, 20))
+
+a1 = sns.boxplot(ax=axs[0, 0], data=all_properties, x="Cluster", y="re_r", showfliers=False, whis=1, palette="colorblind", order=order)
+a2 = sns.boxplot(ax=axs[0, 1], data=all_properties, x="Cluster", y="InitialMassWeightedStellarAge", showfliers=False, whis=1, palette="colorblind", order=order)
+a3 = sns.boxplot(ax=axs[0, 2], data=all_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, palette="colorblind", order=order)
+
+b1 = sns.boxplot(ax=axs[1, 0], data=all_properties, x="Cluster", y="MassType_Star", showfliers=False, whis=1, palette="colorblind", order=order)
+b2 = sns.boxplot(ax=axs[1, 1], data=all_properties, x="Cluster", y="MassType_DM", showfliers=False, whis=1, palette="colorblind", order=order)
+b3 = sns.boxplot(ax=axs[1, 2], data=all_properties, x="Cluster", y="MassType_BH", showfliers=False, whis=1, palette="colorblind", order=order)
+
+
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_select_features")
-# plt.show()
+plt.show()
 
 
 
@@ -244,17 +247,17 @@ print()
 
 
 
-# for i, cluster in enumerate(order):
-for cluster in range(0, n_clusters):
-
-
-    galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
-    sample = random.sample(galaxy_ids, 25)
-
-    print(sample)
-
-    # np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(galaxy_ids[:25]))
-    np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(sample))
+# # for i, cluster in enumerate(order):
+# for cluster in range(0, n_clusters):
+#
+#
+#     galaxy_ids = all_properties[all_properties["Cluster"] == cluster]["GalaxyID"].tolist()
+#     sample = random.sample(galaxy_ids, 25)
+#
+#     print(sample)
+#
+#     # np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(galaxy_ids[:25]))
+#     np.save("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy", np.array(sample))
 
 
 
