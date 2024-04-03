@@ -476,4 +476,30 @@ for i, cluster in enumerate(order):
 
             count += 1
 
-    plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
+    plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
+
+
+
+
+fig, axs = plt.subplots(3, 3, figsize=(20, 20))
+
+galaxies = [6066836, 8471322, 8860264, 9220513, 13857961, 16472250, 16623393, 16882281, 17462825]
+
+count = 0
+
+for i in range(0, 3):
+    for j in range(0, 3):
+
+        sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
+
+        axs[i, j].imshow(image)
+        axs[i, j].get_xaxis().set_visible(False)
+        axs[i, j].get_yaxis().set_visible(False)
+        axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
+
+        count += 1
+
+plt.savefig("Plots/double_fit_sersic_images")
+

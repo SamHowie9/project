@@ -7,6 +7,7 @@ import pandas as pd
 import os
 from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
 from sklearn.neighbors import NearestCentroid
+from yellowbrick.cluster import KElbowVisualizer
 from matplotlib import image as mpimg
 import random
 import textwrap
@@ -22,7 +23,7 @@ pd.set_option('display.width', 1000)
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 20
+n_clusters = 11
 
 # load the extracted features
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
@@ -49,7 +50,7 @@ chosen_features = np.array(chosen_features).T
 
 
 
-chosen_features = extracted_features
+# chosen_features = extracted_features
 
 
 # perform hierarchical ward clustering
@@ -78,6 +79,14 @@ centers = clf.centroids_
 
 
 
+# # optimal clusters
+# model = AgglomerativeClustering()
+# visualizer = KElbowVisualizer(model, k=(2, 20))
+# visualizer.fit(chosen_features)
+# visualizer.show()
+
+
+
 
 
 
@@ -100,7 +109,7 @@ all_properties["Cluster"] = clusters
 # Apparent Magnitude, Stellar Mass, Semi-Major Axis, Sersic Index
 # columns = ["galfit_mag", "galfit_lmstar", "galfit_re", "galfit_n", "galfit_q", "galfit_PA"]
 
-columns = ["n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+columns = ["n_r", "pa_r", "q_r", "re_r", "mag_r", "flag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
 
 med_df = pd.DataFrame(columns=columns)
 
@@ -115,23 +124,29 @@ centers_switch = np.flipud(np.rot90(centers))
 
 
 
+for i in range(0, 5):
+    print(all_properties[(all_properties["flag_r"] == i)].shape[0])
+
+
+print(all_properties[(all_properties["flag_r"] == 2)]["GalaxyID"].tolist())
+
+
 # print(all_properties)
 
 
 
 order_property = "n_r"
-property = "n_r"
 
 order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 # single property
-# a1 = sns.boxplot(data=all_properties, x="Cluster", y=property, showfliers=False, whis=1, palette="colorblind", order=order)
-a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+a1 = sns.boxplot(data=all_properties, x="Cluster", y="n_r", showfliers=False, whis=1, palette="colorblind", order=order)
+# a1 = sns.histplot(data=all_properties, x=property, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
 
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_all_features")
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hist")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_flag_distribution_select_features")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_3_" + str(n_clusters) + "_cluster_sersic_distribution_select_features_hist")
 plt.show()
 
 
@@ -149,8 +164,8 @@ a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showflier
 # a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", stat="probability", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
 
 
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features_hist")
 
 plt.show()
@@ -170,8 +185,8 @@ b2 = sns.boxplot(ax=axs[1, 1], data=all_properties, x="Cluster", y="MassType_DM"
 b3 = sns.boxplot(ax=axs[1, 2], data=all_properties, x="Cluster", y="MassType_BH", showfliers=False, whis=1, palette="colorblind", order=order)
 
 
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_select_features")
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_select_features")
 plt.show()
 
 

@@ -6,6 +6,7 @@ import pandas as pd
 # import keras
 import os
 from sklearn.cluster import KMeans, AgglomerativeClustering
+from sklearn.metrics import calinski_harabasz_score
 from scipy.cluster.hierarchy import dendrogram
 from sklearn.datasets import load_iris
 from sklearn.neighbors import NearestCentroid
@@ -15,7 +16,7 @@ import random
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 28
+encoding_dim = 38
 
 # set the number of clusters
 n_clusters = 4
@@ -31,7 +32,8 @@ extracted_features_switch = extracted_features.T
 
 
 # chose which features to use for clustering
-meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]  # 24
+# meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]  # 24
+meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
 
 chosen_features = []
 
@@ -50,6 +52,19 @@ hierarchical = AgglomerativeClustering(n_clusters=None, distance_threshold=0, me
 # get hierarchical clusters
 clusters = hierarchical.fit_predict(chosen_features)
 
+
+scores = []
+
+for i in range(2, 18):
+    optimal_hierarchical = AgglomerativeClustering(n_clusters=i, metric="euclidean", linkage="ward")
+    optimal_clusters = optimal_hierarchical.fit_predict(chosen_features)
+
+    score = calinski_harabasz_score(chosen_features, optimal_clusters)
+
+    scores.append(score)
+
+plt.plot(range(2, 18), scores)
+plt.show()
 
 
 
@@ -88,11 +103,8 @@ plt.xticks(fontsize=12)
 plt.yticks(fontsize=15)
 
 # plt.axhline(y=95, label="Cutoff Points")
-# plt.axhline(y=120)
-# plt.axhline(y=135)
-# plt.axhline(y=180)
-# plt.axhline(y=250)
-# plt.axhline(y=26)
+plt.axhline(y=15.5)
+plt.axhline(y=19)
 
 # plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', fontsize=20)
 
