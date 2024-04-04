@@ -518,19 +518,20 @@ count = 0
 for i in range(0, 4):
     for j in range(0, 4):
 
-        if i != 3 and j != 3:
-
-            print(i, j)
-
-            sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
-
-            image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
-
-            axs[i, j].imshow(image)
-
         axs[i, j].get_xaxis().set_visible(False)
         axs[i, j].get_yaxis().set_visible(False)
         axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
+
+        if count == 16:
+            break
+
+        sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
+
+        axs[i, j].imshow(image)
+
+
 
         count += 1
 
