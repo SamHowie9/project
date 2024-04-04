@@ -535,12 +535,12 @@ fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 fig, axs = plt.subplots(1, 2, figsize=(20, 10))
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(16536187) + ".png")
-axs[0].imahow()
+axs[0].imshow()
 axs[0].get_xaxis().set_visible(False)
 axs[0].get_yaxis().set_visible(False)
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(16643442) + ".png")
-axs[1].imahow()
+axs[1].imshow()
 axs[1].get_xaxis().set_visible(False)
 axs[1].get_yaxis().set_visible(False)
 
