@@ -518,7 +518,9 @@ count = 0
 for i in range(0, 4):
     for j in range(0, 4):
 
-        if i != 4 and j != 4:
+        if i != 3 and j != 3:
+
+            print(count)
 
             print(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"])
             print(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
