@@ -31,20 +31,22 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
-# # load the extracted features
-# extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
-#
-#
-# # perform hierarchical ward clustering
-# hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
-#
-# # get hierarchical clusters
-# clusters = hierarchical.fit_predict(extracted_features)
-#
-#
-#
-#
-#
+# load the extracted features
+extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
+
+
+# perform hierarchical ward clustering
+hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
+
+# get hierarchical clusters
+clusters = hierarchical.fit_predict(extracted_features)
+
+all_properties["Cluster"] = clusters
+
+
+
+
+
 # def center_crop(img, dim):
 #     width, height = img.shape[1], img.shape[0]
 #     # process crop width and height for max available dimension
