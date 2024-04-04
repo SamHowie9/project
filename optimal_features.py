@@ -7,6 +7,7 @@ from scipy.optimize import curve_fit
 import textwrap
 from sklearn.cluster import AgglomerativeClustering
 from yellowbrick.cluster import KElbowVisualizer
+from scipy.optimize import curve_fit
 
 
 
@@ -54,6 +55,10 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 # stellar mass, gas mass, dm_mass, bh_mass (subgrid), mean age, sfr,
 # MassType_Star, Mass_Type_Gas, Mass_Type_DM, Mass_Type_BH, BlackHoleMass, InitialMassWeightedStellarAge, StarFormationRate
+
+
+
+fig, axs = plt.subplots(2, 1, figsize=(12, 10))
 
 
 
@@ -113,30 +118,75 @@ val_loss_err = np.array(val_loss_err).T
 print(loss_err)
 print(val_loss_err)
 
-plt.figure(figsize=(12, 8))
+
+
+
+# plt.figure(figsize=(12, 8))
+#
+# plt.scatter(x=range(1, 51), y=med_loss, label="Training Images", zorder=10)
+# plt.errorbar(x=range(1, 51), y=med_loss, yerr=loss_err, ls="none", alpha=0.6, zorder=0)
+#
+# plt.scatter(x=range(1, 51), y=med_val_loss, label="Validation Images", zorder=11)
+# plt.errorbar(x=range(1, 51), y=med_val_loss, yerr=val_loss_err, ls="none", alpha=0.6, zorder=1)
+#
+# plt.xlabel("Extracted Features", fontsize=20)
+# plt.ylabel("Loss", fontsize=20)
+#
+# plt.tick_params(labelsize=20)
+#
+# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
+#
+# plt.savefig("Plots/rand_extracted_feat_vs_loss", bbox_inches='tight')
+# plt.show()
 
 
 
 
-plt.scatter(x=range(1, 51), y=med_loss, label="Training Images", zorder=10)
-plt.errorbar(x=range(1, 51), y=med_loss, yerr=loss_err, ls="none", alpha=0.6, zorder=0)
+colours_blue = ["C0"] * 50
+colours_blue[37] = "red"
 
-plt.scatter(x=range(1, 51), y=med_val_loss, label="Validation Images", zorder=11)
-plt.errorbar(x=range(1, 51), y=med_val_loss, yerr=val_loss_err, ls="none", alpha=0.6, zorder=1)
+colours_yellow = ["C1"] * 50
+colours_yellow[37] = "red"
 
-plt.xlabel("Extracted Features", fontsize=20)
-plt.ylabel("Loss", fontsize=20)
+print(colours_blue)
 
-plt.tick_params(labelsize=20)
+axs[0].scatter(x=range(1, 51), y=med_loss, c=colours_blue, label="Training Images", zorder=10)
+axs[0].errorbar(x=range(1, 51), y=med_loss, ecolor=colours_blue, yerr=loss_err, ls="none", alpha=0.6, zorder=0)
 
-# plt.grid(False)
+axs[0].scatter(x=range(1, 51), y=med_val_loss, c=colours_yellow, label="Validation Images", zorder=11)
+axs[0].errorbar(x=range(1, 51), y=med_val_loss, ecolor=colours_yellow, yerr=val_loss_err, ls="none", alpha=0.6, zorder=1)
+
+axs[0].set_xlabel("Extracted Features", fontsize=18)
+axs[0].set_ylabel("Loss", fontsize=18)
+
+axs[0].tick_params(labelsize=18)
+
+axs[0].legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":18})
 
 
 
-plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
+# def expfit(x, a, b, c):
+#     return a * np.exp(-b * x) + c
+#
+# params, covarience = curve_fit(expfit, range(1, 51), med_loss)
+#
+# a, b, c = params
+#
+# x_fit = np.linspace(1, 50, 100).tolist()
+#
+# print(x_fit)
+#
+# y_fit = []
+#
+# for x in x_fit:
+#     y_fit.append(expfit(x, a, b, c))
+#
+# # y_fit = logfit(x_fit, a, b)
+#
+# axs[0].plot(x_fit, y_fit, c="black")
 
-plt.savefig("Plots/rand_extracted_feat_vs_loss", bbox_inches='tight')
-plt.show()
+
+
 
 
 
@@ -260,11 +310,7 @@ for encoding_dim in range(1, 51):
     relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.3).sum()
     relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.3).sum()
 
-    if encoding_dim == 28 or encoding_dim == 38:
-        print(relevant_features_1)
-        print(relevant_features_2)
-        print(relevant_features_3)
-        print()
+
 
     relevant_feature_number.append(relevant_features)
     relevant_feature_ratio.append(relevant_features/encoding_dim)
@@ -318,67 +364,87 @@ print(df)
 # plt.figure(figsize=(10, 8))
 
 
-with sns.axes_style("ticks"):
-    sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
+# with sns.axes_style("ticks"):
+#     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
+    # sns.lmplot(ax=axs[1], data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
 
 # with sns.axes_style("ticks"):
 #     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", order=2, ci=0, height=8, aspect=1.25, line_kws={"color": "red"}, scatter_kws={"s": 0})
 
-logfit = scipy.optimize.curve_fit(lambda t, a, b: a*np.log(t), range(1, 51), med_relevant_feature_number, p0=(0.6, 2.3))
-a = logfit[0]
-b = logfit[1]
+# logfit = scipy.optimize.curve_fit(lambda t, a, b: a*np.log(t), range(1, 51), med_relevant_feature_number, p0=(0.6, 2.3))
+# a = logfit[0]
+# b = logfit[1]
+#
+# yfit = []
+#
+# for i in range(1, 51):
+#     yfit.append(a * np.log(i))
+#
+# print(logfit)
 
-yfit = []
-
-for i in range(1, 51):
-    yfit.append(a * np.log(i))
-
-print(logfit)
 
 # plt.plot(range(1, 51), yfit, c="red")
 
 
-sns.despine(left=False, bottom=False, top=False, right=False)
-
-plt.scatter(x=range(1, 51), y=med_relevant_feature_number)
-plt.errorbar(x=range(1, 51), y=med_relevant_feature_number, yerr=relevant_err, ls="none", alpha=0.6)
+# sns.despine(left=False, bottom=False, top=False, right=False)
 
 
-plt.xlabel("Total Extracted Features", fontsize=20)
-plt.ylabel("Meaningful Extracted Features", fontsize=20)
 
-plt.tick_params(labelsize=20)
-
-
-# sns.lmplot(data=all_properties, x=list(range(1, 46)), y=med_relevant_feature_number)
-
-
-# fit = np.polyfit(x=np.log(x_values), y=med_relevant_feature_number, deg=1)
+# plt.scatter(x=range(1, 51), y=med_relevant_feature_number)
+# plt.errorbar(x=range(1, 51), y=med_relevant_feature_number, yerr=relevant_err, ls="none", alpha=0.6)
 #
-# y_fit = fit[0] * np.log(x_values) + fit[1]
+# plt.xlabel("Total Extracted Features", fontsize=20)
+# plt.ylabel("Meaningful Extracted Features", fontsize=20)
 #
-# plt.plot(x_values, y_fit, c="black")
+# plt.tick_params(labelsize=20)
 
 
 
-# linear = np.polyfit(x=x_values, y=np.log(med_relevant_feature_number), deg=1)
-# quadratic = np.polyfit(x=x_values, y=np.log(med_relevant_feature_number), deg=2)
-# cubic = np.polyfit(x=x_values, y=np.log(med_relevant_feature_number), deg=3)
-#
-# v1 = np.polyval(linear, x_values)
-# v2 = np.polyval(quadratic, x_values)
-# v3 = np.polyval(cubic, x_values)
-#
-# plt.plot(x_values, v1, c="black")
-# plt.plot(x_values, v2, c="yellow")
-# plt.plot(x_values, v3, c="red")
+def logfit(x, a, b):
+    return a * np.log10(x) + b
+
+params, covarience = curve_fit(logfit, range(1, 51), med_relevant_feature_number)
+
+a, b = params
+
+x_fit = np.linspace(1, 50, 100).tolist()
+
+print(x_fit)
+
+y_fit = []
+
+for x in x_fit:
+    y_fit.append(logfit(x, a, b))
+
+# y_fit = logfit(x_fit, a, b)
+
+axs[1].plot(x_fit, y_fit, c="black")
 
 
 
-# plt.scatter(x=range(1, 46), y=relevant_feature_number)
+axs[1].scatter(x=range(1, 51), y=med_relevant_feature_number, c=colours_blue)
+axs[1].errorbar(x=range(1, 51), y=med_relevant_feature_number, yerr=relevant_err, ecolor=colours_blue, ls="none", alpha=0.6)
 
-plt.savefig("Plots/rand_meaningful_extracted_features_0-3_abs", bbox_inches='tight')
+axs[1].set_xlabel("Total Extracted Features", fontsize=18)
+axs[1].set_ylabel("Meaningful Extracted Features", fontsize=18)
+
+axs[1].tick_params(labelsize=15)
+
+
+
+# plt.savefig("Plots/rand_meaningful_extracted_features_0-3_abs", bbox_inches='tight')
+# plt.show()
+
+fig.tight_layout()
+
+plt.savefig("Plots/optimal_extracted_features")
 plt.show()
+
+
+
+
+
+
 
 
 

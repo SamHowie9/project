@@ -25,55 +25,7 @@ encoding_dim = 38
 # set the number of clusters
 n_clusters = 11
 
-# load the extracted features
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
 
-
-print(extracted_features[0].shape)
-
-
-extracted_features_switch = extracted_features.T
-
-
-# chose which features to use for clustering
-# meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]   # 24
-# meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36]  # 19
-meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
-# meaningful_features = [2, 3, 4, 7, 12, 20, 24, 26, 28]
-
-chosen_features = []
-
-for feature in meaningful_features:
-    chosen_features.append(list(extracted_features_switch[feature]))
-
-chosen_features = np.array(chosen_features).T
-
-
-
-# chosen_features = extracted_features
-
-
-# perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
-
-# get hierarchical clusters
-clusters = hierarchical.fit_predict(chosen_features)
-
-
-# kmeans = KMeans(n_clusters=n_clusters)
-# clusters = kmeans.fit_predict(chosen_features)
-
-# spectral = SpectralClustering(n_clusters=n_clusters)
-# clusters = spectral.fit_predict(chosen_features)
-
-# hdbscan = HDBSCAN(metric="euclidean")
-# clusters = hdbscan.fit_predict(chosen_features)
-
-
-# get hierarchical centers
-clf = NearestCentroid()
-clf.fit(chosen_features, clusters)
-centers = clf.centroids_
 
 
 
@@ -101,7 +53,88 @@ physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
+
+
+
+
+
+
+
+
+for i in range(0, 5):
+    print(all_properties[(all_properties["flag_r"] == i)].shape[0])
+
+
+print((2, all_properties[(all_properties["flag_r"] == 2)]["GalaxyID"].tolist()))
+print((4, all_properties[(all_properties["flag_r"] == 4)]["GalaxyID"].tolist()))
+
+
+
+
+
+# load the extracted features
+extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
+
+print(extracted_features.shape)
+
+bad_fit = all_properties[(all_properties["flag_r"] == 4)].index.tolist()
+print(bad_fit)
+
+for galaxy in bad_fit:
+    extracted_features = np.delete(extracted_features, galaxy, 0)
+    all_properties = all_properties.drop(galaxy, axis=0)
+
+extracted_features_switch = extracted_features.T
+
+print(extracted_features.shape)
+
+# chose which features to use for clustering
+# meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]   # 24
+# meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36]  # 19
+meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
+# meaningful_features = [2, 3, 4, 7, 12, 20, 24, 26, 28]
+
+chosen_features = []
+
+for feature in meaningful_features:
+    chosen_features.append(list(extracted_features_switch[feature]))
+
+chosen_features = np.array(chosen_features).T
+
+
+
+# chosen_features = extracted_features
+
+
+# perform hierarchical ward clustering
+hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
+
+# get hierarchical clusters
+clusters = hierarchical.fit_predict(chosen_features)
+
 all_properties["Cluster"] = clusters
+
+
+# kmeans = KMeans(n_clusters=n_clusters)
+# clusters = kmeans.fit_predict(chosen_features)
+
+# spectral = SpectralClustering(n_clusters=n_clusters)
+# clusters = spectral.fit_predict(chosen_features)
+
+# hdbscan = HDBSCAN(metric="euclidean")
+# clusters = hdbscan.fit_predict(chosen_features)
+
+
+# get hierarchical centers
+clf = NearestCentroid()
+clf.fit(chosen_features, clusters)
+centers = clf.centroids_
+centers_switch = centers.T
+
+
+
+
+print(all_properties[(all_properties["flag_r"] == 2)])
 
 
 
@@ -119,19 +152,11 @@ for i in range(0, n_clusters):
 
 med_df["Cluster"] = list(range(0, n_clusters))
 
-extracted_features_switch = np.flipud(np.rot90(extracted_features))
-centers_switch = np.flipud(np.rot90(centers))
 
 
 
-for i in range(0, 5):
-    print(all_properties[(all_properties["flag_r"] == i)].shape[0])
 
 
-print(all_properties[(all_properties["flag_r"] == 2)]["GalaxyID"].tolist())
-
-
-# print(all_properties)
 
 
 
