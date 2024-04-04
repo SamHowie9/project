@@ -302,11 +302,34 @@ plt.show()
 
 
 
+def polyfit(x, a, b, c):
+    return a*x*x + b*x + c
+
+params, covarience = curve_fit(polyfit, extracted_features_switch[3], all_properties["n_r"])
+a, b, c = params
+x_fit_1 = np.linspace(1, 50, 100).tolist()
+y_fit_1 = []
+for x in extracted_features_switch[3]:
+    y_fit_1.append(expfit(x, a, b, c))
+
+params, covarience = curve_fit(polyfit, extracted_features_switch[12], all_properties["n_r"])
+a, b, c = params
+x_fit_2 = np.linspace(1, 50, 100).tolist()
+y_fit_2 = []
+for x in extracted_features_switch[12]:
+    y_fit_2.append(expfit(x, a, b, c))
+
+params, covarience = curve_fit(polyfit, extracted_features_switch[20], all_properties["n_r"])
+a, b, c = params
+x_fit_2 = np.linspace(1, 50, 100).tolist()
+y_fit_2 = []
+for x in extracted_features_switch[20]:
+    y_fit_2.append(expfit(x, a, b, c))
+
+
 
 
 fig, axs = plt.subplots(1, 3, figsize=(25, 5))
-
-
 
 axs[0].scatter(x=extracted_features_switch[3], y=all_properties["n_r"], s=5)
 axs[0].set_xlabel("Feature 3", fontsize=20)
