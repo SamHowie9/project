@@ -521,7 +521,7 @@ for i in range(0, 4):
         if i != 4 and j != 4:
 
             print(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"])
-            print(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist())
+            print(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
 
 
             sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
