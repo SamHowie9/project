@@ -520,7 +520,6 @@ for i in range(0, 4):
 
         axs[i, j].get_xaxis().set_visible(False)
         axs[i, j].get_yaxis().set_visible(False)
-        axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
 
         if count == 16:
             break
@@ -530,8 +529,7 @@ for i in range(0, 4):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
 
         axs[i, j].imshow(image)
-
-
+        axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
 
         count += 1
 
