@@ -65,6 +65,7 @@ for i in range(0, 5):
     print(all_properties[(all_properties["flag_r"] == i)].shape[0])
 
 
+print((1, all_properties[(all_properties["flag_r"] == 1)]["GalaxyID"].tolist()))
 print((2, all_properties[(all_properties["flag_r"] == 2)]["GalaxyID"].tolist()))
 print((4, all_properties[(all_properties["flag_r"] == 4)]["GalaxyID"].tolist()))
 

@@ -509,9 +509,38 @@ fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 
 
 
+# fig, axs = plt.subplots(4, 4, figsize=(20, 20))
+#
+# galaxies = [8606403, 8764213, 13176887, 13202231, 13989414, 14018346, 14042157, 14107961, 14427787, 15336992, 15656318, 16072005, 16169303, 17582605, 17733932]
+#
+# count = 0
+#
+# for i in range(0, 4):
+#     for j in range(0, 4):
+#
+#         axs[i, j].get_xaxis().set_visible(False)
+#         axs[i, j].get_yaxis().set_visible(False)
+#
+#         if count == 15:
+#             break
+#
+#         sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
+#
+#         axs[i, j].imshow(image)
+#         axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
+#
+#         count += 1
+#
+# plt.savefig("Plots/double_fit_sersic_images")
+
+
+
+
 fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 
-galaxies = [8606403, 8764213, 13176887, 13202231, 13989414, 14018346, 14042157, 14107961, 14427787, 15336992, 15656318, 16072005, 16169303, 17582605, 17733932]
+galaxies = [12202542, 14289611, 15358401, 15371869, 15511664, 15535362, 15978821, 16736005, 16921469, 17109600, 17413315, 17760224, 17805326, 18104018, 18135698]
 
 count = 0
 
@@ -533,7 +562,8 @@ for i in range(0, 4):
 
         count += 1
 
-plt.savefig("Plots/double_fit_sersic_images")
+plt.savefig("Plots/unreasonable_sersic_images")
+
 
 
 
