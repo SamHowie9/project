@@ -520,6 +520,10 @@ for i in range(0, 4):
 
         if i != 4 and j != 4:
 
+            print(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"])
+            print(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist())
+
+
             sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
 
             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
