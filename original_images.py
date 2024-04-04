@@ -31,17 +31,17 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
-# load the extracted features
-extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
-
-
-# perform hierarchical ward clustering
-hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
-
-# get hierarchical clusters
-clusters = hierarchical.fit_predict(extracted_features)
-
-all_properties["Cluster"] = clusters
+# # load the extracted features
+# extracted_features = np.load("Features/" + str(encoding_dim) + "_features_3.npy")
+#
+#
+# # perform hierarchical ward clustering
+# hierarchical = AgglomerativeClustering(n_clusters=n_clusters, affinity="euclidean", linkage="ward")
+#
+# # get hierarchical clusters
+# clusters = hierarchical.fit_predict(extracted_features)
+#
+# all_properties["Cluster"] = clusters
 
 
 
