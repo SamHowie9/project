@@ -521,7 +521,7 @@ for i in range(0, 4):
         axs[i, j].get_xaxis().set_visible(False)
         axs[i, j].get_yaxis().set_visible(False)
 
-        if count == 16:
+        if count == 15:
             break
 
         sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
