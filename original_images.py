@@ -440,66 +440,107 @@ fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 #
 #         count += 1
 #
-#
-#
 # plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_stripped")
 # plt.show()
 
 
-# order = [1, 0]
-order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
-# order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
 
 
-for i, cluster in enumerate(order):
-    print(i, cluster)
+# # order = [1, 0]
+# order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
+# # order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
+#
+#
+# for i, cluster in enumerate(order):
+#     print(i, cluster)
+#
+#     galaxy_ids = np.load("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy")
+#
+#     fig, axs = plt.subplots(5, 5, figsize=(20, 20))
+#
+#     count = 0
+#
+#     for j in range(0, 5):
+#         for k in range(0, 5):
+#
+#             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy_ids[count]) + ".png")
+#
+#             sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist()[0])
+#             axis_ratio = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["q_r"].tolist()[0])
+#             stellar_mass = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["MassType_Star"].tolist()[0])
+#
+#             axs[j, k].imshow(image)
+#             axs[j, k].get_xaxis().set_visible(False)
+#             axs[j, k].get_yaxis().set_visible(False)
+#             axs[j, k].set_title((str(galaxy_ids[count]) + " " + str(sersic) + " " + str(axis_ratio)), fontsize=18)
+#
+#             count += 1
+#
+#     plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
 
-    galaxy_ids = np.load("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy")
-
-    fig, axs = plt.subplots(5, 5, figsize=(20, 20))
-
-    count = 0
-
-    for j in range(0, 5):
-        for k in range(0, 5):
-
-            image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy_ids[count]) + ".png")
-
-            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist()[0])
-            axis_ratio = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["q_r"].tolist()[0])
-            stellar_mass = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["MassType_Star"].tolist()[0])
-
-            axs[j, k].imshow(image)
-            axs[j, k].get_xaxis().set_visible(False)
-            axs[j, k].get_yaxis().set_visible(False)
-            axs[j, k].set_title((str(galaxy_ids[count]) + " " + str(sersic) + " " + str(axis_ratio)), fontsize=18)
-
-            count += 1
-
-    plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
 
 
 
+# fig, axs = plt.subplots(3, 3, figsize=(20, 20))
+#
+# galaxies = [6066836, 8471322, 8860264, 9220513, 13857961, 16472250, 16623393, 16882281, 17462825]
+#
+# count = 0
+#
+# for i in range(0, 3):
+#     for j in range(0, 3):
+#
+#         sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
+#
+#         axs[i, j].imshow(image)
+#         axs[i, j].get_xaxis().set_visible(False)
+#         axs[i, j].get_yaxis().set_visible(False)
+#         axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
+#
+#         count += 1
+#
+# plt.savefig("Plots/double_fit_sersic_images")
 
-fig, axs = plt.subplots(3, 3, figsize=(20, 20))
 
-galaxies = [6066836, 8471322, 8860264, 9220513, 13857961, 16472250, 16623393, 16882281, 17462825]
 
-count = 0
 
-for i in range(0, 3):
-    for j in range(0, 3):
 
-        sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
+# fig, axs = plt.subplots(3, 3, figsize=(20, 20))
+#
+# galaxies = [6066836, 8471322, 8860264, 9220513, 13857961, 16472250, 16623393, 16882281, 17462825]
+#
+# count = 0
+#
+# for i in range(0, 3):
+#     for j in range(0, 3):
+#
+#         sersic = str(all_properties[all_properties["GalaxyID"] == galaxies[count]]["n_r"].tolist()[0])
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
+#
+#         axs[i, j].imshow(image)
+#         axs[i, j].get_xaxis().set_visible(False)
+#         axs[i, j].get_yaxis().set_visible(False)
+#         axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
+#
+#         count += 1
+#
+# plt.savefig("Plots/double_fit_sersic_images")
 
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies[count]) + ".png")
 
-        axs[i, j].imshow(image)
-        axs[i, j].get_xaxis().set_visible(False)
-        axs[i, j].get_yaxis().set_visible(False)
-        axs[i, j].set_title((str(galaxies[count]) + " " + str(sersic)), fontsize=18)
 
-        count += 1
 
-plt.savefig("Plots/double_fit_sersic_images")
+fig, axs = plt.subplots(1, 2, figsize=(20, 10))
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(16536187) + ".png")
+axs[0].imahow()
+axs[0].get_xaxis().set_visible(False)
+axs[0].get_yaxis().set_visible(False)
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(16643442) + ".png")
+axs[1].imahow()
+axs[1].get_xaxis().set_visible(False)
+axs[1].get_yaxis().set_visible(False)
 

@@ -14,7 +14,7 @@ import textwrap
 
 
 pd.set_option('display.max_columns', None)
-# pd.set_option('display.max_rows', None)
+pd.set_option('display.max_rows', None)
 pd.set_option('display.width', 1000)
 
 
@@ -68,7 +68,9 @@ for i in range(0, 5):
 print((2, all_properties[(all_properties["flag_r"] == 2)]["GalaxyID"].tolist()))
 print((4, all_properties[(all_properties["flag_r"] == 4)]["GalaxyID"].tolist()))
 
+print(all_properties[(all_properties["flag_r"] == 5)])
 
+# print(all_properties.sort_values("n_r", ascending=False))
 
 
 

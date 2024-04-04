@@ -11,7 +11,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 36
+encoding_dim = 38
 
 
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
@@ -63,6 +63,9 @@ for feature in range(0, len(extracted_features_switch)):
     # loop through each property
     # for gal_property in range(1, len(structure_properties.columns)):
     for gal_property in range(1, len(all_properties.columns)):
+
+        if gal_property == 6:
+            continue
 
         # calculate the correlation between that extracted feature and that property
         # structure_correlation = np.corrcoef(extracted_features_switch[feature], abs(structure_properties.iloc[:, gal_property]))[0][1]
@@ -297,3 +300,28 @@ plt.show()
 #
 # plt.show()
 
+
+
+
+
+fig, axs = plt.subplots(1, 3, figsize=(25, 5))
+
+
+
+axs[0].scatter(x=extracted_features_switch[3], y=all_properties["n_r"], s=5)
+axs[0].set_xlabel("Feature 3", fontsize=20)
+axs[0].set_ylabel("Sersic Index", fontsize=20)
+axs[0].tick_params(labelsize=20)
+
+axs[1].scatter(x=extracted_features_switch[12], y=all_properties["n_r"], s=5)
+axs[1].set_xlabel("Feature 12", fontsize=20)
+axs[1].set_ylabel("Sersic Index", fontsize=20)
+axs[1].tick_params(labelsize=20)
+
+axs[2].scatter(x=extracted_features_switch[20], y=all_properties["n_r"], s=5)
+axs[2].set_xlabel("Feature 20", fontsize=20)
+axs[2].set_ylabel("Sersic Index", fontsize=20)
+axs[2].tick_params(labelsize=20)
+
+plt.savefig("Plots/Sersic_scatter", bbox_inches='tight')
+plt.show()
