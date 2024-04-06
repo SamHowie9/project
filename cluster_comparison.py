@@ -80,7 +80,7 @@ extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3
 
 print(extracted_features.shape)
 
-bad_fit = all_properties[(all_properties["flag_r"] == 4)].index.tolist()
+bad_fit = all_properties[(all_properties["flag_r"] == 4 or all_properties["flag_r"] == 1 or all_properties["flag_r"] == 5)].index.tolist()
 print(bad_fit)
 
 for galaxy in bad_fit:
