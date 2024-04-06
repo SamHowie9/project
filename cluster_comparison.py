@@ -23,7 +23,7 @@ pd.set_option('display.width', 1000)
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 11
+n_clusters = 2
 
 
 
@@ -78,18 +78,16 @@ print(all_properties[(all_properties["flag_r"] == 5)])
 # load the extracted features
 extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
 
-print(extracted_features.shape)
 
-bad_fit = all_properties[(all_properties["flag_r"] == 4 or all_properties["flag_r"] == 1 or all_properties["flag_r"] == 5)].index.tolist()
-print(bad_fit)
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
 
-for galaxy in bad_fit:
-    extracted_features = np.delete(extracted_features, galaxy, 0)
+for i, galaxy in enumerate(bad_fit):
+    extracted_features = np.delete(extracted_features, galaxy-i, 0)
     all_properties = all_properties.drop(galaxy, axis=0)
+
 
 extracted_features_switch = extracted_features.T
 
-print(extracted_features.shape)
 
 # chose which features to use for clustering
 # meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]   # 24
@@ -180,22 +178,61 @@ plt.show()
 
 
 
-# structure measurements
-fig, axs = plt.subplots(1, 3, figsize=(30, 10))
+# structure measurement box
+fig, axs = plt.subplots(1, 3, figsize=(25, 10))
 
 a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="n_r", showfliers=False, whis=1, palette="colorblind", order=order)
+a1.set_ylabel("Sersic Index", fontsize=20)
+a1.set_xlabel(None)
+a1.set_xticks([1, 0], ["Less Featured", "More Featured"])
+a1.tick_params(labelsize=20)
+
 a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y=abs(all_properties["pa_r"]), showfliers=False, whis=1, palette="colorblind", order=order)
+a2.set_ylabel("Position Angle", fontsize=20)
+a2.set_xlabel(None)
+a2.set_xticks([1, 0], ["Less Featured", "More Featured"])
+a2.tick_params(labelsize=20)
+
 a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette="colorblind", order=order)
+a3.set_ylabel("Axis Ratio", fontsize=20)
+a3.set_xlabel(None)
+a3.set_xticks([1, 0], ["Less Featured", "More Featured"])
+a3.tick_params(labelsize=20)
 
-# a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", stat="probability", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-# a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", stat="probability", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-# a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", stat="probability", hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features", bbox_inches='tight')
+plt.show()
 
 
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_all_features")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features")
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features_hist")
 
+
+# struture measurement hist
+fig, axs = plt.subplots(1, 3, figsize=(25, 5))
+
+a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
+# a1 = sns.histplot(ax=axs[0], data=all_properties[all_properties["Cluster" == 0]], x="n_r", stat="probability", bins=20)
+# b1 = sns.histplot(ax=axs[0], data=all_properties[all_properties["Cluster" == 1]], x="n_r", stat="probability", bins=20)
+a1.set_ylabel("Normalised Frequency", fontsize=20)
+a1.set_xlabel("Sersic Index", fontsize=20)
+a1.set_yticks([])
+a1.tick_params(labelsize=20)
+# a1.legend(["Less Featured", "More Featured"], loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=2, prop={"size":20})
+
+a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+a2.set_ylabel("Normalised Frequency", fontsize=20)
+a2.set_xlabel("Position Angle", fontsize=20)
+a2.set_yticks([])
+a2.tick_params(labelsize=20)
+a2.legend(["Less Featured Group", "More Featured Group"], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
+
+a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
+a3.set_ylabel("Normalised Frequency", fontsize=20)
+a3.set_xlabel("Axis Ratio", fontsize=20)
+a3.set_yticks([])
+a3.tick_params(labelsize=20)
+# a1.legend(["Less Featured", "More Featured"], loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=2, prop={"size":20})
+
+
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_select_features_hist", bbox_inches='tight')
 plt.show()
 
 
@@ -214,7 +251,7 @@ b3 = sns.boxplot(ax=axs[1, 2], data=all_properties, x="Cluster", y="MassType_BH"
 
 
 # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
-plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_select_features")
+plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_select_features", bbox_inches='tight')
 plt.show()
 
 

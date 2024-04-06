@@ -240,7 +240,7 @@ for i in range(0, 3):
 
 
 
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_sersic", bbox_inches='tight')
+plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
 plt.show()
 
 
