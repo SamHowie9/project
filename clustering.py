@@ -7,7 +7,7 @@ import pandas as pd
 import os
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.metrics import calinski_harabasz_score
-from scipy.cluster.hierarchy import dendrogram
+from scipy.cluster.hierarchy import dendrogram, set_link_color_palette
 from sklearn.datasets import load_iris
 from sklearn.neighbors import NearestCentroid
 from matplotlib import image as mpimg
@@ -53,19 +53,6 @@ hierarchical = AgglomerativeClustering(n_clusters=None, distance_threshold=0, me
 clusters = hierarchical.fit_predict(chosen_features)
 
 
-scores = []
-
-for i in range(2, 18):
-    optimal_hierarchical = AgglomerativeClustering(n_clusters=i, metric="euclidean", linkage="ward")
-    optimal_clusters = optimal_hierarchical.fit_predict(chosen_features)
-
-    score = calinski_harabasz_score(chosen_features, optimal_clusters)
-
-    scores.append(score)
-
-plt.plot(range(2, 18), scores)
-plt.show()
-
 
 
 
@@ -84,18 +71,26 @@ def plot_dendrogram(model, **kwargs):
                 current_count += counts[child_idx - n_samples]
         counts[i] = current_count
 
-    linkage_matrix = np.column_stack(
-        [model.children_, model.distances_, counts]
-    ).astype(float)
+    linkage_matrix = np.column_stack([model.children_, model.distances_, counts]).astype(float)
 
     # Plot the corresponding dendrogram
     dendrogram(linkage_matrix, **kwargs)
 
 
+
+print(sns.color_palette("colorblind").as_hex())
+print(sns.color_palette("pastel").as_hex())
+
+
+plt.rc("text", usetex=True)
+
 plt.figure(figsize=(20,15))
 
-# plot_dendrogram(hierarchical, truncate_mode="lastp", p=464 )
-plot_dendrogram(hierarchical, truncate_mode="level", p=5, color_threshold=0, link_color_func=lambda k:"black")
+set_link_color_palette(["#80d2fe"])
+plot_dendrogram(hierarchical, truncate_mode="level", p=5, color_threshold=15.5, above_threshold_color="#016398")
+
+# set_link_color_palette(["#fcd082"])
+# plot_dendrogram(hierarchical, truncate_mode="level", p=5, color_threshold=15.5, above_threshold_color="#af7004")
 
 plt.ylabel("Dissimilarity", fontsize=25, labelpad=10)
 plt.xlabel("Number of Images in Clusters", fontsize=25, labelpad=15)
@@ -103,8 +98,15 @@ plt.xticks(fontsize=12)
 plt.yticks(fontsize=15)
 
 # plt.axhline(y=95, label="Cutoff Points")
-plt.axhline(y=15.5)
-plt.axhline(y=19)
+# plt.axhline(y=15.5)
+
+# plt.axhline(y=20.5, label="Cutoff Point")
+plt.axhline(y=15.5, c="black", label="Cutoff Point")
+plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', prop={"size":25})
+# plt.axvline(x=160)
+# plt.axvline(x=480)
+plt.text(x=160, y=32, s="Less Featured", horizontalalignment='center', fontsize=25)
+plt.text(x=480, y=48, s="More Featured", horizontalalignment='center', fontsize=25)
 
 # plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', fontsize=20)
 
@@ -113,6 +115,6 @@ plt.axhline(y=19)
 # plt.axhline(y=134)
 # plt.axhline(y=93)
 
-plt.savefig("Plots/hierarchical_clustering_dendrogram_select_features")
+plt.savefig("Plots/hierarchical_clustering_dendrogram_less_featured", bbox_inches='tight')
 plt.show()
 

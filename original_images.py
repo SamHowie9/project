@@ -14,7 +14,7 @@ import cv2
 encoding_dim = 38
 
 # set the number of clusters
-n_clusters = 2
+n_clusters = 14
 
 
 # load structural and physical properties into dataframes
@@ -184,64 +184,65 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
-fig, axs = plt.subplots(4, 4, figsize=(20, 20))
+# fig, axs = plt.subplots(4, 4, figsize=(20, 20))
 
 
 
 
 
 
-# create the figure for the plot
-fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 
-# create the subfigures for the plot (each group)
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
-
-# # high sersic
-# galaxies_1 = [217859, 234331, 244671, 629180, 1008743, 1732243, 1774857, 2425267, 2446634]
-# # low sersic
-# galaxies_2 = [34157, 35658, 43262, 130678, 138061, 178838, 641392, 1049778, 2047699]
+# # create the figure for the plot
+# fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 #
-# # high stripped sersic
-# galaxies_3 = [50759, 65696, 68767, 246800, 966292, 1028772, 1406432, 1704972, 1738146]
-# # low stripped sersic
-# galaxies_4 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
-
-galaxies_1 = [10733159, 8122788, 4518274, 9532695, 11533908, 8686633, 16677355, 3523446, 10733159]
-galaxies_2 = [11564243, 8536493, 8986033, 10806034, 16720414, 9187925, 9469843, 16420095, 9747706]
-
-
-count = 0
-
-for i in range(0, 3):
-    for j in range(0, 3):
-
-        g1_ax = fig.add_subplot(gs1[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
-        g1_ax.imshow(image)
-        g1_ax.get_xaxis().set_visible(False)
-        g1_ax.get_yaxis().set_visible(False)
-
-        g2_ax = fig.add_subplot(gs2[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies_2[count]) + ".png")
-        g2_ax.imshow(image)
-        g2_ax.get_xaxis().set_visible(False)
-        g2_ax.get_yaxis().set_visible(False)
-
-        # set group title for middle plot of each group
-        if i == 0 and j == 1:
-            # g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
-            # g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
-            g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
-
-        count += 1
-
-
-
-plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
-plt.show()
+# # create the subfigures for the plot (each group)
+# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
+# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
+#
+# # # high sersic
+# # galaxies_1 = [217859, 234331, 244671, 629180, 1008743, 1732243, 1774857, 2425267, 2446634]
+# # # low sersic
+# # galaxies_2 = [34157, 35658, 43262, 130678, 138061, 178838, 641392, 1049778, 2047699]
+# #
+# # # high stripped sersic
+# # galaxies_3 = [50759, 65696, 68767, 246800, 966292, 1028772, 1406432, 1704972, 1738146]
+# # # low stripped sersic
+# # galaxies_4 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
+#
+# galaxies_1 = [10733159, 8122788, 4518274, 9532695, 11533908, 8686633, 16677355, 3523446, 10733159]
+# galaxies_2 = [11564243, 8536493, 8986033, 10806034, 16720414, 9187925, 9469843, 16420095, 9747706]
+#
+#
+# count = 0
+#
+# for i in range(0, 3):
+#     for j in range(0, 3):
+#
+#         g1_ax = fig.add_subplot(gs1[i, j])
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
+#         g1_ax.imshow(image)
+#         g1_ax.get_xaxis().set_visible(False)
+#         g1_ax.get_yaxis().set_visible(False)
+#
+#         g2_ax = fig.add_subplot(gs2[i, j])
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies_2[count]) + ".png")
+#         g2_ax.imshow(image)
+#         g2_ax.get_xaxis().set_visible(False)
+#         g2_ax.get_yaxis().set_visible(False)
+#
+#         # set group title for middle plot of each group
+#         if i == 0 and j == 1:
+#             # g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
+#             # g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
+#             g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+#             g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+#
+#         count += 1
+#
+#
+#
+# plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -451,37 +452,38 @@ plt.show()
 
 
 
-# # order = [1, 0]
+# order = [1, 0]
 # order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
-# # order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
-#
-#
-# for i, cluster in enumerate(order):
-#     print(i, cluster)
-#
-#     galaxy_ids = np.load("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy")
-#
-#     fig, axs = plt.subplots(5, 5, figsize=(20, 20))
-#
-#     count = 0
-#
-#     for j in range(0, 5):
-#         for k in range(0, 5):
-#
-#             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy_ids[count]) + ".png")
-#
-#             sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist()[0])
-#             axis_ratio = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["q_r"].tolist()[0])
-#             stellar_mass = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["MassType_Star"].tolist()[0])
-#
-#             axs[j, k].imshow(image)
-#             axs[j, k].get_xaxis().set_visible(False)
-#             axs[j, k].get_yaxis().set_visible(False)
-#             axs[j, k].set_title((str(galaxy_ids[count]) + " " + str(sersic) + " " + str(axis_ratio)), fontsize=18)
-#
-#             count += 1
-#
-#     plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
+# order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
+order = [4, 3, 12, 13, 11, 7, 9, 10, 5, 6, 1, 8, 2, 0]
+
+
+for i, cluster in enumerate(order):
+    print(i, cluster)
+
+    galaxy_ids = np.load("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy")
+
+    fig, axs = plt.subplots(5, 5, figsize=(20, 20))
+
+    count = 0
+
+    for j in range(0, 5):
+        for k in range(0, 5):
+
+            image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy_ids[count]) + ".png")
+
+            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist()[0])
+            axis_ratio = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["q_r"].tolist()[0])
+            stellar_mass = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["MassType_Star"].tolist()[0])
+
+            axs[j, k].imshow(image)
+            axs[j, k].get_xaxis().set_visible(False)
+            axs[j, k].get_yaxis().set_visible(False)
+            axs[j, k].set_title((str(galaxy_ids[count]) + " " + str(sersic) + " " + str(axis_ratio)), fontsize=18)
+
+            count += 1
+
+    plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
 
 
 
