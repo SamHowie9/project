@@ -609,7 +609,7 @@ group_2 = [17691609, 11506546, 10223986, 14770895]  # very edge on (originally e
 group_0 = [17462825, 1732243, 13869651, 10174638] # irregular galaxies (barred spiral, merger)
 
 
-fig = plt.figure(constrained_layout=False, figsize=(20, 20))
+fig = plt.figure(constrained_layout=False, figsize=(15, 15))
 
 # create sub figures within main figure, specify their location
 gs1 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.975, bottom=0.775)
@@ -643,15 +643,15 @@ for i in range(0, 2):
         g1_ax.imshow(image)
         sersic = str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0])
         print(sersic)
-        g1_ax.set_xlabel(str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0]), fontsize=20, labelpad=-35, color="white")
+        g1_ax.set_xlabel(str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0]), fontsize=20, labelpad=-22, color="white")
         g1_ax.set_xticks([])
         g1_ax.get_yaxis().set_visible(False)
 
         g2_ax = fig.add_subplot(gs2[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(group_3[count]) + ".png")
         g2_ax.imshow(image)
-        g2_ax.get_xaxis().set_visible(False)
-        g2_ax.set_xlabel(str(all_properties[all_properties["GalaxyID"] == group_3[count]]["n_r"].tolist()[0]), fontsize=20)
+        g2_ax.set_xlabel(str(all_properties[all_properties["GalaxyID"] == group_3[count]]["n_r"].tolist()[0]),fontsize=20, labelpad=-22, color="white")
+        g2_ax.set_xticks([])
         g2_ax.get_yaxis().set_visible(False)
 
         g3_ax = fig.add_subplot(gs3[i, j])
