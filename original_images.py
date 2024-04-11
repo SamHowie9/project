@@ -724,3 +724,4 @@ for i in range(0, 2):
         count += 1
 
 plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/all_clusters")
+
