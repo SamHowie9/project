@@ -738,5 +738,64 @@ for i in range(0, 2):
 
         count += 1
 
+
+ax1 = fig.add_subplot(gs1[:])
+ax1.axis("off")
+ax1.set_title("Group 4")
+
+ax2 = fig.add_subplot(gs2[:])
+ax2.axis("off")
+ax2.set_title("Group 3")
+
+ax3 = fig.add_subplot(gs3[:])
+ax3.axis("off")
+ax3.set_title("Group 12")
+
+ax4 = fig.add_subplot(gs4[:])
+ax4.axis("off")
+ax4.set_title("Group 13")
+
+ax5 = fig.add_subplot(gs5[:])
+ax5.axis("off")
+ax5.set_title("Group 11")
+
+ax6 = fig.add_subplot(gs6[:])
+ax6.axis("off")
+ax6.set_title("Group 7")
+
+ax7 = fig.add_subplot(gs7[:])
+ax7.axis("off")
+ax7.set_title("Group 9")
+
+ax8 = fig.add_subplot(gs8[:])
+ax8.axis("off")
+ax8.set_title("Group 10")
+
+ax9 = fig.add_subplot(gs9[:])
+ax9.axis("off")
+ax9.set_title("Group 5")
+
+ax10 = fig.add_subplot(gs10[:])
+ax10.axis("off")
+ax10.set_title("Group 6")
+
+ax11 = fig.add_subplot(gs11[:])
+ax11.axis("off")
+ax11.set_title("Group 1")
+
+ax12 = fig.add_subplot(gs12[:])
+ax12.axis("off")
+ax12.set_title("Group 8")
+
+ax13 = fig.add_subplot(gs13[:])
+ax13.axis("off")
+ax13.set_title("Group 2")
+
+ax14 = fig.add_subplot(gs14[:])
+ax14.axis("off")
+ax14.set_title("Group 0")
+
+
+
 plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/all_clusters", bbox_inches='tight')
 
