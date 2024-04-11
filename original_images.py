@@ -612,25 +612,25 @@ group_0 = [17462825, 1732243, 13869651, 10174638] # irregular galaxies (barred s
 fig = plt.figure(constrained_layout=False, figsize=(20, 20))
 
 # create sub figures within main figure, specify their location
-gs1 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.975, bottom=0.775)
-gs2 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.975, bottom=0.775)
-gs3 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.975, bottom=0.775)
-gs4 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.975, bottom=0.775)
+gs1 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.975, bottom=0.775)
+gs2 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.975, bottom=0.775)
+gs3 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.975, bottom=0.775)
+gs4 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.975, bottom=0.775)
 
-gs5 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.725, bottom=0.525)
-gs6 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.725, bottom=0.525)
-gs7 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.725, bottom=0.525)
-gs8 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.725, bottom=0.525)
+gs5 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.725, bottom=0.525)
+gs6 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.725, bottom=0.525)
+gs7 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.725, bottom=0.525)
+gs8 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.725, bottom=0.525)
 
-gs9 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.475, bottom=0.275)
-gs10 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.475, bottom=0.275)
-gs11 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.475, bottom=0.275)
-gs12 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.475, bottom=0.275)
+gs9 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.475, bottom=0.275)
+gs10 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.475, bottom=0.275)
+gs11 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.475, bottom=0.275)
+gs12 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.475, bottom=0.275)
 
-gs13 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.225, bottom=0.025)
-gs14 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.225, bottom=0.025)
-gs15 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.225, bottom=0.025)
-gs16 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.225, bottom=0.025)
+gs13 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.225, bottom=0.025)
+gs14 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.225, bottom=0.025)
+gs15 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.225, bottom=0.025)
+gs16 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.225, bottom=0.025)
 
 
 count = 0
