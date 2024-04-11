@@ -641,6 +641,8 @@ for i in range(0, 2):
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(group_4[count]) + ".png")
         g1_ax.imshow(image)
+        sersic = str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0])
+        print(sersic)
         g1_ax.set_xlabel(str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0]), fontsize=20, labelpad=-20, color="white")
         g1_ax.get_xaxis().set_visible(False)
         g1_ax.get_yaxis().set_visible(False)
