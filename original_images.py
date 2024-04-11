@@ -452,38 +452,38 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
-# order = [1, 0]
-# order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
-# order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
-order = [4, 3, 12, 13, 11, 7, 9, 10, 5, 6, 1, 8, 2, 0]
-
-
-for i, cluster in enumerate(order):
-    print(i, cluster)
-
-    galaxy_ids = np.load("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy")
-
-    fig, axs = plt.subplots(5, 5, figsize=(20, 20))
-
-    count = 0
-
-    for j in range(0, 5):
-        for k in range(0, 5):
-
-            image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy_ids[count]) + ".png")
-
-            sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist()[0])
-            # axis_ratio = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["q_r"].tolist()[0])
-            # stellar_mass = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["MassType_Star"].tolist()[0])
-
-            axs[j, k].imshow(image)
-            axs[j, k].get_xaxis().set_visible(False)
-            axs[j, k].get_yaxis().set_visible(False)
-            axs[j, k].set_title(str(galaxy_ids[count]) + " " + str(sersic), fontsize=18)
-
-            count += 1
-
-    plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
+# # order = [1, 0]
+# # order = [5, 6, 4, 0, 7, 3, 10, 2, 8, 9, 1]
+# # order = [7, 8, 1, 4, 0, 6, 5, 2, 3]
+# order = [4, 3, 12, 13, 11, 7, 9, 10, 5, 6, 1, 8, 2, 0]
+#
+#
+# for i, cluster in enumerate(order):
+#     print(i, cluster)
+#
+#     galaxy_ids = np.load("Clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(cluster) + ".npy")
+#
+#     fig, axs = plt.subplots(5, 5, figsize=(20, 20))
+#
+#     count = 0
+#
+#     for j in range(0, 5):
+#         for k in range(0, 5):
+#
+#             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy_ids[count]) + ".png")
+#
+#             sersic = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["n_r"].tolist()[0])
+#             # axis_ratio = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["q_r"].tolist()[0])
+#             # stellar_mass = str(all_properties[all_properties["GalaxyID"] == galaxy_ids[count]]["MassType_Star"].tolist()[0])
+#
+#             axs[j, k].imshow(image)
+#             axs[j, k].get_xaxis().set_visible(False)
+#             axs[j, k].get_yaxis().set_visible(False)
+#             axs[j, k].set_title(str(galaxy_ids[count]) + " " + str(sersic), fontsize=18)
+#
+#             count += 1
+#
+#     plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters_" + str(i) + "_" + str(cluster))
 
 
 
@@ -611,25 +611,25 @@ group_0 = [17462825, 1732243, 13869651, 10174638] # irregular galaxies (barred s
 fig = plt.figure(constrained_layout=False, figsize=(20, 20))
 
 # create sub figures within main figure, specify their location
-gs1 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225,top=0.975, bottom=0.775)
-gs2 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475,top=0.975, bottom=0.775)
-gs3 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725,top=0.975, bottom=0.775)
-gs4 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975,top=0.975, bottom=0.775)
+gs1 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.975, bottom=0.775)
+gs2 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.975, bottom=0.775)
+gs3 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.975, bottom=0.775)
+gs4 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.975, bottom=0.775)
 
-gs5 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225,top=0.725, bottom=0.525)
-gs6 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475,top=0.725, bottom=0.525)
-gs7 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725,top=0.725, bottom=0.525)
-gs8 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975,top=0.725, bottom=0.525)
+gs5 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.725, bottom=0.525)
+gs6 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.725, bottom=0.525)
+gs7 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.725, bottom=0.525)
+gs8 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.725, bottom=0.525)
 
-gs9 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225,top=0.475, bottom=0.275)
-gs10 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475,top=0.475, bottom=0.275)
-gs11 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725,top=0.475, bottom=0.275)
-gs12 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975,top=0.475, bottom=0.275)
+gs9 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.475, bottom=0.275)
+gs10 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.475, bottom=0.275)
+gs11 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.475, bottom=0.275)
+gs12 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.475, bottom=0.275)
 
-gs13 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225,top=0.225, bottom=0.025)
-gs14 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.275, right=0.475,top=0.225, bottom=0.025)
-gs15 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.525, right=0.725,top=0.225, bottom=0.025)
-gs16 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.775, right=0.975,top=0.225, bottom=0.025)
+gs13 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.025, right=0.225, top=0.225, bottom=0.025)
+gs14 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.275, right=0.475, top=0.225, bottom=0.025)
+gs15 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.525, right=0.725, top=0.225, bottom=0.025)
+gs16 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.1, hspace=0.1, left=0.775, right=0.975, top=0.225, bottom=0.025)
 
 
 count = 0
@@ -638,90 +638,104 @@ for i in range(0, 2):
     for j in range(0, 2):
 
         g1_ax = fig.add_subplot(gs1[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_4[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_4[count]) + ".png")
         g1_ax.imshow(image)
-        g1_ax.get_xaxis().set_visible(False)
+        g1_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"]), fontsize=20)
+        # g1_ax.get_xaxis().set_visible(False)
         g1_ax.get_yaxis().set_visible(False)
 
         g2_ax = fig.add_subplot(gs2[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_3[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_3[count]) + ".png")
         g2_ax.imshow(image)
-        g2_ax.get_xaxis().set_visible(False)
+        g2_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_3[count]]["n_r"]), fontsize=20)
+        # g2_ax.get_xaxis().set_visible(False)
         g2_ax.get_yaxis().set_visible(False)
 
         g3_ax = fig.add_subplot(gs3[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_12[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_12[count]) + ".png")
         g3_ax.imshow(image)
-        g3_ax.get_xaxis().set_visible(False)
+        g3_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_12[count]]["n_r"]), fontsize=20)
+        # g3_ax.get_xaxis().set_visible(False)
         g3_ax.get_yaxis().set_visible(False)
 
         g4_ax = fig.add_subplot(gs4[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_13[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_13[count]) + ".png")
         g4_ax.imshow(image)
-        g4_ax.get_xaxis().set_visible(False)
+        g4_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_13[count]]["n_r"]), fontsize=20)
+        # g4_ax.get_xaxis().set_visible(False)
         g4_ax.get_yaxis().set_visible(False)
 
         g5_ax = fig.add_subplot(gs5[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_11[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_11[count]) + ".png")
         g5_ax.imshow(image)
-        g5_ax.get_xaxis().set_visible(False)
+        g5_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_11[count]]["n_r"]), fontsize=20)
+        # g5_ax.get_xaxis().set_visible(False)
         g5_ax.get_yaxis().set_visible(False)
 
         g6_ax = fig.add_subplot(gs6[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_7[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_7[count]) + ".png")
         g6_ax.imshow(image)
-        g6_ax.get_xaxis().set_visible(False)
+        g6_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_7[count]]["n_r"]), fontsize=20)
+        # g6_ax.get_xaxis().set_visible(False)
         g6_ax.get_yaxis().set_visible(False)
 
         g7_ax = fig.add_subplot(gs7[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_9[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_9[count]) + ".png")
         g7_ax.imshow(image)
-        g7_ax.get_xaxis().set_visible(False)
+        g7_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_9[count]]["n_r"]), fontsize=20)
+        # g7_ax.get_xaxis().set_visible(False)
         g7_ax.get_yaxis().set_visible(False)
 
         g8_ax = fig.add_subplot(gs8[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_10[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_10[count]) + ".png")
         g8_ax.imshow(image)
-        g8_ax.get_xaxis().set_visible(False)
+        g8_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_10[count]]["n_r"]), fontsize=20)
+        # g8_ax.get_xaxis().set_visible(False)
         g8_ax.get_yaxis().set_visible(False)
 
         g9_ax = fig.add_subplot(gs9[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_5[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_5[count]) + ".png")
         g9_ax.imshow(image)
-        g9_ax.get_xaxis().set_visible(False)
+        g9_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_5[count]]["n_r"]), fontsize=20)
+        # g9_ax.get_xaxis().set_visible(False)
         g9_ax.get_yaxis().set_visible(False)
 
         g10_ax = fig.add_subplot(gs10[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_6[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_6[count]) + ".png")
         g10_ax.imshow(image)
-        g10_ax.get_xaxis().set_visible(False)
+        g10_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_6[count]]["n_r"]), fontsize=20)
+        # g10_ax.get_xaxis().set_visible(False)
         g10_ax.get_yaxis().set_visible(False)
 
         g11_ax = fig.add_subplot(gs11[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_1[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_1[count]) + ".png")
         g11_ax.imshow(image)
-        g11_ax.get_xaxis().set_visible(False)
+        g11_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_1[count]]["n_r"]), fontsize=20)
+        # g11_ax.get_xaxis().set_visible(False)
         g11_ax.get_yaxis().set_visible(False)
 
         g12_ax = fig.add_subplot(gs12[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_8[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_8[count]) + ".png")
         g12_ax.imshow(image)
-        g12_ax.get_xaxis().set_visible(False)
+        g12_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_8[count]]["n_r"]), fontsize=20)
+        # g12_ax.get_xaxis().set_visible(False)
         g12_ax.get_yaxis().set_visible(False)
 
         g13_ax = fig.add_subplot(gs13[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_2[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_2[count]) + ".png")
         g13_ax.imshow(image)
-        g13_ax.get_xaxis().set_visible(False)
+        g13_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_2[count]]["n_r"]), fontsize=20)
+        # g13_ax.get_xaxis().set_visible(False)
         g13_ax.get_yaxis().set_visible(False)
 
         g14_ax = fig.add_subplot(gs14[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(group_0[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand" + str(group_0[count]) + ".png")
         g14_ax.imshow(image)
-        g14_ax.get_xaxis().set_visible(False)
+        g14_ax.set_xaxis("n = " + str(all_properties[all_properties["GalaxyID"] == group_0[count]]["n_r"]), fontsize=20)
+        # g14_ax.get_xaxis().set_visible(False)
         g14_ax.get_yaxis().set_visible(False)
 
         count += 1
 
-plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/all_clusters")
+plt.savefig("Cluster Images/" + str(encoding_dim) + "_features_" + str(n_clusters) + "_clusters/all_clusters", bbox_inches='tight')
 
