@@ -643,8 +643,8 @@ for i in range(0, 2):
         g1_ax.imshow(image)
         sersic = str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0])
         print(sersic)
-        g1_ax.set_xlabel(str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0]), fontsize=20, labelpad=-20, color="white")
-        # g1_ax.get_xaxis().set_visible(False)
+        g1_ax.set_xlabel(str(all_properties[all_properties["GalaxyID"] == group_4[count]]["n_r"].tolist()[0]), fontsize=20, labelpad=-50, color="white")
+        g1_ax.set_xticks([])
         g1_ax.get_yaxis().set_visible(False)
 
         g2_ax = fig.add_subplot(gs2[i, j])
