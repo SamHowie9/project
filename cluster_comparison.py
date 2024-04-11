@@ -209,7 +209,7 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 #
 # a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette=binary_palette, order=order)
 # a3.set_ylabel("Axis Ratio", fontsize=20)
-# a3.set_xlabel(None)
+# a3.set_xlabel("Cluster Index", fontsize=20, labelpad=10)
 # # a3.set_xticks([1, 0], ["Less Featured", "More Featured"])
 # a3.legend([],[], frameon=False)
 # a3.tick_params(labelsize=20)
@@ -254,53 +254,53 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 
-disk = "#93ebe8"
-bulge = "#ff9f9b"
-machine_palette = {4:bulge, 3:bulge, 12:bulge, 13:bulge, 11:disk, 7:disk, 9:disk, 10:disk, 5:disk, 6:disk, 1:disk, 8:disk, 2:disk, 0:disk}
-
-# physical properties
-fig, axs = plt.subplots(3, 2, figsize=(20, 15))
-
-a1 = sns.boxplot(ax=axs[0, 0], data=all_properties, x="Cluster", y="re_r", showfliers=False, whis=1, palette=machine_palette, order=med_df["re_r"].sort_values(ascending=False).index.to_list())
-a1.set_ylabel("Semi-Major Axis (pkpk)", fontsize=20)
-a1.set_xlabel("Cluster", fontsize=20)
-a1.tick_params(labelsize=20)
-
-a2 = sns.boxplot(ax=axs[1, 0], data=all_properties, x="Cluster", y="InitialMassWeightedStellarAge", showfliers=False, whis=1, palette=machine_palette, order=med_df["InitialMassWeightedStellarAge"].sort_values(ascending=False).index.to_list())
-a2.set_ylabel("Stellar Age (Gyr)", fontsize=20)
-a2.set_xlabel("Cluster", fontsize=20)
-a2.tick_params(labelsize=20)
-
-a3 = sns.boxplot(ax=axs[2, 0], data=all_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, palette=machine_palette, order=med_df["StarFormationRate"].sort_values(ascending=False).index.to_list())
-a3.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
-a3.set_xlabel("Cluster", fontsize=20)
-a3.tick_params(labelsize=20)
-
-
-b1 = sns.boxplot(ax=axs[0, 1], data=all_properties, x="Cluster", y=all_properties["MassType_Star"].div(1e10), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_Star"].sort_values(ascending=False).index.to_list())
-b1.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
-b1.set_xlabel("Cluster", fontsize=20)
-b1.tick_params(labelsize=20)
-b1.set_yticks([0, 5, 10, 15])
-b1.set_ylim(-0.1, 15.2)
-
-b2 = sns.boxplot(ax=axs[1, 1], data=all_properties, x="Cluster", y=all_properties["MassType_DM"].div(1e12), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_Star"].sort_values(ascending=False).index.to_list())
-b2.set_ylabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
-b2.set_xlabel("Cluster", fontsize=20)
-b2.tick_params(labelsize=20)
-
-b3 = sns.boxplot(ax=axs[2, 1], data=all_properties, x="Cluster", y=all_properties["MassType_BH"].div(1e8), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_Star"].sort_values(ascending=False).index.to_list())
-b3.set_ylabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
-b3.set_xlabel("Cluster", fontsize=20)
-b3.tick_params(labelsize=20)
-
-disk_patch = mpatches.Patch(color=disk, label="Disk Structures")
-bulge_patch = mpatches.Patch(color=bulge, label="Bulge Structures")
-a1.legend(handles=[disk_patch, bulge_patch], bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=2, prop={"size":20})
-
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
-plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution", bbox_inches='tight')
-plt.show()
+# disk = "#93ebe8"
+# bulge = "#ff9f9b"
+# machine_palette = {4:bulge, 3:bulge, 12:bulge, 13:bulge, 11:disk, 7:disk, 9:disk, 10:disk, 5:disk, 6:disk, 1:disk, 8:disk, 2:disk, 0:disk}
+#
+# # physical properties
+# fig, axs = plt.subplots(3, 2, figsize=(20, 15))
+#
+# a1 = sns.boxplot(ax=axs[0, 0], data=all_properties, x="Cluster", y="re_r", showfliers=False, whis=1, palette=machine_palette, order=med_df["re_r"].sort_values(ascending=False).index.to_list())
+# a1.set_ylabel("Semi-Major Axis (pkpk)", fontsize=20)
+# a1.set_xlabel(None)
+# a1.tick_params(labelsize=20)
+#
+# a2 = sns.boxplot(ax=axs[1, 0], data=all_properties, x="Cluster", y="InitialMassWeightedStellarAge", showfliers=False, whis=1, palette=machine_palette, order=med_df["InitialMassWeightedStellarAge"].sort_values(ascending=False).index.to_list())
+# a2.set_ylabel("Stellar Age (Gyr)", fontsize=20)
+# a2.set_xlabel(None)
+# a2.tick_params(labelsize=20)
+#
+# a3 = sns.boxplot(ax=axs[2, 0], data=all_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, palette=machine_palette, order=med_df["StarFormationRate"].sort_values(ascending=False).index.to_list())
+# a3.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
+# a3.set_xlabel("Cluster Index", fontsize=20)
+# a3.tick_params(labelsize=20)
+#
+#
+# b1 = sns.boxplot(ax=axs[0, 1], data=all_properties, x="Cluster", y=all_properties["MassType_Star"].div(1e10), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_Star"].sort_values(ascending=False).index.to_list())
+# b1.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
+# b1.set_xlabel(None)
+# b1.tick_params(labelsize=20)
+# b1.set_yticks([0, 5, 10, 15])
+# b1.set_ylim(-0.1, 15.2)
+#
+# b2 = sns.boxplot(ax=axs[1, 1], data=all_properties, x="Cluster", y=all_properties["MassType_DM"].div(1e12), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_DM"].sort_values(ascending=False).index.to_list())
+# b2.set_ylabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
+# b2.set_xlabel(None)
+# b2.tick_params(labelsize=20)
+#
+# b3 = sns.boxplot(ax=axs[2, 1], data=all_properties, x="Cluster", y=all_properties["MassType_BH"].div(1e8), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_BH"].sort_values(ascending=False).index.to_list())
+# b3.set_ylabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
+# b3.set_xlabel("Cluster Index", fontsize=20)
+# b3.tick_params(labelsize=20)
+#
+# disk_patch = mpatches.Patch(color=disk, label="Disk Structures")
+# bulge_patch = mpatches.Patch(color=bulge, label="Bulge Structures")
+# a1.legend(handles=[disk_patch, bulge_patch], bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=2, prop={"size":20})
+#
+# # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
+# plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution", bbox_inches='tight')
+# plt.show()
 
 
 # # all physical histogram
@@ -487,24 +487,39 @@ print(str(total_elliptical) + " Ellipticals (" + str(total_elliptical/total) + "
 print()
 
 
-total_0 = all_properties[all_properties["Cluster"] == 0].shape[0]
-total_0_spiral = all_properties[((all_properties["Cluster"] == 0) & (all_properties["n_r"] <= 2.5))].shape[0]
-total_0_elliptical = all_properties[((all_properties["Cluster"] == 0) & (all_properties["n_r"] > 2.5))].shape[0]
+# total_4 = all_properties[all_properties["Cluster"] == 4].shape[0]
+# total_4_spiral = all_properties[((all_properties["Cluster"] == 4) & (all_properties["n_r"] <= 2.5))].shape[0]
+# total_4_elliptical = all_properties[((all_properties["Cluster"] == 4) & (all_properties["n_r"] > 2.5))].shape[0]
+#
+# print("Cluster 4 - " + str(total_4))
+# print("Cluster 4 - " + str(total_4_spiral) + " Spirals (" + str(total_4_spiral/total_4) + ")")
+# print("Cluster 4 - " + str(total_4_elliptical) + " Ellipticals (" + str(total_4_elliptical/total_4) + ")")
+# print()
 
-print("Cluster 0 - " + str(total_0))
-print("Cluster 0 - " + str(total_0_spiral) + " Spirals (" + str(total_0_spiral/total_0) + ")")
-print("Cluster 0 - " + str(total_0_elliptical) + " Ellipticals (" + str(total_0_elliptical/total_0) + ")")
-print()
 
 
-total_1 = all_properties[all_properties["Cluster"] == 1].shape[0]
-total_1_spiral = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] <= 2.5))].shape[0]
-total_1_elliptical = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] > 2.5))].shape[0]
+order = med_df["n_r"].sort_values(ascending=False).index.to_list()
 
-print("Cluster 1 - " + str(total_1))
-print("Cluster 1 - " + str(total_1_spiral) + " Spirals (" + str(total_1_spiral/total_1) + ")")
-print("Cluster 1 - " + str(total_1_elliptical) + " Ellipticals (" + str(total_1_elliptical/total_1) + ")")
-print()
+for i in order:
+    total_i = all_properties[all_properties["Cluster"] == i].shape[0]
+    total_i_spiral = all_properties[((all_properties["Cluster"] == i) & (all_properties["n_r"] <= 2.5))].shape[0]
+    total_i_elliptical = all_properties[((all_properties["Cluster"] == i) & (all_properties["n_r"] > 2.5))].shape[0]
+
+    print("Cluster " + str(i) + " - " + str(total_i))
+    print("Cluster " + str(i) + " - " + str(total_i_spiral) + " Spirals (" + str(total_i_spiral / total_i) + ")")
+    print("Cluster " + str(i) + " - " + str(total_i_elliptical) + " Ellipticals (" + str(total_i_elliptical / total_i) + ")")
+    print()
+
+
+
+# total_1 = all_properties[all_properties["Cluster"] == 1].shape[0]
+# total_1_spiral = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] <= 2.5))].shape[0]
+# total_1_elliptical = all_properties[((all_properties["Cluster"] == 1) & (all_properties["n_r"] > 2.5))].shape[0]
+#
+# print("Cluster 1 - " + str(total_1))
+# print("Cluster 1 - " + str(total_1_spiral) + " Spirals (" + str(total_1_spiral/total_1) + ")")
+# print("Cluster 1 - " + str(total_1_elliptical) + " Ellipticals (" + str(total_1_elliptical/total_1) + ")")
+# print()
 
 
 # # number in elliptical cluster
