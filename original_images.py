@@ -196,8 +196,8 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 
 # create the subfigures for the plot (each group)
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.47, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.53, right=0.95, wspace=0.05, hspace=0.05)
+gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.49, wspace=0.05, hspace=0.05)
+gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.51, right=0.95, wspace=0.05, hspace=0.05)
 
 # # high sersic
 # galaxies_1 = [217859, 234331, 244671, 629180, 1008743, 1732243, 1774857, 2425267, 2446634]
