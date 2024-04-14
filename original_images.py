@@ -192,57 +192,57 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
-# # create the figure for the plot
-# fig = plt.figure(constrained_layout=False, figsize=(20, 10))
+# create the figure for the plot
+fig = plt.figure(constrained_layout=False, figsize=(20, 10))
+
+# create the subfigures for the plot (each group)
+gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.47, wspace=0.05, hspace=0.05)
+gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.53, right=0.95, wspace=0.05, hspace=0.05)
+
+# # high sersic
+# galaxies_1 = [217859, 234331, 244671, 629180, 1008743, 1732243, 1774857, 2425267, 2446634]
+# # low sersic
+# galaxies_2 = [34157, 35658, 43262, 130678, 138061, 178838, 641392, 1049778, 2047699]
 #
-# # create the subfigures for the plot (each group)
-# gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.45, wspace=0.05, hspace=0.05)
-# gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.55, right=0.95, wspace=0.05, hspace=0.05)
-#
-# # # high sersic
-# # galaxies_1 = [217859, 234331, 244671, 629180, 1008743, 1732243, 1774857, 2425267, 2446634]
-# # # low sersic
-# # galaxies_2 = [34157, 35658, 43262, 130678, 138061, 178838, 641392, 1049778, 2047699]
-# #
-# # # high stripped sersic
-# # galaxies_3 = [50759, 65696, 68767, 246800, 966292, 1028772, 1406432, 1704972, 1738146]
-# # # low stripped sersic
-# # galaxies_4 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
-#
-# galaxies_1 = [10733159, 8122788, 4518274, 9532695, 11533908, 8686633, 16677355, 3523446, 10733159]
-# galaxies_2 = [11564243, 8536493, 8986033, 10806034, 16720414, 9187925, 9469843, 16420095, 9747706]
-#
-#
-# count = 0
-#
-# for i in range(0, 3):
-#     for j in range(0, 3):
-#
-#         g1_ax = fig.add_subplot(gs1[i, j])
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
-#         g1_ax.imshow(image)
-#         g1_ax.get_xaxis().set_visible(False)
-#         g1_ax.get_yaxis().set_visible(False)
-#
-#         g2_ax = fig.add_subplot(gs2[i, j])
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies_2[count]) + ".png")
-#         g2_ax.imshow(image)
-#         g2_ax.get_xaxis().set_visible(False)
-#         g2_ax.get_yaxis().set_visible(False)
-#
-#         # set group title for middle plot of each group
-#         if i == 0 and j == 1:
-#             # g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
-#             # g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
-#             g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
-#             g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
-#
-#         count += 1
-#
-#
-#
-# plt.savefig("Plots/" + str(n_clusters) + "_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
-# plt.show()
+# # high stripped sersic
+# galaxies_3 = [50759, 65696, 68767, 246800, 966292, 1028772, 1406432, 1704972, 1738146]
+# # low stripped sersic
+# galaxies_4 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
+
+galaxies_1 = [10733159, 8122788, 4518274, 9532695, 11533908, 8686633, 16677355, 3523446, 10733159]
+galaxies_2 = [11564243, 8536493, 8986033, 10806034, 16720414, 9187925, 9469843, 16420095, 9747706]
+
+
+count = 0
+
+for i in range(0, 3):
+    for j in range(0, 3):
+
+        g1_ax = fig.add_subplot(gs1[i, j])
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
+        g1_ax.imshow(image)
+        g1_ax.get_xaxis().set_visible(False)
+        g1_ax.get_yaxis().set_visible(False)
+
+        g2_ax = fig.add_subplot(gs2[i, j])
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxies_2[count]) + ".png")
+        g2_ax.imshow(image)
+        g2_ax.get_xaxis().set_visible(False)
+        g2_ax.get_yaxis().set_visible(False)
+
+        # set group title for middle plot of each group
+        if i == 0 and j == 1:
+            # g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
+            # g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+
+        count += 1
+
+
+
+plt.savefig("Plots/2_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
+plt.show()
 
 
 
