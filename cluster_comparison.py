@@ -209,7 +209,7 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 #
 # a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette=binary_palette, order=order)
 # a3.set_ylabel("Axis Ratio", fontsize=20)
-# a3.set_xlabel("Cluster Index", fontsize=20, labelpad=10)
+# a3.set_xlabel("Group Index", fontsize=20, labelpad=10)
 # # a3.set_xticks([1, 0], ["Less Featured", "More Featured"])
 # a3.legend([],[], frameon=False)
 # a3.tick_params(labelsize=20)
@@ -273,7 +273,7 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 #
 # a3 = sns.boxplot(ax=axs[2, 0], data=all_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, palette=machine_palette, order=med_df["StarFormationRate"].sort_values(ascending=False).index.to_list())
 # a3.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
-# a3.set_xlabel("Cluster Index", fontsize=20)
+# a3.set_xlabel("Group Index", fontsize=20)
 # a3.tick_params(labelsize=20)
 #
 #
@@ -291,7 +291,7 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 #
 # b3 = sns.boxplot(ax=axs[2, 1], data=all_properties, x="Cluster", y=all_properties["MassType_BH"].div(1e8), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_BH"].sort_values(ascending=False).index.to_list())
 # b3.set_ylabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
-# b3.set_xlabel("Cluster Index", fontsize=20)
+# b3.set_xlabel("Group Index", fontsize=20)
 # b3.tick_params(labelsize=20)
 #
 # disk_patch = mpatches.Patch(color=disk, label="Disk Structures")
@@ -300,6 +300,7 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 #
 # # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
 # plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution", bbox_inches='tight')
+# # plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_sersic_order", bbox_inches='tight')
 # plt.show()
 
 
@@ -578,6 +579,12 @@ for i in order:
 
 
 
+
+sns.scatterplot(data=med_df, x=(med_df["MassType_Star"]), y="n_r", s=100)
+plt.show()
+
+
+print(all_properties["re_r"].sort_values())
 
 
 # print(med_df)
