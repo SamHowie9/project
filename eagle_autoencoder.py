@@ -9,11 +9,12 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import cv2
 
+
+
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
 plt.switch_backend('agg')
-
 
 # tf.config.list_physical_devices('GPU')
 
@@ -22,10 +23,11 @@ plt.switch_backend('agg')
 # select which GPU to use
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
+# number of extracted features
 encoding_dim = 46
 
 
-
+# crops to the center of the images (only when specified)
 def center_crop(img, dim):
     width, height = img.shape[1], img.shape[0]
     # process crop width and height for max available dimension
@@ -38,7 +40,7 @@ def center_crop(img, dim):
     return crop_img
 
 
-
+# finds the width of the galaxy in each image
 def half_max_range(image):
 
     mean_intensity = image.mean()
@@ -89,7 +91,7 @@ def half_max_range(image):
     return start_x, end_x, start_y, end_y
 
 
-
+# crop 'smaller' galaxies and resize 'larger' images
 def resize_image(image, cutoff=60):
 
     # get the fill width half maximum (for x and y direction)
@@ -144,7 +146,7 @@ test_images = np.array(all_images[-200:])
 
 
 # set the encoding dimension (number of extracted features)
-# encoding_dim = 25
+# encoding_dim = 46
 
 
 
@@ -158,12 +160,12 @@ x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="sam
 x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
 x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
 x = Flatten()(x)                                                                                    # (256)
-x = Dense(units=64)(x)                                                                              # (32)
-encoded = Dense(units=encoding_dim, name="encoded")(x)                                              # (2)
+x = Dense(units=64)(x)                                                                              # (64)
+encoded = Dense(units=encoding_dim, name="encoded")(x)                                              # (extracted features)
 
 
 # layers for the decoder
-x = Dense(units=64)(encoded)                                                                        # (32)
+x = Dense(units=64)(encoded)                                                                        # (64)
 x = Dense(units=256)(x)                                                                             # (256)
 x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
 x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)

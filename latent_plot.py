@@ -134,64 +134,71 @@ image = decoder.predict(np.array(a))
 
 
 
-
-
-# fig, axs = plt.subplots(encoding_dim, latent_num, figsize=(10, 20))
-#
-# width = latent_num + 2
-# height = encoding_dim + ((encoding_dim - 1) * 0.1) + 2
-#
-# fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
-#
-# gs = fig.add_gridspec(nrows=encoding_dim, ncols=latent_num, hspace=0.1, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
-#
-#
-# # fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
-#
-# for i in range(encoding_dim):
-#
-#     latent_images = decoder.predict(latent_features[i])
-#
-#     for j in range(latent_num):
-#
-#         ax = fig.add_subplot(gs[i, j])
-#
-#         ax.imshow(latent_images[j])
-#
-#         ax.set_yticklabels([])
-#         ax.set_xticklabels([])
-#
-#         ax.set_yticks([])
-#         ax.set_xticks([])
-#
-#
-#         # ax.get_yaxis().set_visible(False)
-#         # ax.get_xaxis().set_visible(False)
-#
-#
-#         if j == 0:
-#             ax.set_ylabel(i, fontsize=50, rotation=0, labelpad=40)
-#
-#         # axs[i][j].imshow(latent_images[j], aspect="equal")
-#         # axs[i][j].get_xaxis().set_visible(False)
-#         # axs[i][j].get_yaxis().set_visible(False)
-#
-#
-#
-#
-# plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3")
-# # plt.show()
-
-
-
-
-
-
-
 plt.rcParams['text.usetex'] = True
 
+fig, axs = plt.subplots(encoding_dim, latent_num, figsize=(10, 20))
 
 
+# no_features = encoding_dim
+no_features = 19
+
+width = latent_num + 2
+height = no_features + ((no_features - 1) * 0.1) + 2
+
+fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
+
+gs = fig.add_gridspec(nrows=no_features, ncols=latent_num, hspace=0.1, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
+
+
+# fig.subplots_adjust(bottom=0, top=1, left=0, right=1)
+
+for i in range(0, 19):
+
+    # latent_images = decoder.predict(latent_features[i])
+    latent_images = decoder.predict(latent_features[i+19])
+
+    for j in range(latent_num):
+
+        ax = fig.add_subplot(gs[i, j])
+
+        ax.imshow(latent_images[j])
+        # ax.imshow(latent_images[j+19])
+
+        ax.set_yticklabels([])
+        ax.set_xticklabels([])
+
+        ax.set_yticks([])
+        ax.set_xticks([])
+
+
+        # ax.get_yaxis().set_visible(False)
+        # ax.get_xaxis().set_visible(False)
+
+
+        if j == 0:
+            # ax.set_ylabel(i, fontsize=50, rotation=0, labelpad=40)
+            ax.set_ylabel(i+19, fontsize=50, rotation=0, labelpad=40)
+
+        # axs[i][j].imshow(latent_images[j], aspect="equal")
+        # axs[i][j].get_xaxis().set_visible(False)
+        # axs[i][j].get_yaxis().set_visible(False)
+
+
+
+
+plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3_p2")
+# plt.show()
+
+
+
+
+
+
+
+# plt.rcParams['text.usetex'] = True
+#
+#
+#
 # no_features = 3
 #
 # width = latent_num + 2
@@ -220,18 +227,18 @@ plt.rcParams['text.usetex'] = True
 #         if j == 5:
 #             ax.set_title("Feature " + str(image), fontsize=30)
 #
-#         if j == 0:
-#             ax.set_xlabel("$n \sim a$", fontsize=30)
-#
-#         if j == 10:
-#             ax.set_xlabel("$n \sim a$", fontsize=30)
+#         # if j == 0:
+#         #     ax.set_xlabel("$n \sim a$", fontsize=30)
+#         #
+#         # if j == 10:
+#         #     ax.set_xlabel("$n \sim a$", fontsize=30)
 #
 # plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3_sersic.png", bbox_inches='tight')
 # plt.show()
-
-
-
-
+#
+#
+#
+#
 # no_features = 3
 #
 # width = latent_num + 2
@@ -260,18 +267,18 @@ plt.rcParams['text.usetex'] = True
 #         if j == 5:
 #             ax.set_title("Feature " + str(image), fontsize=30)
 #
-#         if j == 0:
-#             ax.set_xlabel("PA $\sim a$", fontsize=30)
-#
-#         if j == 10:
-#             ax.set_xlabel("PA $\sim a$", fontsize=30)
+#         # if j == 0:
+#         #     ax.set_xlabel("PA $\sim a$", fontsize=30)
+#         #
+#         # if j == 10:
+#         #     ax.set_xlabel("PA $\sim a$", fontsize=30)
 #
 # plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3_position_angle.png", bbox_inches='tight')
 # plt.show()
-
-
-
-
+#
+#
+#
+#
 # no_features = 3
 #
 # width = latent_num + 2
@@ -300,52 +307,52 @@ plt.rcParams['text.usetex'] = True
 #         if j == 5:
 #             ax.set_title("Feature " + str(image), fontsize=30)
 #
-#         if j == 0:
-#             ax.set_xlabel("$q \sim a$", fontsize=30)
-#
-#         if j == 10:
-#             ax.set_xlabel("$q \sim a$", fontsize=30)
+#         # if j == 0:
+#         #     ax.set_xlabel("$q \sim a$", fontsize=30)
+#         #
+#         # if j == 10:
+#         #     ax.set_xlabel("$q \sim a$", fontsize=30)
 #
 # plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3_axis_ratio.png", bbox_inches='tight')
 # plt.show()
-
-
-
-
-no_features = 3
-
-width = latent_num + 2
-height = no_features + ((no_features - 1) * 0.5) + 2
-# height = no_features + ((no_features - 1) * 1) + 2
-
-fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
-
-gs = fig.add_gridspec(nrows=3, ncols=latent_num, hspace=0.2, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
-
-for index, image in enumerate([7, 12]):
-
-    latent_images = decoder.predict(latent_features[image])
-
-    for j in range(latent_num):
-
-        ax = fig.add_subplot(gs[index, j])
-
-        ax.imshow(latent_images[j])
-
-        ax.set_yticklabels([])
-        ax.set_xticklabels([])
-
-        ax.set_yticks([])
-        ax.set_xticks([])
-
-        if j == 5:
-            ax.set_title("Feature " + str(image), fontsize=30)
-
-        # if j == 0:
-        #     ax.set_xlabel("SFR $\sim a$ \n $a \sim a$ \n Stellar Age $\sim a$", fontsize=30)
-        #
-        # if j == 10:
-        #     ax.set_xlabel("SFR $\sim a$ \n $a \sim a$ \n Stellar Age $\sim a$", fontsize=30)
-
-plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3_physical.png", bbox_inches='tight')
-plt.show()
+#
+#
+#
+#
+# no_features = 3
+#
+# width = latent_num + 2
+# height = no_features + ((no_features - 1) * 0.5) + 2
+# # height = no_features + ((no_features - 1) * 1) + 2
+#
+# fig = plt.figure(constrained_layout=False, figsize=(width*2, height*2))
+#
+# gs = fig.add_gridspec(nrows=3, ncols=latent_num, hspace=0.2, wspace=0, left=(1/width), right=(1 - 1/width), bottom=(1/height), top=(1 - 1/height))
+#
+# for index, image in enumerate([7, 12]):
+#
+#     latent_images = decoder.predict(latent_features[image])
+#
+#     for j in range(latent_num):
+#
+#         ax = fig.add_subplot(gs[index, j])
+#
+#         ax.imshow(latent_images[j])
+#
+#         ax.set_yticklabels([])
+#         ax.set_xticklabels([])
+#
+#         ax.set_yticks([])
+#         ax.set_xticks([])
+#
+#         if j == 5:
+#             ax.set_title("Feature " + str(image), fontsize=30)
+#
+#         # if j == 0:
+#         #     ax.set_xlabel("SFR $\sim a$ \n $a \sim a$ \n Stellar Age $\sim a$", fontsize=30)
+#         #
+#         # if j == 10:
+#         #     ax.set_xlabel("SFR $\sim a$ \n $a \sim a$ \n Stellar Age $\sim a$", fontsize=30)
+#
+# plt.savefig("Latent Plots Rand/latent_" + str(encoding_dim) + "_features_3_physical.png", bbox_inches='tight')
+# plt.show()

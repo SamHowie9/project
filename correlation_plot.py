@@ -3,9 +3,10 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
-from sklearn.cluster import AgglomerativeClustering
 from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
+from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
+from sklearn.neighbors import NearestCentroid
 
 
 plt.style.use("default")
@@ -64,81 +65,81 @@ extracted_features_switch = extracted_features.T
 
 
 
-# structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
-# physical_correlation_df = pd.DataFrame(columns=["Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
-# correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
-#
-# for feature in range(0, len(extracted_features_switch)):
-#
-#     # create a list to contain the correlation between that feature and each property
-#     structure_correlation_list = []
-#     physical_correlation_list = []
-#
-#     correlation_list = []
-#
-#     # loop through each property
-#     # for gal_property in range(1, len(structure_properties.columns)):
-#     for gal_property in range(1, len(all_properties.columns)):
-#
-#         if gal_property == 6:
-#             continue
-#
-#         # calculate the correlation between that extracted feature and that property
-#         # structure_correlation = np.corrcoef(extracted_features_switch[feature], abs(structure_properties.iloc[:, gal_property]))[0][1]
-#         # structure_correlation_list.append(structure_correlation)
-#
-#         correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
-#         correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-#         correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties.iloc[:, gal_property])[0][1]
-#         correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-#
-#         if gal_property == 1 and feature == 21:
-#             print(correlation_1, correlation_2, correlation_3, correlation_4)
-#
-#         correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
-#
-#         # # linear, quadratic and cubic fitting
-#         # linear = np.polyfit(x=extracted_features_switch[feature], y=all_properties.iloc[:, gal_property], deg=1)
-#         # quadratic = np.polyfit(x=extracted_features_switch[feature], y=all_properties.iloc[:, gal_property], deg=2)
-#         # cubic = np.polyfit(x=extracted_features_switch[feature], y=all_properties.iloc[:, gal_property], deg=3)
-#         #
-#         # # evaluate these polynomials
-#         # val_linear = np.polyval(linear, extracted_features_switch[feature])
-#         # val_quadratic = np.polyval(quadratic, extracted_features_switch[feature])
-#         # val_cubic = np.polyval(cubic, extracted_features_switch[feature])
-#         #
-#         # # mean squared error between polynomial fits and data
-#         # mse_linear = np.mean(np.square(all_properties.iloc[:, gal_property] - val_linear))
-#         # mse_quadratic = np.mean(np.square(all_properties.iloc[:, gal_property] - val_quadratic))
-#         # mse_cubic = np.mean(np.square(all_properties.iloc[:, gal_property] - val_cubic))
-#         #
-#         # best_fit = min(mse_linear, mse_quadratic, mse_cubic)
-#         #
-#         # correlation_list.append(best_fit)
-#
-#
-#
-#     # for gal_property in range(1, len(physical_properties.columns)):
-#     #
-#     #     # calculate the correlation between that extracted feature and that property
-#     #     physical_correlation = np.corrcoef(extracted_features_switch[feature], physical_properties.iloc[:, gal_property])[0][1]
-#     #     physical_correlation_list.append(physical_correlation)
-#
-#     # # add the correlation of that feature to the main dataframe
-#     # structure_correlation_df.loc[len(structure_correlation_df)] = structure_correlation_list
-#     # physical_correlation_df.loc[len(physical_correlation_df)] = physical_correlation_list
-#     # correlation_df.loc[len(correlation_df)] = structure_correlation_list + physical_correlation_list
-#
-#     # print(correlation_list)
-#     #
-#     correlation_df.loc[len(correlation_df)] = correlation_list
-#
-#
-#
-#
-# # print(structure_correlation_df)
-# # print(physical_correlation_df)
-# # print(correlation_df)
+structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
+physical_correlation_df = pd.DataFrame(columns=["Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+
+for feature in range(0, len(extracted_features_switch)):
+
+    # create a list to contain the correlation between that feature and each property
+    structure_correlation_list = []
+    physical_correlation_list = []
+
+    correlation_list = []
+
+    # loop through each property
+    # for gal_property in range(1, len(structure_properties.columns)):
+    for gal_property in range(1, len(all_properties.columns)):
+
+        if gal_property == 6:
+            continue
+
+        # calculate the correlation between that extracted feature and that property
+        # structure_correlation = np.corrcoef(extracted_features_switch[feature], abs(structure_properties.iloc[:, gal_property]))[0][1]
+        # structure_correlation_list.append(structure_correlation)
+
+        correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
+        correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+        correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties.iloc[:, gal_property])[0][1]
+        correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+
+        if gal_property == 1 and feature == 21:
+            print(correlation_1, correlation_2, correlation_3, correlation_4)
+
+        correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+
+        # # linear, quadratic and cubic fitting
+        # linear = np.polyfit(x=extracted_features_switch[feature], y=all_properties.iloc[:, gal_property], deg=1)
+        # quadratic = np.polyfit(x=extracted_features_switch[feature], y=all_properties.iloc[:, gal_property], deg=2)
+        # cubic = np.polyfit(x=extracted_features_switch[feature], y=all_properties.iloc[:, gal_property], deg=3)
+        #
+        # # evaluate these polynomials
+        # val_linear = np.polyval(linear, extracted_features_switch[feature])
+        # val_quadratic = np.polyval(quadratic, extracted_features_switch[feature])
+        # val_cubic = np.polyval(cubic, extracted_features_switch[feature])
+        #
+        # # mean squared error between polynomial fits and data
+        # mse_linear = np.mean(np.square(all_properties.iloc[:, gal_property] - val_linear))
+        # mse_quadratic = np.mean(np.square(all_properties.iloc[:, gal_property] - val_quadratic))
+        # mse_cubic = np.mean(np.square(all_properties.iloc[:, gal_property] - val_cubic))
+        #
+        # best_fit = min(mse_linear, mse_quadratic, mse_cubic)
+        #
+        # correlation_list.append(best_fit)
+
+
+
+    # for gal_property in range(1, len(physical_properties.columns)):
+    #
+    #     # calculate the correlation between that extracted feature and that property
+    #     physical_correlation = np.corrcoef(extracted_features_switch[feature], physical_properties.iloc[:, gal_property])[0][1]
+    #     physical_correlation_list.append(physical_correlation)
+
+    # # add the correlation of that feature to the main dataframe
+    # structure_correlation_df.loc[len(structure_correlation_df)] = structure_correlation_list
+    # physical_correlation_df.loc[len(physical_correlation_df)] = physical_correlation_list
+    # correlation_df.loc[len(correlation_df)] = structure_correlation_list + physical_correlation_list
+
+    # print(correlation_list)
+    #
+    correlation_df.loc[len(correlation_df)] = correlation_list
+
+
+
+
+# print(structure_correlation_df)
+# print(physical_correlation_df)
+# print(correlation_df)
 #
 #
 #
@@ -188,41 +189,41 @@ extracted_features_switch = extracted_features.T
 #
 #
 #
-# # # set the figure size
-# # plt.figure(figsize=(20, 16))
-# #
-# # sns.set(font_scale=1.5)
-# #
-# # # plot a heatmap for the dataframe (with annotations)
-# # ax = sns.heatmap(abs(correlation_df[["Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation Coefficient'})
-# #
-# #
-# # plt.yticks(rotation=0)
-# # plt.ylabel("Extracted Features", fontsize=22)
-# # ax.xaxis.tick_top() # x axis on top
-# # ax.xaxis.set_label_position('top')
-# # ax.tick_params(length=0)
-# #
-# # ax.figure.axes[-1].yaxis.label.set_size(22)
-# # ax.figure.axes[-1].yaxis.labelpad = 15
-# #
-# #
-# # def wrap_labels(ax, width, break_long_words=False):
-# #     labels = []
-# #     for label in ax.get_xticklabels():
-# #         text = label.get_text()
-# #         labels.append(textwrap.fill(text, width=width,
-# #                       break_long_words=break_long_words))
-# #     ax.set_xticklabels(labels, rotation=0, fontsize=22)
-# #
-# # wrap_labels(ax, 10)
-# #
-# #
-# #
-# # plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_physical_property_correlation_2")
-# # plt.show()
+# # set the figure size
+# plt.figure(figsize=(20, 16))
+#
+# sns.set(font_scale=1.5)
+#
+# # plot a heatmap for the dataframe (with annotations)
+# ax = sns.heatmap(abs(correlation_df[["Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation Coefficient'})
 #
 #
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=22)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+#
+# ax.figure.axes[-1].yaxis.label.set_size(22)
+# ax.figure.axes[-1].yaxis.labelpad = 15
+#
+#
+# def wrap_labels(ax, width, break_long_words=False):
+#     labels = []
+#     for label in ax.get_xticklabels():
+#         text = label.get_text()
+#         labels.append(textwrap.fill(text, width=width,
+#                       break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=22)
+#
+# wrap_labels(ax, 10)
+#
+#
+#
+# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_physical_property_correlation_2")
+# plt.show()
+
+
 # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
 #
 # print(correlation_df)
@@ -261,7 +262,7 @@ extracted_features_switch = extracted_features.T
 #
 #
 #
-# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_3_abs")
+# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_3_abs", bbox_inches='tight')
 # plt.show()
 #
 #
@@ -274,42 +275,49 @@ extracted_features_switch = extracted_features.T
 #
 #
 #
-# # # "n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_DM", "MassType_BH", "InitialMassWeightedStellarAge", "StarFormationRate"
-# #
-# # # properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-# # properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
-# #
-# #
-# # all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
-# #
-# # print(all_properties)
-# #
-# # property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
-# #
-# # fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(200, 500))
-# #
-# # sns.set(font_scale=10)
-# #
-# # for i, property in enumerate(properties):
-# #
-# #     axs[0][i].set_title(property_labels[i])
-# #
-# #     for feature in range(encoding_dim):
-# #
-# #         axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property])
-# #
-# #         # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
-# #
-# #         axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=75)
-# #         axs[feature][i].set_ylabel(property_labels[i], fontsize=75)
-# #
-# # plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_2_abs")
-# # # plt.show()
-#
-#
-#
-#
-#
+# "n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_DM", "MassType_BH", "InitialMassWeightedStellarAge", "StarFormationRate"
+
+# properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
+
+
+all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
+
+print(all_properties)
+
+property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
+
+# fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, 140))
+fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
+
+# sns.set(font_scale=10)
+
+for i, property in enumerate(properties):
+
+    axs[0][i].set_title(property_labels[i], fontsize=20)
+
+
+
+    for feature in range(0, 19):
+
+        # axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
+        axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
+
+        # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
+
+        # axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
+        axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
+        axs[feature][i].set_ylabel(None)
+        axs[feature][i].tick_params(labelsize=12)
+
+# plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p1", bbox_inches='tight')
+plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
+plt.show()
+
+
+
+
+
 # # # sns.kdeplot(data=all_properties, x=extracted_features_switch[4], y=all_properties["MassType_Star"], levels=200, fill=True, cmap="mako")
 # #
 # # plt.hist2d(x=extracted_features_switch[4], y=all_properties["MassType_Star"], bins=50, cmap="jet")
@@ -479,67 +487,92 @@ def fit_4(x, a, b, c, d, e):
 
 
 
-params, covarience = curve_fit(fit_2, extracted_features_switch[7], all_properties["StarFormationRate"])
-a, b, c = params
-x_fit_1 = np.linspace(-20, -3, 100).tolist()
-y_fit_1 = []
-for x in x_fit_1:
-    y_fit_1.append(fit_2(x, a, b, c))
-
-params, covarience = curve_fit(fit_2, extracted_features_switch[12], all_properties["StarFormationRate"])
-a, b, c = params
-x_fit_2 = np.linspace(-20, 0, 100).tolist()
-y_fit_2 = []
-for x in x_fit_1:
-    y_fit_2.append(fit_2(x, a, b, c))
-
-params, covarience = curve_fit(fit_2, extracted_features_switch[7], all_properties["re_r"])
-a, b, c = params
-x_fit_3 = np.linspace(-20, -3, 100).tolist()
-y_fit_3 = []
-for x in x_fit_1:
-    y_fit_3.append(fit_2(x, a, b, c))
-
-params, covarience = curve_fit(fit_2, extracted_features_switch[12], all_properties["InitialMassWeightedStellarAge"])
-a, b, c = params
-x_fit_4 = np.linspace(-20, 0, 100).tolist()
-y_fit_4 = []
-for x in x_fit_1:
-    y_fit_4.append(fit_2(x, a, b, c))
-
-
-fig, axs = plt.subplots(2, 2, figsize=(17, 10))
-
-axs[0, 0].scatter(x=extracted_features_switch[7], y=all_properties["StarFormationRate"], s=3, alpha=0.5)
-axs[0, 0].plot(x_fit_1, y_fit_1, c="black")
-axs[0, 0].set_xlabel("Feature 7", fontsize=20)
-axs[0, 0].set_ylabel("Star Formation Rate", fontsize=20)
-axs[0, 0].tick_params(labelsize=20)
-
-axs[0, 1].scatter(x=extracted_features_switch[12], y=all_properties["StarFormationRate"], s=3, alpha=0.5)
-axs[0, 1].plot(x_fit_2, y_fit_2, c="black")
-axs[0, 1].set_xlabel("Feature 12", fontsize=20)
-axs[0, 1].set_ylabel("Star Formation Rate", fontsize=20)
-axs[0, 1].tick_params(labelsize=20)
-
-axs[1, 0].scatter(x=extracted_features_switch[7], y=all_properties["re_r"], s=3, alpha=0.5)
-axs[1, 0].plot(x_fit_3, y_fit_3, c="black")
-axs[1, 0].set_xlabel("Feature 7", fontsize=20)
-axs[1, 0].set_ylabel("Semi-Major Axis", fontsize=20)
-axs[1, 0].tick_params(labelsize=20)
-
-axs[1, 1].scatter(x=extracted_features_switch[12], y=all_properties["InitialMassWeightedStellarAge"], s=3, alpha=0.5)
-axs[1, 1].plot(x_fit_4, y_fit_4, c="black")
-axs[1, 1].set_xlabel("Feature 12", fontsize=20)
-axs[1, 1].set_ylabel("Stellar Age", fontsize=20)
-axs[1, 1].tick_params(labelsize=20)
-
-plt.savefig("Plots/physical_scatter", bbox_inches='tight')
-plt.show()
-
-
+# params, covarience = curve_fit(fit_2, extracted_features_switch[7], all_properties["StarFormationRate"])
+# a, b, c = params
+# x_fit_1 = np.linspace(-20, -3, 100).tolist()
+# y_fit_1 = []
+# for x in x_fit_1:
+#     y_fit_1.append(fit_2(x, a, b, c))
+#
+# params, covarience = curve_fit(fit_2, extracted_features_switch[12], all_properties["StarFormationRate"])
+# a, b, c = params
+# x_fit_2 = np.linspace(-20, 0, 100).tolist()
+# y_fit_2 = []
+# for x in x_fit_1:
+#     y_fit_2.append(fit_2(x, a, b, c))
+#
+# params, covarience = curve_fit(fit_2, extracted_features_switch[7], all_properties["re_r"])
+# a, b, c = params
+# x_fit_3 = np.linspace(-20, -3, 100).tolist()
+# y_fit_3 = []
+# for x in x_fit_1:
+#     y_fit_3.append(fit_2(x, a, b, c))
+#
+# params, covarience = curve_fit(fit_2, extracted_features_switch[12], all_properties["InitialMassWeightedStellarAge"])
+# a, b, c = params
+# x_fit_4 = np.linspace(-20, 0, 100).tolist()
+# y_fit_4 = []
+# for x in x_fit_1:
+#     y_fit_4.append(fit_2(x, a, b, c))
+#
+#
+# fig, axs = plt.subplots(2, 2, figsize=(17, 10))
+#
+# axs[0, 0].scatter(x=extracted_features_switch[7], y=all_properties["StarFormationRate"], s=3, alpha=0.5)
+# axs[0, 0].plot(x_fit_1, y_fit_1, c="black")
+# axs[0, 0].set_xlabel("Feature 7", fontsize=20)
+# axs[0, 0].set_ylabel("Star Formation Rate", fontsize=20)
+# axs[0, 0].tick_params(labelsize=20)
+#
+# axs[0, 1].scatter(x=extracted_features_switch[12], y=all_properties["StarFormationRate"], s=3, alpha=0.5)
+# axs[0, 1].plot(x_fit_2, y_fit_2, c="black")
+# axs[0, 1].set_xlabel("Feature 12", fontsize=20)
+# axs[0, 1].set_ylabel("Star Formation Rate", fontsize=20)
+# axs[0, 1].tick_params(labelsize=20)
+#
+# axs[1, 0].scatter(x=extracted_features_switch[7], y=all_properties["re_r"], s=3, alpha=0.5)
+# axs[1, 0].plot(x_fit_3, y_fit_3, c="black")
+# axs[1, 0].set_xlabel("Feature 7", fontsize=20)
+# axs[1, 0].set_ylabel("Semi-Major Axis", fontsize=20)
+# axs[1, 0].tick_params(labelsize=20)
+#
+# axs[1, 1].scatter(x=extracted_features_switch[12], y=all_properties["InitialMassWeightedStellarAge"], s=3, alpha=0.5)
+# axs[1, 1].plot(x_fit_4, y_fit_4, c="black")
+# axs[1, 1].set_xlabel("Feature 12", fontsize=20)
+# axs[1, 1].set_ylabel("Stellar Age", fontsize=20)
+# axs[1, 1].tick_params(labelsize=20)
+#
+# plt.savefig("Plots/physical_scatter", bbox_inches='tight')
+# plt.show()
 
 
+
+
+
+
+
+
+# semi_major_7 = np.array([all_properties["re_r"]] + [extracted_features_switch[7]])
+# semi_major_7 = semi_major_7.T
+#
+# # perform hierarchical ward clustering
+# hierarchical = SpectralClustering(n_clusters=2)
+#
+# # get hierarchical clusters
+# clusters = hierarchical.fit_predict(semi_major_7)
+# all_properties["Semi-Major Type"] = clusters
+#
+#
+# plt.figure(figsize=(20, 20))
+#
+# a = sns.scatterplot(x=extracted_features_switch[7], y=all_properties["re_r"], hue=all_properties["Semi-Major Type"], s=100)
+# # plt.scatter(x=extracted_features_switch[7], y=all_properties["re_r"], hue=all_properties["Semi-Major Type"], s=3, alpha=0.5)
+# # plt.plot(x_fit_3, y_fit_3, c="black")
+# a.set_xlabel("Feature 7", fontsize=20)
+# a.set_ylabel("Semi-Major Axis", fontsize=20)
+# a.tick_params(labelsize=20)
+#
+# plt.show()
 
 
 

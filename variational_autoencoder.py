@@ -40,12 +40,6 @@ def get_images():
 # get the images and labels to train the model
 all_images = get_images()
 
-# # find the number of images that you will test the model on
-# testing_count = int(len(all_images)/4)
-#
-# # split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
-# # train_images = np.array(all_images[:testing_count*3])
-# # test_images = np.array(all_images[testing_count:])
 
 
 def Sampling(Layer):
@@ -97,9 +91,7 @@ class VAE(keras.Model):
         self.encoder = encoder
         self.decoder = decoder
         self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
-        self.reconstruction_loss_tracker = keras.metrics.Mean(
-            name="reconstruction_loss"
-        )
+        self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
         self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
 
     @property
