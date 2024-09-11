@@ -118,7 +118,7 @@ def resize_image(image, cutoff=60):
 all_images = []
 
 # load the supplemental file into a dataframe
-df = pd.read_csv("stab3510_supplemental_file/table1.csv", comment="#")
+df = pd.read_csv("Galaxy Properties/stab3510_supplemental_file/table1.csv", comment="#")
 
 # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):
@@ -218,7 +218,7 @@ model_data = autoencoder.fit(train_images, train_images, epochs=300, batch_size=
 # autoencoder.load_weights("Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5")
 
 # save the weights
-autoencoder.save_weights(filepath="Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5", overwrite=True)
+autoencoder.save_weights(filepath="Convolutional Eagle/Weights Rand/" + str(encoding_dim) + "_feature_weights_1.h5", overwrite=True)
 
 
 
@@ -228,7 +228,7 @@ autoencoder.save_weights(filepath="Weights Rand/" + str(encoding_dim) + "_featur
 extracted_features = encoder.predict(train_images)
 
 # save the features as a numpy array
-np.save("Features Rand/" + str(encoding_dim) + "_features_1.npy", extracted_features)
+np.save("Convolutional Eagle/Features Rand/" + str(encoding_dim) + "_features_1.npy", extracted_features)
 
 
 
@@ -238,7 +238,7 @@ loss = np.array([model_data.history["loss"][-1], model_data.history["val_loss"][
 print()
 print(encoding_dim)
 print(loss)
-np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
+np.save("Convolutional Eagle/Loss Rand/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
 
 
 
@@ -280,7 +280,7 @@ np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
 #
 #
 #
-# plt.savefig("Reconstructions Rand/" + str(encoding_dim) + "_feature_reconstruction")
+# plt.savefig("Convolutional Eagle/Reconstructions Rand/" + str(encoding_dim) + "_feature_reconstruction")
 # plt.show()
 
 
@@ -314,5 +314,5 @@ np.save("Loss Rand/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
 # plt.plot(model_data.history["val_loss"], label="validation data")
 # plt.legend()
 #
-# plt.savefig("Plots/" + str(encoding_dim) + "_feature_loss")
+# plt.savefig("Convolutional Eagle/Plots/" + str(encoding_dim) + "_feature_loss")
 # plt.show()
