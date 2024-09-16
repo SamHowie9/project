@@ -1,7 +1,8 @@
-from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
-import tensorflow as tf
+# from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
+# import tensorflow as tf
 import keras
 from keras import ops
+from keras.layers import Conv2D, Dense, Flatten, Conv2DTranspose
 import numpy as np
 import pandas as pd
 import os
