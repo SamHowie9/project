@@ -24,7 +24,7 @@ plt.switch_backend('agg')
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 # number of extracted features
-encoding_dim = 46
+encoding_dim = 38
 
 
 # crops to the center of the images (only when specified)
@@ -306,7 +306,7 @@ np.save("Convolutional Eagle/Loss Rand/" + str(encoding_dim) + "_feature_loss_1.
 
 
 
-
+ 
 
 
 # # plot the training and validation loss
