@@ -1,3 +1,5 @@
+import os
+os.environ["KERAS_BACKEND"] = "tensorflow"
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 import tensorflow as tf
 import keras
@@ -10,7 +12,6 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import cv2
 
-os.environ["KERAS_BACKEND"] = "tensorflow"
 
 
 # create sampling layer
