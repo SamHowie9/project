@@ -13,6 +13,9 @@ from matplotlib import image as mpimg
 import cv2
 
 
+# select which GPU to use
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
 
 # create sampling layer
 class Sampling(layers.Layer):
