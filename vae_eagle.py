@@ -65,7 +65,7 @@ class Sampling(Layer):
 encoding_dim = 38
 
 # Define keras tensor for the encoder
-input_image = keras.Input(shape=(128, 128, 3))                                                      # (256, 256, 3)
+input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
 
 # layers for the encoder
 x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
@@ -95,7 +95,7 @@ x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padd
 x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
 x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
-# x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
+x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
 decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (128, 128, 3)
 
 # build the decoder
