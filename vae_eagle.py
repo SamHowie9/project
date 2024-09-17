@@ -1,10 +1,9 @@
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
-# from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 import tensorflow as tf
 import keras
 from keras import ops
-from keras.layers import Layer, Conv2D, Dense, Flatten, Conv2DTranspose
+from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -15,19 +14,50 @@ from matplotlib import image as mpimg
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
-# create sampling layer
+
+
+
+
+# stores an empty list to contain all the image data to train the model
+all_images = []
+
+# load the supplemental file into a dataframe
+df = pd.read_csv("Galaxy Properties/stab3510_supplemental_file/table1.csv", comment="#")
+
+# loop through each galaxy in the supplemental file
+for i, galaxy in enumerate(df["GalaxyID"].tolist()):
+
+    # get the filename of each galaxy in the supplemental file
+    filename = "galrand_" + str(galaxy) + ".png"
+
+    # open the image and append it to the main list
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+    # image = resize_image(image=image)
+    all_images.append(image)
+
+# split the data into training and testing data (200 images used for testing)
+train_images = np.array(all_images[:-200])
+test_images = np.array(all_images[-200:])
+
+
+
+
+
+
+
+# define sampling layer
 class Sampling(Layer):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.seed_generator = keras.random.SeedGenerator(1337)
 
-        def call(self, inputs):
-            z_mean, z_log_var = inputs
-            batch = ops.shape(z_mean)[0]
-            dim = ops.shape(z_mea)[1]
-            epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
-            return z_mean + ops.exp(0.5 * z_log_var) * epsilon
+    def call(self, inputs):
+        z_mean, z_log_var = inputs
+        batch = ops.shape(z_mean)[0]
+        dim = ops.shape(z_mean)[1]
+        epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
+        return z_mean + ops.exp(0.5 * z_log_var) * epsilon
 
 
 
@@ -53,3 +83,83 @@ z = Sampling()([z_mean, z_log_var])
 encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
 encoder.summary()
 
+
+# Define keras tensor for the decoder
+latent_input = keras.Input(shape=(encoding_dim,))
+
+# layers for the decoder
+x = Dense(units=64, activation="relu")(latent_input)                                                # (64)
+x = Dense(units=256, activation="relu")(x)                                                          # (256)
+x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
+x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
+x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
+x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
+x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
+# x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (128, 128, 3)
+
+# build the decoder
+decoder = keras.Model(latent_input, decoded, name="decoder")
+decoder.summary()
+
+
+
+
+# Define VAE model with custom time step
+class VAE(keras.Model):
+
+    def __init__(self, encoder, decoder, **kwargs):
+        super().__init__(**kwargs)
+        self.encoder = encoder
+        self.decoder = decoder
+        self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
+        self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
+        self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+
+    @property
+    def metrics(self):
+        return[
+            self.total_loss_tracker,
+            self.reconstruction_loss_tracker,
+            self.kl_loss_tracker,
+        ]
+
+    # custom train step
+    def train_step(self, data):
+
+        with tf.GradientTape() as tape:
+            z_mean, z_log_var, z = self.encoder(data)
+            reconstruction = self.decoder(z)
+            reconstruction_loss = ops.mean(
+                ops.sum(
+                    keras.losses.binary_crossentropy(data, reconstruction),
+                    axis=(1, 2),
+                )
+            )
+            kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+            kl_loss = ops.mean(ops.sum(kl_loss + kl_loss))
+            total_loss = reconstruction_loss + kl_loss
+
+        grads = tape.gradient(total_loss, self.trainable_weights)
+
+        self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+        self.total_loss_tracker.update_state(total_loss)
+        self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+        self.kl_loss_tracker.update_state(kl_loss)
+
+        return {
+            "loss": self.total_loss_tracker.result(),
+            "reconstruction_loss": self.reconstruction_loss_tracker.result(),
+            "kl_loss": self.kl_loss_tracker.result(),
+        }
+
+
+
+    # build the VAE
+    vae = VAE(encoder, decoder)
+
+    # compile the VAE
+    vae.compile(optimizer=keras.optimizers.Adam())
+
+    # train the model
+    vae.fit(train_images, epochs=300, batch_size=1)

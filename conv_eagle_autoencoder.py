@@ -136,7 +136,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
 
 
-# split the data into training and testing data based on this number (and convert from list to numpy array of shape (256,256,3) given it is an rgb image
+# split the data into training and testing data (200 images used for testing)
 train_images = np.array(all_images[:-200])
 test_images = np.array(all_images[-200:])
 # train_images = np.array(all_images)
