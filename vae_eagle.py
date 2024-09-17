@@ -7,10 +7,8 @@ from keras import ops
 from keras.layers import Conv2D, Dense, Flatten, Conv2DTranspose
 import numpy as np
 import pandas as pd
-import os
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
-import cv2
 
 
 # select which GPU to use
