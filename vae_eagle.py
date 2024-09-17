@@ -1,7 +1,7 @@
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
-# import tensorflow as tf
+import tensorflow as tf
 import keras
 from keras import ops
 from keras.layers import Conv2D, Dense, Flatten, Conv2DTranspose
