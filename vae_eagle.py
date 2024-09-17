@@ -4,7 +4,7 @@ os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
 from keras import ops
-from keras.layers import Conv2D, Dense, Flatten, Conv2DTranspose
+from keras.layers import Layer, Conv2D, Dense, Flatten, Conv2DTranspose
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -16,7 +16,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
 # create sampling layer
-class Sampling(layers.Layer):
+class Sampling(Layer):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
