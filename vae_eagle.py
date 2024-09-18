@@ -175,11 +175,11 @@ extracted_features = encoder.predict(train_images)
 np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_features_1.npy", extracted_features)
 
 
-# get loss, reconstruction loss and kl loss and save as numpy array
-loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-print("\n \n" + str(encoding_dim))
-print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
+# # get loss, reconstruction loss and kl loss and save as numpy array
+# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+# print("\n \n" + str(encoding_dim))
+# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+# np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
 
 
 
