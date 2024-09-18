@@ -177,6 +177,6 @@ np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_features
 
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-print("\n \n", encoding_dim)
-print(loss)
+print("\n \n" + str(encoding_dim))
+print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]))
 np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
