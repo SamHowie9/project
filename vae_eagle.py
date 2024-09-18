@@ -62,7 +62,7 @@ class Sampling(Layer):
 
 
 # number of extracted features
-encoding_dim = 38
+encoding_dim = 32
 
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
@@ -161,7 +161,7 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-model_loss = vae.fit(train_images, epochs=1, batch_size=1)
+model_loss = vae.fit(train_images, epochs=100, batch_size=1)
 
 # load the weights
 # autoencoder.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
@@ -178,5 +178,5 @@ np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_features
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
-print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]))
+print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
 np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
