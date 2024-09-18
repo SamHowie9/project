@@ -161,7 +161,7 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-model_loss = vae.fit(train_images, epochs=100, batch_size=1)
+# model_loss = vae.fit(train_images, epochs=100, batch_size=1)
 
 # load the weights
 vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
