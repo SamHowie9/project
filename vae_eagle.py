@@ -180,3 +180,15 @@ loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruct
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
 np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
+
+
+
+
+# loss plot for individual run
+plt.plot(model_loss.history["loss"], label="loss")
+plt.plot(model_loss.history["reconstruction_loss"], label="reconstruction loss")
+plt.plot(model_loss.history["kl_loss"], label="kl loss")
+plt.legend()
+
+plt.savefig("Convolutional Eagle/Plots/" + str(encoding_dim) + "_feature_loss")
+plt.show()
