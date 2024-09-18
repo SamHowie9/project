@@ -164,10 +164,10 @@ vae.compile(optimizer=keras.optimizers.Adam())
 model_loss = vae.fit(train_images, epochs=1, batch_size=1)
 
 # load the weights
-# autoencoder.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.h5")
+# autoencoder.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5", overwrite=True)
 
 
 # generate extracted features from trained encoder and save as numpy array
