@@ -161,13 +161,13 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-# model_loss = vae.fit(train_images, epochs=100, batch_size=1)
+model_loss = vae.fit(train_images, epochs=300, batch_size=1)
 
 # load the weights
-vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
+# vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
 
 # save the weights
-# vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5", overwrite=True)
 
 
 # generate extracted features from trained encoder and save as numpy array
@@ -175,60 +175,60 @@ extracted_features = encoder.predict(train_images)
 np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_features_1.npy", extracted_features)
 
 
-# # get loss, reconstruction loss and kl loss and save as numpy array
-# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-# print("\n \n" + str(encoding_dim))
-# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-# np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
+# get loss, reconstruction loss and kl loss and save as numpy array
+loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+print("\n \n" + str(encoding_dim))
+print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
 
 
 
 
-# # loss plot for individual run
-# plt.plot(model_loss.history["loss"], label="loss")
-# plt.plot(model_loss.history["reconstruction_loss"], label="reconstruction loss")
-# plt.plot(model_loss.history["kl_loss"], label="kl loss")
-# plt.legend()
-#
-# plt.savefig("Convolutional Eagle/Plots/" + str(encoding_dim) + "_feature_loss")
-# plt.show()
+# loss plot for individual run
+plt.plot(model_loss.history["loss"], label="loss")
+plt.plot(model_loss.history["reconstruction_loss"], label="reconstruction loss")
+plt.plot(model_loss.history["kl_loss"], label="kl loss")
+plt.legend()
 
-
-
-
-# number of images to reconstruct
-n = 12
-
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[n:]
-# images_to_reconstruct = np.array([test_images[0], test_images[5], test_images[20], test_images[50], test_images[98], test_images[120]])
-
-# reconstruct the images
-# reconstructed_images = autoencoder.predict(test_images[n:])
-reconstructed_images = vae.decoder.predict(images_to_reconstruct)
-
-# create figure to hold subplots
-fig, axs = plt.subplots(2, n-1, figsize=(18,5))
-
-# plot each subplot
-for i in range(0, n-1):
-
-    # show the original image (remove axes)
-    axs[0,i].imshow(images_to_reconstruct[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
-
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
-
-    # calculate residue (difference between two images) and show this
-    # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
-    # axs[2,i].imshow(residue_image)
-    # axs[2,i].get_xaxis().set_visible(False)
-    # axs[2,i].get_yaxis().set_visible(False)
-
-plt.savefig("Variational Eagle/Reconstructions/" + str(encoding_dim) + "_feature_reconstruction")
+plt.savefig("Convolutional Eagle/Plots/" + str(encoding_dim) + "_feature_loss")
 plt.show()
+
+
+
+
+# # number of images to reconstruct
+# n = 12
+#
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[n:]
+# # images_to_reconstruct = np.array([test_images[0], test_images[5], test_images[20], test_images[50], test_images[98], test_images[120]])
+#
+# # reconstruct the images
+# # reconstructed_images = autoencoder.predict(test_images[n:])
+# reconstructed_images = vae.decoder.predict(images_to_reconstruct)
+#
+# # create figure to hold subplots
+# fig, axs = plt.subplots(2, n-1, figsize=(18,5))
+#
+# # plot each subplot
+# for i in range(0, n-1):
+#
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(images_to_reconstruct[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
+#
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
+#
+#     # calculate residue (difference between two images) and show this
+#     # residue_image = np.absolute(np.subtract(reconstructed_images[i], test_images[i]))
+#     # axs[2,i].imshow(residue_image)
+#     # axs[2,i].get_xaxis().set_visible(False)
+#     # axs[2,i].get_yaxis().set_visible(False)
+#
+# plt.savefig("Variational Eagle/Reconstructions/" + str(encoding_dim) + "_feature_reconstruction")
+# plt.show()
 
