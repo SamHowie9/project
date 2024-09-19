@@ -10,6 +10,8 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
+encoding_dim = 30
+
 # select which GPU to use
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
@@ -62,7 +64,7 @@ class Sampling(Layer):
 
 
 # number of extracted features
-encoding_dim = 32
+# encoding_dim = 32
 
 # Define keras tensor for the encoder
 input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
@@ -161,10 +163,10 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-# model_loss = vae.fit(train_images, epochs=300, batch_size=1)
+model_loss = vae.fit(train_images, epochs=300, batch_size=1)
 
 # load the weights
-vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
+# vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
 
 # save the weights
 vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5", overwrite=True)
