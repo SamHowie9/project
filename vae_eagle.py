@@ -10,10 +10,10 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
-encoding_dim = 30
+encoding_dim = 34
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 
