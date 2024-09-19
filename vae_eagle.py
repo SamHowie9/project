@@ -205,7 +205,7 @@ images_to_reconstruct = test_images[n:]
 
 # reconstruct the images
 # reconstructed_images = autoencoder.predict(test_images[n:])
-test_features = vae.encoder(images_to_reconstruct)
+test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
 reconstructed_images = vae.decoder.predict(test_features)
 
 # create figure to hold subplots
