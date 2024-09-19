@@ -12,7 +12,7 @@ from matplotlib import image as mpimg
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-
+tf.config.list_physical_devices('GPU')
 
 
 encoding_dim = 42
@@ -168,17 +168,17 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-model_loss = vae.fit(train_images, epochs=300, batch_size=1)
+# model_loss = vae.fit(train_images, epochs=300, batch_size=1)
 
 # load the weights
-# vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
+vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
 
 # save the weights
 vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5", overwrite=True)
 
 
 # generate extracted features from trained encoder and save as numpy array
-extracted_features = encoder.predict(train_images)
+extracted_features = vae.encoder.predict(train_images)
 np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_features_1.npy", extracted_features)
 
 
@@ -237,6 +237,6 @@ for i in range(0, n-1):
     # axs[2,i].get_xaxis().set_visible(False)
     # axs[2,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/" + str(encoding_dim) + "_feature_reconstruction")
+plt.savefig("Variational Eagle/Reconstructions/" + str(encoding_dim) + "_feature_reconstruction_300")
 plt.show()
 
