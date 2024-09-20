@@ -15,7 +15,7 @@ os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 42
+encoding_dim = 32
 
 # select which GPU to use
 os.environ["CUDA_VISIBLE_DEVICES"] = "6"
