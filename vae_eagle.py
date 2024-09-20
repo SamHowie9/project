@@ -17,8 +17,9 @@ tf.config.list_physical_devices('GPU')
 
 encoding_dim = 30
 
-# select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+# select which gpu to use
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 
 
