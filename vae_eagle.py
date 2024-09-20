@@ -15,10 +15,10 @@ os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 32
+encoding_dim = 30
 
 # select which GPU to use
-os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
 
@@ -168,10 +168,10 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-# model_loss = vae.fit(train_images, epochs=300, batch_size=1)
+model_loss = vae.fit(train_images, epochs=300, batch_size=1)
 
 # load the weights
-vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
+# vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5")
 
 # save the weights
 vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_weights_1.weights.h5", overwrite=True)
@@ -182,23 +182,23 @@ extracted_features = vae.encoder.predict(train_images)
 np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_features_1.npy", extracted_features)
 
 
-# # get loss, reconstruction loss and kl loss and save as numpy array
-# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-# print("\n \n" + str(encoding_dim))
-# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-# np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
-#
-#
-#
-#
-# # loss plot for individual run
-# plt.plot(model_loss.history["loss"], label="loss")
-# plt.plot(model_loss.history["reconstruction_loss"], label="reconstruction loss")
-# plt.plot(model_loss.history["kl_loss"], label="kl loss")
-# plt.legend()
-#
-# plt.savefig("Convolutional Eagle/Plots/" + str(encoding_dim) + "_feature_loss")
-# plt.show()
+# get loss, reconstruction loss and kl loss and save as numpy array
+loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+print("\n \n" + str(encoding_dim))
+print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", loss)
+
+
+
+
+# loss plot for individual run
+plt.plot(model_loss.history["loss"], label="loss")
+plt.plot(model_loss.history["reconstruction_loss"], label="reconstruction loss")
+plt.plot(model_loss.history["kl_loss"], label="kl loss")
+plt.legend()
+
+plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature_loss")
+plt.show()
 
 
 
@@ -237,6 +237,6 @@ for i in range(0, n-1):
     # axs[2,i].get_xaxis().set_visible(False)
     # axs[2,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/" + str(encoding_dim) + "_feature_reconstruction_300")
+plt.savefig("Variational Eagle/Reconstructions/" + str(encoding_dim) + "_feature_reconstruction")
 plt.show()
 
