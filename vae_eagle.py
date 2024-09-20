@@ -15,11 +15,11 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 46
+encoding_dim = 31
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -193,9 +193,12 @@ np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_loss_1.npy", l
 
 
 # loss plot for individual run
-plt.plot(model_loss.history["loss"], label="loss")
-plt.plot(model_loss.history["reconstruction_loss"], label="reconstruction loss")
-plt.plot(model_loss.history["kl_loss"], label="kl loss")
+fig, axs1 = plt.subplots()
+axs1.plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss")
+axs1.set_ylabel("reconstruction loss")
+axs2 = axs1.twinx()
+axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
+axs2.set_ylabel("KL Loss")
 plt.legend()
 
 plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature_loss")
