@@ -15,11 +15,11 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 21
+encoding_dim = 20
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 
