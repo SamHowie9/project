@@ -19,10 +19,10 @@ encoding_dim = 30
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="5"
 
 # number of epochs for run
-epochs = 150
+epochs = 200
 
 
 
