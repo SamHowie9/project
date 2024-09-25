@@ -241,6 +241,6 @@ for epoch in epochs:
         axs[1,i].get_xaxis().set_visible(False)
         axs[1,i].get_yaxis().set_visible(False)
 
-    plt.savefig("Variational Eagle/Reconstructions/Training" + str(encoding_dim) + "_feature_" + str(epoch) + "_epoch_reconstruction")
+    plt.savefig("Variational Eagle/Reconstructions/Training/" + str(encoding_dim) + "_feature_" + str(epoch) + "_epoch_reconstruction")
     plt.show()
 
