@@ -4,7 +4,11 @@ import pandas as pd
 
 f = h5py.File("/cosma7/data/durham/dc-howi1/project/TNG100/Subhalo_StellarPhot_p07c_cf00dust_res_conv_ns1_rad30pkpc_091.hdf5", "r")
 
-print(f.keys())
+# print(f.keys())
+
+indices = np.array(f["subhaloIDs"])
+
+print(indices)
 
 # images = pd.DataFrame(f["Subhalo_StellarPhot_p07c_cf00dust_res_conv_ns1_rad30pkpc"])
 
