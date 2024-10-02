@@ -15,11 +15,11 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 1
+encoding_dim = 50
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="7"
+os.environ["CUDA_VISIBLE_DEVICES"]="8"
 
 # number of epochs for run
 epochs = 300
@@ -178,19 +178,19 @@ vae.compile(optimizer=keras.optimizers.Adam())
 model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_2.weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_3.weights.h5", overwrite=True)
 
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_2.npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_3.npy", extracted_features)
 
 
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_2.npy", loss)
+np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_3.npy", loss)
 
 
 
@@ -204,7 +204,7 @@ axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
 axs2.set_ylabel("KL Loss")
 plt.legend()
 
-plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature" + str(epochs) + "_epoch_loss_2")
+plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature" + str(epochs) + "_epoch_loss_3")
 plt.show()
 
 
@@ -237,7 +237,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_2")
+plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_3")
 plt.show()
 
 
