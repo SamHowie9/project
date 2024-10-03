@@ -6,7 +6,7 @@ import pandas as pd
 
 file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 
-print(file.getmembers())
+print(file.list())
 
 # file.extractall()
 
