@@ -15,7 +15,8 @@ file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 
 file.extract("sdss/snapnum_095/data/broadband_304313.fits")
 
-image = fits.open("sdss/snapnum_095/data/broadband_304313.fits")
+hdu_list = fits.open("sdss/snapnum_095/data/broadband_304313.fits")
+image = hdu_list[0].data
 
 df = pd.DataFrame(image)
 print(df)
