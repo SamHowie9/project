@@ -1,5 +1,6 @@
 import h5py
 import tarfile
+from astropy.io import fits
 import numpy as np
 import pandas as pd
 
@@ -10,8 +11,14 @@ file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 #     if member.name.startswith("sdss/snapnum_095/data/"):
 #         print(member.name)
 
-file.extractall(path="sdss/snapnum_095/data/")
+# file.extractall(path="sdss/snapnum_095/data/")
 
+file.extract("sdss/snapnum_095/data/broadband_304313.fits")
+
+image = fits.open("sdss/snapnum_095/data/broadband_304313.fits")
+
+df = pd.DataFrame(image)
+print(df)
 
 # file.extractall()
 
