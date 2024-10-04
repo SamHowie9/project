@@ -18,7 +18,7 @@ file.extract("sdss/snapnum_095/data/broadband_304313.fits")
 hdu_list = fits.open("sdss/snapnum_095/data/broadband_304313.fits")
 image = hdu_list[0].data
 
-df = pd.DataFrame(image)
+df = pd.DataFrame(image[0])
 print(df)
 
 # file.extractall()
