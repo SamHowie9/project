@@ -27,55 +27,84 @@ pd.set_option('display.max_rows', None)
 
 hdu_list_1 = fits.open("sdss/snapnum_095/data/broadband_540856.fits")
 image_1 = hdu_list_1[0].data
-image_1 = np.array(image_1[0:3]).T
+# image_1 = np.array(image_1[0:3]).T
 
 hdu_list_2 = fits.open("sdss/snapnum_095/data/broadband_546348.fits")
 image_2 = hdu_list_2[0].data
-image_2 = np.array(image_2[0:3]).T
+# image_2 = np.array(image_2[0:3]).T
 
 hdu_list_3 = fits.open("sdss/snapnum_095/data/broadband_166270.fits")
 image_3 = hdu_list_3[0].data
-image_3 = np.array(image_3[0:3]).T
+# image_3 = np.array(image_3[0:3]).T
 
 hdu_list_4 = fits.open("sdss/snapnum_095/data/broadband_247336.fits")
 image_4 = hdu_list_4[0].data
-image_4 = np.array(image_4[0:3]).T
+# image_4 = np.array(image_4[0:3]).T
 
 hdu_list_5 = fits.open("sdss/snapnum_095/data/broadband_391637.fits")
 image_5 = hdu_list_5[0].data
+# image_5 = np.array(image_5[0:3]).T
+
+for i in range(0, 3):
+    image_1[i] = image_1[i]/image_1[i].max()
+    image_2[i] = image_2[i] / image_2[i].max()
+    image_3[i] = image_3[i] / image_3[i].max()
+    image_4[i] = image_4[i] / image_4[i].max()
+    image_5[i] = image_5[i] / image_5[i].max()
+
+
+image_1 = np.array(image_1[0:3]).T
+image_2 = np.array(image_2[0:3]).T
+image_3 = np.array(image_3[0:3]).T
+image_4 = np.array(image_4[0:3]).T
 image_5 = np.array(image_5[0:3]).T
 
 
-df = pd.DataFrame(np.array(hdu_list_1[0].data)[0])
-print(df)
+
+# df = pd.DataFrame(np.array(hdu_list_1[0].data)[0])
+# print(df)
 
 
+
+fig, axs = plt.subplots(1, 5, figsize=(25, 5))
+
+axs[0].imshow(image_1/255)
+axs[1].imshow(image_2/255)
+axs[2].imshow(image_3/255)
+axs[3].imshow(image_4/255)
+axs[4].imshow(image_5/255)
+
+for i in range(0, 5):
+    axs[i].get_yaxis().set_visible(False)
+    axs[i].get_xaxis().set_visible(False)
+
+
+
+
+# hdu_list = fits.open("sdss/snapnum_095/data/broadband_540856.fits")
+# image = hdu_list[0].data
+#
+# for i in range(0, 4):
+#     image[i] = image[i]/image[i].max()
+#
+#
+# image = np.array(image[0:3]).T
 # plt.imshow(image)
 
-# fig, axs = plt.subplots(1, 5, figsize=(25, 5))
+
+# fig, axs = plt.subplots(1, 4, figsize=(20, 5))
+# # axs[0].imshow(image[0]/image[0].max())
+# axs[0].imshow(image[0])
+# axs[1].imshow(image[1])
+# axs[2].imshow(image[2])
+# axs[3].imshow(image[3])
 #
-# axs[0].imshow(image_1)
-# axs[1].imshow(image_2)
-# axs[2].imshow(image_3)
-# axs[3].imshow(image_4)
-# axs[4].imshow(image_5)
-#
-# for i in range(0, 5):
-#     axs[i].get_yaxis().set_visible(False)
+# for i in range(0, 4):
 #     axs[i].get_xaxis().set_visible(False)
-#
-# # fig, axs = plt.subplots(4, 1)
-# # axs[0].imshow(image[0])
-# # axs[1].imshow(image[1])
-# # axs[2].imshow(image[2])
-# # axs[3].imshow(image[3])
-# #
-# # for i in range(0, 4):
-# #     axs[i].get_xaxis().set_visible(False)
-# #     axs[i].get_yaxis().set_visible(False)
-#
-# plt.savefig("Variational TNG/Plots/tng_test")
-# plt.show()
+#     axs[i].get_yaxis().set_visible(False)
+
+plt.savefig("Variational TNG/Plots/tng_test")
+plt.show()
 
 
 
