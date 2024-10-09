@@ -40,10 +40,7 @@ hdu_list_5 = fits.open("sdss/snapnum_095/data/broadband_391637.fits")
 image_5 = hdu_list_5[0].data
 image_5 = np.array(image_5[0:3]).T
 
-# df = pd.DataFrame(image[0])
-# print(df)
-
-plt.imshow(image)
+# plt.imshow(image)
 
 fig, axs = plt.subplots(5, 1)
 
