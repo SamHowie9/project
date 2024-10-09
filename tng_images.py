@@ -22,7 +22,18 @@ image = hdu_list[0].data
 df = pd.DataFrame(image[0])
 print(df)
 
-plt.imshow(image[0:3])
+# plt.imshow(image[0:3])
+
+fig, axs = plt.subplots(4, 1)
+axs[0].imshow(image[0])
+axs[1].imshow(image[1])
+axs[2].imshow(image[2])
+axs[3].imshow(image[3])
+
+for i in range(0, 4):
+    axs[i].get_xaxis().set_visible(False)
+    axs[i].get_yaxis().set_visible(False)
+
 plt.savefig("Variational TNG/Plots/tng_test")
 plt.show()
 
