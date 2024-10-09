@@ -8,9 +8,9 @@ from matplotlib import pyplot as plt
 
 file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 
-# for member in file.getmembers():
-#     if member.name.startswith("sdss/snapnum_095/data/"):
-#         print(member.name)
+for member in file.getmembers():
+    if member.name.startswith("sdss/snapnum_095/data/"):
+        print(member.name)
 
 # file.extractall(path="sdss/snapnum_095/data/")
 
@@ -18,21 +18,22 @@ file.extract("sdss/snapnum_095/data/broadband_304313.fits")
 
 hdu_list = fits.open("sdss/snapnum_095/data/broadband_304313.fits")
 image = hdu_list[0].data
+image = np.array(image[0:3]).T
 
-df = pd.DataFrame(image[0])
-print(df)
+# df = pd.DataFrame(image[0])
+# print(df)
 
-# plt.imshow(image[0:3])
+plt.imshow(image)
 
-fig, axs = plt.subplots(4, 1)
-axs[0].imshow(image[0])
-axs[1].imshow(image[1])
-axs[2].imshow(image[2])
-axs[3].imshow(image[3])
-
-for i in range(0, 4):
-    axs[i].get_xaxis().set_visible(False)
-    axs[i].get_yaxis().set_visible(False)
+# fig, axs = plt.subplots(4, 1)
+# axs[0].imshow(image[0])
+# axs[1].imshow(image[1])
+# axs[2].imshow(image[2])
+# axs[3].imshow(image[3])
+#
+# for i in range(0, 4):
+#     axs[i].get_xaxis().set_visible(False)
+#     axs[i].get_yaxis().set_visible(False)
 
 plt.savefig("Variational TNG/Plots/tng_test")
 plt.show()
