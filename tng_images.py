@@ -14,11 +14,11 @@ file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 
 # file.extractall(path="sdss/snapnum_095/data/")
 
-file_1.extract("sdss/snapnum_095/data/broadband_540856.fits")
-file_2.extract("sdss/snapnum_095/data/broadband_546348.fits")
-file_3.extract("sdss/snapnum_095/data/broadband_166270.fits")
-file_4.extract("sdss/snapnum_095/data/broadband_247336.fits")
-file_5.extract("sdss/snapnum_095/data/broadband_391637.fits")
+file.extract("sdss/snapnum_095/data/broadband_540856.fits")
+file.extract("sdss/snapnum_095/data/broadband_546348.fits")
+file.extract("sdss/snapnum_095/data/broadband_166270.fits")
+file.extract("sdss/snapnum_095/data/broadband_247336.fits")
+file.extract("sdss/snapnum_095/data/broadband_391637.fits")
 
 hdu_list_1 = fits.open("sdss/snapnum_095/data/broadband_540856.fits")
 image_1 = hdu_list_1[0].data
