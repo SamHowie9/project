@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+
 
 # file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 #
