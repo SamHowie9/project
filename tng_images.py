@@ -22,7 +22,7 @@ image = hdu_list[0].data
 df = pd.DataFrame(image[0])
 print(df)
 
-plt.imshow(image)
+plt.imshow(image[0:3])
 plt.savefig("Variational TNG/Plots/tng_test")
 plt.show()
 
