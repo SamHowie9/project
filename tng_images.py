@@ -14,9 +14,9 @@ for member in file.getmembers():
 
 # file.extractall(path="sdss/snapnum_095/data/")
 
-file.extract("sdss/snapnum_095/data/broadband_304313.fits")
+file.extract("sdss/snapnum_095/data/broadband_540856.fits")
 
-hdu_list = fits.open("sdss/snapnum_095/data/broadband_304313.fits")
+hdu_list = fits.open("sdss/snapnum_095/data/broadband_540856.fits")
 image = hdu_list[0].data
 image = np.array(image[0:3]).T
 
