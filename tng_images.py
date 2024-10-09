@@ -8,22 +8,57 @@ from matplotlib import pyplot as plt
 
 file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 
-for member in file.getmembers():
-    if member.name.startswith("sdss/snapnum_095/data/"):
-        print(member.name)
+# for member in file.getmembers():
+#     if member.name.startswith("sdss/snapnum_095/data/"):
+#         print(member.name)
 
 # file.extractall(path="sdss/snapnum_095/data/")
 
-file.extract("sdss/snapnum_095/data/broadband_540856.fits")
+file_1.extract("sdss/snapnum_095/data/broadband_540856.fits")
+file_2.extract("sdss/snapnum_095/data/broadband_546348.fits")
+file_3.extract("sdss/snapnum_095/data/broadband_166270.fits")
+file_4.extract("sdss/snapnum_095/data/broadband_247336.fits")
+file_5.extract("sdss/snapnum_095/data/broadband_391637.fits")
 
-hdu_list = fits.open("sdss/snapnum_095/data/broadband_540856.fits")
-image = hdu_list[0].data
-image = np.array(image[0:3]).T
+hdu_list_1 = fits.open("sdss/snapnum_095/data/broadband_540856.fits")
+image_1 = hdu_list_1[0].data
+image_1 = np.array(image_1[0:3]).T
+
+hdu_list_2 = fits.open("sdss/snapnum_095/data/broadband_546348.fits")
+image_2 = hdu_list_2[0].data
+image_2 = np.array(image_2[0:3]).T
+
+hdu_list_3 = fits.open("sdss/snapnum_095/data/broadband_166270.fits")
+image_3 = hdu_list_3[0].data
+image_3 = np.array(image_3[0:3]).T
+
+hdu_list_4 = fits.open("sdss/snapnum_095/data/broadband_247336.fits")
+image_4 = hdu_list_4[0].data
+image_4 = np.array(image_4[0:3]).T
+
+hdu_list_5 = fits.open("sdss/snapnum_095/data/broadband_391637.fits")
+image_5 = hdu_list_5[0].data
+image_5 = np.array(image_5[0:3]).T
 
 # df = pd.DataFrame(image[0])
 # print(df)
 
 plt.imshow(image)
+
+fig, axs = plt.subplots(5, 1)
+
+axs[0].imshow(image_1)
+axs[1].imshow(image_2)
+axs[2].imshow(image_3)
+axs[3].imshow(image_4)
+axs[4].imshow(image_5)
+
+for i in range(0, 5):
+    axs[i].get_yaxis().set_visible(False)
+    axs[i].get_xaxis().set_visible(False)
+
+
+
 
 # fig, axs = plt.subplots(4, 1)
 # axs[0].imshow(image[0])
