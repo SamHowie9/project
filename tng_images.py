@@ -3,6 +3,7 @@ import tarfile
 from astropy.io import fits
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 
 
 file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
@@ -20,6 +21,10 @@ image = hdu_list[0].data
 
 df = pd.DataFrame(image[0])
 print(df)
+
+plt.imshow(image)
+plt.savefig("Variational TNG/Plots/tng_test")
+plt.show()
 
 # file.extractall()
 
