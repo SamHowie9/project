@@ -9,19 +9,19 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 
-file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
-
-# for member in file.getmembers():
-#     if member.name.startswith("sdss/snapnum_095/data/"):
-#         print(member.name)
-
-# file.extractall(path="sdss/snapnum_095/data/")
-
-file.extract("sdss/snapnum_095/data/broadband_540856.fits")
-file.extract("sdss/snapnum_095/data/broadband_546348.fits")
-file.extract("sdss/snapnum_095/data/broadband_166270.fits")
-file.extract("sdss/snapnum_095/data/broadband_247336.fits")
-file.extract("sdss/snapnum_095/data/broadband_391637.fits")
+# file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
+#
+# # for member in file.getmembers():
+# #     if member.name.startswith("sdss/snapnum_095/data/"):
+# #         print(member.name)
+#
+# # file.extractall(path="sdss/snapnum_095/data/")
+#
+# file.extract("sdss/snapnum_095/data/broadband_540856.fits")
+# file.extract("sdss/snapnum_095/data/broadband_546348.fits")
+# file.extract("sdss/snapnum_095/data/broadband_166270.fits")
+# file.extract("sdss/snapnum_095/data/broadband_247336.fits")
+# file.extract("sdss/snapnum_095/data/broadband_391637.fits")
 
 
 
@@ -45,13 +45,16 @@ hdu_list_5 = fits.open("sdss/snapnum_095/data/broadband_391637.fits")
 image_5 = hdu_list_5[0].data
 # image_5 = np.array(image_5[0:3]).T
 
-for i in range(0, 3):
+for i in range(0, 4):
     image_1[i] = image_1[i]/image_1[i].max()
-    image_2[i] = image_2[i] / image_2[i].max()
-    image_3[i] = image_3[i] / image_3[i].max()
-    image_4[i] = image_4[i] / image_4[i].max()
-    image_5[i] = image_5[i] / image_5[i].max()
+    image_2[i] = image_2[i]/image_2[i].max()
+    image_3[i] = image_3[i]/image_3[i].max()
+    image_4[i] = image_4[i]/image_4[i].max()
+    image_5[i] = image_5[i]/image_5[i].max()
 
+    print(image_1[i].max())
+
+print(image_1.max())
 
 image_1 = np.array(image_1[0:3]).T
 image_2 = np.array(image_2[0:3]).T
@@ -68,11 +71,11 @@ image_5 = np.array(image_5[0:3]).T
 
 fig, axs = plt.subplots(1, 5, figsize=(25, 5))
 
-axs[0].imshow(image_1/255)
-axs[1].imshow(image_2/255)
-axs[2].imshow(image_3/255)
-axs[3].imshow(image_4/255)
-axs[4].imshow(image_5/255)
+axs[0].imshow(image_1)
+axs[1].imshow(image_2)
+axs[2].imshow(image_3)
+axs[3].imshow(image_4)
+axs[4].imshow(image_5)
 
 for i in range(0, 5):
     axs[i].get_yaxis().set_visible(False)
@@ -87,6 +90,7 @@ for i in range(0, 5):
 # for i in range(0, 4):
 #     image[i] = image[i]/image[i].max()
 #
+# print(image.max())
 #
 # image = np.array(image[0:3]).T
 # plt.imshow(image)
