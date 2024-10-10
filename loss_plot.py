@@ -7,9 +7,9 @@ import seaborn as sns
 # dataframe containing all losses
 df_loss = pd.DataFrame(columns=["Extracted Features", "Loss", "Reconstruction Loss", "KL Loss"])
 
-for i in range(5, 50):
+for i in range(1, 50):
     try:
-        loss = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
+        loss = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
         df_loss.loc[len(df_loss)] = [i] + loss
         print("   " + str(i))
     except:
