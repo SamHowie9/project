@@ -52,6 +52,12 @@ for i in range(0, 4):
     image_4[i] = image_4[i]/image_4[i].max()
     image_5[i] = image_5[i]/image_5[i].max()
 
+    image_1[i] = np.log10(image_1[i]) + 1
+    image_2[i] = np.log10(image_2[i]) + 1
+    image_3[i] = np.log10(image_3[i]) + 1
+    image_4[i] = np.log10(image_4[i]) + 1
+    image_5[i] = np.log10(image_5[i]) + 1
+
     print(image_1[i].max())
 
 print(image_1.max())
