@@ -229,21 +229,6 @@ min_relevant_feature_ratio = []
 
 for encoding_dim in range(1, 51):
 
-    if encoding_dim ==  26:
-
-        relevant_feature_number.append(0)
-        relevant_feature_ratio.append(0)
-
-        med_relevant_feature_number.append(0)
-        max_relevant_feature_number.append(0)
-        min_relevant_feature_number.append(0)
-
-        med_relevant_feature_ratio.append(0)
-        max_relevant_feature_ratio.append(0)
-        min_relevant_feature_ratio.append(0)
-
-        continue
-
     extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
