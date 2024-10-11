@@ -11,7 +11,7 @@ vae_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_di
 # print(cae_features)
 
 print(cae_features.shape)
-print(vae_features.shape)
+print(vae_features[0].shape)
 
 # print(features.shape)
 #

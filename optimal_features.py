@@ -229,14 +229,29 @@ min_relevant_feature_ratio = []
 
 for encoding_dim in range(1, 51):
 
-    extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")
+    if encoding_dim ==  26:
+
+        relevant_feature_number.append(0)
+        relevant_feature_ratio.append(0)
+
+        med_relevant_feature_number.append(0)
+        max_relevant_feature_number.append(0)
+        min_relevant_feature_number.append(0)
+
+        med_relevant_feature_ratio.append(0)
+        max_relevant_feature_ratio.append(0)
+        min_relevant_feature_ratio.append(0)
+
+        continue
+
+    extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
     structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
 
-    extracted_features_1 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")
-    extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")
-    extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")
+    extracted_features_1 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
+    extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[2]
+    extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[2]
 
     extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
     extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
@@ -333,36 +348,38 @@ for encoding_dim in range(1, 51):
 
 
 
-# print(med_relevant_feature_number)
-# print(max_relevant_feature_number)
-# print(min_relevant_feature_number)
+print(med_relevant_feature_number)
+print(max_relevant_feature_number)
+print(min_relevant_feature_number)
 
+plt.errorbar(range(1, 51), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
+plt.show()
 
-relevant_err = []
-ratio_err = []
-
-for i in range(len(med_relevant_feature_number)):
-    relevant_err.append([(med_relevant_feature_number[i] - min_relevant_feature_number[i]), (max_relevant_feature_number[i] - med_relevant_feature_number[i])])
-    ratio_err.append([(med_relevant_feature_ratio[i] - min_relevant_feature_ratio[i]), (max_relevant_feature_ratio[i] - med_relevant_feature_ratio[i])])
-
-relevant_err = np.array(relevant_err).T
-ratio_err = np.array(ratio_err).T
-
-
-
-# plt.figure(figsize=(10, 8))
-
-# x_values = range(1, 46)
-
-# plt.scatter(x=x_values, y=med_relevant_feature_number)
-# plt.errorbar(x=x_values, y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
-
-# sns.lmplot(x=list(range(1, 46))*3, y=(min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number))
-
-df = pd.DataFrame()
-df["Extracted Features"] = list(range(1, 51))*3
-df["med_relevant_feature_number"] = min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number
-print(df)
+# relevant_err = []
+# ratio_err = []
+#
+# for i in range(len(med_relevant_feature_number)):
+#     relevant_err.append([(med_relevant_feature_number[i] - min_relevant_feature_number[i]), (max_relevant_feature_number[i] - med_relevant_feature_number[i])])
+#     ratio_err.append([(med_relevant_feature_ratio[i] - min_relevant_feature_ratio[i]), (max_relevant_feature_ratio[i] - med_relevant_feature_ratio[i])])
+#
+# relevant_err = np.array(relevant_err).T
+# ratio_err = np.array(ratio_err).T
+#
+#
+#
+# # plt.figure(figsize=(10, 8))
+#
+# # x_values = range(1, 46)
+#
+# # plt.scatter(x=x_values, y=med_relevant_feature_number)
+# # plt.errorbar(x=x_values, y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
+#
+# # sns.lmplot(x=list(range(1, 46))*3, y=(min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number))
+#
+# df = pd.DataFrame()
+# df["Extracted Features"] = list(range(1, 51))*3
+# df["med_relevant_feature_number"] = min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number
+# print(df)
 
 # sns.set_style("ticks")
 
