@@ -237,7 +237,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_2")
+plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
 plt.show()
 
 
