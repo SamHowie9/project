@@ -74,9 +74,41 @@ import seaborn as sns
 
 
 
+df_vae_train = pd.DataFrame(columns=["Extracted Features", "RMSE 1", "RMSE 2", "RMSE 3"])
+df_vae_test = pd.DataFrame(columns=["Extracted Features", "RMSE 1", "RMSE 2", "RMSE 3"])
 
-df_vae_train = pd.DataFrame(columns=["Extracted Features", "Loss", "Reconstruction Loss", "KL Loss"])
-df_vae_test
+df_cae_train = pd.DataFrame(columns=["Extracted Features", "RMSE 1", "RMSE 2", "RMSE 3"])
+df_cae_test = pd.DataFrame(columns=["Extracted Features", "RMSE 1", "RMSE 2", "RMSE 3"])
 
-df_cae_train
-df_cae_test
+df_vae_train["Extracted Features"] = df_vae_test["Extracted Features"] = df_cae_train["Extracted Features"] = df_cae_test["Extracted Features"] = range(1, 51)
+
+df_vae_train["RMSE 1"] = np.load("Variational Eagle/Loss/rmse_train_1.npy")
+df_vae_train["RMSE 2"] = np.load("Variational Eagle/Loss/rmse_train_2.npy")
+df_vae_train["RMSE 3"] = np.load("Variational Eagle/Loss/rmse_train_3.npy")
+
+df_vae_test["RMSE 1"] = np.load("Variational Eagle/Loss/rmse_test_1.npy")
+df_vae_test["RMSE 2"] = np.load("Variational Eagle/Loss/rmse_test_2.npy")
+df_vae_test["RMSE 3"] = np.load("Variational Eagle/Loss/rmse_test_3.npy")
+
+for i in range(1, 51):
+    df_cae_train.loc[i-1, "RMSE 1"] = np.load("Convolutional Eagle/Loss Rand/" + str(i) + "_feature_loss_1.npy")[-1]
+    df_cae_train.loc[i-1, "RMSE 2"] = np.load("Convolutional Eagle/Loss Rand/" + str(i) + "_feature_loss_2.npy")[-1]
+    df_cae_train.loc[i-1, "RMSE 3"] = np.load("Convolutional Eagle/Loss Rand/" + str(i) + "_feature_loss_3.npy")[-1]
+
+# for i in range(1, 51):
+#     df_cae_test.loc[i-1, "RMSE 1"] = np.load("Convolutional Eagle/Loss Rand/" + str(i) + "_feature_loss_1.npy")[-1]
+#     df_cae_test.loc[i-1, "RMSE 2"] = np.load("Convolutional Eagle/Loss Rand/" + str(i) + "_feature_loss_2.npy")[-1]
+#     df_cae_test.loc[i-1, "RMSE 3"] = np.load("Convolutional Eagle/Loss Rand/" + str(i) + "_feature_loss_3.npy")[-1]
+
+print(df_vae_test)
+
+plt.plot(df_vae_train["Extracted Features"], df_vae_train["RMSE 1"], label="Variational Train")
+plt.plot(df_vae_test["Extracted Features"], df_vae_test["RMSE 1"], label="Variational Test")
+plt.plot(df_cae_train["Extracted Features"], df_cae_train["RMSE 2"], label="Convolutional Train")
+plt.legend()
+plt.show()
+
+
+
+# df_vae_train.assign(RMSE_1 = np.load("Variational Eagle/Loss/rmse_train_1.npy"), RMSE_2 = np.load("Variational Eagle/Loss/rmse_train_2.npy"), RMSE_3 = np.load("Variational Eagle/Loss/rmse_train_3.npy"))
+
