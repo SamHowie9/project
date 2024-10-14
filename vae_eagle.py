@@ -55,70 +55,6 @@ test_images = np.array(all_images[-200:])
 
 
 
-
-# define sampling layer
-class Sampling(Layer):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.seed_generator = keras.random.SeedGenerator(1337)
-
-    def call(self, inputs):
-        z_mean, z_log_var = inputs
-        batch = ops.shape(z_mean)[0]
-        dim = ops.shape(z_mean)[1]
-        epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
-        return z_mean + ops.exp(0.5 * z_log_var) * epsilon
-
-
-
-# number of extracted features
-# encoding_dim = 32
-
-# Define keras tensor for the encoder
-input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
-
-# layers for the encoder
-x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
-x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 64, 32)
-x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
-x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
-x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
-x = Flatten()(x)                                                                                    # (256)
-# x = Dense(units=64, activation="relu")(x)                                                           # (64)
-x = Dense(units=64)(x)                                                           # (64)
-z_mean = Dense(encoding_dim, name="z_mean")(x)
-z_log_var = Dense(encoding_dim, name="z_log_var")(x)
-z = Sampling()([z_mean, z_log_var])
-
-# build the encoder
-encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
-encoder.summary()
-
-
-# Define keras tensor for the decoder
-latent_input = keras.Input(shape=(encoding_dim,))
-
-# layers for the decoder
-# x = Dense(units=64, activation="relu")(latent_input)                                                # (64)
-# x = Dense(units=256, activation="relu")(x)                                                          # (256)
-x = Dense(units=64)(latent_input)                                                # (64)
-x = Dense(units=256)(x)                                                          # (256)
-x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
-x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
-x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
-x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
-x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
-x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (128, 128, 3)
-
-# build the decoder
-decoder = keras.Model(latent_input, decoded, name="decoder")
-decoder.summary()
-
-
-
-
 # Define VAE model with custom time step
 class VAE(keras.Model):
 
@@ -169,9 +105,80 @@ class VAE(keras.Model):
 
 
 
+
+
+
+# define sampling layer
+class Sampling(Layer):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.seed_generator = keras.random.SeedGenerator(1337)
+
+    def call(self, inputs):
+        z_mean, z_log_var = inputs
+        batch = ops.shape(z_mean)[0]
+        dim = ops.shape(z_mean)[1]
+        epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
+        return z_mean + ops.exp(0.5 * z_log_var) * epsilon
+
+
+
+
+
+
+# number of extracted features
+# encoding_dim = 32
+
+# Define keras tensor for the encoder
+input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
+
+# layers for the encoder
+x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
+x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 64, 32)
+x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
+x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
+x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
+x = Flatten()(x)                                                                                    # (256)
+# x = Dense(units=64, activation="relu")(x)                                                           # (64)
+x = Dense(units=64)(x)                                                           # (64)
+z_mean = Dense(encoding_dim, name="z_mean")(x)
+z_log_var = Dense(encoding_dim, name="z_log_var")(x)
+z = Sampling()([z_mean, z_log_var])
+
+# build the encoder
+encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
+encoder.summary()
+
+
+# Define keras tensor for the decoder
+latent_input = keras.Input(shape=(encoding_dim,))
+
+# layers for the decoder
+# x = Dense(units=64, activation="relu")(latent_input)                                                # (64)
+# x = Dense(units=256, activation="relu")(x)                                                          # (256)
+x = Dense(units=64)(latent_input)                                                # (64)
+x = Dense(units=256)(x)                                                          # (256)
+x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
+x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
+x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
+x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
+x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
+x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (128, 128, 3)
+
+# build the decoder
+decoder = keras.Model(latent_input, decoded, name="decoder")
+decoder.summary()
+
+
+
+
 # build and compile the VAE
 vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
+
+
 
 
 # # train the model
@@ -180,17 +187,17 @@ vae.compile(optimizer=keras.optimizers.Adam())
 # # save the weights
 # vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
 #
-#
 # # generate extracted features from trained encoder and save as numpy array
 # extracted_features = vae.encoder.predict(train_images)
 # np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
-
-
+#
 # # get loss, reconstruction loss and kl loss and save as numpy array
 # loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 # print("\n \n" + str(encoding_dim))
 # print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
 # np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
+
+
 
 
 
@@ -206,6 +213,7 @@ vae.compile(optimizer=keras.optimizers.Adam())
 #
 # plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature" + str(epochs) + "_epoch_loss_1")
 # plt.show()
+
 
 
 
@@ -262,8 +270,6 @@ for i in range(len(train_images)):
 
     rmse_train.append(rmse)
 
-print(rmse_train)
-print(len(rmse_train))
 print(np.median(np.array(rmse_train)))
 
 
