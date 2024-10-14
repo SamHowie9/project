@@ -174,71 +174,101 @@ vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 
 
-# train the model
-model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
-
-# save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
-
-
-# generate extracted features from trained encoder and save as numpy array
-extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
-
-
-# get loss, reconstruction loss and kl loss and save as numpy array
-loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-print("\n \n" + str(encoding_dim))
-print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
+# # train the model
+# model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
+#
+# # save the weights
+# vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
+#
+#
+# # generate extracted features from trained encoder and save as numpy array
+# extracted_features = vae.encoder.predict(train_images)
+# np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
 
 
-
-
-# loss plot for individual run
-fig, axs1 = plt.subplots()
-axs1.plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss")
-axs1.set_ylabel("reconstruction loss")
-axs2 = axs1.twinx()
-axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
-axs2.set_ylabel("KL Loss")
-plt.legend()
-
-plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature" + str(epochs) + "_epoch_loss_1")
-plt.show()
+# # get loss, reconstruction loss and kl loss and save as numpy array
+# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+# print("\n \n" + str(encoding_dim))
+# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+# np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
 
 
 
 
-# number of images to reconstruct
-n = 12
+# # loss plot for individual run
+# fig, axs1 = plt.subplots()
+# axs1.plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss")
+# axs1.set_ylabel("reconstruction loss")
+# axs2 = axs1.twinx()
+# axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
+# axs2.set_ylabel("KL Loss")
+# plt.legend()
+#
+# plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature" + str(epochs) + "_epoch_loss_1")
+# plt.show()
 
-# create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[n:]
-# images_to_reconstruct = train_images[n:]
 
-# reconstruct the images
-test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
-reconstructed_images = vae.decoder.predict(test_features)
 
-# create figure to hold subplots
-fig, axs = plt.subplots(2, n-1, figsize=(18,5))
 
-# plot each subplot
-for i in range(0, n-1):
 
-    # show the original image (remove axes)
-    axs[0,i].imshow(images_to_reconstruct[i])
-    axs[0,i].get_xaxis().set_visible(False)
-    axs[0,i].get_yaxis().set_visible(False)
+# # Form reconstructions
+#
+# # number of images to reconstruct
+# n = 12
+#
+# # create a subset of the validation data to reconstruct (first 10 images)
+# images_to_reconstruct = test_images[n:]
+# # images_to_reconstruct = train_images[n:]
+#
+# # reconstruct the images
+# test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
+# reconstructed_images = vae.decoder.predict(test_features)
+#
+# # create figure to hold subplots
+# fig, axs = plt.subplots(2, n-1, figsize=(18,5))
+#
+# # plot each subplot
+# for i in range(0, n-1):
+#
+#     # show the original image (remove axes)
+#     axs[0,i].imshow(images_to_reconstruct[i])
+#     axs[0,i].get_xaxis().set_visible(False)
+#     axs[0,i].get_yaxis().set_visible(False)
+#
+#     # show the reconstructed image (remove axes)
+#     axs[1,i].imshow(reconstructed_images[i])
+#     axs[1,i].get_xaxis().set_visible(False)
+#     axs[1,i].get_yaxis().set_visible(False)
+#
+# plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
+# plt.show()
 
-    # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
-    axs[1,i].get_xaxis().set_visible(False)
-    axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
-plt.show()
+
+
+
+
+# find rmse (training and validation)
+
+vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy")
+reconstructions = vae.decoder.predict(features)
+
+rmse_train = []
+
+for i in range(len(train_images)):
+    squared_diff = (train_images[i] - reconstructions[i]) ** 2
+    rmse = np.sqrt(np.mean(squared_diff))
+
+    rmse_train.append(rmse)
+
+print(rmse_train)
+print(np.median(np.array(rmse_train)))
+
+
+# for i in range(len(test_images)):
+
+
 
 
 
