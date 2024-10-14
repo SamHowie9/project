@@ -262,8 +262,8 @@ for encoding_dim in range(1, 51):
 
     # find rmse (training and validation)
 
-    vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_2.weights.h5")
-    features_train = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_2.npy")
+    vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_3.weights.h5")
+    features_train = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_3.npy")
     # reconstructions_train = vae.decoder.predict(features_train[0])
 
     rmse_train = []
@@ -294,7 +294,7 @@ for encoding_dim in range(1, 51):
 
 
 # np.save("Variational Eagle/Loss/rmse_train_3", all_rmse_train)
-np.save("Variational Eagle/Loss/rmse_test_2", all_rmse_test)
+np.save("Variational Eagle/Loss/rmse_test_3", all_rmse_test)
 
 # for i in range(len(test_images)):
 
