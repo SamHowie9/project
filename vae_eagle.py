@@ -252,7 +252,7 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy")
-reconstructions = vae.decoder.predict(features)
+reconstructions = vae.decoder.predict(features[0])
 
 rmse_train = []
 
