@@ -294,7 +294,7 @@ for encoding_dim in range(1, 51):
 
 
 # np.save("Variational Eagle/Loss/rmse_train_3", all_rmse_train)
-np.save("Variational Eagle/Loss/rmse_test_1", all_rmse_train)
+np.save("Variational Eagle/Loss/rmse_test_1", all_rmse_test)
 
 # for i in range(len(test_images)):
 
