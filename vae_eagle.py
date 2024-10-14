@@ -263,6 +263,7 @@ for i in range(len(train_images)):
     rmse_train.append(rmse)
 
 print(rmse_train)
+print(len(rmse_train))
 print(np.median(np.array(rmse_train)))
 
 
