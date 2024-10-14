@@ -126,152 +126,157 @@ class Sampling(Layer):
 
 
 
+all_rmse = []
 
-# number of extracted features
-# encoding_dim = 32
+for encoding_dim in range(1, 51):
 
-# Define keras tensor for the encoder
-input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
+    # number of extracted features
+    # encoding_dim = 32
 
-# layers for the encoder
-x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
-x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 64, 32)
-x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
-x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
-x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
-x = Flatten()(x)                                                                                    # (256)
-# x = Dense(units=64, activation="relu")(x)                                                           # (64)
-x = Dense(units=64)(x)                                                           # (64)
-z_mean = Dense(encoding_dim, name="z_mean")(x)
-z_log_var = Dense(encoding_dim, name="z_log_var")(x)
-z = Sampling()([z_mean, z_log_var])
+    # Define keras tensor for the encoder
+    input_image = keras.Input(shape=(256, 256, 3))                                                      # (256, 256, 3)
 
-# build the encoder
-encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
-encoder.summary()
+    # layers for the encoder
+    x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)    # (128, 128, 64)
+    x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (64, 64, 32)
+    x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)              # (32, 32, 16)
+    x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (16, 16, 8)
+    x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)               # (8, 8, 4)
+    x = Flatten()(x)                                                                                    # (256)
+    # x = Dense(units=64, activation="relu")(x)                                                           # (64)
+    x = Dense(units=64)(x)                                                           # (64)
+    z_mean = Dense(encoding_dim, name="z_mean")(x)
+    z_log_var = Dense(encoding_dim, name="z_log_var")(x)
+    z = Sampling()([z_mean, z_log_var])
 
-
-# Define keras tensor for the decoder
-latent_input = keras.Input(shape=(encoding_dim,))
-
-# layers for the decoder
-# x = Dense(units=64, activation="relu")(latent_input)                                                # (64)
-# x = Dense(units=256, activation="relu")(x)                                                          # (256)
-x = Dense(units=64)(latent_input)                                                # (64)
-x = Dense(units=256)(x)                                                          # (256)
-x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
-x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
-x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
-x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
-x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
-x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (128, 128, 3)
-
-# build the decoder
-decoder = keras.Model(latent_input, decoded, name="decoder")
-decoder.summary()
+    # build the encoder
+    encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
+    encoder.summary()
 
 
+    # Define keras tensor for the decoder
+    latent_input = keras.Input(shape=(encoding_dim,))
 
+    # layers for the decoder
+    # x = Dense(units=64, activation="relu")(latent_input)                                                # (64)
+    # x = Dense(units=256, activation="relu")(x)                                                          # (256)
+    x = Dense(units=64)(latent_input)                                                # (64)
+    x = Dense(units=256)(x)                                                          # (256)
+    x = Reshape((8, 8, 4))(x)                                                                           # (8, 8, 4)
+    x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (16, 16, 4)
+    x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)      # (32, 32, 8)
+    x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (64, 64, 16)
+    x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (128, 128, 32)
+    x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)     # (256, 256, 64)
+    decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)        # (128, 128, 3)
 
-# build and compile the VAE
-vae = VAE(encoder, decoder)
-vae.compile(optimizer=keras.optimizers.Adam())
+    # build the decoder
+    decoder = keras.Model(latent_input, decoded, name="decoder")
+    decoder.summary()
 
 
 
 
-# # train the model
-# model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
-#
-# # save the weights
-# vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
-#
-# # generate extracted features from trained encoder and save as numpy array
-# extracted_features = vae.encoder.predict(train_images)
-# np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
-#
-# # get loss, reconstruction loss and kl loss and save as numpy array
-# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-# print("\n \n" + str(encoding_dim))
-# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-# np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
+    # build and compile the VAE
+    vae = VAE(encoder, decoder)
+    vae.compile(optimizer=keras.optimizers.Adam())
 
 
 
 
-
-
-# # loss plot for individual run
-# fig, axs1 = plt.subplots()
-# axs1.plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss")
-# axs1.set_ylabel("reconstruction loss")
-# axs2 = axs1.twinx()
-# axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
-# axs2.set_ylabel("KL Loss")
-# plt.legend()
-#
-# plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature" + str(epochs) + "_epoch_loss_1")
-# plt.show()
+    # # train the model
+    # model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
+    #
+    # # save the weights
+    # vae.save_weights(filepath="Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
+    #
+    # # generate extracted features from trained encoder and save as numpy array
+    # extracted_features = vae.encoder.predict(train_images)
+    # np.save("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
+    #
+    # # get loss, reconstruction loss and kl loss and save as numpy array
+    # loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+    # print("\n \n" + str(encoding_dim))
+    # print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+    # np.save("Variational Eagle/Loss/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
 
 
 
 
 
 
-# # Form reconstructions
-#
-# # number of images to reconstruct
-# n = 12
-#
-# # create a subset of the validation data to reconstruct (first 10 images)
-# images_to_reconstruct = test_images[n:]
-# # images_to_reconstruct = train_images[n:]
-#
-# # reconstruct the images
-# test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
-# reconstructed_images = vae.decoder.predict(test_features)
-#
-# # create figure to hold subplots
-# fig, axs = plt.subplots(2, n-1, figsize=(18,5))
-#
-# # plot each subplot
-# for i in range(0, n-1):
-#
-#     # show the original image (remove axes)
-#     axs[0,i].imshow(images_to_reconstruct[i])
-#     axs[0,i].get_xaxis().set_visible(False)
-#     axs[0,i].get_yaxis().set_visible(False)
-#
-#     # show the reconstructed image (remove axes)
-#     axs[1,i].imshow(reconstructed_images[i])
-#     axs[1,i].get_xaxis().set_visible(False)
-#     axs[1,i].get_yaxis().set_visible(False)
-#
-# plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
-# plt.show()
+    # # loss plot for individual run
+    # fig, axs1 = plt.subplots()
+    # axs1.plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss")
+    # axs1.set_ylabel("reconstruction loss")
+    # axs2 = axs1.twinx()
+    # axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
+    # axs2.set_ylabel("KL Loss")
+    # plt.legend()
+    #
+    # plt.savefig("Variational Eagle/Plots/" + str(encoding_dim) + "_feature" + str(epochs) + "_epoch_loss_1")
+    # plt.show()
 
 
 
 
 
 
-# find rmse (training and validation)
+    # # Form reconstructions
+    #
+    # # number of images to reconstruct
+    # n = 12
+    #
+    # # create a subset of the validation data to reconstruct (first 10 images)
+    # images_to_reconstruct = test_images[n:]
+    # # images_to_reconstruct = train_images[n:]
+    #
+    # # reconstruct the images
+    # test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
+    # reconstructed_images = vae.decoder.predict(test_features)
+    #
+    # # create figure to hold subplots
+    # fig, axs = plt.subplots(2, n-1, figsize=(18,5))
+    #
+    # # plot each subplot
+    # for i in range(0, n-1):
+    #
+    #     # show the original image (remove axes)
+    #     axs[0,i].imshow(images_to_reconstruct[i])
+    #     axs[0,i].get_xaxis().set_visible(False)
+    #     axs[0,i].get_yaxis().set_visible(False)
+    #
+    #     # show the reconstructed image (remove axes)
+    #     axs[1,i].imshow(reconstructed_images[i])
+    #     axs[1,i].get_xaxis().set_visible(False)
+    #     axs[1,i].get_yaxis().set_visible(False)
+    #
+    # plt.savefig("Variational Eagle/Reconstructions/Validation/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
+    # plt.show()
 
-vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
-features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy")
-reconstructions = vae.decoder.predict(features[0])
 
-rmse_train = []
 
-for i in range(len(train_images)):
-    squared_diff = (train_images[i] - reconstructions[i]) ** 2
-    rmse = np.sqrt(np.mean(squared_diff))
 
-    rmse_train.append(rmse)
 
-print(np.median(np.array(rmse_train)))
 
+    # find rmse (training and validation)
+
+    vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+    features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy")
+    reconstructions = vae.decoder.predict(features[0])
+
+    rmse_train = []
+
+    for i in range(len(train_images)):
+        squared_diff = (train_images[i] - reconstructions[i]) ** 2
+        rmse = np.sqrt(np.mean(squared_diff))
+
+        rmse_train.append(rmse)
+
+    print(np.median(np.array(rmse_train)))
+    all_rmse.append(np.median(np.array(rmse_train)))
+
+np.save("Variational Eagle/Loss/rmse_1", all_rmse)
 
 # for i in range(len(test_images)):
 
