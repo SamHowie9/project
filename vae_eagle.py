@@ -126,7 +126,8 @@ class Sampling(Layer):
 
 
 
-all_rmse = []
+all_rmse_train = []
+all_rmse_test = []
 
 for encoding_dim in range(1, 51):
 
@@ -261,22 +262,39 @@ for encoding_dim in range(1, 51):
 
     # find rmse (training and validation)
 
-    vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_3.weights.h5")
-    features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_3.npy")
-    reconstructions = vae.decoder.predict(features[0])
+    vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+    features_train = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy")
+    # reconstructions_train = vae.decoder.predict(features_train[0])
 
     rmse_train = []
+    rmse_test = []
 
-    for i in range(len(train_images)):
-        squared_diff = (train_images[i] - reconstructions[i]) ** 2
+    # for i in range(len(train_images)):
+    #     squared_diff = (train_images[i] - reconstructions_train[i]) ** 2
+    #     rmse = np.sqrt(np.mean(squared_diff))
+    #
+    #     rmse_train.append(rmse)
+    #
+    # print(np.median(np.array(rmse_train)))
+    # all_rmse_train.append(np.median(np.array(rmse_train)))
+
+
+    features_test, _, _ = vae.encoder.predict(test_images)
+    reconstructions_test = vae.decoder.predict(features_test)
+
+    for i in range(len(test_images)):
+        squared_diff = (test_images[i] - reconstructions_test[i]) ** 2
         rmse = np.sqrt(np.mean(squared_diff))
 
-        rmse_train.append(rmse)
+        rmse_test.append(rmse)
 
-    print(np.median(np.array(rmse_train)))
-    all_rmse.append(np.median(np.array(rmse_train)))
 
-np.save("Variational Eagle/Loss/rmse_3", all_rmse)
+    all_rmse_train.append(np.median(np.array(rmse_train)))
+    all_rmse_test.append(np.median(np.array(rmse_test)))
+
+
+# np.save("Variational Eagle/Loss/rmse_train_3", all_rmse_train)
+np.save("Variational Eagle/Loss/rmse_test_1", all_rmse_train)
 
 # for i in range(len(test_images)):
 
