@@ -103,9 +103,10 @@ for i in range(1, 51):
 print(df_vae_test)
 
 plt.plot(df_vae_train["Extracted Features"], df_vae_train["RMSE 1"], label="Variational Train")
-plt.plot(df_vae_test["Extracted Features"], df_vae_test["RMSE 1"], label="Variational Test")
+# plt.plot(df_vae_test["Extracted Features"], df_vae_test["RMSE 1"], label="Variational Test")
 plt.plot(df_cae_train["Extracted Features"], df_cae_train["RMSE 2"], label="Convolutional Train")
 plt.legend()
+plt.savefig("VAE vs CAE")
 plt.show()
 
 
