@@ -16,17 +16,13 @@ pd.set_option('display.width', 500)
 
 
 
-# encoding_dim = 25
-#
-# extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_1.npy")
-
 
 plt.style.use("default")
 sns.set_style("ticks")
 
 
+# load supplemental file (find galaxies with stellar mass > 10^10 solar masses
 df1 = pd.read_csv("Galaxy Properties/stab3510_supplemental_file/table1.csv", comment="#")
-
 
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
@@ -39,98 +35,51 @@ physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
-# print(df1["GalaxyID"].tolist())
-# print(df1)
-
-# print(structure_properties)
-# print(physical_properties)
-# print(all_properties)
-
-
-
-
-# structual features: Sersic index, Axis ratio, position angle, semi-major axis
-
-# physical propeties: stellar mass, star formation rate, halo mass, black hole mass, merger history
-
-# stellar mass, gas mass, dm_mass, bh_mass (subgrid), mean age, sfr,
-# MassType_Star, Mass_Type_Gas, Mass_Type_DM, Mass_Type_BH, BlackHoleMass, InitialMassWeightedStellarAge, StarFormationRate
-
-
-
-# fig, axs = plt.subplots(2, 1, figsize=(12, 10))
-
-
-
-# loss = []
-# val_loss = []
-#
-# med_loss = []
-# max_loss = []
-# min_loss = []
-#
-# med_val_loss = []
-# max_val_loss = []
-# min_val_loss = []
-#
-# # 46, 50
-# # 47, 49
-# # 48
-#
-#
-# for i in range(1, 51):
-#
-#     if i == 26:
-#         continue
-#
-#     feature_loss = np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy")
-#
-#     loss.append(feature_loss[0])
-#     val_loss.append(feature_loss[1])
-#
-#     feature_loss_1 = np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy")
-#     feature_loss_2 = np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy")
-#     feature_loss_3 = np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy")
-#
-#     if i == 23 or i == 26 or i == 45:
-#         print(feature_loss_1[0])
-#         print(feature_loss_2[0])
-#         print(feature_loss_3[0])
-#         print()
-#
-#     med_loss.append(np.median((feature_loss_1[0], feature_loss_2[0], feature_loss_3[0])))
-#     max_loss.append(max(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-#     min_loss.append(min(feature_loss_1[0], feature_loss_2[0], feature_loss_3[0]))
-#
-#     med_val_loss.append(np.median((feature_loss_1[1], feature_loss_2[1], feature_loss_3[1])))
-#     max_val_loss.append(max(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-#     min_val_loss.append(min(feature_loss_1[1], feature_loss_2[1], feature_loss_3[1]))
-#
-#
-# loss_err = []
-# val_loss_err = []
-#
-# for i in range(len(med_loss)):
-#
-#     loss_err.append([(med_loss[i] - min_loss[i]), (max_loss[i] - med_loss[i])])
-#     val_loss_err.append([(med_val_loss[i] - min_val_loss[i]), (max_val_loss[i] - med_val_loss[i])])
-#
-# loss_err = np.array(loss_err).T
-# val_loss_err = np.array(val_loss_err).T
-#
-# print(loss_err)
-# print(val_loss_err)
 
 
 
 
 
-# def expfit(x, a, b, c):
-#     return a * np.exp(-b * x) + c
+
+fig, axs = plt.subplots(2, 1, figsize=(12, 10))
+
+
+
+# dataframe containing all losses
+df_loss = pd.DataFrame(columns=["Extracted Features", "Min Loss", "Min KL", "Med Loss", "Med KL", "Max Loss", "Max KL"])
+
+for i in range(1, 51):
+    try:
+
+        loss_1 = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        loss_2 = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
+        loss_3 = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
+
+        loss_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
+        kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
+
+        df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
+
+    except:
+        print(i)
+
+print(df_loss)
+
+loss_err_upper = np.array(df_loss["Max Loss"] - df_loss["Med Loss"])
+loss_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
+
+kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
+kl_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
+
+
+# def logfit(x, a, b):
+#     return a * np.log10(x) + b
 #
-# params, covarience = curve_fit(expfit, range(1, 51), med_loss)
+# params, covarience = curve_fit(logfit, range(1, 51), df_loss["Med Loss"])
 #
-# a, b, c = params
+# a, b = params
+#
+# print("Logfit params: " + str(a) + " " + str(b))
 #
 # x_fit = np.linspace(1, 50, 100).tolist()
 #
@@ -139,75 +88,38 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 # y_fit = []
 #
 # for x in x_fit:
-#     y_fit.append(expfit(x, a, b, c))
+#     y_fit.append(logfit(x, a, b))
 #
 #
-#
-#
-#
-# colours_blue = ["C0"] * 50
-# colours_blue[37] = "red"
-#
-# colours_yellow = ["C1"] * 50
-# colours_yellow[37] = "red"
-#
-#
-#
-# plt.figure(figsize=(12, 5))
-#
-# plt.scatter(x=range(1, 51), y=med_loss, c=colours_blue, label="Training Images", zorder=10)
-# plt.errorbar(x=range(1, 51), y=med_loss, ecolor=colours_blue, yerr=loss_err, ls="none", alpha=0.6, zorder=0)
-# # plt.plot(x_fit, y_fit, c="black")
-#
-# plt.scatter(x=range(1, 51), y=med_val_loss, c=colours_yellow, label="Validation Images", zorder=11)
-# plt.errorbar(x=range(1, 51), y=med_val_loss, ecolor=colours_yellow, yerr=val_loss_err, ls="none", alpha=0.6, zorder=1)
-#
-# plt.xlabel("Extracted Features", fontsize=20)
-# plt.ylabel("Loss", fontsize=20)
-#
-# plt.tick_params(labelsize=20)
-#
-# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
-#
-# plt.savefig("Plots/rand_extracted_feat_vs_loss", bbox_inches='tight')
-# plt.show()
-
-
-
-
-# axs[0].scatter(x=range(1, 51), y=med_loss, c=colours_blue, label="Training Images", zorder=10)
-# axs[0].errorbar(x=range(1, 51), y=med_loss, ecolor=colours_blue, yerr=loss_err, ls="none", alpha=0.6, zorder=0)
 # axs[0].plot(x_fit, y_fit, c="black")
-#
-# axs[0].scatter(x=range(1, 51), y=med_val_loss, c=colours_yellow, label="Validation Images", zorder=11)
-# axs[0].errorbar(x=range(1, 51), y=med_val_loss, ecolor=colours_yellow, yerr=val_loss_err, ls="none", alpha=0.6, zorder=1)
-#
-# axs[0].set_xlabel("Extracted Features", fontsize=18)
-# axs[0].set_ylabel("Loss", fontsize=18)
-#
-# axs[0].tick_params(labelsize=18)
-#
-# axs[0].legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":18})
 
 
 
+# fig, axs = plt.subplots()
 
+# axs1.plot(df_loss["Extracted Features"], df_loss["Med Loss"])
+# axs1.plot(df_loss["Extracted Features"], df_loss["Min Loss"])
+# axs1.plot(df_loss["Extracted Features"], df_loss["Max Loss"])
+loss = axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Loss"], yerr=[loss_err_lower, loss_err_upper], fmt="o", label="Loss")
+axs[0].set_ylabel("Loss")
+axs[0].set_xlabel("Extracted Features")
 
+axs2 = axs[0].twinx()
 
+# axs2.plot(df_loss["Extracted Features"], df_loss["Med KL"], color="red")
+kl_div = axs2.errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", color="red", label="KL-Divergence")
+axs2.set_ylabel("KL-Divergence")
 
-# plt.scatter(x=range(1, 51), y=loss, label="Training Images")
-# plt.scatter(x=range(1, 51), y=val_loss, label="Validation Images")
-#
-# # plt.plot(range(17, 41), loss)
-# # plt.plot(range(17, 41), val_loss)
-#
-# plt.xlabel("Number of Extracted Features")
-# plt.ylabel("Root-Mean-Squared Error")
-#
-# plt.legend(bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2)
-#
-# # plt.savefig("Plots/extracted_feat_vs_loss")
+axs[0].legend([loss, kl_div], ["Loss", "KL-Divergence"], loc="center right")
+
+# plt.savefig("Variational Eagle/Plots/Loss vs Extracted Features")
 # plt.show()
+
+
+
+
+
+
 
 
 
@@ -226,7 +138,6 @@ med_relevant_feature_ratio = []
 max_relevant_feature_ratio = []
 min_relevant_feature_ratio = []
 
-
 for encoding_dim in range(1, 51):
 
     extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
@@ -234,9 +145,9 @@ for encoding_dim in range(1, 51):
 
     structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
 
-    extracted_features_1 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
-    extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[2]
-    extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[2]
+    extracted_features_1 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+    extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
+    extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
 
     extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
     extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
@@ -288,33 +199,25 @@ for encoding_dim in range(1, 51):
             # correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
             # correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
 
+
             correlation_list_1.append(correlation_1)
             correlation_list_2.append(correlation_2)
             correlation_list_3.append(correlation_3)
-
-
-
-        # add the correlation of that feature to the main dataframe
-        # structure_correlation_df.loc[len(structure_correlation_df)] = correlation_list
-
-        # print(correlation_list_1)
 
         correlation_df_1.loc[len(correlation_df_1)] = correlation_list_1
         correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
 
 
-
     relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
 
 
     # find the number of features at least slightly correlating with a property
-    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.3).sum()
+    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
 
-    relevant_features_1 = (abs(correlation_df_1[relevant_properties]).max(axis=1) > 0.3).sum()
-    relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.3).sum()
-    relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.3).sum()
-
+    relevant_features_1 = (abs(correlation_df_1[relevant_properties]).max(axis=1) > 0.4).sum()
+    relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.4).sum()
+    relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.4).sum()
 
 
     relevant_feature_number.append(relevant_features)
@@ -329,16 +232,22 @@ for encoding_dim in range(1, 51):
     min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
 
 
+axs[1].errorbar(range(1, 51), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
+axs[1].set_ylabel("Meaningful Extracted Features")
+axs[1].set_xlabel("Extracted Features")
+
+# plt.savefig("Variational Eagle/Plots/Meaningful Extracted Features vs Total Extracted Features")
+# plt.show()
 
 
 
-
-print(med_relevant_feature_number)
-print(max_relevant_feature_number)
-print(min_relevant_feature_number)
-
-plt.errorbar(range(1, 51), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
+plt.savefig("Variational Eagle/Plots/Optimal Extracted Features")
 plt.show()
+
+
+
+
+
 
 # relevant_err = []
 # ratio_err = []

@@ -16,10 +16,10 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 38
+encoding_dim = 10
 
 
-extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_features_1.npy")
+extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
 
@@ -135,63 +135,59 @@ for feature in range(0, len(extracted_features_switch)):
     correlation_df.loc[len(correlation_df)] = correlation_list
 
 
-print(correlation_df)
-
-
 
 
 # print(structure_correlation_df)
 # print(physical_correlation_df)
+
 # print(correlation_df)
+
+
+
+
+
+# # set the figure size
+# plt.figure(figsize=(12, 16))
+#
+# sns.set(font_scale=1.5)
+#
+# # plot a heatmap for the dataframe (with annotations)
+# ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Position Angle", "Axis Ratio"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation Coefficient'})
+#
+#
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=22, labelpad=10)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+#
+# ax.figure.axes[-1].yaxis.label.set_size(22)
+# ax.figure.axes[-1].yaxis.labelpad = 15
+#
+#
+# # colorbar = plt.colorbar(ax)
+# # colorbar.setlabel("Correlation Coefficient", fontsize=22, labelpad=10)
+#
+#
+# def wrap_labels(ax, width, break_long_words=False):
+#     labels = []
+#     for label in ax.get_xticklabels():
+#         text = label.get_text()
+#         labels.append(textwrap.fill(text, width=width,
+#                       break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=22)
+#
+# wrap_labels(ax, 10)
 #
 #
 #
-#
-#
-#
-#
-#
-# # # set the figure size
-# # plt.figure(figsize=(12, 16))
-# #
-# # sns.set(font_scale=1.5)
-# #
-# # # plot a heatmap for the dataframe (with annotations)
-# # ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Position Angle", "Axis Ratio"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation Coefficient'})
-# #
-# #
-# # plt.yticks(rotation=0)
-# # plt.ylabel("Extracted Features", fontsize=22, labelpad=10)
-# # ax.xaxis.tick_top() # x axis on top
-# # ax.xaxis.set_label_position('top')
-# # ax.tick_params(length=0)
-# #
-# # ax.figure.axes[-1].yaxis.label.set_size(22)
-# # ax.figure.axes[-1].yaxis.labelpad = 15
-# #
-# #
-# # # colorbar = plt.colorbar(ax)
-# # # colorbar.setlabel("Correlation Coefficient", fontsize=22, labelpad=10)
-# #
-# #
-# # def wrap_labels(ax, width, break_long_words=False):
-# #     labels = []
-# #     for label in ax.get_xticklabels():
-# #         text = label.get_text()
-# #         labels.append(textwrap.fill(text, width=width,
-# #                       break_long_words=break_long_words))
-# #     ax.set_xticklabels(labels, rotation=0, fontsize=22)
-# #
-# # wrap_labels(ax, 10)
-# #
-# #
-# #
-# # plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_structure_property_correlation_2.eps")
-# # plt.show()
-#
-#
-#
-#
+# plt.savefig("Variational Eagle/Correlation Plots/" + str(encoding_dim) + "_feature_structure_measurement_correlation_1")
+# plt.show()
+
+
+
+
+
 # # set the figure size
 # plt.figure(figsize=(20, 16))
 #
@@ -223,101 +219,100 @@ print(correlation_df)
 #
 #
 #
-# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_physical_property_correlation_2")
+# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_physical_property_correlation_1")
 # plt.show()
 
 
-# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-#
-# print(correlation_df)
-#
-#
-# # set the figure size
-# plt.figure(figsize=(20, 16))
-#
-# # sns.set(font_scale = 2)
-#
-# # ["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"]
-#
-# # plot a heatmap for the dataframe (with annotations)
-# # ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Semi - Major Axis", "AB Magnitude", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-# ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-#
-#
-#
-# plt.yticks(rotation=0)
-# plt.ylabel("Extracted Features", fontsize=15)
-# ax.xaxis.tick_top() # x axis on top
-# ax.xaxis.set_label_position('top')
-# ax.tick_params(length=0)
-# ax.figure.axes[-1].yaxis.label.set_size(15)
-#
-#
-# def wrap_labels(ax, width, break_long_words=False):
-#     labels = []
-#     for label in ax.get_xticklabels():
-#         text = label.get_text()
-#         labels.append(textwrap.fill(text, width=width,
-#                       break_long_words=break_long_words))
-#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
-#
-# wrap_labels(ax, 10)
-#
-#
-#
-# plt.savefig("Correlation Plots Rand/" + str(encoding_dim) + "_feature_all_property_correlation_3_abs", bbox_inches='tight')
+
+
+
+
+
+selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+
+print(correlation_df)
+
+
+# set the figure size
+plt.figure(figsize=(20, encoding_dim))
+
+# sns.set(font_scale = 2)
+
+# ["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"]
+
+# plot a heatmap for the dataframe (with annotations)
+# ax = sns.heatmap(abs(correlation_df[["Sersic Index", "Semi - Major Axis", "AB Magnitude", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+
+plt.yticks(rotation=0)
+plt.ylabel("Extracted Features", fontsize=15)
+ax.xaxis.tick_top() # x axis on top
+ax.xaxis.set_label_position('top')
+ax.tick_params(length=0)
+ax.figure.axes[-1].yaxis.label.set_size(15)
+
+
+def wrap_labels(ax, width, break_long_words=False):
+    labels = []
+    for label in ax.get_xticklabels():
+        text = label.get_text()
+        labels.append(textwrap.fill(text, width=width,
+                      break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+
+wrap_labels(ax, 10)
+
+
+
+plt.savefig("Variational Eagle/Correlation Plots/" + str(encoding_dim) + "_feature_all_property_correlation_1_abs", bbox_inches='tight')
+plt.show()
+
+
+# plt.figure(figsize=(10,10))
+# plt.scatter(x=extracted_features_switch[9], y=all_properties["q_r"])
 # plt.show()
-#
-#
-#
-# # plt.figure(figsize=(10,10))
-# # plt.scatter(x=extracted_features_switch[9], y=all_properties["q_r"])
-# # plt.show()
-#
-#
-#
-#
-#
-# "n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_DM", "MassType_BH", "InitialMassWeightedStellarAge", "StarFormationRate"
 
 
 
-# # properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-# properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
-#
-#
-# all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
-#
-# print(all_properties)
-#
-# property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
-#
-# # fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, 140))
+
+
+# properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
+
+
+all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
+
+print(all_properties)
+
+property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
+
+fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
 # fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
-#
-# # sns.set(font_scale=10)
-#
-# for i, property in enumerate(properties):
-#
-#     axs[0][i].set_title(property_labels[i], fontsize=20)
-#
-#
-#
-#     for feature in range(0, 19):
-#
-#         # axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
-#         axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
-#
-#         # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
-#
-#         # axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
-#         axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
-#         axs[feature][i].set_ylabel(None)
-#         axs[feature][i].tick_params(labelsize=12)
-#
-# # plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p1", bbox_inches='tight')
-# plt.savefig("Correlation Plots Rand/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
-# plt.show()
+
+# sns.set(font_scale=10)
+
+for i, property in enumerate(properties):
+
+    axs[0][i].set_title(property_labels[i], fontsize=20)
+
+    # for feature in range(0, 19):
+    for feature in range(0, encoding_dim):
+
+        axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
+        # axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
+
+        # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
+
+        axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
+        # axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
+        axs[feature][i].set_ylabel(None)
+        axs[feature][i].tick_params(labelsize=12)
+
+plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p1", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
+plt.show()
 
 
 
