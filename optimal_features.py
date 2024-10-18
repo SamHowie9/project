@@ -76,22 +76,31 @@ kl_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
 #     return a * np.log10(x) + b
 #
 # params, covarience = curve_fit(logfit, range(1, 51), df_loss["Med Loss"])
-#
 # a, b = params
-#
+
+def sigmoid_fit(x, a, b, c, d):
+    return (a/(1 + (np.e ** (-b*x + c)))) + d
+
+params, covarience = curve_fit(sigmoid_fit, range(1, 51), df_loss["Med Loss"]/1000)
+a, b, c, d = params
+
+
+
 # print("Logfit params: " + str(a) + " " + str(b))
-#
-# x_fit = np.linspace(1, 50, 100).tolist()
-#
-# print(x_fit)
-#
-# y_fit = []
-#
-# for x in x_fit:
-#     y_fit.append(logfit(x, a, b))
-#
-#
-# axs[0].plot(x_fit, y_fit, c="black")
+
+print(params)
+
+x_fit = np.linspace(1, 50, 100).tolist()
+
+print(x_fit)
+
+y_fit = []
+
+for x in x_fit:
+    y_fit.append(sigmoid_fit(x, a, b, c, d)*1000)
+
+
+axs[0].plot(x_fit, y_fit, c="black")
 
 
 
@@ -105,6 +114,8 @@ axs[0].set_ylabel("Loss")
 axs[0].set_xlabel("Extracted Features")
 
 axs2 = axs[0].twinx()
+
+# axs2.plot(x_fit, y_fit, c="black")
 
 # axs2.plot(df_loss["Extracted Features"], df_loss["Med KL"], color="red")
 kl_div = axs2.errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", color="red", label="KL-Divergence")

@@ -22,6 +22,8 @@ encoding_dim = 10
 extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
 extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
+print(extracted_features.shape)
+
 
 
 # load structural and physical properties into dataframes
