@@ -145,9 +145,11 @@ med_relevant_feature_number = []
 max_relevant_feature_number = []
 min_relevant_feature_number = []
 
-med_relevant_feature_ratio = []
-max_relevant_feature_ratio = []
-min_relevant_feature_ratio = []
+relevant_property_count = []
+
+# med_relevant_feature_ratio = []
+# max_relevant_feature_ratio = []
+# min_relevant_feature_ratio = []
 
 for encoding_dim in range(1, 51):
 
@@ -221,7 +223,7 @@ for encoding_dim in range(1, 51):
 
 
     relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-
+    # relevant_properties = ["n_r"]
 
     # find the number of features at least slightly correlating with a property
     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
@@ -230,20 +232,34 @@ for encoding_dim in range(1, 51):
     relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.4).sum()
     relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.4).sum()
 
-
     relevant_feature_number.append(relevant_features)
-    relevant_feature_ratio.append(relevant_features/encoding_dim)
+    # relevant_feature_ratio.append(relevant_features/encoding_dim)
 
     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
 
-    med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
-    max_relevant_feature_ratio.append(max((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
-    min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
+    # med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
+    # max_relevant_feature_ratio.append(max((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
+    # min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
+
+
+    # for property in relevant_properties:
+    #
+    #     relevant_features_1 = (abs(correlation_df_1[property]).max(axis=1) > 0.4).sum()
+    #     relevant_features_2 = (abs(correlation_df_2[property]).max(axis=1) > 0.4).sum()
+    #     relevant_features_3 = (abs(correlation_df_3[property]).max(axis=1) > 0.4).sum()
+    #
+    #     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
+    #     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
+    #     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
+    #
+    #     relevant_property_count.append([min_relevant_feature_number, med_relevant_feature_number, max_relevant_feature_number])
+
 
 
 axs[1].errorbar(range(1, 51), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
+# axs[1].errorbar(range(1, 51), relevant_property_count[0][1], yerr=[relevant_property_count[0][1] - relevant_property_count[0][1]), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
 axs[1].set_ylabel("Meaningful Extracted Features")
 axs[1].set_xlabel("Extracted Features")
 
