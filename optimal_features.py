@@ -222,8 +222,8 @@ for encoding_dim in range(1, 51):
         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
 
 
-    relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-    # relevant_properties = ["n_r"]
+    # relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+    relevant_properties = ["n_r"]
 
     # find the number of features at least slightly correlating with a property
     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
@@ -268,7 +268,7 @@ axs[1].set_xlabel("Extracted Features")
 
 
 
-plt.savefig("Variational Eagle/Plots/Optimal Extracted Features")
+plt.savefig("Variational Eagle/Plots/Optimal Extracted Features (Sersic Only)")
 plt.show()
 
 
