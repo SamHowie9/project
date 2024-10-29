@@ -28,7 +28,6 @@ for j, image_name in enumerate(images):
     image = hdu_list[0].data
     image = image[0:3]
 
-    image = np.int32(np.array(image).round())
 
     print(np.array(image).shape)
 
@@ -36,7 +35,8 @@ for j, image_name in enumerate(images):
     print(image[1].max())
     print(image[2].max())
 
-    axs[j][0].imshow(np.array(image).T)
+    # axs[j][0].imshow(np.array(image).T)
+    axs[j][1].imshow(((np.array(image)/np.max(image)).T))
 
 
     def fwhm_to_sigma(fwhm):
@@ -47,7 +47,7 @@ for j, image_name in enumerate(images):
     image[2] = gaussian_filter(image[2], sigma=fwhm_to_sigma(2))
 
 
-    axs[j][1].imshow(np.array(image).T)
+    # axs[j][1].imshow(np.array(image).T)
 
 
     gaussian = np.random.normal(0, 0.1, (len(image[0]), len(image[0])))
@@ -56,14 +56,14 @@ for j, image_name in enumerate(images):
         image[i] = image[i] + gaussian
 
 
-    axs[j][2].imshow(np.array(image).T)
+    # axs[j][2].imshow(np.array(image).T)
 
     # normalisation and log filter
     for i in range(0, 3):
         image[i] = image[i]/image[i].max()
         # image[i] = np.log10(image[i]) + 1
 
-    axs[j][3].imshow(np.array(image).T)
+    # axs[j][3].imshow(np.array(image).T)
 
 
     for i in range(0, 3):
@@ -71,7 +71,7 @@ for j, image_name in enumerate(images):
 
     image = np.float32(image)
 
-    axs[j][4].imshow(np.array(image).T)
+    # axs[j][4].imshow(np.array(image).T)
 
 fig.tight_layout()
 plt.savefig("Variational TNG/Plots/Image Processing")

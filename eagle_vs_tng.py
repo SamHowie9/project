@@ -12,11 +12,11 @@ path = baseUrl + "TNG100-1/"
 r = requests.get(path, params=None, headers=headers)
 data = r.json()
 
-print(data["mass_dm"])
+# print(data["mass_dm"])
 
 # print(type(r))
 
-# print(data.keys())
+print(data.keys())
 
 # for i in range(len(data['simulations'])):
 #     print(data['simulations'][i])
