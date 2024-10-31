@@ -7,9 +7,9 @@ from matplotlib import pyplot as plt
 import cv2
 
 
-images = ["broadband_166270.fits", "broadband_247336.fits", "broadband_304313.fits", "broadband_391637.fits", "broadband_540856.fits", "broadband_546348.fits"]
+images = ["broadband_540856.fits", "broadband_546348.fits", "broadband_166270.fits", "broadband_247336.fits", "broadband_391637.fits", "broadband_592000.fits", "broadband_600893.fits", "broadband_89584.fits", "broadband_589571.fits", "broadband_204076.fits"]
 
-fig, axs = plt.subplots(len(images), 5, figsize=(10, 10))
+fig, axs = plt.subplots(len(images), 5, figsize=(10, 18))
 
 
 for i in range(0, len(images)):
