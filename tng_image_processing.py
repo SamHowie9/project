@@ -1,7 +1,10 @@
+import pandas as pd
 from astropy.io import fits
+from keras.src.ops import shape
 from scipy.ndimage import gaussian_filter
 import numpy as np
 from matplotlib import pyplot as plt
+import cv2
 
 
 images = ["broadband_166270.fits", "broadband_247336.fits", "broadband_304313.fits", "broadband_391637.fits", "broadband_540856.fits", "broadband_546348.fits"]
@@ -18,7 +21,7 @@ axs[0][0].set_title("Original")
 axs[0][1].set_title("Gaussian Filter")
 axs[0][2].set_title("Gaussian Noise")
 axs[0][3].set_title("Normalisation")
-axs[0][4].set_title("Log Filter")
+axs[0][4].set_title("Resizing")
 
 
 for j, image_name in enumerate(images):
@@ -26,52 +29,69 @@ for j, image_name in enumerate(images):
     # hdu_list = fits.open("sdss/snapnum_095/data/broadband_540856.fits")
     hdu_list = fits.open("sdss/snapnum_095/data/" + image_name)
     image = hdu_list[0].data
+
+
+    # take only the g,r,i bands (ignore z)
     image = image[0:3]
 
 
-    print(np.array(image).shape)
-
-    print(image[0].max())
-    print(image[1].max())
-    print(image[2].max())
-
-    # axs[j][0].imshow(np.array(image).T)
-    axs[j][1].imshow(((np.array(image)/np.max(image)).T))
+    axs[j][0].imshow(((np.array(image)/np.max(image)).T))
 
 
+
+
+    # convert fwhm value to sigma
     def fwhm_to_sigma(fwhm):
         return fwhm/(2 * np.sqrt(2 * np.log(2)))
 
+    # apply gaussian filter to each band
     image[0] = gaussian_filter(image[0], sigma=fwhm_to_sigma(1.5))
     image[1] = gaussian_filter(image[1], sigma=fwhm_to_sigma(1.5))
     image[2] = gaussian_filter(image[2], sigma=fwhm_to_sigma(2))
 
 
-    # axs[j][1].imshow(np.array(image).T)
+    axs[j][1].imshow((np.array(image)/np.max(image)).T)
 
 
-    gaussian = np.random.normal(0, 0.1, (len(image[0]), len(image[0])))
 
+
+    # add random gaussian noise to each band
     for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.1, (len(image[0]), len(image[0])))
         image[i] = image[i] + gaussian
 
 
-    # axs[j][2].imshow(np.array(image).T)
+    axs[j][2].imshow((np.array(image)/np.max(image)).T)
 
-    # normalisation and log filter
+
+
+
+    # normalise each band
     for i in range(0, 3):
-        image[i] = image[i]/image[i].max()
-        # image[i] = np.log10(image[i]) + 1
-
-    # axs[j][3].imshow(np.array(image).T)
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i] - np.min(image[i])))
 
 
-    for i in range(0, 3):
-        image[i] = np.log10(image[i]) + 1
+    axs[j][3].imshow(np.array(image).T)
 
-    image = np.float32(image)
 
-    # axs[j][4].imshow(np.array(image).T)
+
+
+    # convert image to numpy array of type float32 (for the cv2 resizing function to work)
+    image = np.array(image).astype(np.float32)
+
+    # image resizing (enlarging and shrinking use different interpolation algorithms for the best results
+    if len(image[0] < 256):
+        # enlarge (stretch) the image to 256x256 with bicubic interpolation (best for enlarging images although slower than bilinear)
+        image = cv2.resize(image.T, (256, 256), interpolation=cv2.INTER_CUBIC)
+    else:
+        # shrink the image to 256x256 using area interpolation (best for shrinking images)
+        image = cv2.resize(image.T, (256, 256), interpolation=cv2.INTER_AREA)
+
+
+    axs[j][4].imshow(image)
+
+
+
 
 fig.tight_layout()
 plt.savefig("Variational TNG/Plots/Image Processing")
