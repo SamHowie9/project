@@ -22,6 +22,11 @@ file.extract("sdss/snapnum_095/data/broadband_546348.fits")
 file.extract("sdss/snapnum_095/data/broadband_166270.fits")
 file.extract("sdss/snapnum_095/data/broadband_247336.fits")
 file.extract("sdss/snapnum_095/data/broadband_391637.fits")
+file.extract("sdss/snapnum_095/data/broadband_592000.fits")
+file.extract("sdss/snapnum_095/data/broadband_600893.fits")
+file.extract("sdss/snapnum_095/data/broadband_89584.fits")
+file.extract("sdss/snapnum_095/data/broadband_589571.fits")
+file.extract("sdss/snapnum_095/data/broadband_204076.fits")
 
 
 
