@@ -12,10 +12,13 @@ pd.set_option('display.max_rows', None)
 file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 
 for member in file.getmembers():
-    if member.name.startswith("sdss/snapnum_095/data/"):
+    # if member.name.startswith("sdss/snapnum_095/data/"):
+    #     print(member.name)
+
+    if member.isdir():
         print(member.name)
 
-file.extractall(path="sdss/snapnum_095/data/")
+# file.extractall(path="sdss/snapnum_095/data/")
 
 # file.extract("sdss/snapnum_095/data/broadband_540856.fits")
 # file.extract("sdss/snapnum_095/data/broadband_546348.fits")
