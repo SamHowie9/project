@@ -18,6 +18,9 @@ for member in file.getmembers():
     if member.isdir():
         print(member.name)
 
+    if member.name.startswith("sdss/snapnum_095/data/broadband") == False:
+        print(member.name)
+
 # file.extractall(path="sdss/snapnum_095/data/")
 
 # file.extract("sdss/snapnum_095/data/broadband_540856.fits")
