@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
-import cv2
+# import cv2
 
 
 
