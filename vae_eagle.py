@@ -61,7 +61,7 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
     all_images.append(image)
 
-print(shape(np.array(all_images).T))
+print(np.array(all_images).T.shape)
 print(np.min(np.array(all_images).T[0]), np.max(np.array(all_images).T[0]))
 print(np.min(np.array(all_images).T[1]), np.max(np.array(all_images).T[1]))
 print(np.min(np.array(all_images).T[2]), np.max(np.array(all_images).T[2]))
