@@ -16,6 +16,10 @@ A.append(image)
 print(np.array(A).shape)
 print(image.T[0].shape)
 
+print(np.min(image.T[0]), np.max(image.T[0]))
+print(np.min(image.T[1]), np.max(image.T[1]))
+print(np.min(image.T[2]), np.max(image.T[2]))
+
 # print(np.min(image[0]), np.max(image[0]))
 # print(np.min(image[1]), np.max(image[1]))
 # print(np.min(image[2]), np.max(image[2]))
