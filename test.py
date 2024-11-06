@@ -6,7 +6,31 @@ from matplotlib import image as mpimg
 
 
 
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_33116.png")
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_44049.png")
+
+print(np.min(image[0]), np.max(image[0]))
+print(np.min(image[1]), np.max(image[1]))
+print(np.min(image[2]), np.max(image[2]))
+print()
+
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_10030067.png")
+
+print(np.min(image[0]), np.max(image[0]))
+print(np.min(image[1]), np.max(image[1]))
+print(np.min(image[2]), np.max(image[2]))
+print()
+
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_16106438.png")
+
+print(np.min(image[0]), np.max(image[0]))
+print(np.min(image[1]), np.max(image[1]))
+print(np.min(image[2]), np.max(image[2]))
+print()
+
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_18343512.png")
 
 print(np.min(image[0]), np.max(image[0]))
 print(np.min(image[1]), np.max(image[1]))
