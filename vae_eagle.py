@@ -59,12 +59,17 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     image = normalise_independently(image)
     # image = normalise_to_r(image)
 
+    print(np.min(image[0]), np.max(image[0]))
+    print(np.min(image[1]), np.max(image[1]))
+    print(np.min(image[2]), np.max(image[2]))
+    print()
+
     all_images.append(image)
 
-print(np.array(all_images).T.shape)
-print(np.min(np.array(all_images).T[0]), np.max(np.array(all_images).T[0]))
-print(np.min(np.array(all_images).T[1]), np.max(np.array(all_images).T[1]))
-print(np.min(np.array(all_images).T[2]), np.max(np.array(all_images).T[2]))
+# print(np.array(all_images).T.shape)
+# print(np.min(np.array(all_images).T[0]), np.max(np.array(all_images).T[0]))
+# print(np.min(np.array(all_images).T[1]), np.max(np.array(all_images).T[1]))
+# print(np.min(np.array(all_images).T[2]), np.max(np.array(all_images).T[2]))
 
 
 # split the data into training and testing data (200 images used for testing)
