@@ -8,7 +8,7 @@ from matplotlib import image as mpimg
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_54975668.png")
 
-print(image[0].shape)
+print(image.shape)
 
 # print(np.min(image[0]), np.max(image[0]))
 # print(np.min(image[1]), np.max(image[1]))
