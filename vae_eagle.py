@@ -33,7 +33,7 @@ epochs = 300
 all_images = []
 
 # load the supplemental file into a dataframe
-df = pd.read_csv("Galaxy Properties/stab3510_supplemental_file/table1.csv", comment="#")
+df = pd.read_csv("Galaxy Properties/Eagle Properties/stab3510_supplemental_file/table1.csv", comment="#")
 
 # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(df["GalaxyID"].tolist()):

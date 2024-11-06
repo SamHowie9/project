@@ -1,11 +1,16 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib import image as mpimg
 import cv2
 
 
 
-print("hello")
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_33116.png")
+
+print(np.min(image[0]), np.max(image[0]))
+print(np.min(image[1]), np.max(image[1]))
+print(np.min(image[2]), np.max(image[2]))
 
 
 

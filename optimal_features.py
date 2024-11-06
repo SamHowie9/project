@@ -22,11 +22,11 @@ sns.set_style("ticks")
 
 
 # load supplemental file (find galaxies with stellar mass > 10^10 solar masses
-df1 = pd.read_csv("Galaxy Properties/stab3510_supplemental_file/table1.csv", comment="#")
+df1 = pd.read_csv("Galaxy Properties/Eagle Properties/stab3510_supplemental_file/table1.csv", comment="#")
 
 # load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv", comment="#")
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
 # account for hte validation data and remove final 200 elements
 structure_properties.drop(structure_properties.tail(200).index, inplace=True)
@@ -223,7 +223,7 @@ for encoding_dim in range(1, 51):
 
 
     # relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-    relevant_properties = ["n_r"]
+    relevant_properties = ["StarFormationRate"]
 
     # find the number of features at least slightly correlating with a property
     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
@@ -268,7 +268,7 @@ axs[1].set_xlabel("Extracted Features")
 
 
 
-plt.savefig("Variational Eagle/Plots/Optimal Extracted Features (Sersic Only)")
+plt.savefig("Variational Eagle/Plots/Optimal Extracted Features (Star Formation Rate)")
 plt.show()
 
 
