@@ -13,7 +13,7 @@ A.append(image)
 A.append(image)
 A.append(image)
 
-print(A.shape)
+print(np.array(A).shape)
 print(image.T[0].shape)
 
 # print(np.min(image[0]), np.max(image[0]))
