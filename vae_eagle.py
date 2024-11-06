@@ -61,16 +61,16 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     image = normalise_independently(image)
     # image = normalise_to_r(image)
 
-    # print(np.min(image[0]), np.max(image[0]))
-    # print(np.min(image[1]), np.max(image[1]))
-    # print(np.min(image[2]), np.max(image[2]))
-    # print()
+    print(np.min(image.T[0]), np.max(image.T[0]))
+    print(np.min(image.T[1]), np.max(image.T[1]))
+    print(np.min(image.T[2]), np.max(image.T[2]))
+    print()
 
-    if not(np.min(image[0]) == np.min(image[1]) == np.min(image[2]) == 0.0 and np.max(image[0]) == np.max(image[1]) == np.max(image[2]) == 1.0):
-        print(galaxy)
-        print(np.min(image.T[0]), np.max(image.T[0]))
-        print(np.min(image.T[1]), np.max(image.T[1]))
-        print(np.min(image.T[2]), np.max(image.T[2]))
+    # if not(np.min(image[0]) == np.min(image[1]) == np.min(image[2]) == 0.0 and np.max(image[0]) == np.max(image[1]) == np.max(image[2]) == 1.0):
+    #     print(galaxy)
+    #     print(np.min(image.T[0]), np.max(image.T[0]))
+    #     print(np.min(image.T[1]), np.max(image.T[1]))
+    #     print(np.min(image.T[2]), np.max(image.T[2]))
 
     all_images.append(image)
 
