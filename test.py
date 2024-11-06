@@ -4,11 +4,17 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 # import cv2
 
-
+A = []
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_54975668.png")
 
-print(image.shape)
+A.append(image)
+A.append(image)
+A.append(image)
+A.append(image)
+
+print(A.shape)
+print(image.T[0].shape)
 
 # print(np.min(image[0]), np.max(image[0]))
 # print(np.min(image[1]), np.max(image[1]))
