@@ -58,8 +58,8 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     # image = resize_image(image=image)
 
     # normalise the image (either each band independently or to the r band)
-    image = normalise_independently(image)
-    # image = normalise_to_r(image)
+    # image = normalise_independently(image)
+    image = normalise_to_r(image)
 
     print(np.min(image.T[0]), np.max(image.T[0]))
     print(np.min(image.T[1]), np.max(image.T[1]))
