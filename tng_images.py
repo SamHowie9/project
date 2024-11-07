@@ -11,15 +11,16 @@ pd.set_option('display.max_rows', None)
 
 file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 
-# for member in file.getmembers():
-#     # if member.name.startswith("sdss/snapnum_095/data/"):
-#     #     print(member.name)
-#
-#     # if member.isdir():
-#     #     print(member.name)
-#
-#     if not(member.name.startswith("sdss/snapnum_095/data/broadband") or member.name.startswith("sdss/snapnum_095/morph_images_i/") or member.name.startswith("sdss/snapnum_095/morph_images_g/")):
-#         print(member.name)
+for member in file.getmembers():
+    if member.name.startswith("sdss/snapnum_095/data/"):
+        # print(member.name)
+        file.extract(member=member, path="/cosma7/data/durham/dc-howi1/project/TNG Images/")
+
+    # if member.isdir():
+    #     print(member.name)
+
+    # if not(member.name.startswith("sdss/snapnum_095/data/broadband") or member.name.startswith("sdss/snapnum_095/morph_images_i/") or member.name.startswith("sdss/snapnum_095/morph_images_g/")):
+    #     print(member.name)
 
 # file.extractall(path="sdss/snapnum_095/data/")
 
@@ -34,8 +35,8 @@ file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
 # file.extract("sdss/snapnum_095/data/broadband_589571.fits")
 # file.extract("sdss/snapnum_095/data/broadband_204076.fits")
 
-file.extract("sdss/snapnum_095/morphs_i.hdf5")
-file.extract("sdss/snapnum_095/morphs_g.hdf5")
+# file.extract("sdss/snapnum_095/morphs_i.hdf5")
+# file.extract("sdss/snapnum_095/morphs_g.hdf5")
 
 
 
