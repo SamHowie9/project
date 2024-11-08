@@ -25,14 +25,15 @@ def normalise_to_r(image):
 
 
 
-# stores an empty list to contain all the image data to train the model
+# list to contain all galaxy images
 all_images = []
 
-# load the supplemental file into a dataframe
-df = pd.read_csv("Galaxy Properties/Eagle Properties/stab3510_supplemental_file/table1.csv", comment="#")
+# load the ids of the chosen galaxies
+chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
 
-# loop through each galaxy in the supplemental file
-for i, galaxy in enumerate(df["GalaxyID"].tolist()):
+# # loop through each galaxy in the supplemental file
+for i, galaxy in enumerate(chosen_galaxies):
+    print(i, galaxy)
 
     # get the filename of each galaxy in the supplemental file
     filename = "galrand_" + str(galaxy) + ".png"
@@ -56,10 +57,10 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
 
 
-    print(np.min(image.T[0]), np.max(image.T[0]))
-    print(np.min(image.T[1]), np.max(image.T[1]))
-    print(np.min(image.T[2]), np.max(image.T[2]))
-    print()
+    # print(np.min(image.T[0]), np.max(image.T[0]))
+    # print(np.min(image.T[1]), np.max(image.T[1]))
+    # print(np.min(image.T[2]), np.max(image.T[2]))
+    # print()
 
     # if not(np.min(image[0]) == np.min(image[1]) == np.min(image[2]) == 0.0 and np.max(image[0]) == np.max(image[1]) == np.max(image[2]) == 1.0):
     #     print(galaxy)
