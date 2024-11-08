@@ -1,3 +1,10 @@
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+from matplotlib import image as mpimg
+
+
+
 # stores an empty list to contain all the image data to train the model
 all_images = []
 
