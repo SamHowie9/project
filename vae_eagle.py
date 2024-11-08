@@ -56,8 +56,9 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
 
-    smallest = np.min(image[image > 0])
-    print(smallest)
+    smallest_non_zero = np.min(image[image > 0])
+    image = np.where(image == 0.0, smallest_non_zero, image)
+    # print(smallest)
 
     # apply log transformation to the image
     image = np.log10(image)
