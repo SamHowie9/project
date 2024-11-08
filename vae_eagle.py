@@ -29,14 +29,14 @@ epochs = 300
 def normalise_independently(image):
     image = image.T
     for i in range(0, 3):
-        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i] - np.min(image[i])))
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
     return image.T
 
 # normalise each band to r
 def normalise_to_r(image):
     image = image.T
     for i in range(0, 3):
-        image[i] = (image[i] - np.min(image[i])) / (np.max(image[1] - np.min(image[1])))
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[1]) - np.min(image[1]))
     return image.T
 
 
@@ -68,10 +68,10 @@ for i, galaxy in enumerate(df["GalaxyID"].tolist()):
 
 
 
-    # print(np.min(image.T[0]), np.max(image.T[0]))
-    # print(np.min(image.T[1]), np.max(image.T[1]))
-    # print(np.min(image.T[2]), np.max(image.T[2]))
-    # print()
+    print(np.min(image.T[0]), np.max(image.T[0]))
+    print(np.min(image.T[1]), np.max(image.T[1]))
+    print(np.min(image.T[2]), np.max(image.T[2]))
+    print()
 
     # if not(np.min(image[0]) == np.min(image[1]) == np.min(image[2]) == 0.0 and np.max(image[0]) == np.max(image[1]) == np.max(image[2]) == 1.0):
     #     print(galaxy)
