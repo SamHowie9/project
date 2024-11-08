@@ -5,6 +5,26 @@ from matplotlib import image as mpimg
 
 
 
+
+
+# normalise each band individually
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
+# normalise each band to r
+def normalise_to_r(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[1]) - np.min(image[1]))
+    return image.T
+
+
+
+
+
 # stores an empty list to contain all the image data to train the model
 all_images = []
 
