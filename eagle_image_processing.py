@@ -33,7 +33,6 @@ chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.np
 
 # # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(chosen_galaxies):
-    print(i, galaxy)
 
     # get the filename of each galaxy in the supplemental file
     filename = "galrand_" + str(galaxy) + ".png"
