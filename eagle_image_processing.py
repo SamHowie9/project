@@ -49,7 +49,7 @@ for i, galaxy in enumerate(chosen_galaxies):
 
     # normalise the image (either each band independently or to the r band)
     # image = normalise_independently(image)
-    image = normalise_to_r(image)
+    # image = normalise_to_r(image)
 
     # add the image to the dataset
     all_images.append(image)
