@@ -17,10 +17,10 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 38
+encoding_dim = 18
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to G/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
 extracted_features_switch = extracted_features.T
 
 print(extracted_features_switch.shape)
@@ -57,12 +57,14 @@ print(all_properties[all_properties["flag_r"] == 5])
 
 
 
+extracted_features_switch = extracted_features.T
 
-# perform pca on the extracted features
-pca = PCA(n_components=0.9).fit(extracted_features.T)
-extracted_features_switch = np.array(pca.components_)
 
-print(extracted_features_switch.shape)
+# # perform pca on the extracted features
+# pca = PCA(n_components=0.9).fit(extracted_features.T)
+# extracted_features_switch = np.array(pca.components_)
+#
+# print(extracted_features_switch.shape)
 
 
 
@@ -282,7 +284,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/" + str(encoding_dim) + "_feature_pca_9_all_property_correlation_1_abs", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_" + str(encoding_dim) + "_feature_pca_9_all_property_correlation_1_abs", bbox_inches='tight')
 plt.show()
 
 
@@ -331,7 +333,7 @@ for i, property in enumerate(properties):
         axs[feature][i].set_ylabel(None)
         axs[feature][i].tick_params(labelsize=12)
 
-plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_pca_9_all_property_correlation_1", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised" + str(encoding_dim) + "_feature_all_property_correlation_1", bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
 plt.show()
 
