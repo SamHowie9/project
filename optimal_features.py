@@ -51,9 +51,11 @@ df_loss = pd.DataFrame(columns=["Extracted Features", "Min Loss", "Min KL", "Med
 for i in range(1, 51):
     try:
 
-        loss_1 = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
-        loss_2 = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
-        loss_3 = list(np.load("Variational Eagle/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
+        loss_1 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        # loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
+        # loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
 
         loss_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
         kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
@@ -153,14 +155,16 @@ relevant_property_count = []
 
 for encoding_dim in range(1, 51):
 
-    extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
+    extracted_features = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
     structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
 
-    extracted_features_1 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
-    extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
-    extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
+    extracted_features_1 = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+    extracted_features_2 = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+    extracted_features_3 = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+    # extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
+    # extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
 
     extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
     extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
@@ -222,8 +226,8 @@ for encoding_dim in range(1, 51):
         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
 
 
-    # relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-    relevant_properties = ["StarFormationRate"]
+    relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+    # relevant_properties = ["StarFormationRate"]
 
     # find the number of features at least slightly correlating with a property
     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
@@ -268,7 +272,7 @@ axs[1].set_xlabel("Extracted Features")
 
 
 
-plt.savefig("Variational Eagle/Plots/Optimal Extracted Features (Star Formation Rate)")
+plt.savefig("Variational Eagle/Plots/Individual Normalisation - Optimal Extracted Features")
 plt.show()
 
 
