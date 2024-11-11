@@ -3,6 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
+from sklearn.decomposition import PCA
 from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
 from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
@@ -16,19 +17,29 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 1
+encoding_dim = 15
+
+# load the extracted features
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to G/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
+extracted_features_switch = extracted_features.T
+
+print(extracted_features_switch.shape)
 
 
-extracted_features = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
-extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
-print(extracted_features.shape)
+# perform pca on the extracted features
+pca = PCA(n_components=0.90).fit(extracted_features_switch)
+extracted_features_switch = np.array(pca.components_)
+
+
+print(extracted_features_switch.shape)
+
 
 
 
 # load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv", comment="#")
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
 # account for hte validation data and remove final 200 elements
 structure_properties.drop(structure_properties.tail(200).index, inplace=True)
@@ -50,7 +61,7 @@ print(all_properties[all_properties["flag_r"] == 4])
 print(all_properties[all_properties["flag_r"] == 1])
 print(all_properties[all_properties["flag_r"] == 5])
 
-extracted_features_switch = extracted_features.T
+
 
 
 
@@ -236,7 +247,8 @@ print(correlation_df)
 
 
 # set the figure size
-plt.figure(figsize=(20, encoding_dim))
+# plt.figure(figsize=(20, encoding_dim))
+plt.figure(figsize=(20, extracted_features_switch.shape[0]))
 
 # sns.set(font_scale = 2)
 
@@ -268,13 +280,15 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/" + str(encoding_dim) + "_feature_all_property_correlation_3_abs", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/" + str(encoding_dim) + "_feature_pca_8_all_property_correlation_3_abs", bbox_inches='tight')
 plt.show()
 
 
 # plt.figure(figsize=(10,10))
 # plt.scatter(x=extracted_features_switch[9], y=all_properties["q_r"])
 # plt.show()
+
+
 
 
 
@@ -290,7 +304,9 @@ print(all_properties)
 
 property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
 
-fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
+# fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
+fig, axs = plt.subplots(extracted_features_switch.shape[0], len(properties), figsize=(40, (encoding_dim * 4)))
+
 # fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
 
 # sns.set(font_scale=10)

@@ -7,6 +7,6 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to
 
 print(extracted_features.shape)
 
-pca = PCA(n_components=0.5).fit(extracted_features.T)
+pca = PCA(n_components=0.90).fit(extracted_features.T)
 
 print(pca.components_.shape)
