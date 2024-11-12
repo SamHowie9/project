@@ -40,7 +40,7 @@ for i, galaxy in enumerate(chosen_galaxies):
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
 
-    original_image = image
+    original_image = np.copy(image)
 
     smallest_non_zero = np.min(image[image > 0])
     image = np.where(image == 0.0, smallest_non_zero, image)
@@ -49,7 +49,7 @@ for i, galaxy in enumerate(chosen_galaxies):
     # apply log transformation to the image
     image = np.log10(image)
 
-    log_image = image
+    log_image = np.copy(image)
 
     # normalise the image (either each band independently or to the r band)
     # image = normalise_independently(image)
