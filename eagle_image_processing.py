@@ -47,9 +47,9 @@ for i, galaxy in enumerate(chosen_galaxies):
     # print(smallest)
 
     # apply log transformation to the image
-    image = np.log10(image)
-
-    log_image = np.copy(image)
+    # image = np.log10(image)
+    #
+    # log_image = np.copy(image)
 
     # normalise the image (either each band independently or to the r band)
     # image = normalise_independently(image)
