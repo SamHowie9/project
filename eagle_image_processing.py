@@ -60,9 +60,9 @@ for i, galaxy in enumerate(chosen_galaxies):
 
 
 
-    print(np.min(original_image.T[0]), np.max(original_image.T[0]), "  ", np.min(log_image.T[0]), np.max(log_image.T[0]), "  ", np.min(image.T[0]), np.max(image.T[0]))
-    print(np.min(original_image.T[1]), np.max(original_image.T[1]), "  ", np.min(log_image.T[1]), np.max(log_image.T[1]), "  ", np.min(image.T[1]), np.max(image.T[1]))
-    print(np.min(original_image.T[2]), np.max(original_image.T[2]), "  ", np.min(log_image.T[2]), np.max(log_image.T[2]), "  ", np.min(image.T[2]), np.max(image.T[2]))
+    print(np.min(original_image.T[0]), np.max(original_image.T[0]), "  ", np.min(image.T[0]), np.max(image.T[0]))
+    print(np.min(original_image.T[1]), np.max(original_image.T[1]), "  ", np.min(image.T[1]), np.max(image.T[1]))
+    print(np.min(original_image.T[2]), np.max(original_image.T[2]), "  ", np.min(image.T[2]), np.max(image.T[2]))
     print()
 
     # if not(np.min(image[0]) == np.min(image[1]) == np.min(image[2]) == 0.0 and np.max(image[0]) == np.max(image[1]) == np.max(image[2]) == 1.0):
