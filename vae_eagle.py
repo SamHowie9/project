@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 26
+encoding_dim = 30
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -63,7 +63,7 @@ for i, galaxy in enumerate(chosen_galaxies):
     image = np.where(image == 0.0, smallest_non_zero, image)
 
     # apply log transformation to the image
-    image = np.log10(image)
+    # image = np.log10(image)
 
     # normalise the image (either each band independently or to the r band)
     # image = normalise_independently(image)
