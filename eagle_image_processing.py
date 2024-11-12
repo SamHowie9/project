@@ -40,6 +40,8 @@ for i, galaxy in enumerate(chosen_galaxies):
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
 
+    original_image = image
+
     smallest_non_zero = np.min(image[image > 0])
     image = np.where(image == 0.0, smallest_non_zero, image)
     # print(smallest)
@@ -56,9 +58,9 @@ for i, galaxy in enumerate(chosen_galaxies):
 
 
 
-    print(np.min(image.T[0]), np.max(image.T[0]))
-    print(np.min(image.T[1]), np.max(image.T[1]))
-    print(np.min(image.T[2]), np.max(image.T[2]))
+    print(np.min(original_image.T[0]), np.max(original_image.T[0]), np.min(image.T[0]), np.max(image.T[0]))
+    print(np.min(original_image.T[1]), np.max(original_image.T[1]), np.min(image.T[1]), np.max(image.T[1]))
+    print(np.min(original_image.T[2]), np.max(original_image.T[2]), np.min(image.T[2]), np.max(image.T[2]))
     print()
 
     # if not(np.min(image[0]) == np.min(image[1]) == np.min(image[2]) == 0.0 and np.max(image[0]) == np.max(image[1]) == np.max(image[2]) == 1.0):
