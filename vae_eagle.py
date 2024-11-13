@@ -197,7 +197,8 @@ x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padd
 x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 16)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (256, 256, 64)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
+# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)    # (128, 128, 3)
 
 # build the decoder
 decoder = keras.Model(latent_input, decoded, name="decoder")
@@ -274,13 +275,18 @@ fig, axs = plt.subplots(2, n-1, figsize=(18,5))
 # plot each subplot
 for i in range(0, n-1):
 
+    original_image = normalise_independently(images_to_reconstruct[i])
+    reconstructed_image = normalise_independently(reconstructed_images[i])
+
     # show the original image (remove axes)
-    axs[0,i].imshow(images_to_reconstruct[i])
+    # axs[0,i].imshow(images_to_reconstruct[i])
+    axs[0,i].imshow(original_image)
     axs[0,i].get_xaxis().set_visible(False)
     axs[0,i].get_yaxis().set_visible(False)
 
     # show the reconstructed image (remove axes)
-    axs[1,i].imshow(reconstructed_images[i])
+    # axs[1,i].imshow(reconstructed_images[i])
+    axs[1,i].imshow(reconstructed_image)
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
