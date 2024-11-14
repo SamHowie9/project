@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 15
+encoding_dim = 24
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -215,24 +215,24 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-# model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
+model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 # or load the weights from a previous run
-vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+# vae.load_weights("Variational Eagle/Weights/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_2.weights.h5")
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_2.weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_2.npy", extracted_features)
 
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
+np.save("Variational Eagle/Loss/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_2.npy", loss)
 
 
 
@@ -290,7 +290,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_to_r_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
+plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_to_r_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_2")
 plt.show()
 
 
@@ -298,33 +298,34 @@ plt.show()
 
 
 
-# plotting a heatmap
-
-
-# create gradient model to compute gradient of extracted features with respect to the original images
-# with tf.GradientTape() as tape:
-#     tape.watch(all_images[i])
-#     latent_feature = extracted_features[i][0]
-
-axs, fig = plt.subplots(2, 5)
-
-galaxies_to_map = [234, 1234, 54, 982, 2010]
-
-for i, galaxy in enumerate(galaxies_to_map):
-
-    grads = tf.GradientTape.gradient(extracted_features[galaxy][7][0], all_images[galaxy])
-    heatmap = np.abs(grads).numpy()
-
-    #normalise the heatmap
-    heatmap = (heatmap - np.min(heatmap)) / (np.max(heatmap) - np.min(heatmap))
-
-    axs[0,i].imshow(all_images[galaxy])
-
-    axs[1,i].imshow(all_images[galaxy])
-    axs[1,i].imshow(heatmap, cmap="jet", alpha=0.5)
-
-plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim + "_feature_sersic_heatmap"))
-plt.show()
+# # plotting a heatmap
+#
+#
+#
+# # create gradient model to compute gradient of extracted features with respect to the original images
+# # with tf.GradientTape() as tape:
+# #     tape.watch(all_images[i])
+# #     latent_feature = extracted_features[i][0]
+#
+# axs, fig = plt.subplots(2, 5)
+#
+# galaxies_to_map = [234, 1234, 54, 982, 2010]
+#
+# for i, galaxy in enumerate(galaxies_to_map):
+#
+#     grads = tf.GradientTape.gradient(extracted_features[galaxy][7][0], all_images[galaxy])
+#     heatmap = np.abs(grads).numpy()
+#
+#     #normalise the heatmap
+#     heatmap = (heatmap - np.min(heatmap)) / (np.max(heatmap) - np.min(heatmap))
+#
+#     axs[0,i].imshow(all_images[galaxy])
+#
+#     axs[1,i].imshow(all_images[galaxy])
+#     axs[1,i].imshow(heatmap, cmap="jet", alpha=0.5)
+#
+# plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim + "_feature_sersic_heatmap"))
+# plt.show()
 
 
 
