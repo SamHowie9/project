@@ -228,11 +228,11 @@ vae.save_weights(filepath="Variational Eagle/Weights/Normalised to r/" + str(enc
 extracted_features = vae.encoder.predict(train_images)
 np.save("Variational Eagle/Extracted Features/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
 
-# get loss, reconstruction loss and kl loss and save as numpy array
-loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-print("\n \n" + str(encoding_dim))
-print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
+# # get loss, reconstruction loss and kl loss and save as numpy array
+# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+# print("\n \n" + str(encoding_dim))
+# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+# np.save("Variational Eagle/Loss/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
 
 
 
