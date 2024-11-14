@@ -4,26 +4,39 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 # import cv2
 
-A = []
 
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_54975668.png")
 
-A.append(image)
-A.append(image)
-A.append(image)
-A.append(image)
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to r/15_feature_300_epoch_features_1.npy")
 
-print(np.array(A).shape)
-print(image.T[0].shape)
+print(extracted_features.shape)
+print(extracted_features[0].shape)
+print(extracted_features[0][100].shape)
+print(extracted_features[0][100][7])
 
-print(np.min(image.T[0]), np.max(image.T[0]))
-print(np.min(image.T[1]), np.max(image.T[1]))
-print(np.min(image.T[2]), np.max(image.T[2]))
 
-# print(np.min(image[0]), np.max(image[0]))
-# print(np.min(image[1]), np.max(image[1]))
-# print(np.min(image[2]), np.max(image[2]))
-# print()
+
+
+
+# A = []
+#
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_54975668.png")
+#
+# A.append(image)
+# A.append(image)
+# A.append(image)
+# A.append(image)
+#
+# print(np.array(A).shape)
+# print(image.T[0].shape)
+#
+# print(np.min(image.T[0]), np.max(image.T[0]))
+# print(np.min(image.T[1]), np.max(image.T[1]))
+# print(np.min(image.T[2]), np.max(image.T[2]))
+#
+# # print(np.min(image[0]), np.max(image[0]))
+# # print(np.min(image[1]), np.max(image[1]))
+# # print(np.min(image[2]), np.max(image[2]))
+# # print()
 
 
 

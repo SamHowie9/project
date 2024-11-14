@@ -313,7 +313,7 @@ galaxies_to_map = [234, 1234, 54, 982, 2010]
 
 for i, galaxy in enumerate(galaxies_to_map):
 
-    grads = tf.GradientTape.gradient(extracted_features[galaxy][7][0], all_images[galaxy])
+    grads = tf.GradientTape.gradient(extracted_features[0][galaxy][7], all_images[galaxy])
     heatmap = np.abs(grads).numpy()
 
     #normalise the heatmap
