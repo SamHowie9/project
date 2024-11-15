@@ -333,7 +333,7 @@ for i, galaxy in enumerate(galaxies_to_map):
     axs[0,i].imshow(all_images[galaxy])
 
     axs[1,i].imshow(all_images[galaxy])
-    axs[1,i].imshow(heatmap, cmap="jet", alpha=0.5)
+    axs[1,i].imshow(gradient, cmap="jet", alpha=0.5)
 
 
 
