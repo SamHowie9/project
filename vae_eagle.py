@@ -314,7 +314,7 @@ for i, galaxy in enumerate(galaxies_to_map):
 
     print(i)
 
-    image = all_images(galaxy)
+    image = all_images[galaxy]
 
     # set up gradient model
     with tf.GradientTape() as tape:
