@@ -333,9 +333,13 @@ for i, galaxy in enumerate(galaxies_to_map):
 
     original_image = normalise_independently(all_images[galaxy])
 
-    axs[0,i].imshow(original_image)
+    axs[0, i].imshow(original_image)
+    axs[0, i].get_xaxis().set_visible(False)
+    axs[0, i].get_yaxis().set_visible(False)
 
-    axs[1,i].imshow(gradient, cmap="jet")
+    axs[1, i].imshow(gradient, cmap="jet")
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
 
 
 
