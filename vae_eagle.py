@@ -314,30 +314,32 @@ for i, galaxy in enumerate(galaxies_to_map):
 
     print(i)
 
+    image = all_images(galaxy)
+
     # set up gradient model
     with tf.GradientTape() as tape:
 
         # watch the original image (calculate gradient with respect to original image)
-        tape.watch(all_images[galaxy])
+        tape.watch(image)
 
         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-        selected_feature = encoder(tf.expand_dims(all_images[galaxy], axis=0))[0][7]
+        selected_feature = encoder(tf.expand_dims(image, axis=0))[0][7]
 
     # calculate the gradient and save in numpy array
-    gradient = tape.gradient(selected_feature, all_images[galaxy])
+    gradient = tape.gradient(selected_feature, image)
     gradient = np.array(gradient)
 
-    print(np.min(gradient), np.max(gradient))
-
-    # normalise gradient
-    gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
-
-
-
-    axs[0,i].imshow(all_images[galaxy])
-
-    axs[1,i].imshow(all_images[galaxy])
-    axs[1,i].imshow(gradient, cmap="jet", alpha=0.5)
+    # print(np.min(gradient), np.max(gradient))
+    #
+    # # normalise gradient
+    # gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
+    #
+    #
+    #
+    # axs[0,i].imshow(all_images[galaxy])
+    #
+    # axs[1,i].imshow(all_images[galaxy])
+    # axs[1,i].imshow(gradient, cmap="jet", alpha=0.5)
 
 
 
