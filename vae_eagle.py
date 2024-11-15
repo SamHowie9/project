@@ -340,7 +340,7 @@ for i, galaxy in enumerate(galaxies_to_map):
 
 
 
-plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim + "_feature_sersic_heatmap"))
+plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap")
 plt.show()
 
 
