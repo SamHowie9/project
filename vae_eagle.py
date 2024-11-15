@@ -314,19 +314,19 @@ for i, galaxy in enumerate(galaxies_to_map):
 
     print(i)
 
-    image = tf.convert_to_tensor(all_images[galaxy])
+    image_tensor = tf.convert_to_tensor(all_images[galaxy])
 
     # set up gradient model
     with tf.GradientTape() as tape:
 
         # watch the original image (calculate gradient with respect to original image)
-        tape.watch(image)
+        tape.watch(image_tensor)
 
         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-        selected_feature = encoder(tf.expand_dims(image, axis=0))[0][7]
+        selected_feature = encoder(tf.expand_dims(image_tensor, axis=0))[0, 7]
 
     # calculate the gradient and save in numpy array
-    gradient = tape.gradient(selected_feature, image)
+    gradient = tape.gradient(selected_feature, image_tensor)
     gradient = np.array(gradient)
 
     # print(np.min(gradient), np.max(gradient))
