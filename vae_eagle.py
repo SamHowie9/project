@@ -331,11 +331,11 @@ for i, galaxy in enumerate(galaxies_to_map):
     # normalise gradient
     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
 
+    original_image = normalise_independently(all_images[galaxy])
 
+    axs[0,i].imshow(original_image)
 
-    axs[0,i].imshow(all_images[galaxy])
-
-    axs[1,i].imshow(all_images[galaxy])
+    axs[1,i].imshow(original_image)
     axs[1,i].imshow(gradient, cmap="jet", alpha=0.5)
 
 
