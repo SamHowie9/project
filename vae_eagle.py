@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 18
+encoding_dim = 26
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -313,8 +313,14 @@ plt.show()
 #
 # for i, galaxy in enumerate(galaxies_to_map):
 #
-#     grads = tf.GradientTape.gradient(extracted_features[0][galaxy][7], all_images[galaxy])
-#     heatmap = np.abs(grads).numpy()
+#     with tf.GradientTape() as tape:
+#         tape.watch(all_images[galaxy])
+#         selected_feature = encoder(tf.expand_dims(all_images[galaxy], axis=0))[0][7]
+#
+#     gradient = tape.gradient(selected_feature, all_images[galaxy])
+#
+#     # grads = tf.GradientTape.gradient(extracted_features[0][galaxy][7], all_images[galaxy])
+#     # heatmap = np.abs(grads).numpy()
 #
 #     #normalise the heatmap
 #     heatmap = (heatmap - np.min(heatmap)) / (np.max(heatmap) - np.min(heatmap))
