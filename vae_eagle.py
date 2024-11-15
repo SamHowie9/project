@@ -323,7 +323,7 @@ for i, galaxy in enumerate(galaxies_to_map):
         tape.watch(image_tensor)
 
         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-        selected_feature = encoder(tf.expand_dims(image_tensor, axis=0))[0, 7]
+        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 7]
 
     # calculate the gradient and save in numpy array
     gradient = tape.gradient(selected_feature, image_tensor)
