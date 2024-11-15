@@ -312,6 +312,8 @@ galaxies_to_map = [234, 1234, 54, 982, 2010]
 
 for i, galaxy in enumerate(galaxies_to_map):
 
+    print(i)
+
     # set up gradient model
     with tf.GradientTape() as tape:
 
