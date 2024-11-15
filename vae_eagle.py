@@ -305,31 +305,37 @@ plt.show()
 #     tape.watch(all_images[i])
 #     latent_feature = extracted_features[i][0]
 
-# axs, fig = plt.subplots(2, 5)
-#
-# galaxies_to_map = [234, 1234, 54, 982, 2010]
-galaxies_to_map = [100]
+axs, fig = plt.subplots(2, 5)
+
+galaxies_to_map = [234, 1234, 54, 982, 2010]
+# galaxies_to_map = [100]
 
 for i, galaxy in enumerate(galaxies_to_map):
 
+    # set up gradient model
     with tf.GradientTape() as tape:
+
+        # watch the original image (calculate gradient with respect to original image)
         tape.watch(all_images[galaxy])
+
+        # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
         selected_feature = encoder(tf.expand_dims(all_images[galaxy], axis=0))[0][7]
 
+    # calculate the gradient and save in numpy array
     gradient = tape.gradient(selected_feature, all_images[galaxy])
+    gradient = np.array(gradient)
+
+    # normalise gradient
+    gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
 
 
 
-    # grads = tf.GradientTape.gradient(extracted_features[0][galaxy][7], all_images[galaxy])
-    # heatmap = np.abs(grads).numpy()
+    axs[0,i].imshow(all_images[galaxy])
 
-    # #normalise the heatmap
-    # heatmap = (heatmap - np.min(heatmap)) / (np.max(heatmap) - np.min(heatmap))
-    #
-    # axs[0,i].imshow(all_images[galaxy])
-    #
-    # axs[1,i].imshow(all_images[galaxy])
-    # axs[1,i].imshow(heatmap, cmap="jet", alpha=0.5)
+    axs[1,i].imshow(all_images[galaxy])
+    axs[1,i].imshow(heatmap, cmap="jet", alpha=0.5)
+
+
 
 plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim + "_feature_sersic_heatmap"))
 plt.show()
