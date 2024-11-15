@@ -335,12 +335,11 @@ for i, galaxy in enumerate(galaxies_to_map):
 
     axs[0,i].imshow(original_image)
 
-    axs[1,i].imshow(original_image)
-    axs[1,i].imshow(gradient, cmap="jet", alpha=0.5)
+    axs[1,i].imshow(gradient, cmap="jet")
 
 
 
-plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap")
+plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap", bbox_inches='tight')
 plt.show()
 
 
