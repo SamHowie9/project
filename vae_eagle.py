@@ -327,6 +327,8 @@ for i, galaxy in enumerate(galaxies_to_map):
     gradient = tape.gradient(selected_feature, all_images[galaxy])
     gradient = np.array(gradient)
 
+    print(np.min(gradient), np.max(gradient))
+
     # normalise gradient
     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
 
