@@ -305,14 +305,27 @@ plt.show()
 #     tape.watch(all_images[i])
 #     latent_feature = extracted_features[i][0]
 
-fig, axs = plt.subplots(2, 5)
+fig, axs = plt.subplots(4, 5)
 
 galaxies_to_map = [234, 1234, 54, 982, 2010]
 # galaxies_to_map = [100]
 
 for i, galaxy in enumerate(galaxies_to_map):
 
+    # normalise image (to be displayed)
+    original_image = normalise_independently(all_images[galaxy])
+
+    # display the original image at the top
+    axs[0, i].imshow(original_image)
+    axs[0, i].get_xaxis().set_visible(False)
+    axs[0, i].get_yaxis().set_visible(False)
+
+
+    # convert the image to a tensor
     image_tensor = tf.convert_to_tensor(all_images[galaxy])
+
+
+    # heatmap for sersic index
 
     # set up gradient model
     with tf.GradientTape() as tape:
@@ -327,19 +340,70 @@ for i, galaxy in enumerate(galaxies_to_map):
     gradient = tape.gradient(selected_feature, image_tensor)
     gradient = np.array(gradient)
 
+    # normalise gradient
+    gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
+
+    # display the heatmap for the sersic index correlated feature
+    axs[1, i].imshow(gradient, cmap="jet")
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
+
+
+
+
+
+    # heatmap for position angle
+
+    # set up gradient model
+    with tf.GradientTape() as tape:
+        # watch the original image (calculate gradient with respect to original image)
+        tape.watch(image_tensor)
+
+        # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
+        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 11]
+
+    # calculate the gradient and save in numpy array
+    gradient = tape.gradient(selected_feature, image_tensor)
+    gradient = np.array(gradient)
 
     # normalise gradient
     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
 
-    original_image = normalise_independently(all_images[galaxy])
+    # display the heatmap for the sersic index correlated feature
+    axs[2, i].imshow(gradient, cmap="jet")
+    axs[2, i].get_xaxis().set_visible(False)
+    axs[2, i].get_yaxis().set_visible(False)
 
-    axs[0, i].imshow(original_image)
-    axs[0, i].get_xaxis().set_visible(False)
-    axs[0, i].get_yaxis().set_visible(False)
 
-    axs[1, i].imshow(gradient, cmap="jet")
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].get_yaxis().set_visible(False)
+
+
+
+    # heatmap for semi-major axis
+
+    # set up gradient model
+    with tf.GradientTape() as tape:
+        # watch the original image (calculate gradient with respect to original image)
+        tape.watch(image_tensor)
+
+        # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
+        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 12]
+
+    # calculate the gradient and save in numpy array
+    gradient = tape.gradient(selected_feature, image_tensor)
+    gradient = np.array(gradient)
+
+    # normalise gradient
+    gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
+
+    # display the heatmap for the sersic index correlated feature
+    axs[3, i].imshow(gradient, cmap="jet")
+    axs[3, i].get_xaxis().set_visible(False)
+    axs[3, i].get_yaxis().set_visible(False)
+
+
+
+
+
 
 
 
