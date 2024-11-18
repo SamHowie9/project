@@ -47,14 +47,14 @@ print(list(features_g.T[0]))
 
 fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
-axs[0].scatter(features_individual.T[0], all_properties["n_r"], s=0.5)
-axs[0].set_title("Normalised Individually (σ = )")
+axs[0].scatter(features_individual.T[8], all_properties["n_r"], s=0.5)
+axs[0].set_title("Normalised Individually (ρ = 0.47)")
 
 axs[1].scatter(features_r.T[17], all_properties["n_r"], s=0.5)
-axs[1].set_title("Normalised to r (σ = 0.64)")
+axs[1].set_title("Normalised to r (ρ = 0.64)")
 
 axs[2].scatter(features_g.T[19], all_properties["n_r"], s=0.5)
-axs[2].set_title("Normalised to g (σ = 0.61)")
+axs[2].set_title("Normalised to g (ρ = 0.61)")
 
 plt.savefig("Variational Eagle/Plots/normalisation_comparison_sersic", bbox_inches='tight')
 plt.show()
