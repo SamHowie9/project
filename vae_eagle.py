@@ -414,7 +414,7 @@ axs[3, 2].set_title("Semi-Major Axis")
 
 
 
-plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap")
 plt.show()
 
 
