@@ -17,7 +17,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 15
+encoding_dim = 20
 
 # load the extracted features
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to r/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]

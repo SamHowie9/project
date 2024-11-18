@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 15
+encoding_dim = 20
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -321,7 +321,7 @@ for i, galaxy in enumerate(galaxies_to_map):
         tape.watch(image_tensor)
 
         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 7]
+        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 17]
 
     # calculate the gradient and save in numpy array
     gradient = tape.gradient(selected_feature, image_tensor)
