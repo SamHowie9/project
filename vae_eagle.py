@@ -305,7 +305,7 @@ plt.show()
 #     tape.watch(all_images[i])
 #     latent_feature = extracted_features[i][0]
 
-fig, axs = plt.subplots(4, 5, figsize=(15, 15))
+fig, axs = plt.subplots(4, 5, figsize=(10, 10))
 
 galaxies_to_map = [234, 1234, 54, 982, 2010]
 # galaxies_to_map = [100]
