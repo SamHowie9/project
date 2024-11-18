@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 20
+encoding_dim = 30
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -66,8 +66,8 @@ for i, galaxy in enumerate(chosen_galaxies):
     # image = np.log10(image)
 
     # normalise the image (either each band independently or to the r band)
-    # image = normalise_independently(image)
-    image = normalise_to_r(image)
+    image = normalise_independently(image)
+    # image = normalise_to_r(image)
 
     # add the image to the dataset
     all_images.append(image)
@@ -197,8 +197,8 @@ x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padd
 x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 16)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (256, 256, 64)
-# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)    # (128, 128, 3)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
+# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)     # (128, 128, 3)
 
 # build the decoder
 decoder = keras.Model(latent_input, decoded, name="decoder")
@@ -215,24 +215,24 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-# model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
+model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 # or load the weights from a previous run
-vae.load_weights("Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+# vae.load_weights("Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
 
-# # get loss, reconstruction loss and kl loss and save as numpy array
-# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-# print("\n \n" + str(encoding_dim))
-# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-# np.save("Variational Eagle/Loss/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
+# get loss, reconstruction loss and kl loss and save as numpy array
+loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+print("\n \n" + str(encoding_dim))
+print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+np.save("Variational Eagle/Loss/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
 
 
 
@@ -290,7 +290,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_to_r_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
+plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_individually_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
 plt.show()
 
 
@@ -298,124 +298,124 @@ plt.show()
 
 
 
-# plotting a heatmap
-
-# create gradient model to compute gradient of extracted features with respect to the original images
-# with tf.GradientTape() as tape:
-#     tape.watch(all_images[i])
-#     latent_feature = extracted_features[i][0]
-
-fig, axs = plt.subplots(4, 5, figsize=(10, 10))
-
-galaxies_to_map = [234, 1234, 54, 982, 2010]
-# galaxies_to_map = [100]
-
-for i, galaxy in enumerate(galaxies_to_map):
-
-    # normalise image (to be displayed)
-    original_image = normalise_independently(all_images[galaxy])
-
-    # display the original image at the top
-    axs[0, i].imshow(original_image)
-    axs[0, i].get_xaxis().set_visible(False)
-    axs[0, i].get_yaxis().set_visible(False)
-
-
-
-
-    # convert the image to a tensor
-    image_tensor = tf.convert_to_tensor(all_images[galaxy])
-
-
-
-
-    # heatmap for sersic index
-
-    # set up gradient model
-    with tf.GradientTape() as tape:
-
-        # watch the original image (calculate gradient with respect to original image)
-        tape.watch(image_tensor)
-
-        # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 17]
-
-    # calculate the gradient and save in numpy array
-    gradient = tape.gradient(selected_feature, image_tensor)
-    gradient = np.array(gradient)
-
-    # normalise gradient
-    gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
-
-    # display the heatmap for the sersic index correlated feature
-    axs[1, i].imshow(gradient, cmap="jet")
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].get_yaxis().set_visible(False)
-
-
-
-
-
-    # heatmap for position angle
-
-    # set up gradient model
-    with tf.GradientTape() as tape:
-        # watch the original image (calculate gradient with respect to original image)
-        tape.watch(image_tensor)
-
-        # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 11]
-
-    # calculate the gradient and save in numpy array
-    gradient = tape.gradient(selected_feature, image_tensor)
-    gradient = np.array(gradient)
-
-    # normalise gradient
-    gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
-
-    # display the heatmap for the sersic index correlated feature
-    axs[2, i].imshow(gradient, cmap="jet")
-    axs[2, i].get_xaxis().set_visible(False)
-    axs[2, i].get_yaxis().set_visible(False)
-
-
-
-
-
-    # heatmap for semi-major axis
-
-    # set up gradient model
-    with tf.GradientTape() as tape:
-        # watch the original image (calculate gradient with respect to original image)
-        tape.watch(image_tensor)
-
-        # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-        selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 12]
-
-    # calculate the gradient and save in numpy array
-    gradient = tape.gradient(selected_feature, image_tensor)
-    gradient = np.array(gradient)
-
-    # normalise gradient
-    gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
-
-    # display the heatmap for the sersic index correlated feature
-    axs[3, i].imshow(gradient, cmap="jet")
-    axs[3, i].get_xaxis().set_visible(False)
-    axs[3, i].get_yaxis().set_visible(False)
-
-
-
-
-axs[0, 2].set_title("Original Image")
-axs[1, 2].set_title("Sersic Index")
-axs[2, 2].set_title("Position Angle")
-axs[3, 2].set_title("Semi-Major Axis")
-
-
-
-plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap")
-plt.show()
+# # plotting a heatmap
+#
+# # create gradient model to compute gradient of extracted features with respect to the original images
+# # with tf.GradientTape() as tape:
+# #     tape.watch(all_images[i])
+# #     latent_feature = extracted_features[i][0]
+#
+# fig, axs = plt.subplots(4, 5, figsize=(10, 10))
+#
+# galaxies_to_map = [234, 1234, 54, 982, 2010]
+# # galaxies_to_map = [100]
+#
+# for i, galaxy in enumerate(galaxies_to_map):
+#
+#     # normalise image (to be displayed)
+#     original_image = normalise_independently(all_images[galaxy])
+#
+#     # display the original image at the top
+#     axs[0, i].imshow(original_image)
+#     axs[0, i].get_xaxis().set_visible(False)
+#     axs[0, i].get_yaxis().set_visible(False)
+#
+#
+#
+#
+#     # convert the image to a tensor
+#     image_tensor = tf.convert_to_tensor(all_images[galaxy])
+#
+#
+#
+#
+#     # heatmap for sersic index
+#
+#     # set up gradient model
+#     with tf.GradientTape() as tape:
+#
+#         # watch the original image (calculate gradient with respect to original image)
+#         tape.watch(image_tensor)
+#
+#         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
+#         selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 17]
+#
+#     # calculate the gradient and save in numpy array
+#     gradient = tape.gradient(selected_feature, image_tensor)
+#     gradient = np.array(gradient)
+#
+#     # normalise gradient
+#     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
+#
+#     # display the heatmap for the sersic index correlated feature
+#     axs[1, i].imshow(gradient, cmap="jet")
+#     axs[1, i].get_xaxis().set_visible(False)
+#     axs[1, i].get_yaxis().set_visible(False)
+#
+#
+#
+#
+#
+#     # heatmap for position angle
+#
+#     # set up gradient model
+#     with tf.GradientTape() as tape:
+#         # watch the original image (calculate gradient with respect to original image)
+#         tape.watch(image_tensor)
+#
+#         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
+#         selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 11]
+#
+#     # calculate the gradient and save in numpy array
+#     gradient = tape.gradient(selected_feature, image_tensor)
+#     gradient = np.array(gradient)
+#
+#     # normalise gradient
+#     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
+#
+#     # display the heatmap for the sersic index correlated feature
+#     axs[2, i].imshow(gradient, cmap="jet")
+#     axs[2, i].get_xaxis().set_visible(False)
+#     axs[2, i].get_yaxis().set_visible(False)
+#
+#
+#
+#
+#
+#     # heatmap for semi-major axis
+#
+#     # set up gradient model
+#     with tf.GradientTape() as tape:
+#         # watch the original image (calculate gradient with respect to original image)
+#         tape.watch(image_tensor)
+#
+#         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
+#         selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 12]
+#
+#     # calculate the gradient and save in numpy array
+#     gradient = tape.gradient(selected_feature, image_tensor)
+#     gradient = np.array(gradient)
+#
+#     # normalise gradient
+#     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
+#
+#     # display the heatmap for the sersic index correlated feature
+#     axs[3, i].imshow(gradient, cmap="jet")
+#     axs[3, i].get_xaxis().set_visible(False)
+#     axs[3, i].get_yaxis().set_visible(False)
+#
+#
+#
+#
+# axs[0, 2].set_title("Original Image")
+# axs[1, 2].set_title("Sersic Index")
+# axs[2, 2].set_title("Position Angle")
+# axs[3, 2].set_title("Semi-Major Axis")
+#
+#
+#
+# plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap")
+# plt.show()
 
 
 
