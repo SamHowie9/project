@@ -321,8 +321,12 @@ for i, galaxy in enumerate(galaxies_to_map):
     axs[0, i].get_yaxis().set_visible(False)
 
 
+
+
     # convert the image to a tensor
     image_tensor = tf.convert_to_tensor(all_images[galaxy])
+
+
 
 
     # heatmap for sersic index
@@ -403,7 +407,10 @@ for i, galaxy in enumerate(galaxies_to_map):
 
 
 
-
+axs[0, 2].set_title("Original Image")
+axs[1, 2].set_title("Sersic Index")
+axs[2, 2].set_title("Position Angle")
+axs[3, 2].set_title("Semi-Major Axis")
 
 
 
