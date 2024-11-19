@@ -6,9 +6,9 @@ from matplotlib import pyplot as plt
 
 np.set_printoptions(linewidth=np.inf)
 
-encoding_dim = 10
+encoding_dim = 8
 
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to G/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
 
 print(extracted_features.shape)
 
@@ -44,7 +44,7 @@ plt.xlabel("Principal Components")
 plt.xticks(range(1, encoding_dim+1))
 
 
-plt.savefig("Variational Eagle/Plots/pca_scree_normalised_to_g_" + str(encoding_dim) + "_features")
+plt.savefig("Variational Eagle/Plots/pca_scree_normalised_individually_" + str(encoding_dim) + "_features")
 plt.show()
 
 

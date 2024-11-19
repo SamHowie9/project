@@ -15,11 +15,11 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 1
+encoding_dim = 30
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -222,17 +222,17 @@ model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_2.weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_2.npy", extracted_features)
 
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_1.npy", loss)
+np.save("Variational Eagle/Loss/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_2.npy", loss)
 
 
 
@@ -290,7 +290,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_individually_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_1")
+plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_individually_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_2")
 plt.show()
 
 
