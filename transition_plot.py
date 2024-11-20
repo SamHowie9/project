@@ -1,13 +1,11 @@
 import os
-
-from conv_eagle_autoencoder import extracted_features
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
 from keras import ops
 from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose
 import numpy as np
+from sklearn.decomposition import PCA
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
@@ -218,11 +216,22 @@ vae.compile(optimizer=keras.optimizers.Adam())
 vae.load_weights("Variational Eagle/Weights/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_2.npy")
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_2.npy")[0]
+
+# list of medians for all extracted features
+med_extracted_features = [np.median(extracted_features.T[i]) for i in range(encoding_dim)]
+
 
 # apply pca on the extracted features and project the extracted features
 pca = PCA(n_components=11).fit(extracted_features)
 pca_features = pca.transform(extracted_features)
+
+print(pca_features.shape)
+
+# list of medians for all pca features
+med_pca_features = [np.median(pca_features.T[i]) for i in range(11)]
+
+print(med_pca_features)
 
 
 
