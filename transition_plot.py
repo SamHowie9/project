@@ -212,6 +212,17 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 
+# number of varying features
+num_varying_features = 10
+
+# chosen extracted feature to vary
+chosen_feature = 0
+
+# chosen pca feature to vary
+chosen_pca_feature = 0
+
+
+
 # or load the weights for the model
 vae.load_weights("Variational Eagle/Weights/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 
@@ -221,17 +232,36 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to
 # list of medians for all extracted features
 med_extracted_features = [np.median(extracted_features.T[i]) for i in range(encoding_dim)]
 
+# values to vary the chosen extracted feature (equally spaced values between min and max)
+varying_feature_values = np.linspace(np.min(extracted_features.T[chosen_feature]), np.max(extracted_features.T[chosen_feature]), num_varying_features)
+
+
 
 # apply pca on the extracted features and project the extracted features
 pca = PCA(n_components=11).fit(extracted_features)
 pca_features = pca.transform(extracted_features)
 
-print(pca_features.shape)
-
-# list of medians for all pca features
+# list of medians for all pca features (equally spaced values between min and max)
 med_pca_features = [np.median(pca_features.T[i]) for i in range(11)]
 
-print(med_pca_features)
+# values to vary the chosen pca feature
+varying_pca_feature_values = np.linspace(np.min(pca_features.T[chosen_pca_feature]), np.max(pca_features.T[chosen_pca_feature]), num_varying_features)
+
+
+
+
+for i in range(num_varying_features):
+
+
+    temp_features = med_extracted_features
+    temp_features[chosen_feature] = varying_feature_values[i]
+
+    temp_pca_features = med_pca_features
+    temp_pca_features[chosen_pca_feature] = varying_pca_feature_values[i]
+
+# print(med_pca_features)
+
+
 
 
 
