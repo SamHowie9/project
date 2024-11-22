@@ -15,11 +15,11 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 1
+encoding_dim = 30
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="7"
 
 # number of epochs for run
 epochs = 300
@@ -66,8 +66,8 @@ for i, galaxy in enumerate(chosen_galaxies):
     # image = np.log10(image)
 
     # normalise the image (either each band independently or to the r band)
-    image = normalise_independently(image)
-    # image = normalise_to_r(image)
+    # image = normalise_independently(image)
+    image = normalise_to_r(image)
 
     # add the image to the dataset
     all_images.append(image)
@@ -197,8 +197,8 @@ x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padd
 x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 16)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
 x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (256, 256, 64)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
-# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)     # (128, 128, 3)
+# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)       # (128, 128, 3)
 
 # build the decoder
 decoder = keras.Model(latent_input, decoded, name="decoder")
@@ -222,17 +222,17 @@ model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_3.weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_3.weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_3.npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_3.npy", extracted_features)
 
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_3.npy", loss)
+np.save("Variational Eagle/Loss/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_3.npy", loss)
 
 
 
@@ -290,7 +290,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_individually_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_3")
+plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_to_r_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_3")
 plt.show()
 
 
