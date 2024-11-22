@@ -48,12 +48,12 @@ fig, axs = plt.subplots(2, 1, figsize=(12, 10))
 # dataframe containing all losses
 df_loss = pd.DataFrame(columns=["Extracted Features", "Min Loss", "Min KL", "Med Loss", "Med KL", "Max Loss", "Max KL"])
 
-for i in range(1, 51):
+for i in range(1, 31):
     try:
 
         loss_1 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
-        loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
-        loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
+        loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
         # loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
         # loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
 
@@ -80,29 +80,29 @@ kl_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
 # params, covarience = curve_fit(logfit, range(1, 51), df_loss["Med Loss"])
 # a, b = params
 
-def sigmoid_fit(x, a, b, c, d):
-    return (a/(1 + (np.e ** (-b*x + c)))) + d
-
-params, covarience = curve_fit(sigmoid_fit, range(1, 51), df_loss["Med Loss"]/1000)
-a, b, c, d = params
+# def sigmoid_fit(x, a, b, c, d):
+#     return (a/(1 + (np.e ** (-b*x + c)))) + d
+#
+# params, covarience = curve_fit(sigmoid_fit, range(1, 51), df_loss["Med Loss"]/1000)
+# a, b, c, d = params
 
 
 
 # print("Logfit params: " + str(a) + " " + str(b))
 
-print(params)
-
-x_fit = np.linspace(1, 50, 100).tolist()
-
-print(x_fit)
-
-y_fit = []
-
-for x in x_fit:
-    y_fit.append(sigmoid_fit(x, a, b, c, d)*1000)
-
-
-axs[0].plot(x_fit, y_fit, c="black")
+# print(params)
+#
+# x_fit = np.linspace(1, 50, 100).tolist()
+#
+# print(x_fit)
+#
+# y_fit = []
+#
+# for x in x_fit:
+#     y_fit.append(sigmoid_fit(x, a, b, c, d)*1000)
+#
+#
+# axs[0].plot(x_fit, y_fit, c="black")
 
 
 
@@ -153,16 +153,17 @@ relevant_property_count = []
 # max_relevant_feature_ratio = []
 # min_relevant_feature_ratio = []
 
-for encoding_dim in range(1, 51):
+for encoding_dim in range(1, 31):
 
-    extracted_features = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[2]
+    extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
     extracted_features_switch = np.flipud(np.rot90(extracted_features))
 
     structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
 
-    extracted_features_1 = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
-    extracted_features_2 = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
-    extracted_features_3 = np.load("Variational Eagle/Normalised Individually/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+
+    extracted_features_1 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+    extracted_features_2 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
+    extracted_features_3 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
     # extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
     # extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
 
@@ -262,7 +263,7 @@ for encoding_dim in range(1, 51):
 
 
 
-axs[1].errorbar(range(1, 51), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
+axs[1].errorbar(range(1, 31), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
 # axs[1].errorbar(range(1, 51), relevant_property_count[0][1], yerr=[relevant_property_count[0][1] - relevant_property_count[0][1]), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
 axs[1].set_ylabel("Meaningful Extracted Features")
 axs[1].set_xlabel("Extracted Features")

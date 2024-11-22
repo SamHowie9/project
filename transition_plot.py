@@ -1,4 +1,7 @@
 import os
+
+from matplotlib.pyplot import figure
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -11,77 +14,13 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
-# os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-# tf.config.list_physical_devices('GPU')
 
 
 # number of extracted features
-encoding_dim = 30
-
-# # select which gpu to use
-# os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-# os.environ["CUDA_VISIBLE_DEVICES"]="4"
+encoding_dim = 20
 
 # number of epochs for run
 epochs = 300
-
-
-# # normalise each band individually
-# def normalise_independently(image):
-#     image = image.T
-#     for i in range(0, 3):
-#         image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
-#     return image.T
-#
-# # normalise each band to r
-# def normalise_to_r(image):
-#     image = image.T
-#     for i in range(0, 3):
-#         image[i] = (image[i] - np.min(image[i])) / (np.max(image[1]) - np.min(image[1]))
-#     return image.T
-#
-#
-#
-# # list to contain all galaxy images
-# all_images = []
-#
-# # load the ids of the chosen galaxies
-# chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
-#
-#
-#
-# # # loop through each galaxy in the supplemental file
-# for i, galaxy in enumerate(chosen_galaxies):
-#
-#     # get the filename of each galaxy in the supplemental file
-#     filename = "galrand_" + str(galaxy) + ".png"
-#
-#     # open the image and append it to the main list
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-#
-#     # find smallest non zero pixel value in the image and replace all zero values with this (for log transformation)
-#     smallest_non_zero = np.min(image[image > 0])
-#     image = np.where(image == 0.0, smallest_non_zero, image)
-#
-#     # apply log transformation to the image
-#     # image = np.log10(image)
-#
-#     # normalise the image (either each band independently or to the r band)
-#     image = normalise_independently(image)
-#     # image = normalise_to_r(image)
-#
-#     # add the image to the dataset
-#     all_images.append(image)
-#
-#
-#
-#
-#
-#
-# # split the data into training and testing data (200 images used for testing)
-# train_images = np.array(all_images[:-200])
-# test_images = np.array(all_images[-200:])
 
 
 
@@ -208,32 +147,41 @@ decoder.summary()
 vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 
+# load the weights
+vae.load_weights("Variational Eagle/Weights/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+
 
 
 
 
 # number of varying features
-num_varying_features = 10
+num_varying_features = 15
 
 # chosen extracted feature to vary
-chosen_feature = 0
+chosen_feature = 19
+chosen_feature_2 = 12
 
 # chosen pca feature to vary
-chosen_pca_feature = 0
+chosen_pca_feature = 1
 
 
 
-# or load the weights for the model
-vae.load_weights("Variational Eagle/Weights/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_2.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy")[0]
 
 # list of medians for all extracted features
 med_extracted_features = [np.median(extracted_features.T[i]) for i in range(encoding_dim)]
 
 # values to vary the chosen extracted feature (equally spaced values between min and max)
-varying_feature_values = np.linspace(np.min(extracted_features.T[chosen_feature]), np.max(extracted_features.T[chosen_feature]), num_varying_features)
+# varying_feature_values = np.linspace(np.min(extracted_features.T[chosen_feature]), np.max(extracted_features.T[chosen_feature]), num_varying_features)
+varying_feature_values = [-4, -3] + list(np.linspace(-2, 3, 13))
+# varying_feature_values = [-5, -3] + list(np.linspace(-2.5, 2, 12)) + [2.5]
+
+# second feature
+# varying_feature_values_2 = np.linspace(np.min(extracted_features.T[chosen_feature_2]), np.max(extracted_features.T[chosen_feature_2]), num_varying_features)
+varying_feature_values_2 = [-0.3, -0.2] + list(np.linspace(-0.15, 0.05, 12)) + [0.1]
+# varying_feature_values_2 = [-0.1, -0.8] + list(np.linspace(-0.075, 0.1, 12)) + [0.15]
 
 
 
@@ -245,23 +193,77 @@ pca_features = pca.transform(extracted_features)
 med_pca_features = [np.median(pca_features.T[i]) for i in range(11)]
 
 # values to vary the chosen pca feature
-varying_pca_feature_values = np.linspace(np.min(pca_features.T[chosen_pca_feature]), np.max(pca_features.T[chosen_pca_feature]), num_varying_features)
+# varying_pca_feature_values = np.linspace(np.min(pca_features.T[chosen_pca_feature]), np.max(pca_features.T[chosen_pca_feature]), num_varying_features)
+varying_pca_feature_values = [-4, -3] + list(np.linspace(-2, 2, 13))
 
 
-
+fig, axs = plt.subplots(5, num_varying_features, figsize=(15, 6))
 
 for i in range(num_varying_features):
 
-
-    temp_features = med_extracted_features
+    # 8, 10
+    temp_features = med_extracted_features.copy()
     temp_features[chosen_feature] = varying_feature_values[i]
+    temp_features = np.expand_dims(temp_features, axis=0)
 
-    temp_pca_features = med_pca_features
+    reconstruction = vae.decoder.predict(temp_features)[0]
+
+    axs[0, i].imshow(reconstruction)
+    axs[0, i].get_xaxis().set_visible(False)
+    axs[0, i].get_yaxis().set_visible(False)
+
+
+
+    temp_features_2 = med_extracted_features.copy()
+    temp_features_2[chosen_feature_2] = varying_feature_values_2[i]
+    temp_features_2 = np.expand_dims(temp_features_2, axis=0)
+
+    reconstruction_2 = vae.decoder.predict(temp_features_2)[0]
+
+    axs[1, i].imshow(reconstruction_2)
+    axs[1, i].get_xaxis().set_visible(False)
+    axs[1, i].get_yaxis().set_visible(False)
+
+
+
+    temp_features_3 = med_extracted_features.copy()
+    temp_features_3[chosen_feature] = varying_feature_values[i]
+    temp_features_3[chosen_feature_2] = varying_feature_values_2[i]
+    temp_features_3 = np.expand_dims(temp_features_3, axis=0)
+
+    reconstruction_3 = vae.decoder.predict(temp_features_3)[0]
+
+    axs[2, i].imshow(reconstruction_3)
+    axs[2, i].get_xaxis().set_visible(False)
+    axs[2, i].get_yaxis().set_visible(False)
+
+
+
+    fig.delaxes(axs[3, i])
+
+
+    # 1
+    temp_pca_features = med_pca_features.copy()
     temp_pca_features[chosen_pca_feature] = varying_pca_feature_values[i]
+    temp_pca_features = pca.inverse_transform(temp_pca_features)
+    temp_pca_features = np.expand_dims(temp_pca_features, axis=0)
 
-# print(med_pca_features)
+    reconstruction = vae.decoder.predict(temp_pca_features)[0]
+
+    axs[4, i].imshow(reconstruction)
+    axs[4, i].get_xaxis().set_visible(False)
+    axs[4, i].get_yaxis().set_visible(False)
 
 
+
+axs[0,2].set_title("Varying VAE Feature 19                              ")
+axs[1,2].set_title("Varying VAE Feature 12                              ")
+axs[2,2].set_title("Varying VAE Feature 19 and 12                       ")
+axs[4,2].set_title("Varying PCA Feature 1                               ")
+
+
+plt.savefig("Variational Eagle/Plots/transition_plot_g_normalised_vae_vs_pca", bbox_inches='tight')
+plt.show()
 
 
 
