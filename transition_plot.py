@@ -1,4 +1,7 @@
 import os
+
+from matplotlib.pyplot import figure
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -165,11 +168,11 @@ vae.load_weights("Variational Eagle/Weights/Normalised Individually/" + str(enco
 num_varying_features = 15
 
 # chosen extracted feature to vary
-chosen_feature = 5
-chosen_feature_2 = 14
+chosen_feature = 8
+chosen_feature_2 = 10
 
 # chosen pca feature to vary
-chosen_pca_feature = 5
+chosen_pca_feature = 1
 
 
 
