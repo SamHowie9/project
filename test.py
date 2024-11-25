@@ -5,13 +5,18 @@ from matplotlib import image as mpimg
 # import cv2
 
 
+A = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to r/15_feature_300_epoch_features_1.npy")
+print(A[-0])
 
-print(extracted_features.shape)
-print(extracted_features[0].shape)
-print(extracted_features[0][100].shape)
-print(extracted_features[0][100][7])
+
+
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to r/15_feature_300_epoch_features_1.npy")
+#
+# print(extracted_features.shape)
+# print(extracted_features[0].shape)
+# print(extracted_features[0][100].shape)
+# print(extracted_features[0][100][7])
 
 
 

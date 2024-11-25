@@ -18,7 +18,7 @@ pd.set_option('display.width', 500)
 
 
 encoding_dim = 15
-run = 3
+run = 2
 
 # load the extracted features
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
@@ -62,9 +62,9 @@ extracted_features_switch = extracted_features.T
 
 
 # perform pca on the extracted features
-# pca = PCA(n_components=12).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
+pca = PCA(n_components=11).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features_switch = extracted_features.T
 
 
 
@@ -284,7 +284,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
 plt.show()
 
 
@@ -333,9 +333,37 @@ for i, property in enumerate(properties):
         axs[feature][i].set_ylabel(None)
         axs[feature][i].tick_params(labelsize=12)
 
-plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
 plt.show()
+
+
+
+
+
+# fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+#
+# # 1, 10, 3
+#
+# axs[0].scatter(x=extracted_features_switch[1], y=all_properties["n_r"], s=0.5)
+# axs[0].set_title("VAE Feature 1")
+# axs[0].set_ylabel("Sersic Index")
+# axs[0].set_xlabel(None)
+#
+# axs[1].scatter(x=extracted_features_switch[10], y=all_properties["n_r"], s=0.5)
+# axs[1].set_title("VAE Feature 10")
+# axs[1].set_ylabel("Sersic Index")
+# axs[1].set_xlabel(None)
+#
+# axs[2].scatter(x=pca_extracted_features_switch[3], y=all_properties["n_r"], s=0.5)
+# axs[2].set_title("PCA Feature 3")
+# axs[2].set_ylabel("Sersic Index")
+# axs[2].set_xlabel(None)
+#
+#
+# plt.savefig("Variational Eagle/Plots/individually_normalised" + str(encoding_dim) + "_feature_sersic_scatter_" + str(run), bbox_inches='tight')
+# plt.show()
+
 
 
 
