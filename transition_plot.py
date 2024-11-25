@@ -17,12 +17,22 @@ from matplotlib import image as mpimg
 
 
 # number of extracted features
-encoding_dim = 20
+encoding_dim = 15
+
+run = 1
 
 # number of epochs for run
 epochs = 300
 
 
+
+
+# normalise each band individually
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
 
 
 
@@ -148,7 +158,7 @@ vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 
 # load the weights
-vae.load_weights("Variational Eagle/Weights/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+vae.load_weights("Variational Eagle/Weights/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5")
 
 
 
@@ -158,8 +168,8 @@ vae.load_weights("Variational Eagle/Weights/Normalised to g/" + str(encoding_dim
 num_varying_features = 15
 
 # chosen extracted feature to vary
-chosen_feature = 19
-chosen_feature_2 = 12
+chosen_feature = 8
+chosen_feature_2 = 10
 
 # chosen pca feature to vary
 chosen_pca_feature = 1
@@ -168,19 +178,19 @@ chosen_pca_feature = 1
 
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to g/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_1.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
 
 # list of medians for all extracted features
 med_extracted_features = [np.median(extracted_features.T[i]) for i in range(encoding_dim)]
 
 # values to vary the chosen extracted feature (equally spaced values between min and max)
-# varying_feature_values = np.linspace(np.min(extracted_features.T[chosen_feature]), np.max(extracted_features.T[chosen_feature]), num_varying_features)
-varying_feature_values = [-4, -3] + list(np.linspace(-2, 3, 13))
+varying_feature_values = np.linspace(np.min(extracted_features.T[chosen_feature]), np.max(extracted_features.T[chosen_feature]), num_varying_features)
+# varying_feature_values = [-4, -3] + list(np.linspace(-2, 3, 13))
 # varying_feature_values = [-5, -3] + list(np.linspace(-2.5, 2, 12)) + [2.5]
 
 # second feature
-# varying_feature_values_2 = np.linspace(np.min(extracted_features.T[chosen_feature_2]), np.max(extracted_features.T[chosen_feature_2]), num_varying_features)
-varying_feature_values_2 = [-0.3, -0.2] + list(np.linspace(-0.15, 0.05, 12)) + [0.1]
+varying_feature_values_2 = np.linspace(np.min(extracted_features.T[chosen_feature_2]), np.max(extracted_features.T[chosen_feature_2]), num_varying_features)
+# varying_feature_values_2 = [-0.3, -0.2] + list(np.linspace(-0.15, 0.05, 12)) + [0.1]
 # varying_feature_values_2 = [-0.1, -0.8] + list(np.linspace(-0.075, 0.1, 12)) + [0.15]
 
 
@@ -193,8 +203,8 @@ pca_features = pca.transform(extracted_features)
 med_pca_features = [np.median(pca_features.T[i]) for i in range(11)]
 
 # values to vary the chosen pca feature
-# varying_pca_feature_values = np.linspace(np.min(pca_features.T[chosen_pca_feature]), np.max(pca_features.T[chosen_pca_feature]), num_varying_features)
-varying_pca_feature_values = [-4, -3] + list(np.linspace(-2, 2, 13))
+varying_pca_feature_values = np.linspace(np.min(pca_features.T[chosen_pca_feature]), np.max(pca_features.T[chosen_pca_feature]), num_varying_features)
+# varying_pca_feature_values = [-4, -3] + list(np.linspace(-2, 2, 13))
 
 
 fig, axs = plt.subplots(5, num_varying_features, figsize=(15, 6))
@@ -207,6 +217,7 @@ for i in range(num_varying_features):
     temp_features = np.expand_dims(temp_features, axis=0)
 
     reconstruction = vae.decoder.predict(temp_features)[0]
+    reconstruction = normalise_independently(reconstruction)
 
     axs[0, i].imshow(reconstruction)
     axs[0, i].get_xaxis().set_visible(False)
@@ -219,6 +230,7 @@ for i in range(num_varying_features):
     temp_features_2 = np.expand_dims(temp_features_2, axis=0)
 
     reconstruction_2 = vae.decoder.predict(temp_features_2)[0]
+    reconstruction_2 = normalise_independently(reconstruction_2)
 
     axs[1, i].imshow(reconstruction_2)
     axs[1, i].get_xaxis().set_visible(False)
@@ -232,6 +244,7 @@ for i in range(num_varying_features):
     temp_features_3 = np.expand_dims(temp_features_3, axis=0)
 
     reconstruction_3 = vae.decoder.predict(temp_features_3)[0]
+    reconstruction_3 = normalise_independently(reconstruction_3)
 
     axs[2, i].imshow(reconstruction_3)
     axs[2, i].get_xaxis().set_visible(False)
@@ -256,13 +269,13 @@ for i in range(num_varying_features):
 
 
 
-axs[0,2].set_title("Varying VAE Feature 19                              ")
-axs[1,2].set_title("Varying VAE Feature 12                              ")
-axs[2,2].set_title("Varying VAE Feature 19 and 12                       ")
-axs[4,2].set_title("Varying PCA Feature 1                               ")
+axs[0,2].set_title("Varying VAE Feature " + str(chosen_feature) + "                              ")
+axs[1,2].set_title("Varying VAE Feature " + str(chosen_feature_2) + "                              ")
+axs[2,2].set_title("Varying VAE Feature " + str(chosen_feature) + " and " str(chosen_feature_2) + "                       ")
+axs[4,2].set_title("Varying PCA Feature " + str(chosen_pca_feature) + "                               ")
 
 
-plt.savefig("Variational Eagle/Plots/transition_plot_g_normalised_vae_vs_pca", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/transition_plot_individually_normalised_vae_vs_pca_" + str(run), bbox_inches='tight')
 plt.show()
 
 

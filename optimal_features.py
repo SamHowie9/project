@@ -51,9 +51,9 @@ df_loss = pd.DataFrame(columns=["Extracted Features", "Min Loss", "Min KL", "Med
 for i in range(1, 31):
     try:
 
-        loss_1 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_1.npy"))
-        loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
-        loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
+        loss_1 = list(np.load("Variational Eagle/Loss/Normalised Individually/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        loss_2 = list(np.load("Variational Eagle/Loss/Normalised Individually/" + str(i) + "_feature_300_epoch_loss_2.npy"))
+        loss_3 = list(np.load("Variational Eagle/Loss/Normalised Individually/" + str(i) + "_feature_300_epoch_loss_3.npy"))
         # loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
         # loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
 
