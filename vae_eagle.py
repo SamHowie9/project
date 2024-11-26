@@ -62,9 +62,6 @@ for i, galaxy in enumerate(chosen_galaxies):
     smallest_non_zero = np.min(image[image > 0])
     image = np.where(image == 0.0, smallest_non_zero, image)
 
-    # apply log transformation to the image
-    # image = np.log10(image)
-
     # normalise the image (either each band independently or to the r band)
     # image = normalise_independently(image)
     image = normalise_to_r(image)
