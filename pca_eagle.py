@@ -1,6 +1,8 @@
 from sklearn.decomposition import PCA
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
+from matplotlib import image as mpimg
 
 
 

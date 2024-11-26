@@ -6,8 +6,6 @@ from keras import ops
 from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
-from matplotlib import image as mpimg
 
 
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
