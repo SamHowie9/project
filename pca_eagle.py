@@ -74,7 +74,7 @@ extracted_features = pca.transform(flattened_images)
 
 np.save("Variational Eagle/Extracted Features/PCA/pca_features_0.95", extracted_features)
 
-plt.plot(range(1, extracted_features.shape[0] + 1), pca.explained_variance_ratio_)
+plt.plot(range(1, extracted_features.shape[1] + 1), pca.explained_variance_ratio_)
 
 plt.savefig("Plots/pca_scree")
 plt.show()
