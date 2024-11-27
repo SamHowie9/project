@@ -68,13 +68,13 @@ flattened_images = train_images.reshape(3424, 196608)
 
 
 
-pca = PCA(n_components=0.95).fit(flattened_images)
+pca = PCA(n_components=0.90).fit(flattened_images)
 
 extracted_features = pca.transform(flattened_images)
 
 np.save("Variational Eagle/Extracted Features/PCA/pca_features_0.95", extracted_features)
 
-plt.plot(range(1, 31), pca.explained_variance_ratio_)
+plt.plot(range(1, extracted_features.shape[0] + 1), pca.explained_variance_ratio_)
 
 plt.savefig("Plots/pca_scree")
 plt.show()
