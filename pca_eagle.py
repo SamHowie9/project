@@ -98,10 +98,10 @@ fig, axs = plt.subplots(2, n-1, figsize=(18,5))
 for i in range(0, n-1):
 
     # transform the image into the pca feature space
-    temp_features = pca.transform(images_to_reconstruct[i])
+    temp_features = pca.transform(images_to_reconstruct[i].reshape(3424, 196608))
 
     # transform back to form a reconstruction
-    reconstructed_image = pca.inverse_transform(test_features[i])
+    reconstructed_image = pca.inverse_transform(test_features[i]).reshape(3424, 256, 256, 3)
 
     print(reconstructed_image.shape)
 
