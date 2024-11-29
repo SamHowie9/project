@@ -78,3 +78,43 @@ plt.plot(range(1, extracted_features.shape[1] + 1), pca.explained_variance_ratio
 
 plt.savefig("Plots/pca_scree")
 plt.show()
+
+
+
+# Form reconstructions
+
+# number of images to reconstruct
+n = 12
+
+# create a subset of the validation data to reconstruct (first 10 images)
+images_to_reconstruct = test_images[n:]
+# images_to_reconstruct = train_images[n:]
+
+# reconstruct the images
+test_features, _, _ = pca.transform(images_to_reconstruct)
+reconstructed_images = pca.inverse_transform(test_features)
+
+# create figure to hold subplots
+fig, axs = plt.subplots(2, n-1, figsize=(18,5))
+
+# plot each subplot
+for i in range(0, n-1):
+
+    original_image = normalise_independently(images_to_reconstruct[i])
+    reconstructed_image = normalise_independently(reconstructed_images[i])
+
+    # show the original image (remove axes)
+    # axs[0,i].imshow(images_to_reconstruct[i])
+    axs[0,i].imshow(original_image)
+    axs[0,i].get_xaxis().set_visible(False)
+    axs[0,i].get_yaxis().set_visible(False)
+
+    # show the reconstructed image (remove axes)
+    # axs[1,i].imshow(reconstructed_images[i])
+    axs[1,i].imshow(reconstructed_image)
+    axs[1,i].get_xaxis().set_visible(False)
+    axs[1,i].get_yaxis().set_visible(False)
+
+# plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_independently_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_3")
+plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_independently_pca_reconstruction")
+plt.show()

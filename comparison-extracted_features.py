@@ -21,10 +21,13 @@ encoding_dim = 15
 run = 2
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_0.95.npy")
+encoding_dim = extracted_features.shape[1]
+print(encoding_dim)
 extracted_features_switch = extracted_features.T
 
-print(extracted_features_switch.shape)
+# print(extracted_features_switch.shape)
 
 
 
@@ -62,9 +65,9 @@ extracted_features_switch = extracted_features.T
 
 
 # perform pca on the extracted features
-pca = PCA(n_components=11).fit(extracted_features)
-extracted_features = pca.transform(extracted_features)
-extracted_features_switch = extracted_features.T
+# pca = PCA(n_components=11).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
 
 
 
@@ -284,7 +287,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_" + str(encoding_dim) + "_feature_pca_all_property_correlation_" + str(run), bbox_inches='tight')
 plt.show()
 
 
@@ -333,7 +336,7 @@ for i, property in enumerate(properties):
         axs[feature][i].set_ylabel(None)
         axs[feature][i].tick_params(labelsize=12)
 
-plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_" + str(encoding_dim) + "_feature_pca_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
 plt.show()
 
