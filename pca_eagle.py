@@ -87,7 +87,7 @@ plt.show()
 n = 12
 
 # create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[n:].reshape(n, 196608)
+images_to_reconstruct = test_images[:n].reshape(n, 196608)
 # images_to_reconstruct = train_images[n:]
 
 print(images_to_reconstruct.shape)
