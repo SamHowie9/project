@@ -90,9 +90,6 @@ n = 12
 images_to_reconstruct = test_images[n:]
 # images_to_reconstruct = train_images[n:]
 
-# reconstruct the images
-# test_features, _, _ = pca.transform(images_to_reconstruct)
-# reconstructed_images = pca.inverse_transform(test_features)
 
 # create figure to hold subplots
 fig, axs = plt.subplots(2, n-1, figsize=(18,5))
@@ -100,9 +97,13 @@ fig, axs = plt.subplots(2, n-1, figsize=(18,5))
 # plot each subplot
 for i in range(0, n-1):
 
-    temp_features, _, _ = pca.transform(images_to_reconstruct[i])
+    # transform the image into the pca feature space
+    temp_features = pca.transform(images_to_reconstruct[i])
+
+    # transform back to form a reconstruction
     reconstructed_image = pca.inverse_transform(test_features[i])
 
+    # normalise the original image and reconstruction (for display purposes)
     original_image = normalise_independently(images_to_reconstruct)
     reconstructed_image = normalise_independently(reconstructed_image)
 
