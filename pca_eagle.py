@@ -103,6 +103,8 @@ for i in range(0, n-1):
     # transform back to form a reconstruction
     reconstructed_image = pca.inverse_transform(test_features[i])
 
+    print(reconstructed_image.shape)
+
     # normalise the original image and reconstruction (for display purposes)
     original_image = normalise_independently(images_to_reconstruct)
     reconstructed_image = normalise_independently(reconstructed_image)
