@@ -117,7 +117,7 @@ for i in range(0, n-1):
     print(reconstructed_image.shape)
 
     # normalise the original image and reconstruction (for display purposes)
-    original_image = normalise_independently(images_to_reconstruct[i])
+    original_image = normalise_independently(images_to_reconstruct[i].reshape(256, 256, 3))
     reconstructed_image = normalise_independently(reconstructed_image)
 
     # show the original image (remove axes)
