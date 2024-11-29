@@ -91,8 +91,8 @@ images_to_reconstruct = test_images[n:]
 # images_to_reconstruct = train_images[n:]
 
 # reconstruct the images
-test_features, _, _ = pca.transform(images_to_reconstruct)
-reconstructed_images = pca.inverse_transform(test_features)
+# test_features, _, _ = pca.transform(images_to_reconstruct)
+# reconstructed_images = pca.inverse_transform(test_features)
 
 # create figure to hold subplots
 fig, axs = plt.subplots(2, n-1, figsize=(18,5))
@@ -100,8 +100,11 @@ fig, axs = plt.subplots(2, n-1, figsize=(18,5))
 # plot each subplot
 for i in range(0, n-1):
 
-    original_image = normalise_independently(images_to_reconstruct[i])
-    reconstructed_image = normalise_independently(reconstructed_images[i])
+    temp_features, _, _ = pca.transform(images_to_reconstruct[i])
+    reconstructed_image = pca.inverse_transform(test_features[i])
+
+    original_image = normalise_independently(images_to_reconstruct)
+    reconstructed_image = normalise_independently(reconstructed_image)
 
     # show the original image (remove axes)
     # axs[0,i].imshow(images_to_reconstruct[i])
