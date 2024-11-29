@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
+encoding_dim = 15
+
 
 # normalise each band individually
 def normalise_independently(image):
@@ -68,15 +70,15 @@ flattened_images = train_images.reshape(3424, 196608)
 
 
 
-pca = PCA(n_components=0.90).fit(flattened_images)
+pca = PCA(n_components=encoding_dim).fit(flattened_images)
 
 extracted_features = pca.transform(flattened_images)
 
-np.save("Variational Eagle/Extracted Features/PCA/pca_features_0.95", extracted_features)
+np.save("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features", extracted_features)
 
 plt.plot(range(1, extracted_features.shape[1] + 1), pca.explained_variance_ratio_)
 
-plt.savefig("Plots/pca_scree")
+plt.savefig("Plots/pca_scree_" + str(encoding_dim) + "_features")
 plt.show()
 
 
@@ -133,5 +135,5 @@ for i in range(0, n-1):
     axs[1,i].get_yaxis().set_visible(False)
 
 # plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_independently_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_3")
-plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_independently_pca_reconstruction")
+plt.savefig("Variational Eagle/Reconstructions/Validation/pca_" + str(encoding_dim) + "_features_reconstruction")
 plt.show()
