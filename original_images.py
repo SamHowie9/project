@@ -17,8 +17,8 @@ n_clusters = 14
 
 
 # load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv", comment="#")
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
 # account for hte validation data and remove final 200 elements
 structure_properties.drop(structure_properties.tail(200).index, inplace=True)
