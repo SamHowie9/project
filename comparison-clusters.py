@@ -27,7 +27,7 @@ encoding_dim = 20
 run = 3
 
 # set the number of clusters
-n_clusters = 11
+n_clusters = 2
 
 
 
@@ -85,9 +85,9 @@ extracted_features_switch = extracted_features.T
 
 
 # perform pca on the extracted features
-# pca = PCA(n_components=11).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
+pca = PCA(n_components=11).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features_switch = extracted_features.T
 
 
 
@@ -114,6 +114,9 @@ all_properties["Cluster"] = clusters
 
 print(list(all_properties["GalaxyID"].loc[all_properties["Binary_Cluster"] == 0]))
 print(list(all_properties["GalaxyID"].loc[all_properties["Binary_Cluster"] == 1]))
+print()
+print("Cluster 0:", random.sample(list(all_properties["GalaxyID"].loc[all_properties["Binary_Cluster"] == 0]), 16))
+print("Cluster 1:", random.sample(list(all_properties["GalaxyID"].loc[all_properties["Binary_Cluster"] == 1]), 16))
 print()
 print()
 
@@ -162,6 +165,7 @@ med_df["Cluster"] = list(range(0, n_clusters))
 
 
 print(med_df.sort_values(by="n_r"))
+print()
 
 
 
@@ -517,7 +521,7 @@ print()
 
 
 
-order = med_df["n_r"].sort_values(ascending=False).index.to_list()
+order = med_df["n_r"].sort_values().index.to_list()
 
 for i in order:
     total_i = all_properties[all_properties["Cluster"] == i].shape[0]

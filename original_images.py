@@ -55,14 +55,14 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 fig = plt.figure(constrained_layout=False, figsize=(20, 10))
 
 # create the subfigures for the plot (each group)
-gs1 = fig.add_gridspec(nrows=3, ncols=3, left=0.05, right=0.49, wspace=0.05, hspace=0.05)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.51, right=0.95, wspace=0.05, hspace=0.05)
+gs1 = fig.add_gridspec(nrows=4, ncols=4, left=0.05, right=0.49, wspace=0.05, hspace=0.05)
+gs2 = fig.add_gridspec(nrows=4, ncols=4, left=0.51, right=0.95, wspace=0.05, hspace=0.05)
 
 
 
-# vae
-galaxies_1 = [30903, 8065154, 9181451, 9722530, 10520697, 12131891, 15274006, 17961351, 16632265]
-galaxies_2 = [42234, 8477086, 9698917, 10324278, 10493262, 12116602, 13732943, 16429682, 18125944]
+# vae and pca
+galaxies_1 = [9354175, 8649269, 12008778, 10044250, 8097697, 3528200, 8903544, 9827336, 10148850, 8121522, 14515322, 13207800, 9216031, 10390334, 10669399, 8643938]
+galaxies_2 = [10835614, 12184457, 9674774, 8439349, 10078536, 17079994, 8086783, 9026380, 12192715, 12115375, 16750450, 64010, 1032412, 8585110, 11533908, 18320344]
 
 # vae and pca
 
@@ -87,17 +87,17 @@ for i in range(0, 3):
         # set group title for middle plot of each group
         if i == 0 and j == 1:
 
-            g1_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+            # g1_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+            # g2_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
 
-            # g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
-            # g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
 
         count += 1
 
 
 
-plt.savefig("Variational Eagle/Cluster Plots/vae_2_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
+plt.savefig("Variational Eagle/Cluster Plots/vae_2_cluster_" + str(encoding_dim) + "_feature_originals")
 plt.show()
 
 
