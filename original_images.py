@@ -61,16 +61,16 @@ gs2 = fig.add_gridspec(nrows=4, ncols=4, left=0.51, right=0.95, wspace=0.05, hsp
 
 
 # vae and pca
-galaxies_1 = [9354175, 8649269, 12008778, 10044250, 8097697, 3528200, 8903544, 9827336, 10148850, 8121522, 14515322, 13207800, 9216031, 10390334, 10669399, 8643938]
-galaxies_2 = [10835614, 12184457, 9674774, 8439349, 10078536, 17079994, 8086783, 9026380, 12192715, 12115375, 16750450, 64010, 1032412, 8585110, 11533908, 18320344]
+galaxies_1 = [1699531, 18359999, 12100015, 9271074, 10078536, 1363926, 9437929, 16027782, 5351637, 13985849, 10750094, 9648217, 16824762, 14805238, 16041950, 10701170]
+galaxies_2 = [8090113, 12167142, 9737383, 14090052, 13296286, 18299729, 9932079, 9164674, 13229529, 9334220, 9416366, 13727900, 9485865, 12190346, 9404308, 17813435]
 
 # vae and pca
 
 
 count = 0
 
-for i in range(0, 3):
-    for j in range(0, 3):
+for i in range(0, 4):
+    for j in range(0, 4):
 
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
@@ -97,7 +97,7 @@ for i in range(0, 3):
 
 
 
-plt.savefig("Variational Eagle/Cluster Plots/vae_pca_2_cluster_" + str(encoding_dim) + "_feature_originals")
+plt.savefig("Variational Eagle/Cluster Plots/vae_pca_2_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
 plt.show()
 
 
