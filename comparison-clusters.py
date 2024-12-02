@@ -6,6 +6,7 @@ import pandas as pd
 # from tensorflow.keras.layers import Conv2D, Conv2DTranspose, MaxPooling2D, UpSampling2D, Dense, Flatten, Reshape
 # import keras
 import os
+from sklearn.decomposition import PCA
 from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
 from sklearn.neighbors import NearestCentroid
 from yellowbrick.cluster import KElbowVisualizer
@@ -21,10 +22,12 @@ pd.set_option('display.width', 1000)
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 38
+encoding_dim = 20
+
+run = 3
 
 # set the number of clusters
-n_clusters = 14
+n_clusters = 11
 
 
 
@@ -44,10 +47,10 @@ n_clusters = 14
 
 
 # load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/physical_properties.csv", comment="#")
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-# account for hte validation data and remove final 200 elements
+# account for the validation data and remove final 200 elements
 structure_properties.drop(structure_properties.tail(200).index, inplace=True)
 physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 
@@ -62,22 +65,13 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
-# for i in range(0, 5):
-#     print(all_properties[(all_properties["flag_r"] == i)].shape[0])
-#
-#
-# print((1, all_properties[(all_properties["flag_r"] == 1)]["GalaxyID"].tolist()))
-# print((2, all_properties[(all_properties["flag_r"] == 2)]["GalaxyID"].tolist()))
-# print((4, all_properties[(all_properties["flag_r"] == 4)]["GalaxyID"].tolist()))
-#
-# print(all_properties[(all_properties["flag_r"] == 5)])
-
-# print(all_properties.sort_values("n_r", ascending=False))
 
 
 
 # load the extracted features
-extracted_features = np.load("Features Rand/" + str(encoding_dim) + "_features_3.npy")
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_15_features.npy")
+extracted_features_switch = extracted_features.T
 
 
 bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
@@ -86,40 +80,38 @@ for i, galaxy in enumerate(bad_fit):
     extracted_features = np.delete(extracted_features, galaxy-i, 0)
     all_properties = all_properties.drop(galaxy, axis=0)
 
-
 extracted_features_switch = extracted_features.T
 
 
-# chose which features to use for clustering
-# meaningful_features = [8, 11, 12, 13, 14, 15, 16, 18, 20, 21]   # 24
-# meaningful_features = [1, 2, 7, 10, 16, 20, 23, 27, 29, 36]  # 19
-meaningful_features = [1, 2, 3, 4, 7, 8, 12, 20, 24, 26, 28]  # 26
-# meaningful_features = [2, 3, 4, 7, 12, 20, 24, 26, 28]
 
-chosen_features = []
-
-for feature in meaningful_features:
-    chosen_features.append(list(extracted_features_switch[feature]))
-
-chosen_features = np.array(chosen_features).T
+# perform pca on the extracted features
+# pca = PCA(n_components=11).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
 
 
 
-# chosen_features = extracted_features
 
 
-# perform hierarchical ward clustering
+# perform binomial hierarchical clustering
+binary_hierarchical = AgglomerativeClustering(n_clusters=2, metric="euclidean", linkage="ward")
+binary_clusters = binary_hierarchical.fit_predict(extracted_features)
+
+# add the binomial cluster of each galaxy to properties dataframe
+all_properties["Binary_Cluster"] = binary_clusters
+
+
+
+
+# perform hierarchical clustering
 hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
+clusters = hierarchical.fit_predict(extracted_features)
 
-# get hierarchical clusters
-clusters = hierarchical.fit_predict(chosen_features)
-
+# add the cluster of each galaxy to the properties dataframe
 all_properties["Cluster"] = clusters
 
 
-binary_hierarchical = AgglomerativeClustering(n_clusters=2, metric="euclidean", linkage="ward")
-binary_clusters = binary_hierarchical.fit_predict(chosen_features)
-all_properties["Binary_Cluster"] = binary_clusters
+
 
 
 # kmeans = KMeans(n_clusters=n_clusters)
@@ -134,7 +126,7 @@ all_properties["Binary_Cluster"] = binary_clusters
 
 # get hierarchical centers
 clf = NearestCentroid()
-clf.fit(chosen_features, clusters)
+clf.fit(extracted_features, clusters)
 centers = clf.centroids_
 centers_switch = centers.T
 
@@ -162,7 +154,7 @@ for i in range(0, n_clusters):
 med_df["Cluster"] = list(range(0, n_clusters))
 
 
-print(med_df)
+print(med_df.sort_values(by="n_r"))
 
 
 
@@ -187,35 +179,38 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 
-# # structure measurement box
-# fig, axs = plt.subplots(3, 1, figsize=(20, 15))
-#
+# structure measurement box
+fig, axs = plt.subplots(3, 1, figsize=(20, 15))
+
 # a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="n_r", showfliers=False, whis=1, palette=binary_palette, order=order)
-# a1.set_ylabel("Sersic Index", fontsize=20)
-# a1.set_xlabel(None)
+a1 = sns.boxplot(ax=axs[0], data=all_properties, x="Cluster", y="n_r", showfliers=False, whis=1, order=order)
+a1.set_ylabel("Sersic Index", fontsize=20)
+a1.set_xlabel(None)
 # mf_patch = mpatches.Patch(color=mf, label="More Featured")
 # lf_patch = mpatches.Patch(color=lf, label="Less Featured")
 # a1.legend(handles=[mf_patch, lf_patch], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
-# # a1.set_xticks([1, 0], ["Less Featured", "More Featured"])
-# # a1.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
-# a1.tick_params(labelsize=20)
-#
+# a1.set_xticks([1, 0], ["Less Featured", "More Featured"])
+# a1.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
+a1.tick_params(labelsize=20)
+
 # a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y=abs(all_properties["pa_r"]), showfliers=False, whis=1, palette=binary_palette, order=order)
-# a2.set_ylabel("Position Angle", fontsize=20)
-# a2.set_xlabel(None)
+a2 = sns.boxplot(ax=axs[1], data=all_properties, x="Cluster", y=abs(all_properties["pa_r"]), showfliers=False, whis=1, order=order)
+a2.set_ylabel("Position Angle", fontsize=20)
+a2.set_xlabel(None)
 # a2.legend([],[], frameon=False)
-# # a2.set_xticks([1, 0], ["Less Featured", "More Featured"])
-# a2.tick_params(labelsize=20)
-#
+# a2.set_xticks([1, 0], ["Less Featured", "More Featured"])
+a2.tick_params(labelsize=20)
+
 # a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, palette=binary_palette, order=order)
-# a3.set_ylabel("Axis Ratio", fontsize=20)
-# a3.set_xlabel("Group Index", fontsize=20, labelpad=10)
-# # a3.set_xticks([1, 0], ["Less Featured", "More Featured"])
+a3 = sns.boxplot(ax=axs[2], data=all_properties, x="Cluster", y="q_r", showfliers=False, whis=1, order=order)
+a3.set_ylabel("Axis Ratio", fontsize=20)
+a3.set_xlabel("Group Index", fontsize=20, labelpad=10)
+# a3.set_xticks([1, 0], ["Less Featured", "More Featured"])
 # a3.legend([],[], frameon=False)
-# a3.tick_params(labelsize=20)
-#
-# plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_box", bbox_inches='tight')
-# plt.show()
+a3.tick_params(labelsize=20)
+
+plt.savefig("Variational Eagle/Cluster Plots/vae_" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution_box", bbox_inches='tight')
+plt.show()
 
 
 
@@ -247,7 +242,7 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 # a3.tick_params(labelsize=20)
 #
 #
-# plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Cluster Plots/" +  str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution", bbox_inches='tight')
 # plt.show()
 
 
@@ -262,51 +257,60 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 # disk = "#93ebe8"
 # bulge = "#ff9f9b"
 # machine_palette = {4:bulge, 3:bulge, 12:bulge, 13:bulge, 11:disk, 7:disk, 9:disk, 10:disk, 5:disk, 6:disk, 1:disk, 8:disk, 2:disk, 0:disk}
-#
-# # physical properties
-# fig, axs = plt.subplots(3, 2, figsize=(20, 15))
-#
+
+# physical properties
+fig, axs = plt.subplots(3, 2, figsize=(20, 15))
+
 # a1 = sns.boxplot(ax=axs[0, 0], data=all_properties, x="Cluster", y="re_r", showfliers=False, whis=1, palette=machine_palette, order=med_df["re_r"].sort_values(ascending=False).index.to_list())
-# a1.set_ylabel("Semi-Major Axis (pkpk)", fontsize=20)
-# a1.set_xlabel(None)
-# a1.tick_params(labelsize=20)
-#
+a1 = sns.boxplot(ax=axs[0, 0], data=all_properties, x="Cluster", y="re_r", showfliers=False, whis=1, order=order)
+a1.set_ylabel("Semi-Major Axis (pkpk)", fontsize=20)
+a1.set_xlabel(None)
+a1.tick_params(labelsize=20)
+
 # a2 = sns.boxplot(ax=axs[1, 0], data=all_properties, x="Cluster", y="InitialMassWeightedStellarAge", showfliers=False, whis=1, palette=machine_palette, order=med_df["InitialMassWeightedStellarAge"].sort_values(ascending=False).index.to_list())
-# a2.set_ylabel("Stellar Age (Gyr)", fontsize=20)
-# a2.set_xlabel(None)
-# a2.tick_params(labelsize=20)
-#
+a2 = sns.boxplot(ax=axs[1, 0], data=all_properties, x="Cluster", y="InitialMassWeightedStellarAge", showfliers=False, whis=1, order=order)
+a2.set_ylabel("Stellar Age (Gyr)", fontsize=20)
+a2.set_xlabel(None)
+a2.tick_params(labelsize=20)
+
 # a3 = sns.boxplot(ax=axs[2, 0], data=all_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, palette=machine_palette, order=med_df["StarFormationRate"].sort_values(ascending=False).index.to_list())
-# a3.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
-# a3.set_xlabel("Group Index", fontsize=20)
-# a3.tick_params(labelsize=20)
-#
-#
+a3 = sns.boxplot(ax=axs[2, 0], data=all_properties, x="Cluster", y="StarFormationRate", showfliers=False, whis=1, order=order)
+a3.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
+a3.set_xlabel("Group Index", fontsize=20)
+a3.tick_params(labelsize=20)
+
+
 # b1 = sns.boxplot(ax=axs[0, 1], data=all_properties, x="Cluster", y=all_properties["MassType_Star"].div(1e10), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_Star"].sort_values(ascending=False).index.to_list())
-# b1.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
-# b1.set_xlabel(None)
-# b1.tick_params(labelsize=20)
-# b1.set_yticks([0, 5, 10, 15])
-# b1.set_ylim(-0.1, 15.2)
-#
+b1 = sns.boxplot(ax=axs[0, 1], data=all_properties, x="Cluster", y=all_properties["MassType_Star"].div(1e10), showfliers=False, whis=1, order=order)
+b1.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
+b1.set_xlabel(None)
+b1.tick_params(labelsize=20)
+b1.set_yticks([0, 5, 10, 15])
+b1.set_ylim(-0.1, 15.2)
+
 # b2 = sns.boxplot(ax=axs[1, 1], data=all_properties, x="Cluster", y=all_properties["MassType_DM"].div(1e12), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_DM"].sort_values(ascending=False).index.to_list())
-# b2.set_ylabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
-# b2.set_xlabel(None)
-# b2.tick_params(labelsize=20)
-#
+b2 = sns.boxplot(ax=axs[1, 1], data=all_properties, x="Cluster", y=all_properties["MassType_DM"].div(1e12), showfliers=False, whis=1, order=order)
+b2.set_ylabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
+b2.set_xlabel(None)
+b2.tick_params(labelsize=20)
+
 # b3 = sns.boxplot(ax=axs[2, 1], data=all_properties, x="Cluster", y=all_properties["MassType_BH"].div(1e8), showfliers=False, whis=1, palette=machine_palette, order=med_df["MassType_BH"].sort_values(ascending=False).index.to_list())
-# b3.set_ylabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
-# b3.set_xlabel("Group Index", fontsize=20)
-# b3.tick_params(labelsize=20)
-#
+b3 = sns.boxplot(ax=axs[2, 1], data=all_properties, x="Cluster", y=all_properties["MassType_BH"].div(1e8), showfliers=False, whis=1, order=order)
+b3.set_ylabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
+b3.set_xlabel("Group Index", fontsize=20)
+b3.tick_params(labelsize=20)
+
 # disk_patch = mpatches.Patch(color=disk, label="Disk Structures")
 # bulge_patch = mpatches.Patch(color=bulge, label="Bulge Structures")
 # a1.legend(handles=[disk_patch, bulge_patch], bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=2, prop={"size":20})
-#
-# # plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
-# plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution", bbox_inches='tight')
-# # plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_sersic_order", bbox_inches='tight')
-# plt.show()
+
+# plt.savefig("Plots/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_all_features")
+plt.savefig("Variational Eagle/Cluster Plots/vae_" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution", bbox_inches='tight')
+# plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_physical_distribution_sersic_order", bbox_inches='tight')
+plt.show()
+
+
+
 
 
 
@@ -587,113 +591,113 @@ for i in order:
 
 
 
-types = ["Spirals", "Spirals", "Spirals", "Ellipticals", "Ellipticals", "Spirals", "Spirals", "Spirals", "Spirals", "Spirals", "Spirals", "Spirals", "Barred Spirals", "Ellipticals"]
-med_df["Type"] = types
-
-print(sns.color_palette("colorblind").as_hex())
-
-spiral = "#01a5fe"
-bar = "#029e73"
-elliptical = "#fbb337"
-# triple_palette = {4:elliptical, 3:elliptical, 12:bar, 13:elliptical, 11:spiral, 7:spiral, 9:spiral, 10:spiral, 5:spiral, 6:spiral, 1:spiral, 8:spiral, 2:spiral, 0:spiral}
-triple_palette = [spiral, bar, elliptical]
-
-
-fig, axs = plt.subplots(2, 3, figsize=(25, 12))
-
-
-sm_s = sns.scatterplot(ax=axs[0, 0], data=med_df, x="n_r", y=med_df["MassType_Star"].div(1e10), hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
-
-sm_s.set_xlabel("Sersic Index", fontsize=20)
-sm_s.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
-
-sm_s.tick_params(labelsize=20)
-
-
-sa_s = sns.scatterplot(ax=axs[0, 1], data=med_df, x="n_r", y="InitialMassWeightedStellarAge", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150)
-
-sa_s.set_xlabel("Sersic Index", fontsize=20)
-sa_s.set_ylabel("Stellar Age (Gyr)", fontsize=20)
-sa_s.tick_params(labelsize=20)
-
-
-sm_sa = sns.scatterplot(ax=axs[0, 2], data=med_df, x="InitialMassWeightedStellarAge", y=med_df["MassType_Star"].div(1e10), hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
-
-sm_sa.set_xlabel("Stellar Age (Gyr)", fontsize=20)
-sm_sa.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
-sm_sa.tick_params(labelsize=20)
-
-
-
-# sfr_s = sns.scatterplot(ax=axs[0, 1], data=med_df, x="n_r", y="StarFormationRate", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150)
+# types = ["Spirals", "Spirals", "Spirals", "Ellipticals", "Ellipticals", "Spirals", "Spirals", "Spirals", "Spirals", "Spirals", "Spirals", "Spirals", "Barred Spirals", "Ellipticals"]
+# med_df["Type"] = types
+#
+# print(sns.color_palette("colorblind").as_hex())
+#
+# spiral = "#01a5fe"
+# bar = "#029e73"
+# elliptical = "#fbb337"
+# # triple_palette = {4:elliptical, 3:elliptical, 12:bar, 13:elliptical, 11:spiral, 7:spiral, 9:spiral, 10:spiral, 5:spiral, 6:spiral, 1:spiral, 8:spiral, 2:spiral, 0:spiral}
+# triple_palette = [spiral, bar, elliptical]
+#
+#
+# fig, axs = plt.subplots(2, 3, figsize=(25, 12))
+#
+#
+# sm_s = sns.scatterplot(ax=axs[0, 0], data=med_df, x="n_r", y=med_df["MassType_Star"].div(1e10), hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
+#
+# sm_s.set_xlabel("Sersic Index", fontsize=20)
+# sm_s.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
+#
+# sm_s.tick_params(labelsize=20)
+#
+#
+# sa_s = sns.scatterplot(ax=axs[0, 1], data=med_df, x="n_r", y="InitialMassWeightedStellarAge", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150)
+#
+# sa_s.set_xlabel("Sersic Index", fontsize=20)
+# sa_s.set_ylabel("Stellar Age (Gyr)", fontsize=20)
+# sa_s.tick_params(labelsize=20)
+#
+#
+# sm_sa = sns.scatterplot(ax=axs[0, 2], data=med_df, x="InitialMassWeightedStellarAge", y=med_df["MassType_Star"].div(1e10), hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
+#
+# sm_sa.set_xlabel("Stellar Age (Gyr)", fontsize=20)
+# sm_sa.set_ylabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
+# sm_sa.tick_params(labelsize=20)
+#
+#
+#
+# # sfr_s = sns.scatterplot(ax=axs[0, 1], data=med_df, x="n_r", y="StarFormationRate", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150)
+# #
+# # sfr_s.set_xlabel("Sersic Index", fontsize=20)
+# # sfr_s.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
+# # sfr_s.tick_params(labelsize=20)
+#
+#
+#
+# sma_s = sns.scatterplot(ax=axs[1, 0], data=med_df, x="n_r", y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
+#
+# sma_s.set_xlabel("Sersic Index", fontsize=20)
+# sma_s.set_ylabel("Semi-Major Axis (pkpc)", fontsize=20)
+# sma_s.tick_params(labelsize=20)
+#
+# sfr_s = sns.scatterplot(ax=axs[1, 1], data=med_df, x="n_r", y="StarFormationRate", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
 #
 # sfr_s.set_xlabel("Sersic Index", fontsize=20)
 # sfr_s.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
 # sfr_s.tick_params(labelsize=20)
-
-
-
-sma_s = sns.scatterplot(ax=axs[1, 0], data=med_df, x="n_r", y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
-
-sma_s.set_xlabel("Sersic Index", fontsize=20)
-sma_s.set_ylabel("Semi-Major Axis (pkpc)", fontsize=20)
-sma_s.tick_params(labelsize=20)
-
-sfr_s = sns.scatterplot(ax=axs[1, 1], data=med_df, x="n_r", y="StarFormationRate", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
-
-sfr_s.set_xlabel("Sersic Index", fontsize=20)
-sfr_s.set_ylabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
-sfr_s.tick_params(labelsize=20)
-
-
-sma_sfr = sns.scatterplot(ax=axs[1, 2], data=med_df, x="StarFormationRate", y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
-
-sma_sfr.set_xlabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
-sma_sfr.set_ylabel("Semi-Major Axis (pkpc)", fontsize=20)
-sma_sfr.tick_params(labelsize=20)
-
-
-sa_s.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower center", ncol=3, prop={"size":20})
-# a.legend(bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=3, prop={"size":20})
-
-plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_vs_physical", bbox_inches='tight')
-plt.show()
+#
+#
+# sma_sfr = sns.scatterplot(ax=axs[1, 2], data=med_df, x="StarFormationRate", y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
+#
+# sma_sfr.set_xlabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
+# sma_sfr.set_ylabel("Semi-Major Axis (pkpc)", fontsize=20)
+# sma_sfr.tick_params(labelsize=20)
+#
+#
+# sa_s.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower center", ncol=3, prop={"size":20})
+# # a.legend(bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=3, prop={"size":20})
+#
+# plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_sersic_vs_physical", bbox_inches='tight')
+# plt.show()
 
 
 
 
 
 
-fig, axs = plt.subplots(1, 3, figsize=(25, 5))
-
-
-sm = sns.scatterplot(ax=axs[0], data=med_df, x=med_df["MassType_Star"].div(1e10), y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
-
-sm.set_xlabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
-sm.set_ylabel("Semi-Major Axis", fontsize=20)
-sm.tick_params(labelsize=20)
-
-
-dm = sns.scatterplot(ax=axs[1], data=med_df, x=med_df["MassType_DM"].div(1e12), y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150)
-
-dm.set_xlabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
-dm.set_ylabel("Semi-Major Axis", fontsize=20)
-dm.tick_params(labelsize=20)
-
-
-bh = sns.scatterplot(ax=axs[2], data=med_df, x=med_df["MassType_BH"].div(1e8), y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
-
-bh.set_xlabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
-bh.set_ylabel("Semi-Major Axis", fontsize=20)
-bh.tick_params(labelsize=20)
-
-
-
-dm.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower center", ncol=3, prop={"size":20})
-# a.legend(bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=3, prop={"size":20})
-
-plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_semi-major_vs_mass", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(1, 3, figsize=(25, 5))
+#
+#
+# sm = sns.scatterplot(ax=axs[0], data=med_df, x=med_df["MassType_Star"].div(1e10), y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
+#
+# sm.set_xlabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
+# sm.set_ylabel("Semi-Major Axis", fontsize=20)
+# sm.tick_params(labelsize=20)
+#
+#
+# dm = sns.scatterplot(ax=axs[1], data=med_df, x=med_df["MassType_DM"].div(1e12), y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150)
+#
+# dm.set_xlabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
+# dm.set_ylabel("Semi-Major Axis", fontsize=20)
+# dm.tick_params(labelsize=20)
+#
+#
+# bh = sns.scatterplot(ax=axs[2], data=med_df, x=med_df["MassType_BH"].div(1e8), y="re_r", hue="Type", hue_order=["Spirals", "Barred Spirals", "Ellipticals"], palette=triple_palette, s=150, legend=False)
+#
+# bh.set_xlabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
+# bh.set_ylabel("Semi-Major Axis", fontsize=20)
+# bh.tick_params(labelsize=20)
+#
+#
+#
+# dm.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower center", ncol=3, prop={"size":20})
+# # a.legend(bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=3, prop={"size":20})
+#
+# plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_semi-major_vs_mass", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -741,8 +745,8 @@ plt.show()
 # print(med_df)
 # print()
 #
-order = med_df["n_r"].sort_values(ascending=False).index.to_list()
-print(order)
+# order = med_df["n_r"].sort_values(ascending=False).index.to_list()
+# print(order)
 # print()
 
 
