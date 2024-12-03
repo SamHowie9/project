@@ -60,7 +60,7 @@ sersic_6_8 = [12648880, 14570467, 16204628, 15274006, 8266167, 16150066, 1595350
 
 
 
-fig = plt.figure(constrained_layout=False, figsize=(15, 12))
+fig = plt.figure(constrained_layout=False, figsize=(15, 8))
 
 # create sub figures within main figure, specify their location
 gs1 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.975, bottom=0.775)
@@ -75,8 +75,8 @@ gs8 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.775, r
 
 count = 0
 
-for i in range(0, 2):
-    for j in range(0, 2):
+for i in range(0, 3):
+    for j in range(0, 3):
 
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(sersic_0_1[count]) + ".png")
@@ -158,8 +158,8 @@ ax7 = fig.add_subplot(gs7[:])
 ax7.axis("off")
 ax7.set_title("$n \geq 6$", fontsize=25)
 
-# ax8 = fig.add_subplot(gs8[:])
-# ax8.axis("off")
+ax8 = fig.add_subplot(gs8[:])
+ax8.axis("off")
 # ax8.set_title("$n \geq 7$", fontsize=25)
 
 
