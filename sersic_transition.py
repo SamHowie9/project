@@ -63,15 +63,15 @@ sersic_6_8 = [12648880, 14570467, 16204628, 15274006, 8266167, 16150066, 1595350
 fig = plt.figure(constrained_layout=False, figsize=(15, 8))
 
 # create sub figures within main figure, specify their location
-gs1 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.975, bottom=0.775)
-gs2 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.975, bottom=0.775)
-gs3 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.975, bottom=0.775)
-gs4 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.975, bottom=0.775)
+gs1 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.8, bottom=0.5)
+gs2 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.8, bottom=0.5)
+gs3 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.8, bottom=0.5)
+gs4 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.8, bottom=0.5)
 
-gs5 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.725, bottom=0.525)
-gs6 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.725, bottom=0.525)
-gs7 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.725, bottom=0.525)
-gs8 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.725, bottom=0.525)
+gs5 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.4, bottom=0.1)
+gs6 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.275, right=0.475, top=0.4, bottom=0.1)
+gs7 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.525, right=0.725, top=0.4, bottom=0.1)
+gs8 = fig.add_gridspec(nrows=3, ncols=3, wspace=0.05, hspace=0.05, left=0.775, right=0.975, top=0.4, bottom=0.1)
 
 count = 0
 
@@ -132,31 +132,31 @@ for i in range(0, 3):
 
 ax1 = fig.add_subplot(gs1[:])
 ax1.axis("off")
-ax1.set_title("$n < 1$", fontsize=25)
+ax1.set_title("$n < 1$", fontsize=20)
 
 ax2 = fig.add_subplot(gs2[:])
 ax2.axis("off")
-ax2.set_title("$1 \leq n < 2$", fontsize=25)
+ax2.set_title("$1 \leq n < 2$", fontsize=20)
 
 ax3 = fig.add_subplot(gs3[:])
 ax3.axis("off")
-ax3.set_title("$2 \leq n < 3$", fontsize=25)
+ax3.set_title("$2 \leq n < 3$", fontsize=20)
 
 ax4 = fig.add_subplot(gs4[:])
 ax4.axis("off")
-ax4.set_title("$3 \leq n < 4$", fontsize=25)
+ax4.set_title("$3 \leq n < 4$", fontsize=20)
 
 ax5 = fig.add_subplot(gs5[:])
 ax5.axis("off")
-ax5.set_title("$4 \leq n < 5$", fontsize=25)
+ax5.set_title("$4 \leq n < 5$", fontsize=20)
 
 ax6 = fig.add_subplot(gs6[:])
 ax6.axis("off")
-ax6.set_title("$6 \leq n < 6$", fontsize=25)
+ax6.set_title("$6 \leq n < 6$", fontsize=20)
 
 ax7 = fig.add_subplot(gs7[:])
 ax7.axis("off")
-ax7.set_title("$n \geq 6$", fontsize=25)
+ax7.set_title("$n \geq 6$", fontsize=20)
 
 ax8 = fig.add_subplot(gs8[:])
 ax8.axis("off")
