@@ -79,7 +79,7 @@ for i in range(0, 2):
         g2_ax.imshow(image)
         g2_ax.get_yaxis().set_visible(False)
         g2_ax.get_xaxis().set_visible(False)
-        g2ax.get_xaxis().set_visible(False)
+        g2_ax.get_xaxis().set_visible(False)
 
         g3_ax = fig.add_subplot(gs3[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(sersic_2_3[count]) + ".png")
