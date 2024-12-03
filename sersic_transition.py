@@ -5,6 +5,8 @@ from matplotlib import image as mpimg
 import random
 
 
+plt.rc("text", usetex=True)
+
 
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
@@ -50,7 +52,7 @@ sersic_6_7 = [9526568, 16204628, 14105654, 14747624]
 sersic_7_8 = [14715402, 16657911, 15250310, 15274006]
 
 
-fig = plt.figure(constrained_layout=False, figsize=(15, 8))
+fig = plt.figure(constrained_layout=False, figsize=(15, 12))
 
 # create sub figures within main figure, specify their location
 gs1 = fig.add_gridspec(nrows=2, ncols=2, wspace=0.05, hspace=0.05, left=0.025, right=0.225, top=0.975, bottom=0.775)
@@ -84,13 +86,13 @@ for i in range(0, 2):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(sersic_2_3[count]) + ".png")
         g3_ax.imshow(image)
         g3_ax.get_xaxis().set_visible(False)
-        g3_ax.get_xaxis().set_visible(False)
+        g3_ax.get_yaxis().set_visible(False)
 
         g4_ax = fig.add_subplot(gs4[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(sersic_3_4[count]) + ".png")
         g4_ax.imshow(image)
         g4_ax.get_xaxis().set_visible(False)
-        g4_ax.get_xaxis().set_visible(False)
+        g4_ax.get_yaxis().set_visible(False)
 
         g5_ax = fig.add_subplot(gs5[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(sersic_4_5[count]) + ".png")
