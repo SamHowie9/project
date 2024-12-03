@@ -156,7 +156,7 @@ ax6.set_title("$6 \leq n < 6$", fontsize=25)
 
 ax7 = fig.add_subplot(gs7[:])
 ax7.axis("off")
-ax7.set_title("$n \geq 6", fontsize=25)
+ax7.set_title("$n \geq 6$", fontsize=25)
 
 # ax8 = fig.add_subplot(gs8[:])
 # ax8.axis("off")
