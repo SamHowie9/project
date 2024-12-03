@@ -32,13 +32,13 @@ for i, galaxy in enumerate(bad_fit):
 
 
 
-print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"] < 1]), 9))
-print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(1, 2, inclusive="left")]), 9))
-print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2, 3, inclusive="left")]), 9))
-print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(3, 4, inclusive="left")]), 9))
-print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(4, 5, inclusive="left")]), 9))
-print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(5, 6, inclusive="left")]), 9))
-print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 6]), 9))
+# print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"] < 1]), 9))
+# print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(1, 2, inclusive="left")]), 9))
+# print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2, 3, inclusive="left")]), 9))
+# print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(3, 4, inclusive="left")]), 9))
+# print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(4, 5, inclusive="left")]), 9))
+# print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(5, 6, inclusive="left")]), 9))
+# print(random.sample(list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 6]), 9))
 
 
 # sersic_0_1 = [2599936, 17944813, 8494197, 8485275]
