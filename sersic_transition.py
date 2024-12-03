@@ -115,7 +115,7 @@ for i in range(0, 2):
         g6_ax.get_yaxis().set_visible(False)
 
         g7_ax = fig.add_subplot(gs7[i, j])
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(sersic_6_7[count]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(sersic_6_8[count]) + ".png")
         g7_ax.imshow(image)
         g7_ax.get_xaxis().set_visible(False)
         g7_ax.get_yaxis().set_visible(False)
