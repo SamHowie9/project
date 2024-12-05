@@ -94,7 +94,7 @@ for n, galaxy in enumerate(ellipticals):
     image_rot_270 = np.rot90(np.rot90(np.rot90(image)))
     random.seed(4)
     for i in range(0, 3):
-        gaussian = np.random.normal(0, 0.05, (len(image_rot_270[0]), len(image_rot_270[0])))
+        gaussian = np.random.normal(0, 0.1, (len(image_rot_270[0]), len(image_rot_270[0])))
         image_rot_270.T[i] = image_rot_270.T[i] + gaussian
 
     # add the three variants to the dataset
@@ -105,19 +105,22 @@ for n, galaxy in enumerate(ellipticals):
 
     if n == 0 or n == 1 or n == 2 or n == 3:
 
-
+        axs[n, 0].imshow(normalise_independently(image))
         axs[n, 0].imshow(normalise_independently(image))
         axs[n, 0].get_xaxis().set_visible(False)
         axs[n, 0].get_yaxis().set_visible(False)
 
+        axs[n, 0].imshow(normalise_independently(image))
         axs[n, 1].imshow(normalise_independently(image_rot_90))
         axs[n, 1].get_xaxis().set_visible(False)
         axs[n, 1].get_yaxis().set_visible(False)
 
+        axs[n, 0].imshow(normalise_independently(image))
         axs[n, 2].imshow(normalise_independently(image_rot_180))
         axs[n, 2].get_xaxis().set_visible(False)
         axs[n, 2].get_yaxis().set_visible(False)
 
+        axs[n, 0].imshow(normalise_independently(image))
         axs[n, 3].imshow(normalise_independently(image_rot_270))
         axs[n, 3].get_xaxis().set_visible(False)
         axs[n, 3].get_yaxis().set_visible(False)
@@ -129,5 +132,5 @@ random.seed(5)
 random.shuffle(all_images)
 
 
-plt.savefig("Variational Eagle/Plots/elliptical_variations_0.05")
+plt.savefig("Variational Eagle/Plots/elliptical_variations_not_normalised")
 plt.show()
