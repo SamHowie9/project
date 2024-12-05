@@ -126,14 +126,24 @@ for n, galaxy in enumerate(ellipticals):
         # axs[n, 3].get_yaxis().set_visible(False)
 
 
+chosen = [1852, 1856, 1860, 1864]
+
+for i, galaxy in enumerate(chosen):
+
+    axs[i, 0].imshow(all_images[galaxy+i])
+    axs[i, 1].imshow(all_images[galaxy + i + 1])
+    axs[i, 2].imshow(all_images[galaxy + i + 2])
+    axs[i, 3].imshow(all_images[galaxy + i + 3])
+
+
 
 # randomly (seed for reproducibility) rearrange the galaxies
 random.seed(5)
 random.shuffle(all_images)
 
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spirals[0]) + ".png")
-axs[0, 0].imshow(image)
-axs[1, 0].imshow(all_images[0])
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spirals[0]) + ".png")
+# axs[0, 0].imshow(image)
+# axs[1, 0].imshow(all_images[0])
 
 plt.savefig("Variational Eagle/Plots/elliptical_variations_not_normalised")
 plt.show()
