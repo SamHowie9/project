@@ -61,6 +61,9 @@ all_images = []
 # open and add the spiral galaxies to the dataset
 for galaxy in spirals:
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    print(image.shape)
+    print(image[0].shape)
+    print(image.T[0].shape)
     all_images.append(normalise_independently(image))
 
 # open and add the 'unknown' galaxies to the dataset (sersic index between 2.5 and 4)
