@@ -69,7 +69,7 @@ for galaxy in unknown:
     all_images.append(normalise_independently(image))
 
 # open and add all the elliptical galaxies to the dataset
-for i, galaxy in enumerate(ellipticals):
+for n, galaxy in enumerate(ellipticals):
 
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     all_images.append(normalise_independently(image))
@@ -103,24 +103,24 @@ for i, galaxy in enumerate(ellipticals):
     all_images.append(normalise_independently(image_rot_270))
 
 
-    if i == 0 or i == 1 or i == 2 or i == 3:
+    if n == 0 or n == 1 or n == 2 or n == 3:
 
 
-        axs[i, 0].imshow(normalise_independently(image))
-        axs[i, 0].get_xaxis().set_visible(False)
-        axs[i, 0].get_yaxis().set_visible(False)
+        axs[n, 0].imshow(normalise_independently(image))
+        axs[n, 0].get_xaxis().set_visible(False)
+        axs[n, 0].get_yaxis().set_visible(False)
 
-        axs[i, 1].imshow(normalise_independently(image_rot_90))
-        axs[i, 1].get_xaxis().set_visible(False)
-        axs[i, 1].get_yaxis().set_visible(False)
+        axs[n, 1].imshow(normalise_independently(image_rot_90))
+        axs[n, 1].get_xaxis().set_visible(False)
+        axs[n, 1].get_yaxis().set_visible(False)
 
-        axs[i, 2].imshow(normalise_independently(image_rot_180))
-        axs[i, 2].get_xaxis().set_visible(False)
-        axs[i, 2].get_yaxis().set_visible(False)
+        axs[n, 2].imshow(normalise_independently(image_rot_180))
+        axs[n, 2].get_xaxis().set_visible(False)
+        axs[n, 2].get_yaxis().set_visible(False)
 
-        axs[i, 3].imshow(normalise_independently(image_rot_270))
-        axs[i, 3].get_xaxis().set_visible(False)
-        axs[i, 3].get_yaxis().set_visible(False)
+        axs[n, 3].imshow(normalise_independently(image_rot_270))
+        axs[n, 3].get_xaxis().set_visible(False)
+        axs[n, 3].get_yaxis().set_visible(False)
 
 
 
