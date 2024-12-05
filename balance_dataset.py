@@ -94,7 +94,7 @@ for n, galaxy in enumerate(ellipticals):
     image_rot_270 = np.rot90(np.rot90(np.rot90(image)))
     random.seed(4)
     for i in range(0, 3):
-        gaussian = np.random.normal(0, 0.1, (len(image_rot_270[0]), len(image_rot_270[0])))
+        gaussian = np.random.normal(0, 0.05, (len(image_rot_270[0]), len(image_rot_270[0])))
         image_rot_270.T[i] = image_rot_270.T[i] + gaussian
 
     # add the three variants to the dataset
@@ -129,5 +129,5 @@ random.seed(5)
 random.shuffle(all_images)
 
 
-plt.savefig("Variational Eagle/Plots/elliptical_variations")
+plt.savefig("Variational Eagle/Plots/elliptical_variations_0.05")
 plt.show()
