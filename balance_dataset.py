@@ -61,9 +61,6 @@ all_images = []
 # open and add the spiral galaxies to the dataset
 for galaxy in spirals:
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    print(image.shape)
-    print(image[0].shape)
-    print(image.T[0].shape)
     all_images.append(normalise_independently(image))
 
 # open and add the 'unknown' galaxies to the dataset (sersic index between 2.5 and 4)
@@ -84,21 +81,21 @@ for galaxy in ellipticals:
     random.seed(2)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.1, (len(image_rot_90[0]), len(image_rot_90[0])))
-        image_rot_90[i] = image_rot_90[i] + gaussian
+        image_rot_90.T[i] = image_rot_90.T[i] + gaussian
 
     # rotate the original image by 180 degrees (90 twice) and add different random noise (seed for reproducibility)
     image_rot_180 = np.rot90(np.rot90(image))
     random.seed(3)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.1, (len(image_rot_180[0]), len(image_rot_180[0])))
-        image_rot_180[i] = image_rot_180[i] + gaussian
+        image_rot_180.T[i] = image_rot_180.T[i] + gaussian
 
     # rotate the original image by 270 degrees (90 thrice) and add different random noise (seed for reproducibility)
     image_rot_270 = np.rot90(np.rot90(np.rot90(image)))
     random.seed(4)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.1, (len(image_rot_270[0]), len(image_rot_270[0])))
-        image_rot_270[i] = image_rot_270[i] + gaussian
+        image_rot_270.T[i] = image_rot_270.T[i] + gaussian
 
     # add the three variants to the dataset
     all_images.append(normalise_independently(image_rot_90))
