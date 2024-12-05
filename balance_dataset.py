@@ -105,6 +105,8 @@ for galaxy in ellipticals:
 
     if galaxy == 0 or galaxy == 1 or galaxy == 2 or galaxy == 3:
 
+        print(galaxy)
+
         axs[galaxy, 0].imshow(normalise_independently(image))
         axs[galaxy, 0].get_xaxis().set_visible(False)
         axs[galaxy, 0].get_yaxis().set_visible(False)
