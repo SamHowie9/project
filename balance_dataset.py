@@ -103,23 +103,23 @@ for galaxy in ellipticals:
     all_images.append(normalise_independently(image_rot_270))
 
 
-    if i == 0 or i == 1 or i == 2 or i == 3:
+    if galaxy == 0 or galaxy == 1 or galaxy == 2 or galaxy == 3:
 
-        axs[i, 0].imshow(normalise_independently(image))
-        axs[i, 0].get_xaxis().set_visible(False)
-        axs[i, 0].get_yaxis().set_visible(False)
+        axs[galaxy, 0].imshow(normalise_independently(image))
+        axs[galaxy, 0].get_xaxis().set_visible(False)
+        axs[galaxy, 0].get_yaxis().set_visible(False)
 
-        axs[i, 1].imshow(normalise_independently(image_rot_90))
-        axs[i, 1].get_xaxis().set_visible(False)
-        axs[i, 1].get_yaxis().set_visible(False)
+        axs[galaxy, 1].imshow(normalise_independently(image_rot_90))
+        axs[galaxy, 1].get_xaxis().set_visible(False)
+        axs[galaxy, 1].get_yaxis().set_visible(False)
 
-        axs[i, 2].imshow(normalise_independently(image_rot_180))
-        axs[i, 2].get_xaxis().set_visible(False)
-        axs[i, 2].get_yaxis().set_visible(False)
+        axs[galaxy, 2].imshow(normalise_independently(image_rot_180))
+        axs[galaxy, 2].get_xaxis().set_visible(False)
+        axs[galaxy, 2].get_yaxis().set_visible(False)
 
-        axs[i, 3].imshow(normalise_independently(image_rot_270))
-        axs[i, 3].get_xaxis().set_visible(False)
-        axs[i, 3].get_yaxis().set_visible(False)
+        axs[galaxy, 3].imshow(normalise_independently(image_rot_270))
+        axs[galaxy, 3].get_xaxis().set_visible(False)
+        axs[galaxy, 3].get_yaxis().set_visible(False)
 
 
 
