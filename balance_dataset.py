@@ -133,6 +133,7 @@ random.shuffle(all_images)
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spirals[0]) + ".png")
 axs[0, 0].imshow(image)
+axs[1, 0].imshow(all_images[0])
 
 plt.savefig("Variational Eagle/Plots/elliptical_variations_not_normalised")
 plt.show()
