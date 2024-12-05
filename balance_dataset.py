@@ -103,27 +103,27 @@ for n, galaxy in enumerate(ellipticals):
     all_images.append(normalise_independently(image_rot_270))
 
 
-    if n == 0 or n == 1 or n == 2 or n == 3:
+    # if n == 0 or n == 1 or n == 2 or n == 3:
 
-        # axs[n, 0].imshow(normalise_independently(image))
-        axs[n, 0].imshow(image)
-        axs[n, 0].get_xaxis().set_visible(False)
-        axs[n, 0].get_yaxis().set_visible(False)
-
-        # axs[n, 0].imshow(normalise_independently(image))
-        axs[n, 1].imshow(image_rot_90)
-        axs[n, 1].get_xaxis().set_visible(False)
-        axs[n, 1].get_yaxis().set_visible(False)
-
-        # axs[n, 0].imshow(normalise_independently(image))
-        axs[n, 2].imshow(image_rot_180)
-        axs[n, 2].get_xaxis().set_visible(False)
-        axs[n, 2].get_yaxis().set_visible(False)
-
-        # axs[n, 0].imshow(normalise_independently(image))
-        axs[n, 3].imshow(image_rot_270)
-        axs[n, 3].get_xaxis().set_visible(False)
-        axs[n, 3].get_yaxis().set_visible(False)
+        # # axs[n, 0].imshow(normalise_independently(image))
+        # axs[n, 0].imshow(image)
+        # axs[n, 0].get_xaxis().set_visible(False)
+        # axs[n, 0].get_yaxis().set_visible(False)
+        #
+        # # axs[n, 0].imshow(normalise_independently(image))
+        # axs[n, 1].imshow(image_rot_90)
+        # axs[n, 1].get_xaxis().set_visible(False)
+        # axs[n, 1].get_yaxis().set_visible(False)
+        #
+        # # axs[n, 0].imshow(normalise_independently(image))
+        # axs[n, 2].imshow(image_rot_180)
+        # axs[n, 2].get_xaxis().set_visible(False)
+        # axs[n, 2].get_yaxis().set_visible(False)
+        #
+        # # axs[n, 0].imshow(normalise_independently(image))
+        # axs[n, 3].imshow(image_rot_270)
+        # axs[n, 3].get_xaxis().set_visible(False)
+        # axs[n, 3].get_yaxis().set_visible(False)
 
 
 
@@ -131,6 +131,8 @@ for n, galaxy in enumerate(ellipticals):
 random.seed(5)
 random.shuffle(all_images)
 
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spirals[0]) + ".png")
+axs[0, 0].imshow(image)
 
 plt.savefig("Variational Eagle/Plots/elliptical_variations_not_normalised")
 plt.show()
