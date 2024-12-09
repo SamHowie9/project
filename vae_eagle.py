@@ -17,7 +17,7 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 25
+encoding_dim = 26
 
 run = 1
 
