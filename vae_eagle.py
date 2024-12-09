@@ -17,7 +17,7 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 24
+encoding_dim = 25
 
 run = 1
 
@@ -26,7 +26,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
-epochs = 3
+epochs = 300
 
 
 # normalise each band individually
