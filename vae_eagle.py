@@ -162,7 +162,7 @@ for n, galaxy in enumerate(ellipticals):
 # train on all images and test on a subset
 train_images = np.array(all_images)
 random.seed(2)
-test_images = random.sample(all_images, 20)
+test_images = random.sample(np.array(all_images), 20)
 
 print(test_images.shape)
 
