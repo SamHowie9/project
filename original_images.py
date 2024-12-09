@@ -97,7 +97,7 @@ for i in range(0, 4):
 
 
 
-plt.savefig("Variational Eagle/Cluster Plots/vae_pca_2_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
+plt.savefig("Variational Eagle/Cluster Plots/balanced_vae_pca_2_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
 plt.show()
 
 

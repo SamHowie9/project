@@ -24,19 +24,36 @@ run = 3
 n_clusters = 4
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_15_features.npy")
 extracted_features_switch = extracted_features.T
 
 
 
 # perform pca on the extracted features
-pca = PCA(n_components=11).fit(extracted_features)
+pca = PCA(n_components=13).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
 extracted_features_switch = extracted_features.T
 
 
 
+
+# perform binomial hierarchical clustering
+binary_hierarchical = AgglomerativeClustering(n_clusters=2, metric="euclidean", linkage="ward")
+binary_clusters = binary_hierarchical.fit_predict(extracted_features)
+
+cluster_0 = 0
+cluster_1 = 0
+
+print(binary_clusters)
+for i in binary_clusters:
+    if i == 0:
+        cluster_0 += 1
+    else:
+        cluster_1 += 1
+
+print(cluster_0)
+print(cluster_1)
 
 
 
@@ -113,6 +130,6 @@ plt.ylim(0, 70)
 # plt.axhline(y=134)
 # plt.axhline(y=93)
 
-plt.savefig("Variational Eagle/Plots/dendrogram_vae_pca", bbox_inches='tight')
+plt.savefig("Variational Eagle/CLuster Plots/balanced_dendrogram_vae_pca", bbox_inches='tight')
 plt.show()
 
