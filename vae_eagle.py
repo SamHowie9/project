@@ -362,6 +362,8 @@ n = 12
 images_to_reconstruct = test_images[n:]
 # images_to_reconstruct = train_images[n:]
 
+print(images_to_reconstruct.shape)
+
 # reconstruct the images
 test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
 reconstructed_images = vae.decoder.predict(test_features)
