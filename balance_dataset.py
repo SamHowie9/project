@@ -130,10 +130,10 @@ chosen = [1852, 1856, 1860, 1864]
 
 for i, galaxy in enumerate(chosen):
 
-    axs[i, 0].imshow(all_images[galaxy+i])
-    axs[i, 1].imshow(all_images[galaxy + i + 1])
-    axs[i, 2].imshow(all_images[galaxy + i + 2])
-    axs[i, 3].imshow(all_images[galaxy + i + 3])
+    axs[i, 0].imshow(all_images[galaxy])
+    axs[i, 1].imshow(all_images[galaxy + 1])
+    axs[i, 2].imshow(all_images[galaxy + 2])
+    axs[i, 3].imshow(all_images[galaxy + 3])
 
 
 
