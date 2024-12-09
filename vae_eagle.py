@@ -359,7 +359,7 @@ np.save("Variational Eagle/Loss/Balanced/" + str(encoding_dim) + "_feature_" + s
 n = 12
 
 # create a subset of the validation data to reconstruct (first 10 images)
-images_to_reconstruct = test_images[n:]
+images_to_reconstruct = test_images[:n]
 # images_to_reconstruct = train_images[n:]
 
 print(images_to_reconstruct.shape)

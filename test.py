@@ -7,8 +7,10 @@ from matplotlib import image as mpimg
 
 A = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-print(A[:-3])
-print(A[-3:])
+print(A[:3])
+
+# print(A[:-3])
+# print(A[-3:])
 
 
 
