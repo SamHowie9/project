@@ -1,7 +1,4 @@
 import os
-
-from pca_eagle import test_images
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
