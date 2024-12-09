@@ -38,16 +38,10 @@ for i, galaxy in enumerate(bad_fit):
     all_properties = all_properties.drop(galaxy, axis=0)
 
 
-print(len(all_properties))
-
-
 spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
 unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
 ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
 
-print(len(spirals))
-print(len(unknown))
-print(len(ellipticals))
 
 
 # randomly sample half the spirals (seed for reproducibility)
@@ -76,21 +70,19 @@ for n, galaxy in enumerate(ellipticals):
 
     # add three more variants of this image
 
-    # rotate the image by 90 degrees and add random noise (seed for reproducibility)
+    # rotate the image by 90 degrees and add random noise
     image_rot_90 = np.rot90(np.copy(image), k=1)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
         image_rot_90.T[i] = image_rot_90.T[i] + gaussian
 
-    # rotate the original image by 180 degrees (90 twice) and add different random noise (seed for reproducibility)
-    # image_rot_180 = np.rot90(np.copy(image), k=2)
+    # flip the original image horizontally and add random noise
     image_flip = np.fliplr(np.copy(image))
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.01, (len(image_flip[0]), len(image_flip[0])))
         image_flip.T[i] = image_flip.T[i] + gaussian
 
-    # rotate the original image by 270 degrees (90 thrice) and add different random noise (seed for reproducibility)
-    # image_rot_270 = np.rot90(np.copy(image), k=3)
+    # flip the rotated image horizontally and add random noise
     image_flip_90 = np.fliplr(np.copy(image_rot_90))
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.01, (len(image_flip_90[0]), len(image_flip_90[0])))
@@ -99,32 +91,8 @@ for n, galaxy in enumerate(ellipticals):
     # add the three variants to the dataset
     all_images.append(normalise_independently(image_rot_90))
     all_images.append(normalise_independently(image_flip))
-    # all_images.append(normalise_independently(image_rot_180))
     all_images.append(normalise_independently(image_flip_90))
-    # all_images.append(normalise_independently(image_rot_270))
 
-
-    # if n == 0 or n == 1 or n == 2 or n == 3:
-
-        # # axs[n, 0].imshow(normalise_independently(image))
-        # axs[n, 0].imshow(image)
-        # axs[n, 0].get_xaxis().set_visible(False)
-        # axs[n, 0].get_yaxis().set_visible(False)
-        #
-        # # axs[n, 0].imshow(normalise_independently(image))
-        # axs[n, 1].imshow(image_rot_90)
-        # axs[n, 1].get_xaxis().set_visible(False)
-        # axs[n, 1].get_yaxis().set_visible(False)
-        #
-        # # axs[n, 0].imshow(normalise_independently(image))
-        # axs[n, 2].imshow(image_rot_180)
-        # axs[n, 2].get_xaxis().set_visible(False)
-        # axs[n, 2].get_yaxis().set_visible(False)
-        #
-        # # axs[n, 0].imshow(normalise_independently(image))
-        # axs[n, 3].imshow(image_rot_270)
-        # axs[n, 3].get_xaxis().set_visible(False)
-        # axs[n, 3].get_yaxis().set_visible(False)
 
 
 chosen = [1852, 1856, 1860, 1864]
@@ -139,8 +107,8 @@ for i, galaxy in enumerate(chosen):
 
 
 # randomly (seed for reproducibility) rearrange the galaxies
-random.seed(5)
-random.shuffle(all_images)
+# random.seed(5)
+# random.shuffle(all_images)
 
 # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spirals[0]) + ".png")
 # axs[0, 0].imshow(image)

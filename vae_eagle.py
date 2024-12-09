@@ -6,6 +6,8 @@ from keras import ops
 from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose
 import numpy as np
 import pandas as pd
+import random
+from matplotlib import pyplot as plt
 
 
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -15,12 +17,14 @@ import pandas as pd
 
 encoding_dim = 24
 
+run = 1
+
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
-epochs = 300
+epochs = 3
 
 
 # normalise each band individually
@@ -39,42 +43,129 @@ def normalise_to_r(image):
 
 
 
-# list to contain all galaxy images
+# # list to contain all galaxy images
+# all_images = []
+#
+# # load the ids of the chosen galaxies
+# chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
+#
+# # # loop through each galaxy in the supplemental file
+# for i, galaxy in enumerate(chosen_galaxies):
+#
+#     # get the filename of each galaxy in the supplemental file
+#     filename = "galrand_" + str(galaxy) + ".png"
+#
+#     # open the image and append it to the main list
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+#
+#     # find smallest non zero pixel value in the image and replace all zero values with this (for log transformation)
+#     smallest_non_zero = np.min(image[image > 0])
+#     image = np.where(image == 0.0, smallest_non_zero, image)
+#
+#     # normalise the image (either each band independently or to the r band)
+#     # image = normalise_independently(image)
+#     image = normalise_to_r(image)
+#
+#     # add the image to the dataset
+#     all_images.append(image)
+
+
+
+
+
+# load the images as a balanced dataset
+
+
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+# account for hte validation data and remove final 200 elements
+structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+physical_properties.drop(physical_properties.tail(200).index, inplace=True)
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+
+
+
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+print(bad_fit)
+
+# remove those galaxies
+for i, galaxy in enumerate(bad_fit):
+    all_properties = all_properties.drop(galaxy, axis=0)
+
+
+spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
+unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
+
+
+
+# randomly sample half the spirals (seed for reproducibility)
+random.seed(1)
+spirals = random.sample(spirals, round(len(spirals)/2))
+
+fig, axs = plt.subplots(4, 4)
+
 all_images = []
 
-# load the ids of the chosen galaxies
-chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
+# open and add the spiral galaxies to the dataset
+for galaxy in spirals:
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    all_images.append(normalise_independently(image))
+
+# open and add the 'unknown' galaxies to the dataset (sersic index between 2.5 and 4)
+for galaxy in unknown:
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    all_images.append(normalise_independently(image))
+
+# open and add all the elliptical galaxies to the dataset
+for n, galaxy in enumerate(ellipticals):
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    all_images.append(normalise_independently(image))
+
+    # add three more variants of this image
+
+    # rotate the image by 90 degrees and add random noise
+    image_rot_90 = np.rot90(np.copy(image), k=1)
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
+        image_rot_90.T[i] = image_rot_90.T[i] + gaussian
+
+    # flip the original image horizontally and add random noise
+    image_flip = np.fliplr(np.copy(image))
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.01, (len(image_flip[0]), len(image_flip[0])))
+        image_flip.T[i] = image_flip.T[i] + gaussian
+
+    # flip the rotated image horizontally and add random noise
+    image_flip_90 = np.fliplr(np.copy(image_rot_90))
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.01, (len(image_flip_90[0]), len(image_flip_90[0])))
+        image_flip_90.T[i] = image_flip_90.T[i] + gaussian
+
+    # add the three variants to the dataset
+    all_images.append(normalise_independently(image_rot_90))
+    all_images.append(normalise_independently(image_flip))
+    all_images.append(normalise_independently(image_flip_90))
 
 
 
-# # loop through each galaxy in the supplemental file
-for i, galaxy in enumerate(chosen_galaxies):
 
-    # get the filename of each galaxy in the supplemental file
-    filename = "galrand_" + str(galaxy) + ".png"
-
-    # open the image and append it to the main list
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-
-    # find smallest non zero pixel value in the image and replace all zero values with this (for log transformation)
-    smallest_non_zero = np.min(image[image > 0])
-    image = np.where(image == 0.0, smallest_non_zero, image)
-
-    # normalise the image (either each band independently or to the r band)
-    # image = normalise_independently(image)
-    image = normalise_to_r(image)
-
-    # add the image to the dataset
-    all_images.append(image)
-
-
-
-
+# train on all images and test on a subset
+train_images = np.array(all_images)
+random.seed(2)
+test_images = random.sample(all_images, 20)
 
 
 # split the data into training and testing data (200 images used for testing)
-train_images = np.array(all_images[:-200])
-test_images = np.array(all_images[-200:])
+# train_images = np.array(all_images[:-200])
+# test_images = np.array(all_images[-200:])
 
 
 
@@ -217,17 +308,17 @@ model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_3.weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_3.npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy", extracted_features)
 
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_3.npy", loss)
+np.save("Variational Eagle/Loss/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_" + str(run) + ".npy", loss)
 
 
 
@@ -285,7 +376,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/normalised_to_r_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_3")
+plt.savefig("Variational Eagle/Reconstructions/Validation/balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_" + str(run))
 plt.show()
 
 
