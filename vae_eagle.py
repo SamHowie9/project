@@ -164,6 +164,8 @@ train_images = np.array(all_images)
 random.seed(2)
 test_images = random.sample(all_images, 20)
 
+print(test_images.shape)
+
 
 # split the data into training and testing data (200 images used for testing)
 # train_images = np.array(all_images[:-200])
