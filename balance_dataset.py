@@ -78,7 +78,6 @@ for n, galaxy in enumerate(ellipticals):
 
     # rotate the image by 90 degrees and add random noise (seed for reproducibility)
     image_rot_90 = np.rot90(np.copy(image), k=1)
-    # random.seed(2)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
         image_rot_90.T[i] = image_rot_90.T[i] + gaussian
@@ -86,18 +85,16 @@ for n, galaxy in enumerate(ellipticals):
     # rotate the original image by 180 degrees (90 twice) and add different random noise (seed for reproducibility)
     # image_rot_180 = np.rot90(np.copy(image), k=2)
     image_flip = np.fliplr(np.copy(image))
-    # random.seed(3)
-    # for i in range(0, 3):
-    #     gaussian = np.random.normal(0, 0.1, (len(image_rot_180[0]), len(image_rot_180[0])))
-    #     image_rot_180.T[i] = image_rot_180.T[i] + gaussian
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.1, (len(image_flip[0]), len(image_flip[0])))
+        image_flip.T[i] = image_flip.T[i] + gaussian
 
     # rotate the original image by 270 degrees (90 thrice) and add different random noise (seed for reproducibility)
     # image_rot_270 = np.rot90(np.copy(image), k=3)
     image_flip_90 = np.fliplr(np.copy(image_rot_90))
-    # random.seed(4)
-    # for i in range(0, 3):
-    #     gaussian = np.random.normal(0, 0.1, (len(image_rot_270[0]), len(image_rot_270[0])))
-    #     image_rot_270.T[i] = image_rot_270.T[i] + gaussian
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.1, (len(image_flip_90[0]), len(image_flip_90[0])))
+        image_flip_90.T[i] = image_flip_90.T[i] + gaussian
 
     # add the three variants to the dataset
     all_images.append(normalise_independently(image_rot_90))
