@@ -170,6 +170,10 @@ test_images = random.sample(all_images, 20)
 # test_images = np.array(all_images[-200:])
 
 
+print(train_images.shape)
+print(train_images[0].shape)
+
+
 
 
 
