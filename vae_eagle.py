@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import random
 from matplotlib import pyplot as plt
+from matplotlib import image as mpimg
+
 
 
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
