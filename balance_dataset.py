@@ -80,7 +80,7 @@ for n, galaxy in enumerate(ellipticals):
     image_rot_90 = np.rot90(np.copy(image), k=1)
     random.seed(2)
     for i in range(0, 3):
-        gaussian = np.random.normal(0, 0.1, (len(image_rot_90[0]), len(image_rot_90[0])))
+        gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
         image_rot_90.T[i] = image_rot_90.T[i] + gaussian
 
     # rotate the original image by 180 degrees (90 twice) and add different random noise (seed for reproducibility)
