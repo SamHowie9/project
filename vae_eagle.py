@@ -1,4 +1,7 @@
 import os
+
+from pca_eagle import test_images
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -161,8 +164,11 @@ for n, galaxy in enumerate(ellipticals):
 
 # train on all images and test on a subset
 train_images = np.array(all_images)
-random.seed(2)
-test_images = random.sample(np.array(all_images), 20)
+test_images = []
+test_indices = random.sample(range(0, len(all_images)), 20)
+for i in test_indices:
+    test_images.append(all_images[i])
+test_images = np.array(test_images)
 
 print(test_images.shape)
 
