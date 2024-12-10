@@ -2,12 +2,24 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
+import random
 # import cv2
 
 
 A = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-print(A[:3])
+print(A + B + C)
+
+random.seed(1)
+print(random.sample(A, 5))
+
+random.seed(1)
+print(random.sample(B, 5))
+
+random.seed(1)
+print(random.sample(C, 5))
 
 # print(A[:-3])
 # print(A[-3:])

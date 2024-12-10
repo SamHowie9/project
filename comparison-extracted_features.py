@@ -3,6 +3,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
+import random
 from sklearn.decomposition import PCA
 from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
@@ -18,26 +19,7 @@ pd.set_option('display.width', 500)
 
 
 encoding_dim = 20
-run = 1
-
-
-# load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-# extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
-encoding_dim = extracted_features.shape[1]
-print(encoding_dim)
-extracted_features_switch = extracted_features.T
-
-
-
-
-# # perform pca on the extracted features
-# pca = PCA(n_components=11).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
-
-
-
+run = 3
 
 
 
@@ -57,9 +39,67 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
+
+
+
+# original dataset
+
+# # load the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
+# encoding_dim = extracted_features.shape[1]
+# extracted_features_switch = extracted_features.T
+#
+#
+# # # perform pca on the extracted features
+# # pca = PCA(n_components=11).fit(extracted_features)
+# # extracted_features = pca.transform(extracted_features)
+# # extracted_features_switch = extracted_features.T
+
+
+
+
+
+
+# balanced dataset
+
+# load the extracted features
+extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+encoding_dim = extracted_features.shape[1]
+extracted_features_switch = extracted_features.T
+
+# perform pca on the extracted features
+pca = PCA(n_components=13).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features_switch = extracted_features.T
+
+# get the indices of the different types of galaxies (according to sersic index)
+spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+
+# sample the galaxies to balance the dataset (as we did when training the model)
+random.seed(1)
+chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
+chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
+chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
+
+# reorder the properties dataframe to match the extracted features of the balanced dataset
+all_properties = all_properties.iloc[chosen_indices]
+
+
+
+
+
+
+
+
+
+
+
 # find all bad fit galaxies
 bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-print(bad_fit)
+# print(bad_fit)
 
 # remove those galaxies
 for i, galaxy in enumerate(bad_fit):
@@ -67,7 +107,6 @@ for i, galaxy in enumerate(bad_fit):
     all_properties = all_properties.drop(galaxy, axis=0)
 
 extracted_features_switch = extracted_features.T
-
 
 
 
@@ -136,9 +175,6 @@ for feature in range(0, len(extracted_features_switch)):
 
 
 
-
-
-
 # set the figure size
 # plt.figure(figsize=(20, encoding_dim))
 plt.figure(figsize=(20, extracted_features_switch.shape[0]))
@@ -173,7 +209,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
 plt.show()
 
@@ -219,7 +255,7 @@ for i, property in enumerate(properties):
         axs[feature][i].set_ylabel(None)
         axs[feature][i].tick_params(labelsize=12)
 
-plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_pca_all_property_correlation", bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
 plt.show()
