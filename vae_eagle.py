@@ -23,7 +23,7 @@ run = 3
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 # number of epochs for run
 epochs = 300
@@ -70,6 +70,11 @@ def normalise_to_r(image):
 #
 #     # add the image to the dataset
 #     all_images.append(image)
+#
+#
+# split the data into training and testing data (200 images used for testing)
+# train_images = np.array(all_images[:-200])
+# test_images = np.array(all_images[-200:])
 
 
 
@@ -159,24 +164,28 @@ for n, galaxy in enumerate(ellipticals):
 
 
 
-# train on all images and test on a subset
+# convert the training dataset to an array and define a list to contain the testing dataset
 train_images = np.array(all_images)
 test_images = []
+
+# randomly sample 20 items to make up the testing set
+random.seed(2)
 test_indices = random.sample(range(0, len(all_images)), 20)
+
+# add these values to the testing set and remove from the training set
 for i in test_indices:
     test_images.append(all_images[i])
+    np.delete(train_images, i, axis=0)
+
+# convert the testing dataset to an array
 test_images = np.array(test_images)
 
+print(train_images.shape)
 print(test_images.shape)
 
 
-# split the data into training and testing data (200 images used for testing)
-# train_images = np.array(all_images[:-200])
-# test_images = np.array(all_images[-200:])
 
 
-print(train_images.shape)
-print(train_images[0].shape)
 
 
 

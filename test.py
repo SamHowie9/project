@@ -6,20 +6,15 @@ import random
 # import cv2
 
 
-A = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+A = [[1, 2], [3, 4], [5, 6], [7, 8]]
 B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-print(A + B + C)
 
-random.seed(1)
-print(random.sample(A, 5))
-
-random.seed(1)
-print(random.sample(B, 5))
-
-random.seed(1)
-print(random.sample(C, 5))
+A = np.array(A)
+print(A)
+A = np.delete(A, 1, axis=0)
+print(A)
 
 # print(A[:-3])
 # print(A[-3:])
