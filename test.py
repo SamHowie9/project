@@ -6,19 +6,31 @@ import random
 # import cv2
 
 
-A = [[1, 2], [3, 4], [5, 6], [7, 8]]
-B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-
-A = np.array(A)
-print(A)
-A = np.delete(A, 1, axis=0)
-print(A)
+# A = [[1, 2], [3, 4], [5, 6], [7, 8]]
+# B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+# C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+#
+#
+# A = np.array(A)
+# print(A)
+# A = np.delete(A, 1, axis=0)
+# print(A)
 
 # print(A[:-3])
 # print(A[-3:])
 
+data = {
+    "A": [1, 2, 3, 1, 2, 3, 1, 2, 3],
+    "B": [4, 5, 6, 1, 2, 3, 1, 2, 3],
+    "C": [7, 8, 9, 1, 2, 3, 1, 2, 3],
+}
+df = pd.DataFrame(data)
+
+print(df)
+
+df = df.iloc[[1, 2]]
+
+print(df)
 
 
 # extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to r/15_feature_300_epoch_features_1.npy")

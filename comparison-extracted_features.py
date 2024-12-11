@@ -30,12 +30,22 @@ run = 3
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-# account for hte validation data and remove final 200 elements
-structure_properties.drop(structure_properties.tail(200).index, inplace=True)
-physical_properties.drop(physical_properties.tail(200).index, inplace=True)
+# # account for hte validation data and remove final 200 elements
+# structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+# physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# print(bad_fit)
+
+# remove those galaxies
+for i, galaxy in enumerate(bad_fit):
+    all_properties = all_properties.drop(galaxy, axis=0)
+
 
 
 
@@ -55,6 +65,10 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 # # pca = PCA(n_components=11).fit(extracted_features)
 # # extracted_features = pca.transform(extracted_features)
 # # extracted_features_switch = extracted_features.T
+#
+#
+# # account for the training data in the dataframe
+# all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
 
 
 
@@ -84,29 +98,44 @@ chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices
 chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
 chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
 
+print(all_properties)
+print(len(chosen_indices))
+
 # reorder the properties dataframe to match the extracted features of the balanced dataset
 all_properties = all_properties.iloc[chosen_indices]
 
 
+# get the randomly sampled testing set indices
+random.seed(2)
+test_indices = random.sample(range(0, len(chosen_indices)), 20)
+
+# flag the training set in the properties dataframe
+for i in test_indices:
+    all_properties.loc[i, :] = np.nan
+
+# remove the training set from the properties dataframe
+all_properties.dropna()
+
+
+
+
+print(all_properties)
+print(extracted_features.shape)
 
 
 
 
 
-
-
-
-
-# find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-# print(bad_fit)
-
-# remove those galaxies
-for i, galaxy in enumerate(bad_fit):
-    extracted_features = np.delete(extracted_features, galaxy-i, 0)
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-extracted_features_switch = extracted_features.T
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# # print(bad_fit)
+#
+# # remove those galaxies
+# for i, galaxy in enumerate(bad_fit):
+#     extracted_features = np.delete(extracted_features, galaxy-i, 0)
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+# extracted_features_switch = extracted_features.T
 
 
 
