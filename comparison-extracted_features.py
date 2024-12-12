@@ -39,6 +39,9 @@ physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_p
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
 
+print(len(all_properties))
+
+
 # find all bad fit galaxies
 bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
 # print(bad_fit)
@@ -48,6 +51,7 @@ for i, galaxy in enumerate(bad_fit):
     all_properties = all_properties.drop(galaxy, axis=0)
 
 
+print(len(all_properties))
 
 
 
@@ -83,7 +87,6 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + 
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
-print(extracted_features.shape)
 
 # perform pca on the extracted features
 pca = PCA(n_components=13).fit(extracted_features)
@@ -106,9 +109,15 @@ chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_in
 # print(len(chosen_indices))
 
 
+print(len(chosen_indices))
+
+
 
 # reorder the properties dataframe to match the extracted features of the balanced dataset
 all_properties = all_properties.loc[chosen_indices]
+
+
+print(len(all_properties))
 
 
 # print(all_properties)
@@ -123,11 +132,11 @@ for i in test_indices:
     all_properties = all_properties.drop(all_properties.index[i])
 
 
+print(len(all_properties))
 
 
-
-print(all_properties)
-print(extracted_features.shape)
+# print(all_properties)
+# print(extracted_features.shape)
 
 
 

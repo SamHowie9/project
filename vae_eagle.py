@@ -168,10 +168,12 @@ test_images = []
 random.seed(2)
 test_indices = random.sample(range(0, len(all_images)), 20)
 
+print(train_images.shape)
+
 # add these values to the testing set and remove from the training set
 for i in test_indices:
     test_images.append(all_images[i])
-    np.delete(train_images, i, axis=0)
+    train_images = np.delete(train_images, i, axis=0)
 
 # convert the testing dataset to an array
 test_images = np.array(test_images)
