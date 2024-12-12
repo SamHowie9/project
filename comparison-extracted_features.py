@@ -87,6 +87,8 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + 
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
+print(extracted_features.shape)
+
 
 # perform pca on the extracted features
 pca = PCA(n_components=13).fit(extracted_features)
@@ -127,9 +129,12 @@ print(len(all_properties))
 random.seed(2)
 test_indices = random.sample(range(0, len(chosen_indices)), 20)
 
-# flag the training set in the properties dataframe
+# flag the training set in the properties dataframe (removing individually effects the position of the other elements)
 for i in test_indices:
-    all_properties = all_properties.drop(all_properties.index[i])
+    all_properties.iloc[i] = np.nan
+
+# remove the training set from the properties dataframe
+all_properties = all_properties.dropna()
 
 
 print(len(all_properties))

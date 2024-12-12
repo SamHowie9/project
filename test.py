@@ -24,19 +24,42 @@ data = {
     "B": [4, 5, 6, 1, 2, 3, 1, 2, 3],
     "C": [7, 8, 9, 1, 2, 3, 1, 2, 3],
 }
+
+
+
+
+
+
 df = pd.DataFrame(data)
 
 print(df)
 print()
 
-df = df.drop(3, axis=0)
+df.iloc[1] = np.nan
+
+df.iloc[3] = np.nan
 
 print(df)
-print()
 
-df = df.drop(df.index[3])
+df = df.dropna()
 
 print(df)
+
+
+
+
+
+# print(df)
+# print()
+#
+# df = df.drop(3, axis=0)
+#
+# print(df)
+# print()
+#
+# df = df.drop(df.index[3])
+#
+# print(df)
 
 # df = df.iloc[[1, 2, 5]]
 #
