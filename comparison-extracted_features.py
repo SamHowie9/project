@@ -19,8 +19,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 20
-run = 3
+encoding_dim = 15
+run = 1
 
 
 
@@ -83,6 +83,8 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + 
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
+print(extracted_features.shape)
+
 # perform pca on the extracted features
 pca = PCA(n_components=13).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
@@ -99,9 +101,9 @@ chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices
 chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
 chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
 
-print(all_properties)
-print(len(chosen_spiral_indices), len(unknown_indices), len(chosen_ellipticals_indices))
-print(len(chosen_indices))
+# print(all_properties)
+# print(len(chosen_spiral_indices), len(unknown_indices), len(chosen_ellipticals_indices))
+# print(len(chosen_indices))
 
 
 
@@ -109,7 +111,7 @@ print(len(chosen_indices))
 all_properties = all_properties.loc[chosen_indices]
 
 
-print(all_properties)
+# print(all_properties)
 
 
 # get the randomly sampled testing set indices

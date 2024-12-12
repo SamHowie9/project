@@ -26,7 +26,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
-epochs = 300
+epochs = 3
 
 
 # normalise each band individually
@@ -329,6 +329,8 @@ vae.save_weights(filepath="Variational Eagle/Weights/Balanced/" + str(encoding_d
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
 np.save("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy", extracted_features)
+
+print(extracted_features.shape)
 
 # get loss, reconstruction loss and kl loss and save as numpy array
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
