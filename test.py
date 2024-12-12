@@ -27,10 +27,20 @@ data = {
 df = pd.DataFrame(data)
 
 print(df)
+print()
 
-df = df.iloc[[1, 2]]
+df = df.drop(3, axis=0)
 
 print(df)
+print()
+
+df = df.drop(df.index[3])
+
+print(df)
+
+# df = df.iloc[[1, 2, 5]]
+#
+# print(df)
 
 
 # extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to r/15_feature_300_epoch_features_1.npy")

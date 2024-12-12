@@ -87,10 +87,6 @@ def normalise_to_r(image):
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-# account for hte validation data and remove final 200 elements
-structure_properties.drop(structure_properties.tail(200).index, inplace=True)
-physical_properties.drop(physical_properties.tail(200).index, inplace=True)
-
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 

@@ -15,6 +15,7 @@ plt.style.use("default")
 
 
 pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
 pd.set_option('display.width', 500)
 
 
@@ -99,10 +100,16 @@ chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in ra
 chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
 
 print(all_properties)
+print(len(chosen_spiral_indices), len(unknown_indices), len(chosen_ellipticals_indices))
 print(len(chosen_indices))
 
+
+
 # reorder the properties dataframe to match the extracted features of the balanced dataset
-all_properties = all_properties.iloc[chosen_indices]
+all_properties = all_properties.loc[chosen_indices]
+
+
+print(all_properties)
 
 
 # get the randomly sampled testing set indices
@@ -111,10 +118,8 @@ test_indices = random.sample(range(0, len(chosen_indices)), 20)
 
 # flag the training set in the properties dataframe
 for i in test_indices:
-    all_properties.loc[i, :] = np.nan
+    all_properties = all_properties.drop(all_properties.index[i])
 
-# remove the training set from the properties dataframe
-all_properties.dropna()
 
 
 
