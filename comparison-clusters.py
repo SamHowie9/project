@@ -25,9 +25,9 @@ pd.set_option('display.width', 1000)
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 25
+encoding_dim = 20
 
-run = 2
+run = 1
 
 # set the number of clusters
 n_clusters = 2
