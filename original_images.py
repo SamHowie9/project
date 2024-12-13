@@ -61,8 +61,8 @@ gs2 = fig.add_gridspec(nrows=4, ncols=4, left=0.51, right=0.95, wspace=0.05, hsp
 
 
 # vae and pca
-galaxies_1 = [9057798, 10756039, 18719250, 16618997, 8373456, 14266206, 10315384, 5296020, 13864314, 9666768, 1760771, 9361157, 14706696, 11548125, 3435558, 17848505]
-galaxies_2 = [18461283, 19380933, 13646928, 17668707, 16807938, 18758771, 16462661, 20487147, 16268672, 16351397, 12759146, 16673538, 17795988, 18816265, 14570467, 18194866]
+galaxies_1 = [14071650, 15927500, 10188323, 19331310, 9401632, 11631623, 18405939, 9809641, 4476933, 20640562, 10031997, 8386414, 9917123, 10750094, 17509947, 9962212]
+galaxies_2 = [16701964, 15046949, 13646928, 16664982, 12759146, 9078222, 12648880, 20823325, 17668707, 12184457, 12575320, 16639750, 15630313, 14105654, 14120121, 12787952]
 
 # vae and pca
 
@@ -87,8 +87,8 @@ for i in range(0, 4):
         # set group title for middle plot of each group
         if i == 0 and j == 1:
 
-            g1_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("   More Featured (Spiral-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("   Less Featured (Elliptical-Like)", fontsize=25, pad=20)
             #
             # g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
             # g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)

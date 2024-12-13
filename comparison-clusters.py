@@ -166,6 +166,7 @@ all_properties["Cluster"] = clusters
 
 all_properties["GalaxyID"] = all_properties["GalaxyID"].astype(int)
 
+random.seed(5)
 
 print(list(all_properties["GalaxyID"].loc[all_properties["Binary_Cluster"] == 0]))
 print(list(all_properties["GalaxyID"].loc[all_properties["Binary_Cluster"] == 1]))
