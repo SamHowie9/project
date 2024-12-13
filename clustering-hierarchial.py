@@ -16,24 +16,24 @@ from matplotlib import image as mpimg
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 20
+encoding_dim = 25
 
-run = 3
+run = 2
 
 # set the number of clusters
-n_clusters = 4
+n_clusters = 2
 
 # load the extracted features
-# extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_15_features.npy")
 extracted_features_switch = extracted_features.T
 
 
 
 # perform pca on the extracted features
-# pca = PCA(n_components=13).fit(extracted_features)
-pca = PCA(n_components=11).fit(extracted_features)
+pca = PCA(n_components=4).fit(extracted_features)
+# pca = PCA(n_components=11).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
 extracted_features_switch = extracted_features.T
 

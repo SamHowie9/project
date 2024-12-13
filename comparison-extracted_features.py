@@ -19,7 +19,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 15
+encoding_dim = 25
 run = 1
 
 
@@ -91,9 +91,10 @@ print(extracted_features.shape)
 
 
 # perform pca on the extracted features
-pca = PCA(n_components=13).fit(extracted_features)
-extracted_features = pca.transform(extracted_features)
-extracted_features_switch = extracted_features.T
+# pca = PCA(n_components=13).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
+
 
 # get the indices of the different types of galaxies (according to sersic index)
 spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
@@ -106,59 +107,23 @@ chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices
 chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
 chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
 
-# print(all_properties)
-# print(len(chosen_spiral_indices), len(unknown_indices), len(chosen_ellipticals_indices))
-# print(len(chosen_indices))
-
-
-print(len(chosen_indices))
-
-
 
 # reorder the properties dataframe to match the extracted features of the balanced dataset
 all_properties = all_properties.loc[chosen_indices]
-
-
-print(len(all_properties))
-
-
-# print(all_properties)
 
 
 # get the randomly sampled testing set indices
 random.seed(2)
 test_indices = random.sample(range(0, len(chosen_indices)), 20)
 
+
 # flag the training set in the properties dataframe (removing individually effects the position of the other elements)
 for i in test_indices:
     all_properties.iloc[i] = np.nan
 
+
 # remove the training set from the properties dataframe
 all_properties = all_properties.dropna()
-
-
-print(len(all_properties))
-
-
-# print(all_properties)
-# print(extracted_features.shape)
-
-
-
-
-
-# # find all bad fit galaxies
-# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-# # print(bad_fit)
-#
-# # remove those galaxies
-# for i, galaxy in enumerate(bad_fit):
-#     extracted_features = np.delete(extracted_features, galaxy-i, 0)
-#     all_properties = all_properties.drop(galaxy, axis=0)
-#
-# extracted_features_switch = extracted_features.T
-
-
 
 
 
@@ -259,7 +224,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
 plt.show()
 
@@ -305,7 +270,7 @@ for i, property in enumerate(properties):
         axs[feature][i].set_ylabel(None)
         axs[feature][i].tick_params(labelsize=12)
 
-plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_pca_all_property_correlation", bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
 plt.show()

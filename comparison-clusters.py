@@ -15,6 +15,9 @@ import random
 import textwrap
 
 
+
+
+
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.width', 1000)
@@ -22,9 +25,9 @@ pd.set_option('display.width', 1000)
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 20
+encoding_dim = 25
 
-run = 3
+run = 2
 
 # set the number of clusters
 n_clusters = 2
@@ -35,59 +38,122 @@ n_clusters = 2
 
 
 
-# # optimal clusters
-# model = AgglomerativeClustering()
-# visualizer = KElbowVisualizer(model, k=(2, 20))
-# visualizer.fit(chosen_features)
-# visualizer.show()
-
-
-
-
-
-
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-# account for the validation data and remove final 200 elements
-structure_properties.drop(structure_properties.tail(200).index, inplace=True)
-physical_properties.drop(physical_properties.tail(200).index, inplace=True)
+# # account for hte validation data and remove final 200 elements
+# structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+# physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
 
+print(len(all_properties))
 
 
-
-
-
-
-
-
-
-
-# load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-# extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_15_features.npy")
-extracted_features_switch = extracted_features.T
-
-
+# find all bad fit galaxies
 bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# print(bad_fit)
 
+# remove those galaxies
 for i, galaxy in enumerate(bad_fit):
-    extracted_features = np.delete(extracted_features, galaxy-i, 0)
     all_properties = all_properties.drop(galaxy, axis=0)
 
+
+print(len(all_properties))
+
+
+
+
+
+# original dataset
+
+# # load the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
+# encoding_dim = extracted_features.shape[1]
+# extracted_features_switch = extracted_features.T
+#
+#
+# # # perform pca on the extracted features
+# # pca = PCA(n_components=11).fit(extracted_features)
+# # extracted_features = pca.transform(extracted_features)
+# # extracted_features_switch = extracted_features.T
+#
+#
+# # account for the training data in the dataframe
+# all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
+
+
+
+
+
+
+# balanced dataset
+
+# load the extracted features
+extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
+print(extracted_features.shape)
 
 
 # perform pca on the extracted features
-pca = PCA(n_components=11).fit(extracted_features)
+pca = PCA(n_components=13).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
 extracted_features_switch = extracted_features.T
+
+
+# get the indices of the different types of galaxies (according to sersic index)
+spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+
+# sample the galaxies to balance the dataset (as we did when training the model)
+random.seed(1)
+chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
+chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
+chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
+
+
+# reorder the properties dataframe to match the extracted features of the balanced dataset
+all_properties = all_properties.loc[chosen_indices]
+
+
+# get the randomly sampled testing set indices
+random.seed(2)
+test_indices = random.sample(range(0, len(chosen_indices)), 20)
+
+
+# flag the training set in the properties dataframe (removing individually effects the position of the other elements)
+for i in test_indices:
+    all_properties.iloc[i] = np.nan
+
+
+# remove the training set from the properties dataframe
+all_properties = all_properties.dropna()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -503,9 +569,11 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 total = all_properties.shape[0]
 total_spiral = all_properties[all_properties["n_r"] <= 2.5].shape[0]
-total_elliptical = all_properties[all_properties["n_r"] > 2.5].shape[0]
+total_unknown = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")]
+total_elliptical = all_properties[all_properties["n_r"] >= 4].shape[0]
 
 print(str(total_spiral) + " Spirals (" + str(total_spiral/total) + ")")
+print(str(total_unknown) + " Unknown (" + str(total_unknown/total) + ")")
 print(str(total_elliptical) + " Ellipticals (" + str(total_elliptical/total) + ")")
 print()
 
@@ -526,10 +594,12 @@ order = med_df["n_r"].sort_values().index.to_list()
 for i in order:
     total_i = all_properties[all_properties["Cluster"] == i].shape[0]
     total_i_spiral = all_properties[((all_properties["Cluster"] == i) & (all_properties["n_r"] <= 2.5))].shape[0]
-    total_i_elliptical = all_properties[((all_properties["Cluster"] == i) & (all_properties["n_r"] > 2.5))].shape[0]
+    total_i_unknown = all_properties[((all_properties["Cluster"] == i) & (all_properties["n_r"].between(2.5, 4, inclusive="neither")))].shape[0]
+    total_i_elliptical = all_properties[((all_properties["Cluster"] == i) & (all_properties["n_r"] >= 4))].shape[0]
 
     print("Cluster " + str(i) + " - " + str(total_i))
     print("Cluster " + str(i) + " - " + str(total_i_spiral) + " Spirals (" + str(total_i_spiral / total_i) + ")")
+    print("Cluster " + str(i) + " - " + str(total_i_unknown) + " Unknown (" + str(total_i_unknown / total_i) + ")")
     print("Cluster " + str(i) + " - " + str(total_i_elliptical) + " Ellipticals (" + str(total_i_elliptical / total_i) + ")")
     print()
 
