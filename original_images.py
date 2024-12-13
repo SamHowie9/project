@@ -10,10 +10,10 @@ import random
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 38
+encoding_dim = 25
 
 # set the number of clusters
-n_clusters = 14
+n_clusters = 2
 
 
 # load structural and physical properties into dataframes
@@ -61,8 +61,8 @@ gs2 = fig.add_gridspec(nrows=4, ncols=4, left=0.51, right=0.95, wspace=0.05, hsp
 
 
 # vae and pca
-galaxies_1 = [1699531, 18359999, 12100015, 9271074, 10078536, 1363926, 9437929, 16027782, 5351637, 13985849, 10750094, 9648217, 16824762, 14805238, 16041950, 10701170]
-galaxies_2 = [8090113, 12167142, 9737383, 14090052, 13296286, 18299729, 9932079, 9164674, 13229529, 9334220, 9416366, 13727900, 9485865, 12190346, 9404308, 17813435]
+galaxies_1 = [9057798, 10756039, 18719250, 16618997, 8373456, 14266206, 10315384, 5296020, 13864314, 9666768, 1760771, 9361157, 14706696, 11548125, 3435558, 17848505]
+galaxies_2 = [18461283, 19380933, 13646928, 17668707, 16807938, 18758771, 16462661, 20487147, 16268672, 16351397, 12759146, 16673538, 17795988, 18816265, 14570467, 18194866]
 
 # vae and pca
 
@@ -87,11 +87,11 @@ for i in range(0, 4):
         # set group title for middle plot of each group
         if i == 0 and j == 1:
 
-            # g1_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
-            # g2_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
-
-            g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+            #
+            # g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+            # g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
 
         count += 1
 
