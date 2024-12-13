@@ -209,14 +209,14 @@ gs2 = fig.add_gridspec(nrows=3, ncols=3, left=0.51, right=0.95, wspace=0.05, hsp
 # # low stripped sersic
 # galaxies_4 = [1383229, 1427448, 2331971, 7182472, 13869651, 13985849, 14237115, 14402768, 15037053]
 
-galaxies_1 = [10733159, 8122788, 4518274, 9532695, 11533908, 8686633, 16677355, 3523446, 10733159]
-galaxies_2 = [11564243, 8536493, 8986033, 10806034, 16720414, 9187925, 9469843, 16420095, 9747706]
+galaxies_1 = [9057798, 10756039, 18719250, 16618997, 8373456, 14266206, 10315384, 5296020, 13864314, 9666768, 1760771, 9361157, 14706696, 11548125, 3435558, 17848505]
+galaxies_2 = [18461283, 19380933, 13646928, 17668707, 16807938, 18758771, 16462661, 20487147, 16268672, 16351397, 12759146, 16673538, 17795988, 18816265, 14570467, 18194866]
 
 
 count = 0
 
-for i in range(0, 3):
-    for j in range(0, 3):
+for i in range(0, 4):
+    for j in range(0, 4):
 
         g1_ax = fig.add_subplot(gs1[i, j])
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxies_1[count]) + ".png")
@@ -232,10 +232,10 @@ for i in range(0, 3):
 
         # set group title for middle plot of each group
         if i == 0 and j == 1:
-            # g1_ax.set_title("High Sersic (Elliptical-Like)", fontsize=25, pad=20)
-            # g2_ax.set_title("Low Sersic (Spiral-Like)", fontsize=25, pad=20)
-            g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
-            g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+            g1_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
+            g2_ax.set_title("Less Features (Elliptical-Like)", fontsize=25, pad=20)
+            # g1_ax.set_title("Less Featured (Elliptical-Like)", fontsize=25, pad=20)
+            # g2_ax.set_title("More Featured (Spiral-Like)", fontsize=25, pad=20)
 
         count += 1
 

@@ -19,7 +19,7 @@ import textwrap
 
 
 pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
+# pd.set_option('display.max_rows', None)
 pd.set_option('display.width', 1000)
 
 
@@ -146,19 +146,6 @@ all_properties = all_properties.dropna()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 # perform binomial hierarchical clustering
 binary_hierarchical = AgglomerativeClustering(n_clusters=2, metric="euclidean", linkage="ward")
 binary_clusters = binary_hierarchical.fit_predict(extracted_features)
@@ -176,6 +163,8 @@ clusters = hierarchical.fit_predict(extracted_features)
 # add the cluster of each galaxy to the properties dataframe
 all_properties["Cluster"] = clusters
 
+
+all_properties["GalaxyID"] = all_properties["GalaxyID"].astype(int)
 
 
 print(list(all_properties["GalaxyID"].loc[all_properties["Binary_Cluster"] == 0]))
