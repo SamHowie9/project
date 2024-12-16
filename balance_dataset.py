@@ -60,7 +60,7 @@ datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_
 for galaxy in ellipticals:
 
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 3, 256, 256)
+    image = image.reshape(1, 256, 256, 3)
 
     i = 0
     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
