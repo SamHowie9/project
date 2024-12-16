@@ -65,7 +65,7 @@ datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_
 #     i = 0
 #     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
 #         i += 1
-#         if i > 30:
+#         if i > 29:
 #             break
 
 galaxy = 140114
@@ -74,17 +74,24 @@ files = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
 
 print(files)
 
-# fig, axs = plt.subplots(4, 10)
-#
-# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#
-# axs[0, 0].imshow(image)
-#
-# for i in range(0, 10):
-#
-#     image_1 = mpimg.imread(/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_)
-#
-#     axs[0, i].imshow
+fig, axs = plt.subplots(4, 10)
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+
+axs[0, 0].imshow(image)
+
+for i in range(0, 10):
+
+    image_1 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + image[i])
+    image_2 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + image[i + 10])
+    image_3 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + image[i + 20])
+
+    axs[1, i].imshow(image_1)
+    axs[2, i].imshow(image_2)
+    axs[3, i].imshow(image_3)
+
+plt.savefig("Variational Eagle/Plots/balancing")
+plt.show()
 
 
 # # randomly sample half the spirals (seed for reproducibility)
