@@ -84,27 +84,24 @@ axs[0, 0].imshow(image)
 for i in range(0, 10):
 
     image_1 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i])
-
-    image_1 = normalise_independently(image_1)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.01, (len(image_1[0]), len(image_1[0])))
         image_1.T[i] = image_1.T[i] + gaussian
+    image_1 = normalise_independently(image_1)
 
 
     image_2 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 10])
-
-    image_2 = normalise_independently(image_2)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.01, (len(image_2[0]), len(image_2[0])))
         image_2.T[i] = image_2.T[i] + gaussian
+    image_2 = normalise_independently(image_2)
 
 
     image_3 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 20])
-
-    image_3 = normalise_independently(image_3)
     for i in range(0, 3):
         gaussian = np.random.normal(0, 0.01, (len(image_3[0]), len(image_3[0])))
         image_3.T[i] = image_3.T[i] + gaussian
+    image_3 = normalise_independently(image_3)
 
 
     axs[0, i].get_xaxis().set_visible(False)
