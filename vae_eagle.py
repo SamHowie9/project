@@ -19,11 +19,11 @@ from matplotlib import image as mpimg
 
 encoding_dim = 25
 
-run = 3
+run = 2
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="8"
 
 # number of epochs for run
 epochs = 300
@@ -205,9 +205,12 @@ for i, galaxy in enumerate(chosen_galaxies):
 train_images = all_images[:-200]
 test_images = np.array(all_images[-200:])
 
+print(".")
 
 # load the filenames of the augmented images
 augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
+
+print(".")
 
 for galaxy in augmented_galaxies:
 
