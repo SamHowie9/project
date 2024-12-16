@@ -52,76 +52,76 @@ print(len(ellipticals))
 print(ellipticals)
 
 # ellipticals = [9768388]
+
+datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+
+
+for galaxy in ellipticals:
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i > 29:
+            break
+
+
+
+
+# galaxy = 9768388
 #
-# datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+# files = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
+#
+# print(files)
+#
+# fig, axs = plt.subplots(4, 10)
+#
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#
+# axs[0, 0].imshow(image)
+#
+# for i in range(0, 10):
+#
+#     image_1 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i])
+#     for j in range(0, 3):
+#         gaussian = np.random.normal(0, 0.01, (len(image_1[0]), len(image_1[0])))
+#         image_1.T[j] = image_1.T[j] + gaussian
+#     image_1 = normalise_independently(image_1)
 #
 #
-# for galaxy in ellipticals:
+#     image_2 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 10])
+#     for j in range(0, 3):
+#         gaussian = np.random.normal(0, 0.01, (len(image_2[0]), len(image_2[0])))
+#         image_2.T[j] = image_2.T[j] + gaussian
+#     image_2 = normalise_independently(image_2)
 #
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
 #
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i > 29:
-#             break
-
-
-
-
-galaxy = 9768388
-
-files = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
-
-print(files)
-
-fig, axs = plt.subplots(4, 10)
-
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-
-axs[0, 0].imshow(image)
-
-for i in range(0, 10):
-
-    image_1 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i])
-    for j in range(0, 3):
-        gaussian = np.random.normal(0, 0.01, (len(image_1[0]), len(image_1[0])))
-        image_1.T[j] = image_1.T[j] + gaussian
-    image_1 = normalise_independently(image_1)
-
-
-    image_2 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 10])
-    for j in range(0, 3):
-        gaussian = np.random.normal(0, 0.01, (len(image_2[0]), len(image_2[0])))
-        image_2.T[j] = image_2.T[j] + gaussian
-    image_2 = normalise_independently(image_2)
-
-
-    image_3 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 20])
-    for j in range(0, 3):
-        gaussian = np.random.normal(0, 0.01, (len(image_3[0]), len(image_3[0])))
-        image_3.T[j] = image_3.T[j] + gaussian
-    image_3 = normalise_independently(image_3)
-
-
-    axs[0, i].get_xaxis().set_visible(False)
-    axs[0, i].get_yaxis().set_visible(False)
-
-    axs[1, i].imshow(image_1)
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].get_yaxis().set_visible(False)
-
-    axs[2, i].imshow(image_2)
-    axs[2, i].get_xaxis().set_visible(False)
-    axs[2, i].get_yaxis().set_visible(False)
-
-    axs[3, i].imshow(image_3)
-    axs[3, i].get_xaxis().set_visible(False)
-    axs[3, i].get_yaxis().set_visible(False)
-
-plt.savefig("Variational Eagle/Plots/balancing")
-plt.show()
+#     image_3 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 20])
+#     for j in range(0, 3):
+#         gaussian = np.random.normal(0, 0.01, (len(image_3[0]), len(image_3[0])))
+#         image_3.T[j] = image_3.T[j] + gaussian
+#     image_3 = normalise_independently(image_3)
+#
+#
+#     axs[0, i].get_xaxis().set_visible(False)
+#     axs[0, i].get_yaxis().set_visible(False)
+#
+#     axs[1, i].imshow(image_1)
+#     axs[1, i].get_xaxis().set_visible(False)
+#     axs[1, i].get_yaxis().set_visible(False)
+#
+#     axs[2, i].imshow(image_2)
+#     axs[2, i].get_xaxis().set_visible(False)
+#     axs[2, i].get_yaxis().set_visible(False)
+#
+#     axs[3, i].imshow(image_3)
+#     axs[3, i].get_xaxis().set_visible(False)
+#     axs[3, i].get_yaxis().set_visible(False)
+#
+# plt.savefig("Variational Eagle/Plots/balancing")
+# plt.show()
 
 
 
