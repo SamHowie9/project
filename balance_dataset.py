@@ -82,9 +82,9 @@ axs[0, 0].imshow(image)
 
 for i in range(0, 10):
 
-    image_1 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + image[i])
-    image_2 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + image[i + 10])
-    image_3 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + image[i + 20])
+    image_1 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + files[i])
+    image_2 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + files[i + 10])
+    image_3 = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + files[i + 20])
 
     axs[1, i].imshow(image_1)
     axs[2, i].imshow(image_2)
