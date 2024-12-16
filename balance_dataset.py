@@ -51,10 +51,9 @@ print(len(ellipticals))
 
 print(ellipticals)
 
-ellipticals = [9768388]
+# ellipticals = [9768388]
 
 datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
-
 
 
 for galaxy in ellipticals:
@@ -68,41 +67,44 @@ for galaxy in ellipticals:
         if i > 29:
             break
 
-galaxy = 9768388
 
-files = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
 
-print(files)
 
-fig, axs = plt.subplots(4, 10)
-
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-
-axs[0, 0].imshow(image)
-
-for i in range(0, 10):
-
-    image_1 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i])
-    image_2 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 10])
-    image_3 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 20])
-
-    axs[0, i].get_xaxis().set_visible(False)
-    axs[0, i].get_yaxis().set_visible(False)
-
-    axs[1, i].imshow(image_1)
-    axs[1, i].get_xaxis().set_visible(False)
-    axs[1, i].get_yaxis().set_visible(False)
-
-    axs[2, i].imshow(image_2)
-    axs[2, i].get_xaxis().set_visible(False)
-    axs[2, i].get_yaxis().set_visible(False)
-
-    axs[3, i].imshow(image_3)
-    axs[3, i].get_xaxis().set_visible(False)
-    axs[3, i].get_yaxis().set_visible(False)
-
-plt.savefig("Variational Eagle/Plots/balancing")
-plt.show()
+# galaxy = 9768388
+#
+# files = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
+#
+# print(files)
+#
+# fig, axs = plt.subplots(4, 10)
+#
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#
+# axs[0, 0].imshow(image)
+#
+# for i in range(0, 10):
+#
+#     image_1 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i])
+#     image_2 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 10])
+#     image_3 = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + files[i + 20])
+#
+#     axs[0, i].get_xaxis().set_visible(False)
+#     axs[0, i].get_yaxis().set_visible(False)
+#
+#     axs[1, i].imshow(image_1)
+#     axs[1, i].get_xaxis().set_visible(False)
+#     axs[1, i].get_yaxis().set_visible(False)
+#
+#     axs[2, i].imshow(image_2)
+#     axs[2, i].get_xaxis().set_visible(False)
+#     axs[2, i].get_yaxis().set_visible(False)
+#
+#     axs[3, i].imshow(image_3)
+#     axs[3, i].get_xaxis().set_visible(False)
+#     axs[3, i].get_yaxis().set_visible(False)
+#
+# plt.savefig("Variational Eagle/Plots/balancing")
+# plt.show()
 
 
 # # randomly sample half the spirals (seed for reproducibility)
