@@ -59,6 +59,13 @@ datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_
 for galaxy in ellipticals:
 
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+
+    image = normalise_independently(image)
+
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.01, (len(image[0]), len(image[0])))
+        image.T[i] = image.T[i] + gaussian
+
     image = image.reshape(1, 256, 256, 3)
 
     i = 0
