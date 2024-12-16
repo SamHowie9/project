@@ -51,20 +51,20 @@ print(len(ellipticals))
 
 print(ellipticals)
 
-# ellipticals = [9768388]
+ellipticals = [9768388]
 
-# datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
-#
-#
-# for galaxy in ellipticals:
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i > 29:
-#             break
+datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+
+
+for galaxy in ellipticals:
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i > 29:
+            break
 
 
 
