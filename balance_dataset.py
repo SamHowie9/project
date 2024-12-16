@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
-# from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import random
+import os
 
 
 
@@ -57,18 +57,34 @@ datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_
 
 
 
-for galaxy in ellipticals:
+# for galaxy in ellipticals:
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     image = image.reshape(1, 256, 256, 3)
+#
+#     i = 0
+#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
+#         i += 1
+#         if i > 30:
+#             break
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 256, 256, 3)
+galaxy = 140114
 
-    i = 0
-    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/", save_prefix=galaxy, save_format="png"):
-        i += 1
-        if i > 30:
-            break
+files = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
 
+print(files)
 
+# fig, axs = plt.subplots(4, 10)
+#
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#
+# axs[0, 0].imshow(image)
+#
+# for i in range(0, 10):
+#
+#     image_1 = mpimg.imread(/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_)
+#
+#     axs[0, i].imshow
 
 
 # # randomly sample half the spirals (seed for reproducibility)
