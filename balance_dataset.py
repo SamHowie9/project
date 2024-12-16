@@ -51,9 +51,9 @@ print(len(ellipticals))
 
 print(ellipticals)
 
-ellipticals = [8065154]
+ellipticals = [9768388]
 
-datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True)
+datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
 
 
 
@@ -68,7 +68,7 @@ for galaxy in ellipticals:
         if i > 29:
             break
 
-galaxy = 8065154
+galaxy = 9768388
 
 files = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
 
