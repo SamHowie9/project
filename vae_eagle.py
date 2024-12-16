@@ -26,7 +26,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="9"
 
 # number of epochs for run
-epochs = 3
+epochs = 300
 
 
 # normalise each band individually
