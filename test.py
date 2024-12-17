@@ -6,8 +6,11 @@ import random
 # import cv2
 
 
-# A = [[1, 2], [3, 4], [5, 6], [7, 8]]
-# B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+A = [[1, 2], [3, 4], [5, 6], [7, 8]]
+B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+print(A[:3])
+
 # C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 #
 #
@@ -19,31 +22,31 @@ import random
 # print(A[:-3])
 # print(A[-3:])
 
-data = {
-    "A": [1, 2, 3, 1, 2, 3, 1, 2, 3],
-    "B": [4, 5, 6, 1, 2, 3, 1, 2, 3],
-    "C": [7, 8, 9, 1, 2, 3, 1, 2, 3],
-}
-
-
-
-
-
-
-df = pd.DataFrame(data)
-
-print(df)
-print()
-
-df.iloc[1] = np.nan
-
-df.iloc[3] = np.nan
-
-print(df)
-
-df = df.dropna()
-
-print(df)
+# data = {
+#     "A": [1, 2, 3, 1, 2, 3, 1, 2, 3],
+#     "B": [4, 5, 6, 1, 2, 3, 1, 2, 3],
+#     "C": [7, 8, 9, 1, 2, 3, 1, 2, 3],
+# }
+#
+#
+#
+#
+#
+#
+# df = pd.DataFrame(data)
+#
+# print(df)
+# print()
+#
+# df.iloc[1] = np.nan
+#
+# df.iloc[3] = np.nan
+#
+# print(df)
+#
+# df = df.dropna()
+#
+# print(df)
 
 
 

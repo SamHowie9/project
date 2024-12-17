@@ -93,51 +93,74 @@ print(len(all_properties))
 
 # balanced dataset
 
+# # load the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# encoding_dim = extracted_features.shape[1]
+# extracted_features_switch = extracted_features.T
+#
+# print(extracted_features.shape)
+#
+#
+# # perform pca on the extracted features
+# pca = PCA(n_components=13).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
+#
+#
+# # get the indices of the different types of galaxies (according to sersic index)
+# spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+# unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+# ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+#
+# # sample the galaxies to balance the dataset (as we did when training the model)
+# random.seed(1)
+# chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
+# chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
+# chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
+#
+#
+# # reorder the properties dataframe to match the extracted features of the balanced dataset
+# all_properties = all_properties.loc[chosen_indices]
+#
+#
+# # get the randomly sampled testing set indices
+# random.seed(2)
+# test_indices = random.sample(range(0, len(chosen_indices)), 20)
+#
+#
+# # flag the training set in the properties dataframe (removing individually effects the position of the other elements)
+# for i in test_indices:
+#     all_properties.iloc[i] = np.nan
+#
+#
+# # remove the training set from the properties dataframe
+# all_properties = all_properties.dropna()
+
+
+
+
+
+# fully balanced dataset
+
+# account for the testing dataset
+all_properties = all_properties.iloc[:-200]
+
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
 print(extracted_features.shape)
 
+extracted_features = extracted_features[:len(all_properties)]
+
+print(extracted_features.shape)
 
 # perform pca on the extracted features
 pca = PCA(n_components=13).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
+# extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
-
-
-# get the indices of the different types of galaxies (according to sersic index)
-spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
-unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
-ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
-
-# sample the galaxies to balance the dataset (as we did when training the model)
-random.seed(1)
-chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
-chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
-chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
-
-
-# reorder the properties dataframe to match the extracted features of the balanced dataset
-all_properties = all_properties.loc[chosen_indices]
-
-
-# get the randomly sampled testing set indices
-random.seed(2)
-test_indices = random.sample(range(0, len(chosen_indices)), 20)
-
-
-# flag the training set in the properties dataframe (removing individually effects the position of the other elements)
-for i in test_indices:
-    all_properties.iloc[i] = np.nan
-
-
-# remove the training set from the properties dataframe
-all_properties = all_properties.dropna()
-
-
-
 
 
 
@@ -220,8 +243,8 @@ for i in range(0, n_clusters):
 med_df["Cluster"] = list(range(0, n_clusters))
 
 
-print(med_df.sort_values(by="n_r"))
-print()
+# print(med_df.sort_values(by="n_r"))
+# print()
 
 
 
@@ -559,7 +582,7 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 total = all_properties.shape[0]
 total_spiral = all_properties[all_properties["n_r"] <= 2.5].shape[0]
-total_unknown = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")]
+total_unknown = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")].shape[0]
 total_elliptical = all_properties[all_properties["n_r"] >= 4].shape[0]
 
 print(str(total_spiral) + " Spirals (" + str(total_spiral/total) + ")")

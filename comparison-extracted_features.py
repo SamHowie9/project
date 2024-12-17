@@ -19,8 +19,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 25
-run = 1
+encoding_dim = 15
+run = 3
 
 
 
@@ -82,52 +82,72 @@ print(len(all_properties))
 
 # balanced dataset
 
+# # load the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# encoding_dim = extracted_features.shape[1]
+# extracted_features_switch = extracted_features.T
+#
+# print(extracted_features.shape)
+#
+#
+# # perform pca on the extracted features
+# pca = PCA(n_components=13).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
+#
+#
+# # get the indices of the different types of galaxies (according to sersic index)
+# spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+# unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+# ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+#
+# # sample the galaxies to balance the dataset (as we did when training the model)
+# random.seed(1)
+# chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
+# chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
+# chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
+#
+#
+# # reorder the properties dataframe to match the extracted features of the balanced dataset
+# all_properties = all_properties.loc[chosen_indices]
+#
+#
+# # get the randomly sampled testing set indices
+# random.seed(2)
+# test_indices = random.sample(range(0, len(chosen_indices)), 20)
+#
+#
+# # flag the training set in the properties dataframe (removing individually effects the position of the other elements)
+# for i in test_indices:
+#     all_properties.iloc[i] = np.nan
+#
+#
+# # remove the training set from the properties dataframe
+# all_properties = all_properties.dropna()
+
+
+
+
+
+# fully balanced dataset
+
+# account for the testing dataset
+all_properties = all_properties.iloc[:-200]
+
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
 print(extracted_features.shape)
 
+extracted_features = extracted_features[:len(all_properties)]
 
 # perform pca on the extracted features
-# pca = PCA(n_components=13).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
-
-
-# get the indices of the different types of galaxies (according to sersic index)
-spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
-unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
-ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
-
-# sample the galaxies to balance the dataset (as we did when training the model)
-random.seed(1)
-chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
-chosen_ellipticals_indices = [index for index in ellipticals_indices for _ in range(4)]
-chosen_indices = chosen_spiral_indices + unknown_indices + chosen_ellipticals_indices
-
-
-# reorder the properties dataframe to match the extracted features of the balanced dataset
-all_properties = all_properties.loc[chosen_indices]
-
-
-# get the randomly sampled testing set indices
-random.seed(2)
-test_indices = random.sample(range(0, len(chosen_indices)), 20)
-
-
-# flag the training set in the properties dataframe (removing individually effects the position of the other elements)
-for i in test_indices:
-    all_properties.iloc[i] = np.nan
-
-
-# remove the training set from the properties dataframe
-all_properties = all_properties.dropna()
-
-
-
-
+pca = PCA(n_components=13).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+# extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
 
 
 
@@ -224,7 +244,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run) + "_2", bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
 plt.show()
 
@@ -236,44 +256,44 @@ plt.show()
 
 
 
-# properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
-
-
-all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
-
-print(all_properties)
-
-property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
-
-# fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
-fig, axs = plt.subplots(extracted_features_switch.shape[0], len(properties), figsize=(40, (encoding_dim * 4)))
-
-# fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
-
-
-for i, property in enumerate(properties):
-
-    axs[0][i].set_title(property_labels[i], fontsize=20)
-
-    # for feature in range(0, 19):
-    # for feature in range(0, encoding_dim):
-    for feature in range(0, extracted_features_switch.shape[0]):
-
-        axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
-        # axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
-
-        # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
-
-        axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
-        # axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
-        axs[feature][i].set_ylabel(None)
-        axs[feature][i].tick_params(labelsize=12)
-
-plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-# plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_pca_all_property_correlation", bbox_inches='tight')
-# plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
-plt.show()
+# # properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+# properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
+#
+#
+# all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
+#
+# print(all_properties)
+#
+# property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
+#
+# # fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
+# fig, axs = plt.subplots(extracted_features_switch.shape[0], len(properties), figsize=(40, (encoding_dim * 4)))
+#
+# # fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
+#
+#
+# for i, property in enumerate(properties):
+#
+#     axs[0][i].set_title(property_labels[i], fontsize=20)
+#
+#     # for feature in range(0, 19):
+#     # for feature in range(0, encoding_dim):
+#     for feature in range(0, extracted_features_switch.shape[0]):
+#
+#         axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
+#         # axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
+#
+#         # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
+#
+#         axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
+#         # axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
+#         axs[feature][i].set_ylabel(None)
+#         axs[feature][i].tick_params(labelsize=12)
+#
+# plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# # plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_pca_all_property_correlation", bbox_inches='tight')
+# # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
+# plt.show()
 
 
 
