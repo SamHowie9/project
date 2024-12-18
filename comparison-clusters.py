@@ -25,9 +25,9 @@ pd.set_option('display.width', 1000)
 
 
 # set the encoding dimension (number of extracted features)
-encoding_dim = 20
+encoding_dim = 25
 
-run = 1
+run = 2
 
 # set the number of clusters
 n_clusters = 2
@@ -152,7 +152,7 @@ extracted_features_switch = extracted_features.T
 
 print(extracted_features.shape)
 
-extracted_features = extracted_features[:len(all_properties)]
+# extracted_features = extracted_features[:len(all_properties)]
 
 print(extracted_features.shape)
 
@@ -173,6 +173,9 @@ extracted_features_switch = extracted_features.T
 binary_hierarchical = AgglomerativeClustering(n_clusters=2, metric="euclidean", linkage="ward")
 binary_clusters = binary_hierarchical.fit_predict(extracted_features)
 
+
+binary_clusters = binary_clusters[:len(all_properties)]
+
 # add the binomial cluster of each galaxy to properties dataframe
 all_properties["Binary_Cluster"] = binary_clusters
 
@@ -182,6 +185,8 @@ all_properties["Binary_Cluster"] = binary_clusters
 # perform hierarchical clustering
 hierarchical = AgglomerativeClustering(n_clusters=n_clusters, metric="euclidean", linkage="ward")
 clusters = hierarchical.fit_predict(extracted_features)
+
+clusters = clusters[:len(all_properties)]
 
 # add the cluster of each galaxy to the properties dataframe
 all_properties["Cluster"] = clusters
@@ -213,18 +218,18 @@ print()
 # clusters = hdbscan.fit_predict(chosen_features)
 
 
-# get hierarchical centers
-clf = NearestCentroid()
-clf.fit(extracted_features, clusters)
-centers = clf.centroids_
-centers_switch = centers.T
-
-
-
-mf = "#eec681"
-lf = "#7fb8d8"
-
-binary_palette = {0:mf, 1:mf, 2:lf, 3:lf, 4:lf, 5:mf, 6:mf, 7:mf, 8:mf, 9:mf, 10:mf, 11:mf, 12:mf, 13:lf}
+# # get hierarchical centers
+# clf = NearestCentroid()
+# clf.fit(extracted_features, clusters)
+# centers = clf.centroids_
+# centers_switch = centers.T
+#
+#
+#
+# mf = "#eec681"
+# lf = "#7fb8d8"
+#
+# binary_palette = {0:mf, 1:mf, 2:lf, 3:lf, 4:lf, 5:mf, 6:mf, 7:mf, 8:mf, 9:mf, 10:mf, 11:mf, 12:mf, 13:lf}
 
 
 
@@ -308,32 +313,32 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 
-# # struture measurement hist
-# fig, axs = plt.subplots(1, 3, figsize=(25, 5))
-#
-# a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
-# a1.set_ylabel("Normalised Frequency", fontsize=20)
-# a1.set_xlabel("Sersic Index", fontsize=20)
-# a1.set_yticks([])
-# a1.tick_params(labelsize=20)
-#
-# a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
-# a2.set_ylabel("Normalised Frequency", fontsize=20)
-# a2.set_xlabel("Position Angle", fontsize=20)
-# a2.set_yticks([])
-# a2.set_xticks([-90, 0, 90], ["$-90^{\circ}$", "$0^{\circ}$", "$90^{\circ}$"])
-# a2.tick_params(labelsize=20)
-# a2.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
-#
-# a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
-# a3.set_ylabel("Normalised Frequency", fontsize=20)
-# a3.set_xlabel("Axis Ratio", fontsize=20)
-# a3.set_yticks([])
-# a3.tick_params(labelsize=20)
-#
-#
+# struture measurement hist
+fig, axs = plt.subplots(1, 3, figsize=(25, 5))
+
+a1 = sns.histplot(ax=axs[0], data=all_properties, x="n_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
+a1.set_ylabel("Normalised Frequency", fontsize=20)
+a1.set_xlabel("Sersic Index", fontsize=20)
+a1.set_yticks([])
+a1.tick_params(labelsize=20)
+
+a2 = sns.histplot(ax=axs[1], data=all_properties, x="pa_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20)
+a2.set_ylabel("Normalised Frequency", fontsize=20)
+a2.set_xlabel("Position Angle", fontsize=20)
+a2.set_yticks([])
+a2.set_xticks([-90, 0, 90], ["$-90^{\circ}$", "$0^{\circ}$", "$90^{\circ}$"])
+a2.tick_params(labelsize=20)
+a2.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
+
+a3 = sns.histplot(ax=axs[2], data=all_properties, x="q_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
+a3.set_ylabel("Normalised Frequency", fontsize=20)
+a3.set_xlabel("Axis Ratio", fontsize=20)
+a3.set_yticks([])
+a3.tick_params(labelsize=20)
+
+
 # plt.savefig("Variational Eagle/Cluster Plots/" +  str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_structure_distribution", bbox_inches='tight')
-# plt.show()
+plt.show()
 
 
 
@@ -404,94 +409,94 @@ order = med_df[order_property].sort_values(ascending=False).index.to_list()
 
 
 
-# # all physical histogram
-# fig, axs = plt.subplots(3, 2, figsize=(20, 18))
-#
-# bins = np.histogram_bin_edges(all_properties["re_r"], bins=20)
-# combined_bins = np.sum(np.histogram(all_properties["re_r"], bins=bins[20:])[0])
-# new_bins = np.concatenate((bins[:20], [bins[20]]))
-# hist_counts = np.concatenate((np.histogram(all_properties["re_r"], bins=bins[:20])[0], [combined_bins]))
-#
-# a1 = sns.histplot(ax=axs[0, 0], data=all_properties, x="re_r", bins=new_bins, stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0])
-# # a1 = sns.histplot(ax=axs[0], data=all_properties, x="re_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
-# a1.set_ylabel("Normalised Frequency", fontsize=20)
-# a1.set_xlabel("Semi-Major Axis (pkpc)", fontsize=20)
-# a1.set_yticks([])
-# a1.tick_params(labelsize=20)
-# a1.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=2, prop={"size":20})
-#
-#
-# a2 = sns.histplot(ax=axs[1, 0], data=all_properties, x="InitialMassWeightedStellarAge", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
-# a2.set_ylabel("Normalised Frequency", fontsize=20)
-# a2.set_xlabel("Stellar Age (Gyr)", fontsize=20)
-# a2.set_yticks([])
-# a2.tick_params(labelsize=20)
-#
-# a3 = sns.histplot(ax=axs[2, 0], data=all_properties, x="StarFormationRate", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=50, legend=False)
-# a3.set_ylabel("Normalised Frequency", fontsize=20)
-# # a3.set_xlabel("Star Formation Rate ($\mathrm{M}_{\odot}\mathrm{yr}^{-1}$)", fontsize=20)
-# a3.set_xlabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
-#
-# a3.set_yticks([])
-# a3.set_xlim(0, 6)
-# a3.tick_params(labelsize=20)
-#
-#
-#
-# stellar_mass = all_properties["MassType_Star"].div(1e10)
-#
-# bins = np.histogram_bin_edges(stellar_mass, bins=100)
-# combined_bins = np.sum(np.histogram(stellar_mass, bins=bins[20:])[0])
-# new_bins = np.concatenate((bins[:20], [bins[20]]))
-# hist_counts = np.concatenate((np.histogram(stellar_mass, bins=bins[:20])[0], [combined_bins]))
-#
-# a1 = sns.histplot(ax=axs[0, 1], data=all_properties, x=stellar_mass, bins=new_bins, hue="Cluster", palette="colorblind", stat="probability", common_norm=False, hue_order=[1,0], legend=False)
-# # a1 = sns.histplot(ax=axs[0], data=all_properties, x="MassType_Star", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=50, legend=False)
-# a1.set_ylabel("Normalised Frequency", fontsize=20)
-# # a1.set_xlabel("Stellar Mass ($10^{10} \mathrm{M}_{\odot}$)", fontsize=20)
-# a1.set_xlabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
-# a1.set_yticks([])
-# a1.set_xticks([0, 5, 10])
-# a1.tick_params(labelsize=20)
-#
-#
-#
-# dm_mass = all_properties["MassType_DM"].div(1e12)
-#
-# bins = np.histogram_bin_edges(dm_mass, bins=250)
-# combined_bins = np.sum(np.histogram(dm_mass, bins=bins[20:])[0])
-# new_bins = np.concatenate((bins[:20], [bins[20]]))
-# hist_counts = np.concatenate((np.histogram(dm_mass, bins=bins[:20])[0], [combined_bins]))
-#
-# a2 = sns.histplot(ax=axs[1, 1], data=all_properties, x=dm_mass, bins=new_bins, hue="Cluster", palette="colorblind", stat="probability", common_norm=False, hue_order=[1,0], legend=False)
-# # a2 = sns.histplot(ax=axs[1], data=all_properties, x="MassType_DM", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=170)
-# a2.set_ylabel("Normalised Frequency", fontsize=20)
-# # a2.set_xlabel("Dark Matter Mass ($10^{12} \mathrm{M}_{\odot}$)", fontsize=20)
-# a2.set_xlabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
-# a2.set_yticks([])
-# a2.set_xticks([0, 5, 10])
-# a2.tick_params(labelsize=20)
-# # a2.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
-#
-#
-# bh_mass = all_properties["MassType_BH"].div(1e8)
-#
-# bins = np.histogram_bin_edges(bh_mass, bins=250)
-# combined_bins = np.sum(np.histogram(bh_mass, bins=bins[20:])[0])
-# new_bins = np.concatenate((bins[:20], [bins[20]]))
-# hist_counts = np.concatenate((np.histogram(bh_mass, bins=bins[:20])[0], [combined_bins]))
-#
-# a3 = sns.histplot(ax=axs[2, 1], data=all_properties, x=bh_mass, bins=new_bins, hue="Cluster", palette="colorblind", stat="probability", common_norm=False, hue_order=[1,0], legend=False)
-# # a3 = sns.histplot(ax=axs[2], data=all_properties, x="MassType_BH", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=150, legend=False)
-# a3.set_ylabel("Normalised Frequency", fontsize=20)
-# # a3.set_xlabel("Black Hole Mass ($10^{8} \mathrm{M}_{\odot}$)", fontsize=20)
-# a3.set_xlabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
-# a3.set_yticks([])
-# # a3.set_xlim(0, 0.5e9)
-# a3.tick_params(labelsize=20)
-#
+# all physical histogram
+fig, axs = plt.subplots(3, 2, figsize=(20, 18))
+
+bins = np.histogram_bin_edges(all_properties["re_r"], bins=20)
+combined_bins = np.sum(np.histogram(all_properties["re_r"], bins=bins[20:])[0])
+new_bins = np.concatenate((bins[:20], [bins[20]]))
+hist_counts = np.concatenate((np.histogram(all_properties["re_r"], bins=bins[:20])[0], [combined_bins]))
+
+a1 = sns.histplot(ax=axs[0, 0], data=all_properties, x="re_r", bins=new_bins, stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0])
+# a1 = sns.histplot(ax=axs[0], data=all_properties, x="re_r", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
+a1.set_ylabel("Normalised Frequency", fontsize=20)
+a1.set_xlabel("Semi-Major Axis (pkpc)", fontsize=20)
+a1.set_yticks([])
+a1.tick_params(labelsize=20)
+a1.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0.52, 0.93), loc='upper center', bbox_transform=fig.transFigure, ncol=2, prop={"size":20})
+
+
+a2 = sns.histplot(ax=axs[1, 0], data=all_properties, x="InitialMassWeightedStellarAge", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=20, legend=False)
+a2.set_ylabel("Normalised Frequency", fontsize=20)
+a2.set_xlabel("Stellar Age (Gyr)", fontsize=20)
+a2.set_yticks([])
+a2.tick_params(labelsize=20)
+
+a3 = sns.histplot(ax=axs[2, 0], data=all_properties, x="StarFormationRate", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=50, legend=False)
+a3.set_ylabel("Normalised Frequency", fontsize=20)
+# a3.set_xlabel("Star Formation Rate ($\mathrm{M}_{\odot}\mathrm{yr}^{-1}$)", fontsize=20)
+a3.set_xlabel("Star Formation Rate (M$_{\odot}$yr$^{-1}$)", fontsize=20)
+
+a3.set_yticks([])
+a3.set_xlim(0, 6)
+a3.tick_params(labelsize=20)
+
+
+
+stellar_mass = all_properties["MassType_Star"].div(1e10)
+
+bins = np.histogram_bin_edges(stellar_mass, bins=100)
+combined_bins = np.sum(np.histogram(stellar_mass, bins=bins[20:])[0])
+new_bins = np.concatenate((bins[:20], [bins[20]]))
+hist_counts = np.concatenate((np.histogram(stellar_mass, bins=bins[:20])[0], [combined_bins]))
+
+a1 = sns.histplot(ax=axs[0, 1], data=all_properties, x=stellar_mass, bins=new_bins, hue="Cluster", palette="colorblind", stat="probability", common_norm=False, hue_order=[1,0], legend=False)
+# a1 = sns.histplot(ax=axs[0], data=all_properties, x="MassType_Star", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=50, legend=False)
+a1.set_ylabel("Normalised Frequency", fontsize=20)
+# a1.set_xlabel("Stellar Mass ($10^{10} \mathrm{M}_{\odot}$)", fontsize=20)
+a1.set_xlabel("Stellar Mass ($10^{10}$M$_{\odot}$)", fontsize=20)
+a1.set_yticks([])
+a1.set_xticks([0, 5, 10])
+a1.tick_params(labelsize=20)
+
+
+
+dm_mass = all_properties["MassType_DM"].div(1e12)
+
+bins = np.histogram_bin_edges(dm_mass, bins=250)
+combined_bins = np.sum(np.histogram(dm_mass, bins=bins[20:])[0])
+new_bins = np.concatenate((bins[:20], [bins[20]]))
+hist_counts = np.concatenate((np.histogram(dm_mass, bins=bins[:20])[0], [combined_bins]))
+
+a2 = sns.histplot(ax=axs[1, 1], data=all_properties, x=dm_mass, bins=new_bins, hue="Cluster", palette="colorblind", stat="probability", common_norm=False, hue_order=[1,0], legend=False)
+# a2 = sns.histplot(ax=axs[1], data=all_properties, x="MassType_DM", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=170)
+a2.set_ylabel("Normalised Frequency", fontsize=20)
+# a2.set_xlabel("Dark Matter Mass ($10^{12} \mathrm{M}_{\odot}$)", fontsize=20)
+a2.set_xlabel("Dark Matter Mass ($10^{12}$M$_{\odot}$)", fontsize=20)
+a2.set_yticks([])
+a2.set_xticks([0, 5, 10])
+a2.tick_params(labelsize=20)
+# a2.legend(["More Featured Group", "Less Featured Group"], bbox_to_anchor=(0., 1.00, 1., .100), loc='lower center', ncol=2, prop={"size":20})
+
+
+bh_mass = all_properties["MassType_BH"].div(1e8)
+
+bins = np.histogram_bin_edges(bh_mass, bins=250)
+combined_bins = np.sum(np.histogram(bh_mass, bins=bins[20:])[0])
+new_bins = np.concatenate((bins[:20], [bins[20]]))
+hist_counts = np.concatenate((np.histogram(bh_mass, bins=bins[:20])[0], [combined_bins]))
+
+a3 = sns.histplot(ax=axs[2, 1], data=all_properties, x=bh_mass, bins=new_bins, hue="Cluster", palette="colorblind", stat="probability", common_norm=False, hue_order=[1,0], legend=False)
+# a3 = sns.histplot(ax=axs[2], data=all_properties, x="MassType_BH", stat="probability", common_norm=False, hue="Cluster", palette="colorblind", hue_order=[1, 0], bins=150, legend=False)
+a3.set_ylabel("Normalised Frequency", fontsize=20)
+# a3.set_xlabel("Black Hole Mass ($10^{8} \mathrm{M}_{\odot}$)", fontsize=20)
+a3.set_xlabel("Black Hole Mass ($10^{8}$M$_{\odot}$)", fontsize=20)
+a3.set_yticks([])
+# a3.set_xlim(0, 0.5e9)
+a3.tick_params(labelsize=20)
+
 # plt.savefig("Cluster Properties/" + str(encoding_dim) + "_feature_" + str(n_clusters) + "_cluster_all_physical_distribution", bbox_inches='tight')
-# plt.show()
+plt.show()
 
 
 

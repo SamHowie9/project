@@ -61,8 +61,8 @@ gs2 = fig.add_gridspec(nrows=4, ncols=4, left=0.51, right=0.95, wspace=0.05, hsp
 
 
 # vae and pca
-galaxies_1 = [8339150, 14436223, 7707096, 12178298, 16012583, 15691065, 20867356, 6040034, 17344767, 17853027, 17868998, 16018178, 13678886, 11482234, 10615048, 10178759]
-galaxies_2 = [19380933, 19020657, 14805238, 20796005, 9526568, 16878001, 16018178, 9526568, 16351397, 16750450, 14570467, 17668707, 9554090, 13921561, 21242351, 15250310]
+galaxies_1 = [17124511, 8402091, 14774114, 9936591, 4480429, 24478, 8970963, 17352150, 14183869, 11140837, 10375596, 2335941, 10023059, 14892360, 9378422, 12711010]
+galaxies_2 = [16012583, 16030140, 18067708, 3467929, 7680777, 16614950, 16369839, 18143519, 18266347, 8961773, 18002123, 17464778, 18085862, 3435558, 12100015, 9779253]
 
 # vae and pca
 
@@ -97,7 +97,7 @@ for i in range(0, 4):
 
 
 
-plt.savefig("Variational Eagle/Cluster Plots/balanced_vae_pca_2_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
+plt.savefig("Variational Eagle/Cluster Plots/fully_balanced_vae_pca_2_cluster_" + str(encoding_dim) + "_feature_originals", bbox_inches='tight')
 plt.show()
 
 

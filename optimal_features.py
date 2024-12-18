@@ -125,156 +125,156 @@ axs2.set_ylabel("KL-Divergence")
 
 axs[0].legend([loss, kl_div], ["Loss", "KL-Divergence"], loc="center right")
 
-# plt.savefig("Variational Eagle/Plots/Loss vs Extracted Features")
-# plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-relevant_feature_number = []
-relevant_feature_ratio = []
-
-med_relevant_feature_number = []
-max_relevant_feature_number = []
-min_relevant_feature_number = []
-
-relevant_property_count = []
-
-# med_relevant_feature_ratio = []
-# max_relevant_feature_ratio = []
-# min_relevant_feature_ratio = []
-
-for encoding_dim in range(1, 31):
-
-    extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
-    extracted_features_switch = np.flipud(np.rot90(extracted_features))
-
-    structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
-
-
-    extracted_features_1 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
-    extracted_features_2 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
-    extracted_features_3 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
-    # extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
-    # extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
-
-    extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
-    extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
-    extracted_features_switch_3 = np.flipud(np.rot90(extracted_features_3))
-
-    correlation_df_1 = pd.DataFrame(columns=all_properties.columns[1:])
-    correlation_df_2 = pd.DataFrame(columns=all_properties.columns[1:])
-    correlation_df_3 = pd.DataFrame(columns=all_properties.columns[1:])
-
-    # print(correlation_df_1)
-
-    for feature in range(0, len(extracted_features_switch)):
-
-        # create a list to contain the correlation between that feature and each property
-        correlation_list = []
-
-        correlation_list_1 = []
-        correlation_list_2 = []
-        correlation_list_3 = []
-
-        # loop through each property
-        for gal_property in range(1, len(all_properties.columns)):
-
-            # calculate the correlation between that extracted feature and that property
-            # correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
-            # correlation = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
-            # correlation_list.append(correlation)
-
-            correlation_1_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
-            correlation_1_2 = np.corrcoef(extracted_features_switch_1[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-            correlation_1_3 = np.corrcoef(abs(extracted_features_switch_1[feature]), all_properties.iloc[:, gal_property])[0][1]
-            correlation_1_4 = np.corrcoef(abs(extracted_features_switch_1[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-            correlation_1 = max(abs(correlation_1_1), abs(correlation_1_2), abs(correlation_1_3), abs(correlation_1_4))
-
-            correlation_2_1 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
-            correlation_2_2 = np.corrcoef(extracted_features_switch_2[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-            correlation_2_3 = np.corrcoef(abs(extracted_features_switch_2[feature]), all_properties.iloc[:, gal_property])[0][1]
-            correlation_2_4 = np.corrcoef(abs(extracted_features_switch_2[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-            correlation_2 = max(abs(correlation_2_1), abs(correlation_2_2), abs(correlation_2_3), abs(correlation_2_4))
-
-            correlation_3_1 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
-            correlation_3_2 = np.corrcoef(extracted_features_switch_3[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-            correlation_3_3 = np.corrcoef(abs(extracted_features_switch_3[feature]), all_properties.iloc[:, gal_property])[0][1]
-            correlation_3_4 = np.corrcoef(abs(extracted_features_switch_3[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-            correlation_3 = max(abs(correlation_3_1), abs(correlation_3_2), abs(correlation_3_3), abs(correlation_3_4))
-
-
-            # correlation_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
-            # correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
-            # correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
-
-
-            correlation_list_1.append(correlation_1)
-            correlation_list_2.append(correlation_2)
-            correlation_list_3.append(correlation_3)
-
-        correlation_df_1.loc[len(correlation_df_1)] = correlation_list_1
-        correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
-        correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
-
-
-    relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-    # relevant_properties = ["StarFormationRate"]
-
-    # find the number of features at least slightly correlating with a property
-    relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
-
-    relevant_features_1 = (abs(correlation_df_1[relevant_properties]).max(axis=1) > 0.4).sum()
-    relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.4).sum()
-    relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.4).sum()
-
-    relevant_feature_number.append(relevant_features)
-    # relevant_feature_ratio.append(relevant_features/encoding_dim)
-
-    med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
-    max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
-    min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
-
-    # med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
-    # max_relevant_feature_ratio.append(max((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
-    # min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
-
-
-    # for property in relevant_properties:
-    #
-    #     relevant_features_1 = (abs(correlation_df_1[property]).max(axis=1) > 0.4).sum()
-    #     relevant_features_2 = (abs(correlation_df_2[property]).max(axis=1) > 0.4).sum()
-    #     relevant_features_3 = (abs(correlation_df_3[property]).max(axis=1) > 0.4).sum()
-    #
-    #     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
-    #     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
-    #     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
-    #
-    #     relevant_property_count.append([min_relevant_feature_number, med_relevant_feature_number, max_relevant_feature_number])
-
-
-
-axs[1].errorbar(range(1, 31), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
-# axs[1].errorbar(range(1, 51), relevant_property_count[0][1], yerr=[relevant_property_count[0][1] - relevant_property_count[0][1]), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
-axs[1].set_ylabel("Meaningful Extracted Features")
-axs[1].set_xlabel("Extracted Features")
-
-# plt.savefig("Variational Eagle/Plots/Meaningful Extracted Features vs Total Extracted Features")
-# plt.show()
-
-
-
-plt.savefig("Variational Eagle/Plots/Individual Normalisation - Optimal Extracted Features")
+plt.savefig("Variational Eagle/Plots/Loss vs Extracted Features")
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+# relevant_feature_number = []
+# relevant_feature_ratio = []
+#
+# med_relevant_feature_number = []
+# max_relevant_feature_number = []
+# min_relevant_feature_number = []
+#
+# relevant_property_count = []
+#
+# # med_relevant_feature_ratio = []
+# # max_relevant_feature_ratio = []
+# # min_relevant_feature_ratio = []
+#
+# for encoding_dim in range(1, 31):
+#
+#     extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+#     extracted_features_switch = np.flipud(np.rot90(extracted_features))
+#
+#     structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
+#
+#
+#     extracted_features_1 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
+#     extracted_features_2 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
+#     extracted_features_3 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
+#     # extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
+#     # extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
+#
+#     extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
+#     extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
+#     extracted_features_switch_3 = np.flipud(np.rot90(extracted_features_3))
+#
+#     correlation_df_1 = pd.DataFrame(columns=all_properties.columns[1:])
+#     correlation_df_2 = pd.DataFrame(columns=all_properties.columns[1:])
+#     correlation_df_3 = pd.DataFrame(columns=all_properties.columns[1:])
+#
+#     # print(correlation_df_1)
+#
+#     for feature in range(0, len(extracted_features_switch)):
+#
+#         # create a list to contain the correlation between that feature and each property
+#         correlation_list = []
+#
+#         correlation_list_1 = []
+#         correlation_list_2 = []
+#         correlation_list_3 = []
+#
+#         # loop through each property
+#         for gal_property in range(1, len(all_properties.columns)):
+#
+#             # calculate the correlation between that extracted feature and that property
+#             # correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
+#             # correlation = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
+#             # correlation_list.append(correlation)
+#
+#             correlation_1_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
+#             correlation_1_2 = np.corrcoef(extracted_features_switch_1[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+#             correlation_1_3 = np.corrcoef(abs(extracted_features_switch_1[feature]), all_properties.iloc[:, gal_property])[0][1]
+#             correlation_1_4 = np.corrcoef(abs(extracted_features_switch_1[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+#             correlation_1 = max(abs(correlation_1_1), abs(correlation_1_2), abs(correlation_1_3), abs(correlation_1_4))
+#
+#             correlation_2_1 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
+#             correlation_2_2 = np.corrcoef(extracted_features_switch_2[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+#             correlation_2_3 = np.corrcoef(abs(extracted_features_switch_2[feature]), all_properties.iloc[:, gal_property])[0][1]
+#             correlation_2_4 = np.corrcoef(abs(extracted_features_switch_2[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+#             correlation_2 = max(abs(correlation_2_1), abs(correlation_2_2), abs(correlation_2_3), abs(correlation_2_4))
+#
+#             correlation_3_1 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
+#             correlation_3_2 = np.corrcoef(extracted_features_switch_3[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+#             correlation_3_3 = np.corrcoef(abs(extracted_features_switch_3[feature]), all_properties.iloc[:, gal_property])[0][1]
+#             correlation_3_4 = np.corrcoef(abs(extracted_features_switch_3[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+#             correlation_3 = max(abs(correlation_3_1), abs(correlation_3_2), abs(correlation_3_3), abs(correlation_3_4))
+#
+#
+#             # correlation_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
+#             # correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
+#             # correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
+#
+#
+#             correlation_list_1.append(correlation_1)
+#             correlation_list_2.append(correlation_2)
+#             correlation_list_3.append(correlation_3)
+#
+#         correlation_df_1.loc[len(correlation_df_1)] = correlation_list_1
+#         correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
+#         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
+#
+#
+#     relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+#     # relevant_properties = ["StarFormationRate"]
+#
+#     # find the number of features at least slightly correlating with a property
+#     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
+#
+#     relevant_features_1 = (abs(correlation_df_1[relevant_properties]).max(axis=1) > 0.4).sum()
+#     relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.4).sum()
+#     relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.4).sum()
+#
+#     relevant_feature_number.append(relevant_features)
+#     # relevant_feature_ratio.append(relevant_features/encoding_dim)
+#
+#     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
+#     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
+#     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
+#
+#     # med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
+#     # max_relevant_feature_ratio.append(max((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
+#     # min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
+#
+#
+#     # for property in relevant_properties:
+#     #
+#     #     relevant_features_1 = (abs(correlation_df_1[property]).max(axis=1) > 0.4).sum()
+#     #     relevant_features_2 = (abs(correlation_df_2[property]).max(axis=1) > 0.4).sum()
+#     #     relevant_features_3 = (abs(correlation_df_3[property]).max(axis=1) > 0.4).sum()
+#     #
+#     #     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
+#     #     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
+#     #     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
+#     #
+#     #     relevant_property_count.append([min_relevant_feature_number, med_relevant_feature_number, max_relevant_feature_number])
+#
+#
+#
+# axs[1].errorbar(range(1, 31), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
+# # axs[1].errorbar(range(1, 51), relevant_property_count[0][1], yerr=[relevant_property_count[0][1] - relevant_property_count[0][1]), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
+# axs[1].set_ylabel("Meaningful Extracted Features")
+# axs[1].set_xlabel("Extracted Features")
+#
+# # plt.savefig("Variational Eagle/Plots/Meaningful Extracted Features vs Total Extracted Features")
+# # plt.show()
+#
+#
+#
+# plt.savefig("Variational Eagle/Plots/Individual Normalisation - Optimal Extracted Features")
+# plt.show()
 
 
 
