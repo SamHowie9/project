@@ -82,97 +82,98 @@ def normalise_to_r(image):
 
 
 
-# # load the images as a partially balanced dataset
-#
-# # load structural and physical properties into dataframes
-# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-#
-# # dataframe for all properties
-# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-#
-#
-# # find all bad fit galaxies
-# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-# print(bad_fit)
-#
-# # remove those galaxies
-# for i, galaxy in enumerate(bad_fit):
-#     all_properties = all_properties.drop(galaxy, axis=0)
-#
-#
-# spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
-# unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
-# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
-#
-#
-# # randomly sample half the spirals (seed for reproducibility)
-# random.seed(1)
-# spirals = random.sample(spirals, round(len(spirals)/2))
-#
-# fig, axs = plt.subplots(4, 4)
-#
-# all_images = []
-#
-# # open and add the spiral galaxies to the dataset
-# for galaxy in spirals:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
-#
-# # open and add the 'unknown' galaxies to the dataset (sersic index between 2.5 and 4)
-# for galaxy in unknown:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
-#
-# # open and add all the elliptical galaxies to the dataset
-# for n, galaxy in enumerate(ellipticals):
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
-#
-#     # add three more variants of this image
-#
-#     # rotate the image by 90 degrees and add random noise
-#     image_rot_90 = np.rot90(np.copy(image), k=1)
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
-#         image_rot_90.T[i] = image_rot_90.T[i] + gaussian
-#
-#     # flip the original image horizontally and add random noise
-#     image_flip = np.fliplr(np.copy(image))
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_flip[0]), len(image_flip[0])))
-#         image_flip.T[i] = image_flip.T[i] + gaussian
-#
-#     # flip the rotated image horizontally and add random noise
-#     image_flip_90 = np.fliplr(np.copy(image_rot_90))
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_flip_90[0]), len(image_flip_90[0])))
-#         image_flip_90.T[i] = image_flip_90.T[i] + gaussian
-#
-#     # add the three variants to the dataset
-#     all_images.append(normalise_independently(image_rot_90))
-#     all_images.append(normalise_independently(image_flip))
-#     all_images.append(normalise_independently(image_flip_90))
-#
-#
-# # convert the training dataset to an array and define a list to contain the testing dataset
-# train_images = np.array(all_images)
-# test_images = []
-#
-# # randomly sample 20 items to make up the testing set
-# random.seed(2)
-# test_indices = random.sample(range(0, len(all_images)), 20)
-#
-# print(train_images.shape)
-#
-# # add these values to the testing set and remove from the training set
-# for i in test_indices:
-#     test_images.append(all_images[i])
-#     train_images = np.delete(train_images, i, axis=0)
-#
-# # convert the testing dataset to an array
-# test_images = np.array(test_images)
+# load the images as a partially balanced dataset
+
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+print(bad_fit)
+
+# remove those galaxies
+for i, galaxy in enumerate(bad_fit):
+    all_properties = all_properties.drop(galaxy, axis=0)
+
+
+spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
+unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
+
+
+# randomly sample half the spirals (seed for reproducibility)
+random.seed(1)
+spirals = random.sample(spirals, round(len(spirals)/2))
+
+fig, axs = plt.subplots(4, 4)
+
+all_images = []
+
+# open and add the spiral galaxies to the dataset
+for galaxy in spirals:
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    all_images.append(normalise_independently(image))
+
+# open and add the 'unknown' galaxies to the dataset (sersic index between 2.5 and 4)
+for galaxy in unknown:
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    all_images.append(normalise_independently(image))
+
+# open and add all the elliptical galaxies to the dataset
+for n, galaxy in enumerate(ellipticals):
+
+    # open and add each elliptical galaxy
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    all_images.append(normalise_independently(image))
+
+    # add three more variants of this image
+
+    # rotate the image by 90 degrees and add random noise
+    image_rot_90 = np.rot90(np.copy(image), k=1)
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
+        image_rot_90.T[i] = image_rot_90.T[i] + gaussian
+
+    # flip the original image horizontally and add random noise
+    image_flip = np.fliplr(np.copy(image))
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.01, (len(image_flip[0]), len(image_flip[0])))
+        image_flip.T[i] = image_flip.T[i] + gaussian
+
+    # flip the rotated image horizontally and add random noise
+    image_flip_90 = np.fliplr(np.copy(image_rot_90))
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.01, (len(image_flip_90[0]), len(image_flip_90[0])))
+        image_flip_90.T[i] = image_flip_90.T[i] + gaussian
+
+    # add the three variants to the dataset
+    all_images.append(normalise_independently(image_rot_90))
+    all_images.append(normalise_independently(image_flip))
+    all_images.append(normalise_independently(image_flip_90))
+
+
+# convert the training dataset to an array and define a list to contain the testing dataset
+train_images = np.array(all_images)
+test_images = []
+
+# randomly sample 20 items to make up the testing set
+random.seed(2)
+test_indices = random.sample(range(0, len(all_images)), 20)
+
+print(train_images.shape)
+
+# add these values to the testing set and remove from the training set
+for i in test_indices:
+    test_images.append(all_images[i])
+    train_images = np.delete(train_images, i, axis=0)
+
+# convert the testing dataset to an array
+test_images = np.array(test_images)
 
 
 
@@ -180,55 +181,55 @@ def normalise_to_r(image):
 
 # load the images as a fully balanced dataset
 
-# load the ids of the chosen galaxies
-chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
-
-all_images = []
-
-# # loop through each galaxy in the supplemental file
-for i, galaxy in enumerate(chosen_galaxies):
-
-    # get the filename of each galaxy in the supplemental file
-    filename = "galrand_" + str(galaxy) + ".png"
-
-    # open the image and append it to the main list
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-
-    # normalise the image (each band independently)
-    image = normalise_independently(image)
-
-    # add the image to the dataset
-    all_images.append(image)
-
-
-# split the data into training and testing data (200 images used for testing)
-train_images = all_images[:-200]
-test_images = np.array(all_images[-200:])
-
-print(".")
-
-# load the filenames of the augmented images
-augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
-
-print(".")
-
-for galaxy in augmented_galaxies:
-
-    # load each augmented image
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + galaxy)
-
-    # normalise the image
-    image = normalise_independently(image)
-
-    # add the image to the training set (not the testing set)
-    train_images.append(image)
-
-# convert the training set to a numpy array
-train_images = np.array(train_images)
-
-
-print(train_images.shape)
-print(test_images.shape)
+# # load the ids of the chosen galaxies
+# chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
+#
+# all_images = []
+#
+# # # loop through each galaxy in the supplemental file
+# for i, galaxy in enumerate(chosen_galaxies):
+#
+#     # get the filename of each galaxy in the supplemental file
+#     filename = "galrand_" + str(galaxy) + ".png"
+#
+#     # open the image and append it to the main list
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+#
+#     # normalise the image (each band independently)
+#     image = normalise_independently(image)
+#
+#     # add the image to the dataset
+#     all_images.append(image)
+#
+#
+# # split the data into training and testing data (200 images used for testing)
+# train_images = all_images[:-200]
+# test_images = np.array(all_images[-200:])
+#
+# print(".")
+#
+# # load the filenames of the augmented images
+# augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
+#
+# print(".")
+#
+# for galaxy in augmented_galaxies:
+#
+#     # load each augmented image
+#     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + galaxy)
+#
+#     # normalise the image
+#     image = normalise_independently(image)
+#
+#     # add the image to the training set (not the testing set)
+#     train_images.append(image)
+#
+# # convert the training set to a numpy array
+# train_images = np.array(train_images)
+#
+#
+# print(train_images.shape)
+# print(test_images.shape)
 
 
 

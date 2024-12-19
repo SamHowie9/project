@@ -9,7 +9,33 @@ import random
 A = [[1, 2], [3, 4], [5, 6], [7, 8]]
 B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-print(A[:3])
+B = [[3, 3], [5, 5], [9, 9], [1, 1], [1, 1], [1, 1], [1, 1], [2, 2], [2, 2], [2, 2], [2, 2], [3, 3], [3, 3], [3, 3], [3, 3], [4, 4], [4, 4], [4, 4], [4, 4]]
+
+# print(A[:3])
+
+B_1 = B[:3]
+B_2 = B[3:]
+
+print(B)
+print(B_1)
+print(B_2)
+
+B_2 = [B_2[i] for i in range(len(B_2)) if i % 4 == 0]
+
+B = B_1 + B_2
+
+print(B)
+
+B[3] = np.nan
+B[5] = np.nan
+
+print(B)
+
+
+B = [galaxy for galaxy in B if not np.isnan(galaxy).all()]
+
+print(B)
+
 
 # C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 #
