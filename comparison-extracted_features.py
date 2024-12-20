@@ -39,19 +39,16 @@ physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_p
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
 
-print(len(all_properties))
-
-
 # find all bad fit galaxies
 bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
 # print(bad_fit)
 
 # remove those galaxies
-for i, galaxy in enumerate(bad_fit):
+for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
 
 
-print(len(all_properties))
+# print(len(all_properties))
 
 
 
@@ -105,17 +102,16 @@ test_indices = random.sample(range(0, dataset_size), 20)
 # flag the training set in the properties dataframe and extracted features (removing individually effects the position of the other elements)
 for i in test_indices:
     if i <= len(all_properties):
-        print(i, ".")
+        # print(i, ".")
         all_properties.iloc[i] = np.nan
-    else:
-        print(i)
+    # else:
+    #     print(i)
 
 # remove the training set from the properties dataframe and extracted features
 all_properties = all_properties.dropna()
 
 print(len(all_properties))
-
-print("....")
+print()
 
 
 
@@ -147,13 +143,6 @@ ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
 
 
 
-
-print(len(all_properties))
-
-print()
-
-print(extracted_features.shape)
-
 extracted_features_spiral = extracted_features[:(len(chosen_spiral_indices) + len(unknown_indices))]
 extracted_features_elliptical = extracted_features[(len(chosen_spiral_indices) + len(unknown_indices)):]
 
@@ -163,21 +152,21 @@ extracted_features = np.array(list(extracted_features_spiral) + list(extracted_f
 print(extracted_features.shape)
 
 
-# get the randomly sampled testing set indices
-random.seed(2)
-dataset_size = len(chosen_indices) + (3 * len(ellipticals_indices))
-test_indices = random.sample(range(0, dataset_size), 20)
-
-
-
-
-# extracted_features = [galaxy for galaxy in extracted_features if not np.isnan(galaxy).all()]
-
-extracted_features_switch = extracted_features.T
-
-
-print(len(all_properties))
-print(extracted_features.shape)
+# # get the randomly sampled testing set indices
+# random.seed(2)
+# dataset_size = len(chosen_indices) + (3 * len(ellipticals_indices))
+# test_indices = random.sample(range(0, dataset_size), 20)
+#
+#
+#
+#
+# # extracted_features = [galaxy for galaxy in extracted_features if not np.isnan(galaxy).all()]
+#
+# extracted_features_switch = extracted_features.T
+#
+#
+# print(len(all_properties))
+# print(extracted_features.shape)
 
 
 

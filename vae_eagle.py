@@ -19,7 +19,7 @@ from matplotlib import image as mpimg
 
 encoding_dim = 15
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -94,10 +94,10 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 # find all bad fit galaxies
 bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-print(bad_fit)
+print("Bad Fit Indices:", bad_fit)
 
 # remove those galaxies
-for i, galaxy in enumerate(bad_fit):
+for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
 
 
@@ -158,22 +158,43 @@ for n, galaxy in enumerate(ellipticals):
 
 
 # convert the training dataset to an array and define a list to contain the testing dataset
-train_images = np.array(all_images)
+# train_images = np.array(all_images)
+train_images = []
 test_images = []
 
 # randomly sample 20 items to make up the testing set
 random.seed(2)
 test_indices = random.sample(range(0, len(all_images)), 20)
 
-print(train_images.shape)
+# add the images to either the training set or the testing set based on this
+for i, image in enumerate(all_images):
+    if i in test_indices:
+        test_images.append(image)
+    else:
+        train_images.append(image)
+
+# convert the datasets to numpy arrays
+train_images = np.array(train_images)
+test_images = np.array(test_images)
+
+print()
+print()
+print("Total Number of Images: ", len(all_images))
+print("Training Set:           ", train_images.shape)
+print("Testing Set:            ", test_images.shape)
+print("Indices of Testing Set: ", test_indices)
+print()
+print()
+
 
 # add these values to the testing set and remove from the training set
-for i in test_indices:
-    test_images.append(all_images[i])
-    train_images = np.delete(train_images, i, axis=0)
+# for i in test_indices:
+#     test_images.append(all_images[i])
+    # train_images = np.delete(train_images, i, axis=0)
+
 
 # convert the testing dataset to an array
-test_images = np.array(test_images)
+# test_images = np.array(test_images)
 
 
 
@@ -376,11 +397,11 @@ model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy", extracted_features)
 
 print(np.array(extracted_features).shape)
 
@@ -388,7 +409,7 @@ print(np.array(extracted_features).shape)
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_" + str(run) + ".npy", loss)
+np.save("Variational Eagle/Loss/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_" + str(run) + ".npy", loss)
 
 
 
@@ -421,7 +442,7 @@ n = 12
 images_to_reconstruct = test_images[:n]
 # images_to_reconstruct = train_images[n:]
 
-print(images_to_reconstruct.shape)
+# print(images_to_reconstruct.shape)
 
 # reconstruct the images
 test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
@@ -448,7 +469,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Validation/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_" + str(run))
+plt.savefig("Variational Eagle/Reconstructions/Validation/balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_" + str(run))
 plt.show()
 
 
