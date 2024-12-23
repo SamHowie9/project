@@ -19,8 +19,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 25
-run = 1
+encoding_dim = 20
+run = 3
 
 
 
@@ -113,9 +113,9 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + 
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-pca = PCA(n_components=13).fit(extracted_features)
-extracted_features = pca.transform(extracted_features)
-extracted_features_switch = extracted_features.T
+# pca = PCA(n_components=13).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
 
 # get the indices of the different types of galaxies (according to sersic index) after restructuring of properties dataframe
 spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
@@ -254,7 +254,7 @@ wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
 plt.show()
 
@@ -300,7 +300,7 @@ for i, property in enumerate(properties):
         axs[feature][i].set_ylabel(None)
         axs[feature][i].tick_params(labelsize=12)
 
-plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_pca_all_property_correlation", bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
 plt.show()
