@@ -11,154 +11,34 @@ B = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 B = [[3, 3], [5, 5], [9, 9], [1, 1], [1, 1], [1, 1], [1, 1], [2, 2], [2, 2], [2, 2], [2, 2], [3, 3], [3, 3], [3, 3], [3, 3], [4, 4], [4, 4], [4, 4], [4, 4]]
 
-# print(A[:3])
-
-B_1 = B[:3]
-B_2 = B[3:]
-
-print(B)
-print(B_1)
-print(B_2)
-
-B_2 = [B_2[i] for i in range(len(B_2)) if i % 4 == 0]
-
-B = B_1 + B_2
-
-print(B)
-
-B[3] = np.nan
-B[5] = np.nan
-
-print(B)
 
 
-B = [galaxy for galaxy in B if not np.isnan(galaxy).all()]
+chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
 
-print(B)
-
-
-# C = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-#
-#
-# A = np.array(A)
-# print(A)
-# A = np.delete(A, 1, axis=0)
-# print(A)
-
-# print(A[:-3])
-# print(A[-3:])
-
-# data = {
-#     "A": [1, 2, 3, 1, 2, 3, 1, 2, 3],
-#     "B": [4, 5, 6, 1, 2, 3, 1, 2, 3],
-#     "C": [7, 8, 9, 1, 2, 3, 1, 2, 3],
-# }
-#
-#
-#
-#
-#
-#
-# df = pd.DataFrame(data)
-#
-# print(df)
-# print()
-#
-# df.iloc[1] = np.nan
-#
-# df.iloc[3] = np.nan
-#
-# print(df)
-#
-# df = df.dropna()
-#
-# print(df)
+print(len(chosen_galaxies))
 
 
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
+# # account for hte validation data and remove final 200 elements
+# structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+# physical_properties.drop(physical_properties.tail(200).index, inplace=True)
 
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
-# print(df)
-# print()
-#
-# df = df.drop(3, axis=0)
-#
-# print(df)
-# print()
-#
-# df = df.drop(df.index[3])
-#
-# print(df)
+print(len(all_properties))
 
-# df = df.iloc[[1, 2, 5]]
-#
-# print(df)
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# print(bad_fit)
 
+# remove those galaxies
+for galaxy in bad_fit:
+    all_properties = all_properties.drop(galaxy, axis=0)
 
-# extracted_features = np.load("Variational Eagle/Extracted Features/Normalised to r/15_feature_300_epoch_features_1.npy")
-#
-# print(extracted_features.shape)
-# print(extracted_features[0].shape)
-# print(extracted_features[0][100].shape)
-# print(extracted_features[0][100][7])
+print(len(list(all_properties["GalaxyID"])))
 
-
-
-
-
-# A = []
-#
-# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_54975668.png")
-#
-# A.append(image)
-# A.append(image)
-# A.append(image)
-# A.append(image)
-#
-# print(np.array(A).shape)
-# print(image.T[0].shape)
-#
-# print(np.min(image.T[0]), np.max(image.T[0]))
-# print(np.min(image.T[1]), np.max(image.T[1]))
-# print(np.min(image.T[2]), np.max(image.T[2]))
-#
-# # print(np.min(image[0]), np.max(image[0]))
-# # print(np.min(image[1]), np.max(image[1]))
-# # print(np.min(image[2]), np.max(image[2]))
-# # print()
-
-
-
-
-
-
-# # A = [[[[1], [2], [3]], [[1], [2], [3]], [[1], [2], [3]]],
-# #      [[[1], [2], [3]], [[1], [2], [3]], [[1], [2], [3]]],
-# #      [[[1], [2], [3]], [[1], [2], [3]], [[1], [2], [3]]]]
-#
-# A = [[[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-#      [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]],
-#      [[1, 2, 3, 4, 5], [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]]]
-#
-#
-# print(pd.DataFrame(A[0]))
-#
-#
-# print(np.array(A).shape)
-#
-# print(max(max(max(row) for row in A)))
-#
-# print(np.max(A))
-#
-# # print(np.array(A)/max(max(max(row) for row in A)))
-# print(np.array(A)/np.max(A).T)
-#
-# B = (np.array(A)/max(max(max(row) for row in A))).T
-#
-# C = cv2.resize(B, (10, 10))
-#
-# plt.imshow(C)
-#
-# # plt.imshow((np.array(A)/max(max(max(row) for row in A))).T)
-#
-# plt.show()
+print(len(all_properties))
