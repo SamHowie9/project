@@ -113,9 +113,9 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + 
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-# pca = PCA(n_components=13).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
+pca = PCA(n_components=13).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features_switch = extracted_features.T
 
 # get the indices of the different types of galaxies (according to sersic index) after restructuring of properties dataframe
 spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
@@ -220,42 +220,131 @@ for feature in range(0, len(extracted_features_switch)):
 
 
 
-# set the figure size
-# plt.figure(figsize=(20, encoding_dim))
-plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+# # set the figure size
+# # plt.figure(figsize=(20, encoding_dim))
+# plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+#
+#
+# # properties to plot
+# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+#
+#
+# # plot a heatmap for the dataframe (with annotations)
+# ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+#
+#
+#
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=15)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+# ax.figure.axes[-1].yaxis.label.set_size(15)
+#
+#
+# def wrap_labels(ax, width, break_long_words=False):
+#     labels = []
+#     for label in ax.get_xticklabels():
+#         text = label.get_text()
+#         labels.append(textwrap.fill(text, width=width,
+#                       break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
+#
+# wrap_labels(ax, 10)
+#
+#
+#
+# plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# # plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
+# plt.show()
 
 
-# properties to plot
-selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-
-
-# plot a heatmap for the dataframe (with annotations)
-ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
 
 
 
-plt.yticks(rotation=0)
-plt.ylabel("Extracted Features", fontsize=15)
-ax.xaxis.tick_top() # x axis on top
-ax.xaxis.set_label_position('top')
-ax.tick_params(length=0)
-ax.figure.axes[-1].yaxis.label.set_size(15)
-
-
-def wrap_labels(ax, width, break_long_words=False):
-    labels = []
-    for label in ax.get_xticklabels():
-        text = label.get_text()
-        labels.append(textwrap.fill(text, width=width,
-                      break_long_words=break_long_words))
-    ax.set_xticklabels(labels, rotation=0, fontsize=15)
-
-wrap_labels(ax, 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-# plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
+
+# # properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+# properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
+#
+#
+# all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
+#
+# print(all_properties)
+#
+# property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
+#
+# # fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
+# fig, axs = plt.subplots(extracted_features_switch.shape[0], len(properties), figsize=(40, (encoding_dim * 4)))
+#
+# # fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
+#
+#
+# for i, property in enumerate(properties):
+#
+#     axs[0][i].set_title(property_labels[i], fontsize=20)
+#
+#     # for feature in range(0, 19):
+#     # for feature in range(0, encoding_dim):
+#     for feature in range(0, extracted_features_switch.shape[0]):
+#
+#         axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
+#         # axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
+#
+#         # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
+#
+#         axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
+#         # axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
+#         axs[feature][i].set_ylabel(None)
+#         axs[feature][i].tick_params(labelsize=12)
+#
+# plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# # plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_pca_all_property_correlation", bbox_inches='tight')
+# # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
+# plt.show()
+
+
+
+def quadratic(a, b, c, x):
+    return (a * x * x) + (b * x) + c
+
+def exponential(x, a, b, c):
+    return a * np.exp(b * x) + c
+
+
+
+
+
+
+fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+
+axs.scatter(x=extracted_features_switch[1], y=all_properties["n_r"], s=2, c="darkturquoise")
+
+# fit = np.polyfit(x=extracted_features_switch[1], y=all_properties["n_r"], deg=2)
+# print(fit)
+#
+# x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+# y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+
+params, covariance = curve_fit(exponential, extracted_features_switch[1], all_properties["n_r"], p0=(1, -1, 1))
+
+print(params)
+print(covariance)
+
+x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+y_fit = [exponential(x, *params) for x in x_fit]
+
+
+axs.plot(x_fit, y_fit, c="black")
+
+# axs.plot(x_fit, y_fit, c="black")
+
+axs.set_xlabel("PCA Feature 1")
+axs.set_ylabel("Sersic Index")
+
+plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_sersic_3", bbox_inches='tight')
 plt.show()
 
 
@@ -263,47 +352,71 @@ plt.show()
 
 
 
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+#
+# axs.scatter(x=extracted_features_switch[3], y=all_properties["pa_r"], s=2)
+#
+#
+# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=3)
+# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=4)
+# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=5)
+# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=6)
+#
+# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
+#
+# plt.plot(y_fit, x_fit, c="black")
+#
+# axs.set_xlabel("PCA Feature 3")
+# axs.set_ylabel("Position Angle")
+#
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_3_vs_position_angle_1", bbox_inches='tight')
+# plt.show()
 
 
 
-# properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
 
 
-all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
-
-print(all_properties)
-
-property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
-
-# fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
-fig, axs = plt.subplots(extracted_features_switch.shape[0], len(properties), figsize=(40, (encoding_dim * 4)))
-
-# fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
 
 
-for i, property in enumerate(properties):
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+#
+# axs.scatter(x=extracted_features_switch[3], y=all_properties["q_r"], s=2)
+#
+#
+#
+#
+# # fit = np.polyfit(x=abs(extracted_features_switch[3]), y=all_properties["q_r"], deg=1)
+# fit = np.polyfit(x=abs(extracted_features_switch[3]), y=all_properties["q_r"], deg=2)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
+#
+# x_fit = np.linspace(np.min(abs(extracted_features_switch[3])), np.max(abs(extracted_features_switch[3])), 100)
+# # y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
+# y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
+#
+# plt.plot(x_fit, y_fit, c="black")
+# plt.plot((-1 * x_fit), y_fit, c="black")
+#
+# axs.set_xlabel("PCA Feature 3")
+# axs.set_ylabel("Axis Ratio")
+#
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_3_vs_axis_ratio_1", bbox_inches='tight')
+# plt.show()
 
-    axs[0][i].set_title(property_labels[i], fontsize=20)
 
-    # for feature in range(0, 19):
-    # for feature in range(0, encoding_dim):
-    for feature in range(0, extracted_features_switch.shape[0]):
 
-        axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
-        # axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
-
-        # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
-
-        axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
-        # axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
-        axs[feature][i].set_ylabel(None)
-        axs[feature][i].tick_params(labelsize=12)
-
-plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-# plt.savefig("Variational Eagle/Correlation Plots/scatter_individually_normalised_pca_all_property_correlation", bbox_inches='tight')
-# plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
-plt.show()
 
 
 
