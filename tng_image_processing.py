@@ -66,12 +66,12 @@ for j, image_name in enumerate(images):
 
 
 
-    # normalise each band
-    for i in range(0, 3):
-        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i] - np.min(image[i])))
-
-
-    axs[j][3].imshow(np.array(image).T)
+    # # normalise each band
+    # for i in range(0, 3):
+    #     image[i] = (image[i] - np.min(image[i])) / (np.max(image[i] - np.min(image[i])))
+    #
+    #
+    # axs[j][3].imshow(np.array(image).T)
 
 
 
@@ -102,5 +102,5 @@ for j, image_name in enumerate(images):
 
 
 fig.tight_layout()
-plt.savefig("Variational TNG/Plots/Image Processing")
+plt.savefig("Variational TNG/Plots/Image Processing 2")
 plt.show()

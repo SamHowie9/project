@@ -43,216 +43,36 @@ def normalise_to_r(image):
         image[i] = (image[i] - np.min(image[i])) / (np.max(image[1]) - np.min(image[1]))
     return image.T
 
+# convert fwhm value to sigma
+def fwhm_to_sigma(fwhm):
+    return fwhm/(2 * np.sqrt(2 * np.log(2)))
 
+# image processing for each image
+def image_processing(image):
 
-# # load the original dataset
-#
-# # list to contain all galaxy images
-# all_images = []
-#
-# # load the ids of the chosen galaxies
-# chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
-#
-# # # loop through each galaxy in the supplemental file
-# for i, galaxy in enumerate(chosen_galaxies):
-#
-#     # get the filename of each galaxy in the supplemental file
-#     filename = "galrand_" + str(galaxy) + ".png"
-#
-#     # open the image and append it to the main list
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-#
-#     # find smallest non zero pixel value in the image and replace all zero values with this (for log transformation)
-#     smallest_non_zero = np.min(image[image > 0])
-#     image = np.where(image == 0.0, smallest_non_zero, image)
-#
-#     # normalise the image (either each band independently or to the r band)
-#     # image = normalise_independently(image)
-#     image = normalise_to_r(image)
-#
-#     # add the image to the dataset
-#     all_images.append(image)
-#
-#
-# split the data into training and testing data (200 images used for testing)
-# train_images = np.array(all_images[:-200])
-# test_images = np.array(all_images[-200:])
+    # seed for random (for reproducibility)
+    random.seed(1)
+
+    # add random gaussian noise to each band of the image
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.1, (len(image[0]), len(image[0])))
+        image[i] = image[i] + gaussian
 
 
 
 
+galaxies = os.listdir("sdss/snapnum_095/data/")
 
-# load the images as a partially balanced dataset
+for galaxy in galaxies:
 
-# # load structural and physical properties into dataframes
-# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-#
-# # dataframe for all properties
-# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-#
-# # find all bad fit galaxies
-# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-# print("Bad Fit Indices:", bad_fit)
-#
-# # remove those galaxies
-# for galaxy in bad_fit:
-#     all_properties = all_properties.drop(galaxy, axis=0)
-#
-#
-# spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
-# unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
-# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
-#
-#
-# # randomly sample half the spirals (seed for reproducibility)
-# random.seed(1)
-# spirals = random.sample(spirals, round(len(spirals)/2))
-#
-# fig, axs = plt.subplots(4, 4)
-#
-# all_images = []
-#
-# # open and add the spiral galaxies to the dataset
-# for galaxy in spirals:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
-#
-# # open and add the 'unknown' galaxies to the dataset (sersic index between 2.5 and 4)
-# for galaxy in unknown:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
-#
-# # open and add all the elliptical galaxies to the dataset
-# for n, galaxy in enumerate(ellipticals):
-#
-#     # open and add each elliptical galaxy
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
-#
-#     # add three more variants of this image
-#
-#     # rotate the image by 90 degrees and add random noise
-#     image_rot_90 = np.rot90(np.copy(image), k=1)
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
-#         image_rot_90.T[i] = image_rot_90.T[i] + gaussian
-#
-#     # flip the original image horizontally and add random noise
-#     image_flip = np.fliplr(np.copy(image))
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_flip[0]), len(image_flip[0])))
-#         image_flip.T[i] = image_flip.T[i] + gaussian
-#
-#     # flip the rotated image horizontally and add random noise
-#     image_flip_90 = np.fliplr(np.copy(image_rot_90))
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_flip_90[0]), len(image_flip_90[0])))
-#         image_flip_90.T[i] = image_flip_90.T[i] + gaussian
-#
-#     # add the three variants to the dataset
-#     all_images.append(normalise_independently(image_rot_90))
-#     all_images.append(normalise_independently(image_flip))
-#     all_images.append(normalise_independently(image_flip_90))
-#
-#
-# # convert the training dataset to an array and define a list to contain the testing dataset
-# # train_images = np.array(all_images)
-# train_images = []
-# test_images = []
-#
-# # randomly sample 20 items to make up the testing set
-# random.seed(2)
-# test_indices = random.sample(range(0, len(all_images)), 20)
-#
-# # add the images to either the training set or the testing set based on this
-# for i, image in enumerate(all_images):
-#     if i in test_indices:
-#         test_images.append(image)
-#     else:
-#         train_images.append(image)
-#
-# # convert the datasets to numpy arrays
-# train_images = np.array(train_images)
-# test_images = np.array(test_images)
-#
-# print()
-# print()
-# print("Total Number of Images: ", len(all_images))
-# print("Training Set:           ", train_images.shape)
-# print("Testing Set:            ", test_images.shape)
-# print("Indices of Testing Set: ", test_indices)
-# print()
-# print()
+    # open the fits file and get the image
+    hdu_list = fits.open("sdss/snapnum_095/data/" + galaxy)
+    image = hdu_list[0].data
+
+    # take only the g,r,i bands (ignore z)
+    image = image[0:3]
 
 
-
-
-
-
-# load the images as a fully balanced dataset
-
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-# find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-print("Bad Fit Indices:", bad_fit)
-
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# get a list of all the ids of the galaxies
-chosen_galaxies = list(all_properties["GalaxyID"])
-
-# list to contain all galaxy images
-all_images = []
-
-# # loop through each galaxy
-for i, galaxy in enumerate(chosen_galaxies):
-
-    # get the filename of each galaxy in the supplemental file
-    filename = "galrand_" + str(galaxy) + ".png"
-
-    # open the image and append it to the main list
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-
-    # normalise the image (each band independently)
-    image = normalise_independently(image)
-
-    # add the image to the dataset
-    all_images.append(image)
-
-
-# split the data into training and testing data (200 images used for testing)
-train_images = all_images[:-200]
-test_images = np.array(all_images[-200:])
-
-# load the filenames of the augmented images
-augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
-
-for galaxy in augmented_galaxies:
-
-    # load each augmented image
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + galaxy)
-
-    # normalise the image
-    image = normalise_independently(image)
-
-    # add the image to the training set (not the testing set)
-    train_images.append(image)
-
-# convert the training set to a numpy array
-train_images = np.array(train_images)
-
-
-print(train_images.shape)
-print(test_images.shape)
 
 
 
@@ -475,128 +295,6 @@ plt.savefig("Variational Eagle/Reconstructions/Validation/balanced_" + str(encod
 plt.show()
 
 
-
-
-
-
-# # plotting a heatmap
-#
-# # create gradient model to compute gradient of extracted features with respect to the original images
-# # with tf.GradientTape() as tape:
-# #     tape.watch(all_images[i])
-# #     latent_feature = extracted_features[i][0]
-#
-# fig, axs = plt.subplots(4, 5, figsize=(10, 10))
-#
-# galaxies_to_map = [234, 1234, 54, 982, 2010]
-# # galaxies_to_map = [100]
-#
-# for i, galaxy in enumerate(galaxies_to_map):
-#
-#     # normalise image (to be displayed)
-#     original_image = normalise_independently(all_images[galaxy])
-#
-#     # display the original image at the top
-#     axs[0, i].imshow(original_image)
-#     axs[0, i].get_xaxis().set_visible(False)
-#     axs[0, i].get_yaxis().set_visible(False)
-#
-#
-#
-#
-#     # convert the image to a tensor
-#     image_tensor = tf.convert_to_tensor(all_images[galaxy])
-#
-#
-#
-#
-#     # heatmap for sersic index
-#
-#     # set up gradient model
-#     with tf.GradientTape() as tape:
-#
-#         # watch the original image (calculate gradient with respect to original image)
-#         tape.watch(image_tensor)
-#
-#         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-#         selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 17]
-#
-#     # calculate the gradient and save in numpy array
-#     gradient = tape.gradient(selected_feature, image_tensor)
-#     gradient = np.array(gradient)
-#
-#     # normalise gradient
-#     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
-#
-#     # display the heatmap for the sersic index correlated feature
-#     axs[1, i].imshow(gradient, cmap="jet")
-#     axs[1, i].get_xaxis().set_visible(False)
-#     axs[1, i].get_yaxis().set_visible(False)
-#
-#
-#
-#
-#
-#     # heatmap for position angle
-#
-#     # set up gradient model
-#     with tf.GradientTape() as tape:
-#         # watch the original image (calculate gradient with respect to original image)
-#         tape.watch(image_tensor)
-#
-#         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-#         selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 11]
-#
-#     # calculate the gradient and save in numpy array
-#     gradient = tape.gradient(selected_feature, image_tensor)
-#     gradient = np.array(gradient)
-#
-#     # normalise gradient
-#     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
-#
-#     # display the heatmap for the sersic index correlated feature
-#     axs[2, i].imshow(gradient, cmap="jet")
-#     axs[2, i].get_xaxis().set_visible(False)
-#     axs[2, i].get_yaxis().set_visible(False)
-#
-#
-#
-#
-#
-#     # heatmap for semi-major axis
-#
-#     # set up gradient model
-#     with tf.GradientTape() as tape:
-#         # watch the original image (calculate gradient with respect to original image)
-#         tape.watch(image_tensor)
-#
-#         # calculate gradient of specific extracted feature function from the encoder (not just the value of the extracted feature)
-#         selected_feature = tf.convert_to_tensor(encoder(tf.expand_dims(image_tensor, axis=0)))[0, 0, 12]
-#
-#     # calculate the gradient and save in numpy array
-#     gradient = tape.gradient(selected_feature, image_tensor)
-#     gradient = np.array(gradient)
-#
-#     # normalise gradient
-#     gradient = (gradient - np.min(gradient)) / (np.max(gradient) - np.min(gradient))
-#
-#     # display the heatmap for the sersic index correlated feature
-#     axs[3, i].imshow(gradient, cmap="jet")
-#     axs[3, i].get_xaxis().set_visible(False)
-#     axs[3, i].get_yaxis().set_visible(False)
-#
-#
-#
-#
-# axs[0, 2].set_title("Original Image")
-# axs[1, 2].set_title("Sersic Index")
-# axs[2, 2].set_title("Position Angle")
-# axs[3, 2].set_title("Semi-Major Axis")
-#
-#
-#
-# plt.savefig("Variational Eagle/Plots/r_normalised_" + str(encoding_dim) + "_feature_sersic_heatmap")
-# plt.show()
 
 
 
