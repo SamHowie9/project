@@ -9,7 +9,7 @@ import cv2
 
 images = ["broadband_540856.fits", "broadband_546348.fits", "broadband_166270.fits", "broadband_247336.fits", "broadband_391637.fits", "broadband_592000.fits", "broadband_600893.fits", "broadband_89584.fits", "broadband_589571.fits", "broadband_204076.fits"]
 
-fig, axs = plt.subplots(len(images), 5, figsize=(10, 18))
+fig, axs = plt.subplots(len(images), 6, figsize=(10, 20))
 
 
 for i in range(0, len(images)):
@@ -90,6 +90,13 @@ for j, image_name in enumerate(images):
 
     axs[j][4].imshow(image)
 
+
+    # normalise each band
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i] - np.min(image[i])))
+
+
+    axs[j][5].imshow(np.array(image).T)
 
 
 
