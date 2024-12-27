@@ -95,13 +95,13 @@ def image_processing(image):
 all_images = []
 
 # list of all the galaxy images to load
-galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/TNG Images/")
+galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/TNG Images/sdss/snapnum_095/data/")
 
 # loop through each image
 for galaxy in galaxies:
 
     # open the fits file and get the image
-    hdu_list = fits.open("/cosma7/data/durham/dc-howi1/project/TNG Images/" + galaxy)
+    hdu_list = fits.open("/cosma7/data/durham/dc-howi1/project/TNG Images/sdss/snapnum_095/data/" + galaxy)
     image = hdu_list[0].data
 
     # perform the image processing
