@@ -90,6 +90,7 @@ for j, image_name in enumerate(images):
 
     axs[j][4].imshow(image)
 
+    image = image.T
 
     # normalise each band
     for i in range(0, 3):
