@@ -53,6 +53,9 @@ def fwhm_to_sigma(fwhm):
 # image processing for each image
 def image_processing(image):
 
+    # take only the g,r,i bands (ignore z)
+    image = image[0:3]
+
     # apply gaussian filter to each band
     image[0] = gaussian_filter(image[0], sigma=fwhm_to_sigma(1.5))
     image[1] = gaussian_filter(image[1], sigma=fwhm_to_sigma(1.5))
@@ -104,9 +107,8 @@ for galaxy in galaxies:
     # perform the image processing
     image = image_processing(image)
 
-
-    # add the image to the list
-    all_images.append(image)
+    # add the transpose of the image to the list
+    all_images.append(image.T)
 
 
 print(np.array(all_images[0]).shape)
