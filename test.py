@@ -71,5 +71,5 @@ for galaxy in reconstruction_ids:
     reconstruction.append(normalise_independently(image))
 
 
-loss = keras.losses.binary_crossentropy(data, reconstruction)
+loss = keras.losses.binary_crossentropy(data[0], reconstruction[0])
 print(loss)
