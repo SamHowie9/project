@@ -285,22 +285,22 @@ class VAE(keras.Model):
     def train_step(self, data):
 
         with tf.GradientTape() as tape:
-            # z_mean, z_log_var, z = self.encoder(data)
-            # reconstruction = self.decoder(z)
-            # reconstruction_loss = ops.mean(
-            #     ops.sum(
-            #         # keras.losses.binary_crossentropy(data, reconstruction),
-            #         axis=(1, 2),
-            #     )
-            # )
             z_mean, z_log_var, z = self.encoder(data)
             reconstruction = self.decoder(z)
             reconstruction_loss = ops.mean(
                 ops.sum(
-                    root_mean_squared_error(data, reconstruction),
-                    axis=1,
+                    keras.losses.binary_crossentropy(data, reconstruction),
+                    axis=(1, 2),
                 )
             )
+            # z_mean, z_log_var, z = self.encoder(data)
+            # reconstruction = self.decoder(z)
+            # reconstruction_loss = ops.mean(
+            #     ops.sum(
+            #         root_mean_squared_error(data, reconstruction),
+            #         axis=1,
+            #     )
+            # )
             kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
             kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
             total_loss = reconstruction_loss + kl_loss
@@ -406,11 +406,11 @@ model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Balanced RMSE/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Balanced RMSE//" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy", extracted_features)
 
 print(np.array(extracted_features).shape)
 
@@ -418,7 +418,7 @@ print(np.array(extracted_features).shape)
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Balanced RMSE//" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_" + str(run) + ".npy", loss)
+np.save("Variational Eagle/Loss/Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_" + str(run) + ".npy", loss)
 
 
 
@@ -434,7 +434,7 @@ axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
 axs2.set_ylabel("KL Loss")
 plt.legend()
 
-plt.savefig("Variational Eagle/Plots/balanced_rmse_" + str(encoding_dim) + "_feature_loss_" + str(run))
+plt.savefig("Variational Eagle/Plots/balanced_" + str(encoding_dim) + "_feature_loss_" + str(run))
 plt.show()
 
 
@@ -478,7 +478,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Testing/balanced_rmse" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_" + str(run))
+plt.savefig("Variational Eagle/Reconstructions/Testing/balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_" + str(run))
 plt.show()
 
 
