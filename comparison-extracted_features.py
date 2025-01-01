@@ -20,7 +20,7 @@ pd.set_option('display.width', 500)
 
 
 encoding_dim = 20
-run = 3
+run = 1
 
 
 
@@ -220,43 +220,43 @@ for feature in range(0, len(extracted_features_switch)):
 
 
 
-# # set the figure size
-# # plt.figure(figsize=(20, encoding_dim))
-# plt.figure(figsize=(20, extracted_features_switch.shape[0]))
-#
-#
-# # properties to plot
-# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-#
-#
-# # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-#
-#
-#
-# plt.yticks(rotation=0)
-# plt.ylabel("Extracted Features", fontsize=15)
-# ax.xaxis.tick_top() # x axis on top
-# ax.xaxis.set_label_position('top')
-# ax.tick_params(length=0)
-# ax.figure.axes[-1].yaxis.label.set_size(15)
-#
-#
-# def wrap_labels(ax, width, break_long_words=False):
-#     labels = []
-#     for label in ax.get_xticklabels():
-#         text = label.get_text()
-#         labels.append(textwrap.fill(text, width=width,
-#                       break_long_words=break_long_words))
-#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
-#
-# wrap_labels(ax, 10)
-#
-#
-#
+# set the figure size
+# plt.figure(figsize=(20, encoding_dim))
+plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+
+
+# properties to plot
+selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+
+
+# plot a heatmap for the dataframe (with annotations)
+ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+
+plt.yticks(rotation=0)
+plt.ylabel("Extracted Features", fontsize=15)
+ax.xaxis.tick_top() # x axis on top
+ax.xaxis.set_label_position('top')
+ax.tick_params(length=0)
+ax.figure.axes[-1].yaxis.label.set_size(15)
+
+
+def wrap_labels(ax, width, break_long_words=False):
+    labels = []
+    for label in ax.get_xticklabels():
+        text = label.get_text()
+        labels.append(textwrap.fill(text, width=width,
+                      break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+
+wrap_labels(ax, 10)
+
+
+
 # plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-# # plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
-# plt.show()
+# plt.savefig("Variational Eagle/Correlation Plots/individually_normalised_pca_all_property_correlation", bbox_inches='tight')
+plt.show()
 
 
 
@@ -307,45 +307,45 @@ for feature in range(0, len(extracted_features_switch)):
 
 
 
-def quadratic(a, b, c, x):
-    return (a * x * x) + (b * x) + c
-
-def exponential(x, a, b, c):
-    return a * np.exp(b * x) + c
-
-
-
-
-
-
-fig, axs = plt.subplots(1, 1, figsize=(5, 5))
-
-axs.scatter(x=extracted_features_switch[1], y=all_properties["n_r"], s=2, c="darkturquoise")
-
-# fit = np.polyfit(x=extracted_features_switch[1], y=all_properties["n_r"], deg=2)
-# print(fit)
+# def quadratic(a, b, c, x):
+#     return (a * x * x) + (b * x) + c
+#
+# def exponential(x, a, b, c):
+#     return a * np.exp(b * x) + c
+#
+#
+#
+#
+#
+#
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+#
+# axs.scatter(x=extracted_features_switch[1], y=all_properties["n_r"], s=2, c="darkturquoise")
+#
+# # fit = np.polyfit(x=extracted_features_switch[1], y=all_properties["n_r"], deg=2)
+# # print(fit)
+# #
+# # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+# # y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+#
+# params, covariance = curve_fit(exponential, extracted_features_switch[1], all_properties["n_r"], p0=(1, -1, 1))
+#
+# print(params)
+# print(covariance)
 #
 # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-# y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
-
-params, covariance = curve_fit(exponential, extracted_features_switch[1], all_properties["n_r"], p0=(1, -1, 1))
-
-print(params)
-print(covariance)
-
-x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-y_fit = [exponential(x, *params) for x in x_fit]
-
-
-axs.plot(x_fit, y_fit, c="black")
-
+# y_fit = [exponential(x, *params) for x in x_fit]
+#
+#
 # axs.plot(x_fit, y_fit, c="black")
-
-axs.set_xlabel("PCA Feature 1")
-axs.set_ylabel("Sersic Index")
-
-plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_sersic_3", bbox_inches='tight')
-plt.show()
+#
+# # axs.plot(x_fit, y_fit, c="black")
+#
+# axs.set_xlabel("PCA Feature 1")
+# axs.set_ylabel("Sersic Index")
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_sersic_3", bbox_inches='tight')
+# plt.show()
 
 
 
