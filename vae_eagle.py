@@ -262,7 +262,7 @@ def root_mean_squared_error(data, reconstruction):
 
 
 
-# Define VAE model with custom time step
+# Define VAE model with custom train step
 class VAE(keras.Model):
 
     def __init__(self, encoder, decoder, **kwargs):
@@ -283,6 +283,8 @@ class VAE(keras.Model):
 
     # custom train step
     def train_step(self, data):
+
+        print(data.shape)
 
         with tf.GradientTape() as tape:
             z_mean, z_log_var, z = self.encoder(data)
