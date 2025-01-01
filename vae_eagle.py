@@ -18,13 +18,13 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 20
+encoding_dim = 15
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="6"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -285,11 +285,18 @@ class VAE(keras.Model):
     def train_step(self, data):
 
         with tf.GradientTape() as tape:
+            # z_mean, z_log_var, z = self.encoder(data)
+            # reconstruction = self.decoder(z)
+            # reconstruction_loss = ops.mean(
+            #     ops.sum(
+            #         # keras.losses.binary_crossentropy(data, reconstruction),
+            #         axis=(1, 2),
+            #     )
+            # )
             z_mean, z_log_var, z = self.encoder(data)
             reconstruction = self.decoder(z)
             reconstruction_loss = ops.mean(
                 ops.sum(
-                    # keras.losses.binary_crossentropy(data, reconstruction),
                     root_mean_squared_error(data, reconstruction),
                     axis=(1, 2),
                 )
