@@ -70,6 +70,11 @@ for galaxy in reconstruction_ids:
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     reconstruction.append(normalise_independently(image))
 
+data_image = np.expand_dims(data[0], axis=0)
+reconstruction_image = np.expand_dims(data[0], axis=0)
 
-loss = keras.losses.binary_crossentropy(data[0], reconstruction[0])
+print(data_image.shape)
+print(reconstruction_image.shape)
+
+loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
 print(loss)
