@@ -284,7 +284,7 @@ class VAE(keras.Model):
     # custom train step
     def train_step(self, data):
 
-        print(data.shape)
+        print("Train Step Data Shape: ", data.shape)
 
         with tf.GradientTape() as tape:
             z_mean, z_log_var, z = self.encoder(data)
