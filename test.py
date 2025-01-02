@@ -86,9 +86,13 @@ def root_mean_squared_error(data, reconstruction):
     data = np.reshape(np.array(data), (256, 256, 3)).T
     reconstruction = np.reshape(np.array(reconstruction), (256, 256, 3)).T
 
-    diff = data[0] - reconstruction[0]
+    rmse_0 = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
+    rmse_1 = np.sqrt(np.mean(np.square(reconstruction[1] - data[1])))
+    rmse_2 = np.sqrt(np.mean(np.square(reconstruction[2] - data[2])))
 
-    return np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
+    return np.mean([rmse_0, rmse_1, rmse_2])
+
+    # return np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
 
 
 
