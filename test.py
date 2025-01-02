@@ -70,15 +70,17 @@ data = []
 reconstruction = []
 
 for galaxy in data_ids:
+    print(galaxy)
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     data.append(normalise_independently(image))
 
 for galaxy in reconstruction_ids:
+    print(galaxy)
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     reconstruction.append(normalise_independently(image))
 
 data_image = np.expand_dims(data[0], axis=0)
-reconstruction_image = np.expand_dims(data[0], axis=0)
+reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
 
 def root_mean_squared_error(data, reconstruction):
     print(reconstruction - data)
