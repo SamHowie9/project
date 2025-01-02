@@ -15,10 +15,11 @@ from tensorflow.keras import backend as K
 #
 # B = [[3, 3], [5, 5], [9, 9], [1, 1], [1, 1], [1, 1], [1, 1], [2, 2], [2, 2], [2, 2], [2, 2], [3, 3], [3, 3], [3, 3], [3, 3], [4, 4], [4, 4], [4, 4], [4, 4]]
 
-# A = [2, 3, 4, 5, 6, 7, 8]
-# B = [1, 2, 3, 4, 5, 6, 7]
-#
-# print(np.array(A) - np.array(B))
+A = np.array([10, 12, 414, 62, 62, 8, 9])
+B = np.array([1, 2, 3, 4, 5, 6, 7])
+
+print(A - B)
+print(np.square(A - B))
 
 
 # chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
@@ -55,66 +56,64 @@ from tensorflow.keras import backend as K
 
 
 
-# normalise each band individually
-def normalise_independently(image):
-    image = image.T
-    for i in range(0, 3):
-        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
-    return image.T
-
-
-data_ids = [2, 13632, 21794, 23302, 24478]
-reconstruction_ids = [26264, 27474, 28851, 29818, 30903]
-
-data = []
-reconstruction = []
-
-for galaxy in data_ids:
-    print(galaxy)
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    data.append(normalise_independently(image))
-
-for galaxy in reconstruction_ids:
-    print(galaxy)
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    reconstruction.append(normalise_independently(image))
-
-data_image = np.expand_dims(data[0], axis=0)
-reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
-
-def root_mean_squared_error(data, reconstruction):
-
-    data = np.reshape(np.array(data), (256, 256, 3)).T
-    reconstruction = np.reshape(np.array(reconstruction), (256, 256, 3)).T
-
-    diff = data[0] - reconstruction[0]
-
-    rmse = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
-
-    print(rmse)
-
-    # print(np.max(diff))
-    #
-    # print(pd.DataFrame(diff))
-    #
-    # print(data.shape)
-    # print(reconstruction.shape)
-
-    return 0
-
-
-    # diff = reconstruction - data
-    #
-    # print(pd.DataFrame(diff))
-    #
-    # return np.sqrt(np.mean(np.square(reconstruction - data)))
-
-
-
-print(data_image.shape)
-print(reconstruction_image.shape)
-
-loss = root_mean_squared_error(data_image, reconstruction_image)
-# loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
-
-print(loss)
+# # normalise each band individually
+# def normalise_independently(image):
+#     image = image.T
+#     for i in range(0, 3):
+#         image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+#     return image.T
+#
+#
+# data_ids = [2, 13632, 21794, 23302, 24478]
+# reconstruction_ids = [26264, 27474, 28851, 29818, 30903]
+#
+# data = []
+# reconstruction = []
+#
+# for galaxy in data_ids:
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     data.append(normalise_independently(image))
+#
+# for galaxy in reconstruction_ids:
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     reconstruction.append(normalise_independently(image))
+#
+# data_image = np.expand_dims(data[0], axis=0)
+# reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
+#
+# def root_mean_squared_error(data, reconstruction):
+#
+#     data = np.reshape(np.array(data), (256, 256, 3)).T
+#     reconstruction = np.reshape(np.array(reconstruction), (256, 256, 3)).T
+#
+#     diff = data[0] - reconstruction[0]
+#
+#     rmse = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
+#
+#     print(rmse)
+#
+#     # print(np.max(diff))
+#     #
+#     # print(pd.DataFrame(diff))
+#     #
+#     # print(data.shape)
+#     # print(reconstruction.shape)
+#
+#     return 0
+#
+#
+#     # diff = reconstruction - data
+#     #
+#     # print(pd.DataFrame(diff))
+#     #
+#     # return np.sqrt(np.mean(np.square(reconstruction - data)))
+#
+#
+#
+# print(data_image.shape)
+# print(reconstruction_image.shape)
+#
+# loss = root_mean_squared_error(data_image, reconstruction_image)
+# # loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
+#
+# print(loss)
