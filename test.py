@@ -15,6 +15,10 @@ from tensorflow.keras import backend as K
 #
 # B = [[3, 3], [5, 5], [9, 9], [1, 1], [1, 1], [1, 1], [1, 1], [2, 2], [2, 2], [2, 2], [2, 2], [3, 3], [3, 3], [3, 3], [3, 3], [4, 4], [4, 4], [4, 4], [4, 4]]
 
+# A = [2, 3, 4, 5, 6, 7, 8]
+# B = [1, 2, 3, 4, 5, 6, 7]
+#
+# print(np.array(A) - np.array(B))
 
 
 # chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
@@ -77,14 +81,14 @@ data_image = np.expand_dims(data[0], axis=0)
 reconstruction_image = np.expand_dims(data[0], axis=0)
 
 def root_mean_squared_error(data, reconstruction):
-    return K.sqrt(K.mean(K.square(reconstruction - data)))
+    return np.sqrt(np.mean(np.square(reconstruction - data)))
 
 
 
 print(data_image.shape)
 print(reconstruction_image.shape)
 
-loss = root_mean_squared_error(list(data_image.T), list(reconstruction_image.T))
+loss = root_mean_squared_error(np.array(data_image).T, np.array(reconstruction_image).T)
 # loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
 
 print(loss)
