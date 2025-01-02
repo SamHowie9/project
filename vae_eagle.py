@@ -257,12 +257,15 @@ print(test_images.shape)
 # root meaan squared error between two tensors
 def root_mean_squared_error(data, reconstruction):
 
+    # calculate the rmse for each band
     rmse_0 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[0] - tf.transpose(data)[0])))
     rmse_1 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[1] - tf.transpose(data)[1])))
     rmse_2 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[2] - tf.transpose(data)[2])))
 
+    # calculate the average rmse of the three bands
     rmse = ops.mean([rmse_0, rmse_1, rmse_2])
 
+    # return the average rmse
     return rmse
 
 
@@ -297,16 +300,16 @@ class VAE(keras.Model):
             # form reconstruction (run latent representation through decoder)
             reconstruction = self.decoder(z)
 
-            # binary cross entropy reconstruction loss
-            # reconstruction_loss = ops.mean(
-            #     ops.sum(
-            #         keras.losses.binary_crossentropy(data, reconstruction),
-            #         axis=(1, 2),
-            #     )
-            # )
+            binary cross entropy reconstruction loss
+            reconstruction_loss = ops.mean(
+                ops.sum(
+                    keras.losses.binary_crossentropy(data, reconstruction),
+                    axis=(1, 2),
+                )
+            )
 
             # root mean squared error reconstruction loss
-            reconstruction_loss = root_mean_squared_error(data, reconstruction)
+            # reconstruction_loss = root_mean_squared_error(data, reconstruction)
 
             # get the kl divergence (mean for each extracted feature)
             kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
