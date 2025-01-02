@@ -258,8 +258,8 @@ print(test_images.shape)
 def root_mean_squared_error(data, reconstruction):
 
     # reshape tensors and convert to arrays
-    data = np.reshape(np.array(data), (256, 256, 3)).T
-    reconstruction = np.reshape(np.array(reconstruction), (256, 256, 3)).T
+    data = np.reshape(data.numpy(), (256, 256, 3)).T
+    reconstruction = np.reshape(reconstruction.numpy(), (256, 256, 3)).T
 
     # calculate rmse for each band
     rmse_0 = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
