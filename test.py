@@ -83,18 +83,28 @@ data_image = np.expand_dims(data[0], axis=0)
 reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
 
 def root_mean_squared_error(data, reconstruction):
-    diff = reconstruction - data
 
-    print(pd.DataFrame(diff))
+    data = np.reshape(np.array(data), (256, 256, 3))
+    reconstruction = np.reshape(np.array(reconstruction), (256, 256, 3))
 
-    return np.sqrt(np.mean(np.square(reconstruction - data)))
+    print(data.shape)
+    print(reconstruction.shape)
+
+    return 0
+
+
+    # diff = reconstruction - data
+    #
+    # print(pd.DataFrame(diff))
+    #
+    # return np.sqrt(np.mean(np.square(reconstruction - data)))
 
 
 
 print(data_image.shape)
 print(reconstruction_image.shape)
 
-loss = root_mean_squared_error(np.array(data_image).T[0], np.array(reconstruction_image).T[0])
+loss = root_mean_squared_error(data_image, reconstruction_image)
 # loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
 
 print(loss)
