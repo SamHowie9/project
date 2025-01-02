@@ -257,17 +257,13 @@ print(test_images.shape)
 # root meaan squared error between two tensors
 def root_mean_squared_error(data, reconstruction):
 
-    # reshape tensors and convert to arrays
-    data = np.reshape(data.numpy(), (256, 256, 3)).T
-    reconstruction = np.reshape(reconstruction.numpy(), (256, 256, 3)).T
+    rmse_0 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[0] - tf.transpose(data)[0])))
+    rmse_1 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[1] - tf.transpose(data)[1])))
+    rmse_2 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[2] - tf.transpose(data)[2])))
 
-    # calculate rmse for each band
-    rmse_0 = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
-    rmse_1 = np.sqrt(np.mean(np.square(reconstruction[1] - data[1])))
-    rmse_2 = np.sqrt(np.mean(np.square(reconstruction[2] - data[2])))
+    rmse = ops.mean([rmse_0, rmse_1, rmse_2])
 
-    # return the mean of the rmse for all bands
-    return np.mean([rmse_0, rmse_1, rmse_2])
+    return rmse
 
 
 

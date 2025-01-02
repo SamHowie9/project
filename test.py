@@ -84,22 +84,9 @@ reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
 
 def root_mean_squared_error(data, reconstruction):
 
-    data_np = np.reshape(np.array(data), (256, 256, 3)).T
-    reconstruction_np = np.reshape(np.array(reconstruction), (256, 256, 3)).T
-
-    rmse_0 = np.sqrt(np.mean(np.square(reconstruction_np[0] - data_np[0])))
-    rmse_1 = np.sqrt(np.mean(np.square(reconstruction_np[1] - data_np[1])))
-    rmse_2 = np.sqrt(np.mean(np.square(reconstruction_np[2] - data_np[2])))
-
-    print(rmse_0, rmse_1, rmse_2)
-    print(np.mean([rmse_0, rmse_1, rmse_2]))
-
-
     rmse_0 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[0] - tf.transpose(data)[0])))
     rmse_1 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[1] - tf.transpose(data)[1])))
     rmse_2 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[2] - tf.transpose(data)[2])))
-
-    print(rmse_0, rmse_1, rmse_2)
 
     rmse = ops.mean([rmse_0, rmse_1, rmse_2])
 
