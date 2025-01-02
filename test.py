@@ -84,7 +84,7 @@ def root_mean_squared_error(data, reconstruction):
 print(data_image.shape)
 print(reconstruction_image.shape)
 
-loss = root_mean_squared_error(data_image.T, reconstruction_image.T)
+loss = root_mean_squared_error(list(data_image.T), list(reconstruction_image.T))
 # loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
 
 print(loss)
