@@ -5,6 +5,7 @@ from matplotlib import image as mpimg
 import random
 # import cv2
 import keras
+from keras import ops
 
 
 # A = [[1, 2], [3, 4], [5, 6], [7, 8]]
@@ -77,4 +78,5 @@ print(data_image.shape)
 print(reconstruction_image.shape)
 
 loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
+
 print(loss)
