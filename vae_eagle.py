@@ -300,16 +300,17 @@ class VAE(keras.Model):
             # form reconstruction (run latent representation through decoder)
             reconstruction = self.decoder(z)
 
-            binary cross entropy reconstruction loss
-            reconstruction_loss = ops.mean(
-                ops.sum(
-                    keras.losses.binary_crossentropy(data, reconstruction),
-                    axis=(1, 2),
-                )
-            )
+            # binary cross entropy reconstruction loss
+            # reconstruction_loss = ops.mean(
+            #     ops.sum(
+            #         keras.losses.binary_crossentropy(data, reconstruction),
+            #         axis=(1, 2),
+            #     )
+            # )
 
             # root mean squared error reconstruction loss
             # reconstruction_loss = root_mean_squared_error(data, reconstruction)
+            reconstruction_loss = ops.sqrt(ops.mean(ops.sum(ops.square(data - reconstruction), axis=(1, 2, 3))))
 
             # get the kl divergence (mean for each extracted feature)
             kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
