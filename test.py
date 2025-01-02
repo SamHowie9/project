@@ -93,7 +93,7 @@ def root_mean_squared_error(data, reconstruction):
     #
     # return np.mean([rmse_0, rmse_1, rmse_2])
 
-    rmse = ops.sqrt(ops.mean(ops.square(reconstruction.transpose - data.transpose)))
+    rmse = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction) - tf.transpose(data))))
 
     return rmse
 
