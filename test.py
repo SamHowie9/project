@@ -83,8 +83,10 @@ data_image = np.expand_dims(data[0], axis=0)
 reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
 
 def root_mean_squared_error(data, reconstruction):
-    print(reconstruction - data)
-    print((reconstruction - data).shape)
+    diff = reconstruction - data
+
+    print(pd.DataFrame(diff))
+
     return np.sqrt(np.mean(np.square(reconstruction - data)))
 
 
