@@ -6,6 +6,8 @@ import random
 # import cv2
 import keras
 from keras import ops
+from tensorflow.keras import backend as K
+
 
 
 # A = [[1, 2], [3, 4], [5, 6], [7, 8]]
@@ -71,12 +73,18 @@ for galaxy in reconstruction_ids:
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     reconstruction.append(normalise_independently(image))
 
-data_image = np.expand_dims(data[0].T, axis=0)
-reconstruction_image = np.expand_dims(data[0].T, axis=0)
+data_image = np.expand_dims(data[0], axis=0)
+reconstruction_image = np.expand_dims(data[0], axis=0)
+
+def root_mean_squared_error(data, reconstruction):
+    return K.sqrt(K.mean(K.square(reconstruction - data)))
+
+
 
 print(data_image.shape)
 print(reconstruction_image.shape)
 
-loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
+loss = root_mean_squared_error(data_image, reconstruction_image)
+# loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
 
 print(loss)
