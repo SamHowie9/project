@@ -89,6 +89,8 @@ def root_mean_squared_error(data, reconstruction):
 
     diff = data[0] - reconstruction[0]
 
+    print(np.max(diff))
+
     print(pd.DataFrame(diff))
 
     print(data.shape)
