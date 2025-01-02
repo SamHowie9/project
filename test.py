@@ -7,6 +7,7 @@ import random
 import keras
 from keras import ops
 from tensorflow.keras import backend as K
+import tensorflow as tf
 
 
 
@@ -83,17 +84,24 @@ reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
 
 def root_mean_squared_error(data, reconstruction):
 
-    data = np.reshape(np.array(data), (256, 256, 3)).T
-    reconstruction = np.reshape(np.array(reconstruction), (256, 256, 3)).T
+    # data = np.reshape(np.array(data), (256, 256, 3)).T
+    # reconstruction = np.reshape(np.array(reconstruction), (256, 256, 3)).T
+    #
+    # rmse_0 = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
+    # rmse_1 = np.sqrt(np.mean(np.square(reconstruction[1] - data[1])))
+    # rmse_2 = np.sqrt(np.mean(np.square(reconstruction[2] - data[2])))
+    #
+    # return np.mean([rmse_0, rmse_1, rmse_2])
 
-    rmse_0 = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
-    rmse_1 = np.sqrt(np.mean(np.square(reconstruction[1] - data[1])))
-    rmse_2 = np.sqrt(np.mean(np.square(reconstruction[2] - data[2])))
+    rmse = ops.sqrt(ops.mean(ops.square(reconstruction.transpose - data.transpose)))
 
-    return np.mean([rmse_0, rmse_1, rmse_2])
+    return rmse
 
-    # return np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
-
+    # rmse_0 = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
+    # rmse_1 = np.sqrt(np.mean(np.square(reconstruction[1] - data[1])))
+    # rmse_2 = np.sqrt(np.mean(np.square(reconstruction[2] - data[2])))
+    #
+    # return np.mean([rmse_0, rmse_1, rmse_2])
 
 
     # print(np.max(diff))
@@ -116,6 +124,9 @@ def root_mean_squared_error(data, reconstruction):
 
 print(data_image.shape)
 print(reconstruction_image.shape)
+
+data_image = tf.convert_to_tensor(data_image)
+reconstruction_image = tf.convert_to_tensor(reconstruction_image)
 
 loss = root_mean_squared_error(data_image, reconstruction_image)
 # loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
