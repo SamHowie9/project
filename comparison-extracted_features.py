@@ -19,8 +19,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 15
-run = 1
+encoding_dim = 25
+run = 3
 
 
 
@@ -135,6 +135,8 @@ extracted_features_switch = extracted_features.T
 
 
 
+
+print(all_properties.sort_values(by="re_r"))
 
 
 
@@ -308,20 +310,20 @@ for feature in range(0, len(extracted_features_switch)):
 
 
 
-# def quadratic(a, b, c, x):
-#     return (a * x * x) + (b * x) + c
-#
-# def exponential(x, a, b, c):
-#     return a * np.exp(b * x) + c
-#
-#
-#
-#
-#
-#
+def quadratic(a, b, c, x):
+    return (a * x * x) + (b * x) + c
+
+def exponential(x, a, b, c):
+    return a * np.exp(b * x) + c
+
+
+
+
+
+
 # fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
-# axs.scatter(x=extracted_features_switch[1], y=all_properties["n_r"], s=2, c="darkturquoise")
+# axs.scatter(x=extracted_features_switch[1], y=all_properties["n_r"], s=2)
 #
 # # fit = np.polyfit(x=extracted_features_switch[1], y=all_properties["n_r"], deg=2)
 # # print(fit)
@@ -329,7 +331,7 @@ for feature in range(0, len(extracted_features_switch)):
 # # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
 # # y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
 #
-# params, covariance = curve_fit(exponential, extracted_features_switch[1], all_properties["n_r"], p0=(1, -1, 1))
+# params, covariance = curve_fit(exponential, extracted_features_switch[1], all_properties["n_r"], p0=(1, 1, 1))
 #
 # print(params)
 # print(covariance)
@@ -345,7 +347,7 @@ for feature in range(0, len(extracted_features_switch)):
 # axs.set_xlabel("PCA Feature 1")
 # axs.set_ylabel("Sersic Index")
 #
-# plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_sersic_3", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
 
 
@@ -375,7 +377,7 @@ for feature in range(0, len(extracted_features_switch)):
 # axs.set_ylabel("Position Angle")
 #
 #
-# plt.savefig("Variational Eagle/Plots/pca_feature_3_vs_position_angle_1", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/pca_feature_3_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
 
 
@@ -384,21 +386,94 @@ for feature in range(0, len(extracted_features_switch)):
 
 
 
+fig, axs = plt.subplots(2, 1, figsize=(5, 10))
+
+axs[0].scatter(x=extracted_features_switch[2], y=all_properties["pa_r"], s=2)
+
+fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[2], deg=3)
+x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+axs[0].plot(y_fit, x_fit, c="black")
+
+axs[0].set_xlabel("PCA Feature 2", fontsize=10)
+axs[0].set_ylabel("Position Angle (°)", fontsize=10)
+axs[0].tick_params(labelsize=10)
+axs[0].set_yticks([-90, -45, 0, 45, 90])
+
+
+
+axs[1].scatter(x=extracted_features_switch[3], y=all_properties["pa_r"], s=2)
+
+fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=3)
+x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+axs[1].plot(y_fit, x_fit, c="black")
+
+axs[1].set_xlabel("PCA Feature 3", fontsize=10)
+axs[1].set_ylabel("Position Angle (°)", fontsize=10)
+axs[1].tick_params(labelsize=10)
+axs[1].set_yticks([-90, -45, 0, 45, 90])
+
+plt.savefig("Variational Eagle/Plots/pca_feature_2_and_3_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.show()
+
+
+
+
+
+fig, axs = plt.subplots(2, 1, figsize=(5, 10))
+
+
+axs[0].scatter(x=extracted_features_switch[2], y=abs(all_properties["pa_r"]), s=2)
+
+fit = np.polyfit(x=abs(all_properties["pa_r"]), y=extracted_features_switch[2], deg=3)
+x_fit = np.linspace(np.min(abs(all_properties["pa_r"])), np.max(abs(all_properties["pa_r"])), 100)
+y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+axs[0].plot(y_fit, x_fit, c="black")
+
+axs[0].set_xlabel("PCA Feature 2", fontsize=10)
+axs[0].set_ylabel("Position Angle (°)", fontsize=10)
+axs[0].tick_params(labelsize=10)
+axs[0].set_yticks([0, 45, 90])
+
+
+
+axs[1].scatter(x=extracted_features_switch[3], y=abs(all_properties["pa_r"]), s=2)
+
+fit = np.polyfit(x=abs(all_properties["pa_r"]), y=extracted_features_switch[3], deg=3)
+x_fit = np.linspace(np.min(abs(all_properties["pa_r"])), np.max(abs(all_properties["pa_r"])), 100)
+y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+axs[1].plot(y_fit, x_fit, c="black")
+
+axs[1].set_xlabel("PCA Feature 3", fontsize=10)
+axs[1].set_ylabel("Position Angle (°)", fontsize=10)
+axs[1].tick_params(labelsize=10)
+axs[1].set_yticks([0, 45, 90])
+# axs[1].set_yticks([])
+
+
+plt.savefig("Variational Eagle/Plots/pca_feature_2_and_3_vs_abs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.show()
+
+
+
+
+
+
 # fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
-# axs.scatter(x=extracted_features_switch[3], y=all_properties["q_r"], s=2)
+# axs.scatter(x=extracted_features_switch[2], y=all_properties["q_r"], s=2)
 #
 #
-#
-#
-# # fit = np.polyfit(x=abs(extracted_features_switch[3]), y=all_properties["q_r"], deg=1)
-# fit = np.polyfit(x=abs(extracted_features_switch[3]), y=all_properties["q_r"], deg=2)
+# # fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=1)
+# fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=2)
 # # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
 # # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
 # # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
 # # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
 #
-# x_fit = np.linspace(np.min(abs(extracted_features_switch[3])), np.max(abs(extracted_features_switch[3])), 100)
+# # x_fit = np.linspace(np.min(abs(extracted_features_switch[2])), np.max(abs(extracted_features_switch[3])), 100)
+# x_fit = np.linspace(0, 4, 100)
 # # y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
 # y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
 # # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
@@ -409,12 +484,40 @@ for feature in range(0, len(extracted_features_switch)):
 # plt.plot(x_fit, y_fit, c="black")
 # plt.plot((-1 * x_fit), y_fit, c="black")
 #
-# axs.set_xlabel("PCA Feature 3")
+# axs.set_xlabel("PCA Feature 2")
 # axs.set_ylabel("Axis Ratio")
 #
 #
-# plt.savefig("Variational Eagle/Plots/pca_feature_3_vs_axis_ratio_1", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/pca_feature_2_vs_axis_ratio_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
+
+
+
+
+
+
+
+fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+
+axs.scatter(x=extracted_features_switch[0], y=all_properties["re_r"], s=2)
+
+
+fit = np.polyfit(x=extracted_features_switch[0], y=all_properties["re_r"], deg=2)
+
+x_fit = np.linspace(-3, np.max(extracted_features_switch[0]), 100)
+y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
+
+
+axs.plot(x_fit, y_fit, c="black")
+
+axs.set_xlabel("PCA Feature 0")
+axs.set_ylabel("Semi-Major Axis (pkpc)")
+
+axs.set_ylim(0, 30)
+
+
+plt.savefig("Variational Eagle/Plots/pca_feature_0_vs_semi-major_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.show()
 
 
 
