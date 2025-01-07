@@ -16,7 +16,7 @@ import random
 
 
 # number of extracted features
-encoding_dim = 20
+encoding_dim = 25
 
 run = 3
 
@@ -241,18 +241,24 @@ extracted_features_switch = extracted_features.T
 print(len(extracted_features.T))
 
 
+
+
+
+
+
+
+
 num_varying_features = 15
 
-chosen_feature = 1
 
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-
 print(len(med_pca_features))
 
-# varying_feature_values = np.linspace(np.min(extracted_features.T[chosen_feature]), np.max(extracted_features.T[chosen_feature]), num_varying_features)
 
-# fig, axs = plt.subplots(1, num_varying_features, figsize=(num_varying_features, 3))
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features, len(extracted_features)))
+
+# transition plot for all extracted features
+
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(15, 25))
 
 for i in range(len(extracted_features.T)):
 
@@ -275,9 +281,47 @@ for i in range(len(extracted_features.T)):
         axs[i][j].get_xaxis().set_visible(False)
         axs[i][j].get_yaxis().set_visible(False)
 
-
+plt.savefig("Variational Eagle/Plots/transition_plot_vae_all", bbox_inches='tight')
 plt.show()
 
+
+
+# transition plot for specific extracted feature
+
+# chosen_feature = 2
+#
+# varying_feature_values = np.linspace(np.min(extracted_features.T[chosen_feature]), np.max(extracted_features.T[chosen_feature]), num_varying_features)
+#
+# fig, axs = plt.subplots(1, num_varying_features, figsize=(num_varying_features, 3))
+#
+# for i in range(num_varying_features):
+#     temp_pca_features = med_pca_features.copy()
+#     temp_pca_features[chosen_feature] = varying_feature_values[i]
+#
+#     temp_features = temp_pca_features
+#     temp_features = np.expand_dims(temp_features, axis=0)
+#
+#     temp_features = pca.inverse_transform(temp_pca_features)
+#     temp_features = np.expand_dims(temp_features, axis=0)
+#
+#     reconstruction = vae.decoder.predict(temp_features)[0]
+#
+#     axs[i].imshow(reconstruction)
+#     # axs[i].get_xaxis().set_visible(False)
+#     # axs[i].get_yaxis().set_visible(False)
+#
+#     axs[i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     # axs[i].set_title(round(varying_feature_values[i], 2))
+#     axs[i].set_xlabel(round(varying_feature_values[i], 2))
+#
+#
+# # fig.suptitle("PCA Feature 0")
+# supxlabel = fig.supxlabel("PCA Feature 2")
+# supxlabel.set_y(0.2)
+#
+# plt.savefig("Variational Eagle/Plots/transition_plot_vae_pca_feature_2", bbox_inches='tight')
+# plt.show()
 
 
 
