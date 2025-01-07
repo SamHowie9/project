@@ -217,9 +217,9 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + 
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-# pca = PCA(n_components=13).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
+pca = PCA(n_components=13).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features_switch = extracted_features.T
 
 # get the indices of the different types of galaxies (according to sersic index) after restructuring of properties dataframe
 spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
@@ -258,31 +258,31 @@ print(len(med_pca_features))
 
 # transition plot for all extracted features
 
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(15, 25))
-
-for i in range(len(extracted_features.T)):
-
-    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
-
-    for j in range(num_varying_features):
-
-        temp_pca_features = med_pca_features.copy()
-        temp_pca_features[i] = varying_feature_values[j]
-
-        temp_features = temp_pca_features
-        temp_features = np.expand_dims(temp_features, axis=0)
-
-        # temp_features = pca.inverse_transform(temp_pca_features)
-        # temp_features = np.expand_dims(temp_features, axis=0)
-
-        reconstruction = vae.decoder.predict(temp_features)[0]
-
-        axs[i][j].imshow(reconstruction)
-        axs[i][j].get_xaxis().set_visible(False)
-        axs[i][j].get_yaxis().set_visible(False)
-
-plt.savefig("Variational Eagle/Plots/transition_plot_vae_all", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(15, 25))
+#
+# for i in range(len(extracted_features.T)):
+#
+#     varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+#
+#     for j in range(num_varying_features):
+#
+#         temp_pca_features = med_pca_features.copy()
+#         temp_pca_features[i] = varying_feature_values[j]
+#
+#         temp_features = temp_pca_features
+#         temp_features = np.expand_dims(temp_features, axis=0)
+#
+#         # temp_features = pca.inverse_transform(temp_pca_features)
+#         # temp_features = np.expand_dims(temp_features, axis=0)
+#
+#         reconstruction = vae.decoder.predict(temp_features)[0]
+#
+#         axs[i][j].imshow(reconstruction)
+#         axs[i][j].get_xaxis().set_visible(False)
+#         axs[i][j].get_yaxis().set_visible(False)
+#
+# plt.savefig("Variational Eagle/Plots/transition_plot_vae_all", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -323,6 +323,41 @@ plt.show()
 # plt.savefig("Variational Eagle/Plots/transition_plot_vae_pca_feature_2", bbox_inches='tight')
 # plt.show()
 
+
+
+
+# transition plot for group of features
+
+chosen_features = [0, 1, 2, 3]
+
+fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(15, 6))
+
+for i in chosen_features:
+
+    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+
+    for j in range(num_varying_features):
+
+        temp_pca_features = med_pca_features.copy()
+        temp_pca_features[i] = varying_feature_values[j]
+
+        temp_features = temp_pca_features
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        temp_features = pca.inverse_transform(temp_pca_features)
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        reconstruction = vae.decoder.predict(temp_features)[0]
+
+        axs[i][j].imshow(reconstruction)
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        axs[i][j].set_xlabel(round(varying_feature_values[i], 2))
+
+        if j == 7:
+            axs[i][j].set_xlabel(str(round(varying_feature_values[i], 2)) + "\nPCA Feature " + str(i))
+
+plt.savefig("Variational Eagle/Plots/transition_plot_vae_pca_0_1_2_3", bbox_inches='tight')
+plt.show()
 
 
 
