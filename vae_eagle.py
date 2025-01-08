@@ -33,7 +33,6 @@ os.environ["CUDA_VISIBLE_DEVICES"]="9"
 epochs = 300
 
 
-
 # normalise each band individually
 def normalise_independently(image):
     image = image.T
