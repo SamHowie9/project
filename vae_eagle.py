@@ -5,7 +5,7 @@ os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
 from keras import ops
-from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose
+from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
 from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
@@ -423,8 +423,8 @@ x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="sa
 x = Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
 x = Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
 # x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
-x = GlobalAveragePooling2D()                                                                                    # (512)
-x = Dense(128, activation="relu")                                                                               # (128)
+x = GlobalAveragePooling2D()(x)                                                                                 # (512)
+x = Dense(128, activation="relu")(x)                                                                            # (128)
 
 z_mean = Dense(encoding_dim, name="z_mean")(x)
 z_log_var = Dense(encoding_dim, name="z_log_var")(x)
