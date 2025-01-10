@@ -81,7 +81,7 @@ for i, galaxy in enumerate(chosen_galaxies):
     all_images.append(image)
 
 
-split the data into training and testing data (200 images used for testing)
+# split the data into training and testing data (200 images used for testing)
 train_images = np.array(all_images[:-200])
 test_images = np.array(all_images[-200:])
 
