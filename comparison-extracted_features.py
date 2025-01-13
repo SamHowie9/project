@@ -47,33 +47,31 @@ for encoding_dim in [15, 20, 25]:
 
 
 
-        print(all_properties)
-        print()
 
 
 
         # original dataset
 
-        # load the extracted features
-        extracted_features = np.load("Variational Eagle/Extracted Features/Original/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
-        encoding_dim = extracted_features.shape[1]
-        extracted_features_switch = extracted_features.T
-
-
-        # perform pca on the extracted features
-        pca = PCA(n_components=13).fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
-        extracted_features_switch = extracted_features.T
-
-
-        # account for the training data in the dataframe
-        # all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
-        all_properties = all_properties.iloc[:-200]
-
-
-        print(all_properties)
-        print()
+        # # load the extracted features
+        # extracted_features = np.load("Variational Eagle/Extracted Features/Original/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+        # # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
+        # encoding_dim = extracted_features.shape[1]
+        # extracted_features_switch = extracted_features.T
+        #
+        #
+        # # perform pca on the extracted features
+        # pca = PCA(n_components=13).fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        # extracted_features_switch = extracted_features.T
+        #
+        #
+        # # account for the training data in the dataframe
+        # # all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
+        # all_properties = all_properties.iloc[:-200]
+        #
+        #
+        # print(all_properties)
+        # print()
 
 
 
@@ -148,23 +146,23 @@ for encoding_dim in [15, 20, 25]:
 
         # fully balanced dataset
 
-        # # account for the testing dataset
-        # all_properties = all_properties.iloc[:-200]
-        #
-        # # load the extracted features
-        # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        # encoding_dim = extracted_features.shape[1]
-        # extracted_features_switch = extracted_features.T
-        #
-        # print(extracted_features.shape)
-        #
+        # account for the testing dataset
+        all_properties = all_properties.iloc[:-200]
+
+        # load the extracted features
+        extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+        encoding_dim = extracted_features.shape[1]
+        extracted_features_switch = extracted_features.T
+
+        print(extracted_features.shape)
+
+        extracted_features = extracted_features[:len(all_properties)]
+
+        # perform pca on the extracted features
+        pca = PCA(n_components=13).fit(extracted_features)
+        extracted_features = pca.transform(extracted_features)
         # extracted_features = extracted_features[:len(all_properties)]
-        #
-        # # perform pca on the extracted features
-        # pca = PCA(n_components=13).fit(extracted_features)
-        # extracted_features = pca.transform(extracted_features)
-        # # extracted_features = extracted_features[:len(all_properties)]
-        # extracted_features_switch = extracted_features.T
+        extracted_features_switch = extracted_features.T
 
 
 
@@ -183,10 +181,7 @@ for encoding_dim in [15, 20, 25]:
 
 
 
-        print(all_properties)
-        print()
-        print(all_properties.columns)
-        print("...........")
+
 
 
         structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
@@ -264,7 +259,7 @@ for encoding_dim in [15, 20, 25]:
 
 
 
-        plt.savefig("Variational Eagle/Correlation Plots/original_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+        plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
         plt.show()
 
 
@@ -309,7 +304,7 @@ for encoding_dim in [15, 20, 25]:
                 axs[feature][i].set_ylabel(None)
                 axs[feature][i].tick_params(labelsize=12)
 
-        plt.savefig("Variational Eagle/Correlation Plots/scatter_original_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+        plt.savefig("Variational Eagle/Correlation Plots/scatter_fully_balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
         # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
         plt.show()
 
