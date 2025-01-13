@@ -6,6 +6,8 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import random
 import os
+from scipy.ndimage import gaussian_filter
+
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -182,6 +184,73 @@ pd.set_option('display.max_rows', None)
 
 
 
+
+
+
+# normalise each band individually
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
+# normalise each band to r
+def normalise_to_r(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[1]) - np.min(image[1]))
+    return image.T
+
+# convert fwhm value to sigma
+def fwhm_to_sigma(fwhm):
+    return fwhm/(2 * np.sqrt(2 * np.log(2)))
+
+# image processing for each image
+def image_processing(image):
+
+    # take only the g,r,i bands (ignore z)
+    image = image[0:3]
+
+    # apply gaussian filter to each band
+    image[0] = gaussian_filter(image[0], sigma=fwhm_to_sigma(1.5))
+    image[1] = gaussian_filter(image[1], sigma=fwhm_to_sigma(1.5))
+    image[2] = gaussian_filter(image[2], sigma=fwhm_to_sigma(2))
+
+    # random seed for reproducibility
+    random.seed(1)
+
+    # add random gaussian noise to each band of the image
+    for i in range(0, 3):
+        gaussian = np.random.normal(0, 0.1, (len(image[0]), len(image[0])))
+        image[i] = image[i] + gaussian
+
+    # convert image to numpy array of type float32 (for the cv2 resizing function to work)
+    image = np.array(image).astype(np.float32)
+
+    # image resizing (enlarging and shrinking use different interpolation algorithms for the best results
+    if len(image[0] < 256):
+        # enlarge (stretch) the image to 256x256 with bicubic interpolation (best for enlarging images although slower than bilinear)
+        image = cv2.resize(image.T, (256, 256), interpolation=cv2.INTER_CUBIC)
+    else:
+        # shrink the image to 256x256 using area interpolation (best for shrinking images)
+        image = cv2.resize(image.T, (256, 256), interpolation=cv2.INTER_AREA)
+
+    #transpose for normalisation
+    image = image.T
+
+    # normalise each band individually
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i] - np.min(image[i])))
+
+    # return the new image
+    return image
+
+
+
+
+
+
+
 fig, axs = plt.subplots(5, 5, figsize=(15, 15))
 
 # list of all the galaxy images to load
@@ -197,7 +266,8 @@ for i in range(0, 5):
 
         hdu_list = fits.open("/cosma7/data/durham/dc-howi1/project/TNG Images/sdss/snapnum_095/data/" + random_galaxies[n])
         image = hdu_list[0].data
-        image = image[0:3].T
+
+        image = image_processing(image)
 
         # # perform the image processing
         # image = image_processing(image)
