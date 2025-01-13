@@ -20,13 +20,13 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 25
+encoding_dim = 15
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -260,7 +260,7 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-model_loss = vae.fit(train_images, epochs=epochs, batch_size=1)
+model_loss = vae.fit(train_images, epochs=epochs, batch_size=32)
 
 # or load the weights from a previous run
 # vae.load_weights("Variational TNG/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
