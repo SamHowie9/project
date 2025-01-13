@@ -21,13 +21,13 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 25
+encoding_dim = 15
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -54,11 +54,26 @@ def normalise_to_r(image):
 
 # load the original dataset
 
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+print("Bad Fit Indices:", bad_fit)
+
+# remove those galaxies
+for galaxy in bad_fit:
+    all_properties = all_properties.drop(galaxy, axis=0)
+
+# get a list of all the ids of the galaxies
+chosen_galaxies = list(all_properties["GalaxyID"])
+
 # list to contain all galaxy images
 all_images = []
-
-# load the ids of the chosen galaxies
-chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
 
 # # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(chosen_galaxies):
