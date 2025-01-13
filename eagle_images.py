@@ -1,5 +1,8 @@
 from matplotlib import pyplot as plt
+from matplotlib import image as mpimg
 import random
+import pandas as pd
+import numpy as np
 
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
