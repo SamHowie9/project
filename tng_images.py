@@ -207,5 +207,5 @@ for i in range(0, 5):
 
         n += 1
 
-plt.saevefig("Variational TNG/Plots/random_galaxy_sample", bbox_inches='tight')
+plt.savefig("Variational TNG/Plots/random_galaxy_sample", bbox_inches='tight')
 plt.show()
