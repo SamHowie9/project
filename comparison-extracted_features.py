@@ -5,10 +5,10 @@ from matplotlib import pyplot as plt
 import textwrap
 import random
 from sklearn.decomposition import PCA
-from yellowbrick.cluster import KElbowVisualizer
+# from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
-from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
-from sklearn.neighbors import NearestCentroid
+# from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
+# from sklearn.neighbors import NearestCentroid
 
 
 plt.style.use("default")
