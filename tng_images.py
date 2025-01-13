@@ -4,17 +4,19 @@ from astropy.io import fits
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+import random
+import os
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 
-file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
-
-for member in file.getmembers():
-    if member.name.startswith("sdss/snapnum_095/data/"):
-        # print(member.name)
-        file.extract(member=member, path="/cosma7/data/durham/dc-howi1/project/TNG Images/")
+# file = tarfile.open("/cosma7/data/durham/dc-howi1/project/TNG100/sdss_095.tar")
+#
+# for member in file.getmembers():
+#     if member.name.startswith("sdss/snapnum_095/data/"):
+#         # print(member.name)
+#         file.extract(member=member, path="/cosma7/data/durham/dc-howi1/project/TNG Images/")
 
     # if member.isdir():
     #     print(member.name)
@@ -176,3 +178,34 @@ for member in file.getmembers():
 # print(images)
 
 # print(list(f.keys()))
+
+
+
+
+fig, axs = plt.subplots(5, 5, figsize=(15, 15))
+
+# list of all the galaxy images to load
+galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/TNG Images/sdss/snapnum_095/data/")
+
+random.seed(1)
+random_galaxies = random.sample(galaxies, 25)
+
+n = 0
+
+for i in range(0, 5):
+    for j in range(0, 5):
+
+        hdu_list = fits.open("/cosma7/data/durham/dc-howi1/project/TNG Images/sdss/snapnum_095/data/" + random_galaxies[n])
+        image = hdu_list[0].data
+
+        # # perform the image processing
+        # image = image_processing(image)
+
+        axs[i][j].imshow(image)
+        axs[i][j].get_xaxis().set_visible(False)
+        axs[i][j].get_yaxis().set_visible(False)
+
+        n += 1
+
+plt.saevefig("Variational TNG/Plots/random_galaxy_sample", bbox_inches='tight')
+plt.show()
