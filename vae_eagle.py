@@ -21,13 +21,13 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 25
+encoding_dim = 15
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -74,8 +74,7 @@ for i, galaxy in enumerate(chosen_galaxies):
     image = np.where(image == 0.0, smallest_non_zero, image)
 
     # normalise the image (either each band independently or to the r band)
-    # image = normalise_independently(image)
-    image = normalise_to_r(image)
+    image = normalise_independently(image)
 
     # add the image to the dataset
     all_images.append(image)
