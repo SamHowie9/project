@@ -27,6 +27,16 @@ random_galaxies = random.sample(chosen_galaxies, 25)
 
 
 
+
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
+
+
+
 fig, axs = plt.subplots(5, 5, figsize=(15, 15))
 
 n = 0
@@ -36,6 +46,8 @@ for i in range(0, 5):
 
         filename = "galrand_" + str(random_galaxies[n]) + ".png"
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+
+        image = normalise_independently(image)
 
         axs[i][j].imshow(image)
         axs[i][j].get_xaxis().set_visible(False)
