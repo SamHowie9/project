@@ -157,6 +157,7 @@ for encoding_dim in [15, 20, 25]:
         print(extracted_features.shape)
 
         extracted_features = extracted_features[:len(all_properties)]
+        extracted_features_switch = extracted_features.T
 
         # perform pca on the extracted features
         # pca = PCA(n_components=13).fit(extracted_features)
