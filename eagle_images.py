@@ -43,5 +43,5 @@ for i in range(0, 5):
 
         n += 1
 
-plt.savefig("Variational EAGLE/Plots/random_galaxy_sample", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/random_galaxy_sample", bbox_inches='tight')
 plt.show()
