@@ -245,7 +245,7 @@ def image_processing(image):
         image[i] = (image[i] - np.min(image[i])) / (np.max(image[i] - np.min(image[i])))
 
     # return the new image
-    return image
+    return image.T
 
 
 
