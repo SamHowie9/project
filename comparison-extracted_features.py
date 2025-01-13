@@ -47,6 +47,8 @@ for encoding_dim in [15, 20, 25]:
 
 
 
+        print(all_properties)
+        print()
 
 
 
@@ -69,7 +71,8 @@ for encoding_dim in [15, 20, 25]:
         all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
 
 
-
+        print(all_properties)
+        print()
 
 
 
