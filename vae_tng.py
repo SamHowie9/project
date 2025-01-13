@@ -20,13 +20,13 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 25
+encoding_dim = 15
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -213,13 +213,15 @@ class Sampling(Layer):
 input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
 
 # layers for the encoder
-x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 64)
-x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 32)
-x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (32, 32, 16)
-x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)                           # (16, 16, 8)
-x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)                           # (8, 8, 4)
-x = Flatten()(x)                                                                                                # (256)
-x = Dense(units=64)(x)                                                                                          # (64)
+x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
+x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
+x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
+x = Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
+x = Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
+# x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
+x = GlobalAveragePooling2D()(x)                                                                                 # (512)
+x = Dense(128, activation="relu")(x)                                                                            # (128)
+
 z_mean = Dense(encoding_dim, name="z_mean")(x)
 z_log_var = Dense(encoding_dim, name="z_log_var")(x)
 z = Sampling()([z_mean, z_log_var])
@@ -233,16 +235,15 @@ encoder.summary()
 latent_input = keras.Input(shape=(encoding_dim,))
 
 # layers for the decoder
-x = Dense(units=64)(latent_input)                                                                               # (64)
-x = Dense(units=256)(x)                                                                                         # (256)
-x = Reshape((8, 8, 4))(x)                                                                                       # (8, 8, 4)
-x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)                  # (16, 16, 4)
-x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)                  # (32, 32, 8)
-x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 16)
+x = Dense(units=128, activation="relu")(latent_input)                                                           # (64)
+x = Dense(units=512, activation="relu")(x)                                                                      # (256)
+x = Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
+x = Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
+x = Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
+x = Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
+x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
 x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
-x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (256, 256, 64)
-# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
-decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)       # (128, 128, 3)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
 
 # build the decoder
 decoder = keras.Model(latent_input, decoded, name="decoder")
