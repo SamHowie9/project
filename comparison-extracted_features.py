@@ -179,7 +179,10 @@ for encoding_dim in [15, 20, 25]:
 
 
 
-
+        print(all_properties)
+        print()
+        print(all_properties.columns)
+        print("...........")
 
 
         structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
