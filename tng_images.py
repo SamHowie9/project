@@ -197,7 +197,7 @@ for i in range(0, 5):
 
         hdu_list = fits.open("/cosma7/data/durham/dc-howi1/project/TNG Images/sdss/snapnum_095/data/" + random_galaxies[n])
         image = hdu_list[0].data
-        image = image[0:3]
+        image = image[0:3].T
 
         # # perform the image processing
         # image = image_processing(image)
