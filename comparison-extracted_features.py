@@ -68,7 +68,8 @@ for encoding_dim in [15, 20, 25]:
 
 
         # account for the training data in the dataframe
-        all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
+        # all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
+        all_properties = all_properties.iloc[:-200]
 
 
         print(all_properties)
