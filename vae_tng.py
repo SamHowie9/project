@@ -3,7 +3,7 @@ os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
 from keras import ops
-from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose
+from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
 import numpy as np
 import pandas as pd
 import random
@@ -20,13 +20,13 @@ from matplotlib import image as mpimg
 # tf.config.list_physical_devices('GPU')
 
 
-encoding_dim = 20
+encoding_dim = 15
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="6"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
