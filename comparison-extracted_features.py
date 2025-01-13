@@ -77,7 +77,7 @@ for encoding_dim in [15, 20, 25]:
 
         # balanced dataset
 
-        get the indices of the different types of galaxies (according to sersic index)
+        # get the indices of the different types of galaxies (according to sersic index)
         spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
         unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
         ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
