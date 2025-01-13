@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-import seaborn as sns
+# import seaborn as sns
 import textwrap
 import random
 from sklearn.decomposition import PCA
@@ -19,8 +19,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-encoding_dim = 15
-run = 2
+# encoding_dim = 15
+# run = 2
 
 
 for encoding_dim in [15, 20, 25]:
