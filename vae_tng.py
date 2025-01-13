@@ -22,7 +22,7 @@ from matplotlib import image as mpimg
 
 encoding_dim = 25
 
-run = 4
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
