@@ -34,6 +34,7 @@ n = 0
 for i in range(0, 5):
     for j in range(0, 5):
 
+        filename = "galrand_" + str(random_galaxies[n]) + ".png"
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
 
         axs[i][j].imshow(image)
