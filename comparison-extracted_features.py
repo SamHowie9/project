@@ -52,21 +52,21 @@ for encoding_dim in [15, 20, 25]:
 
         # original dataset
 
-        # # load the extracted features
-        # extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        # # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
-        # encoding_dim = extracted_features.shape[1]
-        # extracted_features_switch = extracted_features.T
-        #
-        #
-        # # # perform pca on the extracted features
-        # # pca = PCA(n_components=11).fit(extracted_features)
-        # # extracted_features = pca.transform(extracted_features)
-        # # extracted_features_switch = extracted_features.T
-        #
-        #
-        # # account for the training data in the dataframe
-        # all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
+        # load the extracted features
+        extracted_features = np.load("Variational Eagle/Extracted Features/Original/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+        # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
+        encoding_dim = extracted_features.shape[1]
+        extracted_features_switch = extracted_features.T
+
+
+        # perform pca on the extracted features
+        pca = PCA(n_components=13).fit(extracted_features)
+        extracted_features = pca.transform(extracted_features)
+        extracted_features_switch = extracted_features.T
+
+
+        # account for the training data in the dataframe
+        all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
 
 
 
@@ -76,66 +76,66 @@ for encoding_dim in [15, 20, 25]:
         # balanced dataset
 
         # get the indices of the different types of galaxies (according to sersic index)
-        spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
-        unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
-        ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
-
-        # randomly sample half the spiral galaxies
-        random.seed(1)
-        chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
-
-        # indices of the galaxies trained on the model that we have properties for
-        chosen_indices = chosen_spiral_indices + unknown_indices + ellipticals_indices
-
-        # reorder the properties dataframe to match the extracted features of the balanced dataset
-        all_properties = all_properties.loc[chosen_indices]
-
-        # get the indices of the randomly sampled testing set (from the full dataset with augmented images)
-        random.seed(2)
-        dataset_size = len(chosen_spiral_indices) + len(unknown_indices) + (4 * len(ellipticals_indices))
-        test_indices = random.sample(range(0, dataset_size), 20)
-
-        # flag the training set in the properties dataframe (removing individually effects the position of the other elements)
-        for i in test_indices:
-            if i <= len(all_properties):
-                all_properties.iloc[i] = np.nan
-
-        # remove the training set from the properties dataframe
-        all_properties = all_properties.dropna()
-
-
-        # load the extracted features
+        # spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+        # unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+        # ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+        #
+        # # randomly sample half the spiral galaxies
+        # random.seed(1)
+        # chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
+        #
+        # # indices of the galaxies trained on the model that we have properties for
+        # chosen_indices = chosen_spiral_indices + unknown_indices + ellipticals_indices
+        #
+        # # reorder the properties dataframe to match the extracted features of the balanced dataset
+        # all_properties = all_properties.loc[chosen_indices]
+        #
+        # # get the indices of the randomly sampled testing set (from the full dataset with augmented images)
+        # random.seed(2)
+        # dataset_size = len(chosen_spiral_indices) + len(unknown_indices) + (4 * len(ellipticals_indices))
+        # test_indices = random.sample(range(0, dataset_size), 20)
+        #
+        # # flag the training set in the properties dataframe (removing individually effects the position of the other elements)
+        # for i in test_indices:
+        #     if i <= len(all_properties):
+        #         all_properties.iloc[i] = np.nan
+        #
+        # # remove the training set from the properties dataframe
+        # all_properties = all_properties.dropna()
+        #
+        #
+        # # load the extracted features
+        # # extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
         # extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        extracted_features_switch = extracted_features.T
-
-        # perform pca on the extracted features
-        pca = PCA(n_components=13).fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
-        extracted_features_switch = extracted_features.T
-
-        # get the indices of the different types of galaxies (according to sersic index) after restructuring of properties dataframe
-        spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
-        unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
-        ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
-
-        # split the extracted features array into the half with spirals and unknown and ellipticals
-        extracted_features_spiral_unknown = extracted_features[:(len(spirals_indices) + len(unknown_indices))]
-        extracted_features_elliptical = extracted_features[(len(spirals_indices) + len(unknown_indices)):]
-
-        # remove the augmented images (3 of every 4 elliptical galaxies)
-        extracted_features_elliptical = np.array([extracted_features_elliptical[i] for i in range(len(extracted_features_elliptical)) if i % 4 == 0])
-
-        # join the two arrays back together
-        extracted_features = np.array(list(extracted_features_spiral_unknown) + list(extracted_features_elliptical))
-        extracted_features_switch = extracted_features.T
-
+        # extracted_features_switch = extracted_features.T
+        #
+        # # perform pca on the extracted features
+        # pca = PCA(n_components=13).fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        # extracted_features_switch = extracted_features.T
+        #
+        # # get the indices of the different types of galaxies (according to sersic index) after restructuring of properties dataframe
+        # spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+        # unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+        # ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+        #
+        # # split the extracted features array into the half with spirals and unknown and ellipticals
+        # extracted_features_spiral_unknown = extracted_features[:(len(spirals_indices) + len(unknown_indices))]
+        # extracted_features_elliptical = extracted_features[(len(spirals_indices) + len(unknown_indices)):]
+        #
+        # # remove the augmented images (3 of every 4 elliptical galaxies)
+        # extracted_features_elliptical = np.array([extracted_features_elliptical[i] for i in range(len(extracted_features_elliptical)) if i % 4 == 0])
+        #
+        # # join the two arrays back together
+        # extracted_features = np.array(list(extracted_features_spiral_unknown) + list(extracted_features_elliptical))
+        # extracted_features_switch = extracted_features.T
 
 
 
 
 
-        print(all_properties.sort_values(by="re_r"))
+
+        # print(all_properties.sort_values(by="re_r"))
 
 
 
@@ -257,7 +257,7 @@ for encoding_dim in [15, 20, 25]:
 
 
 
-        plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+        plt.savefig("Variational Eagle/Correlation Plots/original_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
         plt.show()
 
 
@@ -302,7 +302,7 @@ for encoding_dim in [15, 20, 25]:
                 axs[feature][i].set_ylabel(None)
                 axs[feature][i].tick_params(labelsize=12)
 
-        plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
+        plt.savefig("Variational Eagle/Correlation Plots/scatter_original_" + str(encoding_dim) + "_feature_vae_pca_all_property_correlation_" + str(run), bbox_inches='tight')
         # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
         plt.show()
 
