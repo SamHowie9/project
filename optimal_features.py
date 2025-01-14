@@ -21,27 +21,27 @@ plt.style.use("default")
 sns.set_style("ticks")
 
 
-# load supplemental file (find galaxies with stellar mass > 10^10 solar masses
-df1 = pd.read_csv("Galaxy Properties/Eagle Properties/stab3510_supplemental_file/table1.csv", comment="#")
-
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-# account for hte validation data and remove final 200 elements
-structure_properties.drop(structure_properties.tail(200).index, inplace=True)
-physical_properties.drop(physical_properties.tail(200).index, inplace=True)
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-
+# # load supplemental file (find galaxies with stellar mass > 10^10 solar masses
+# df1 = pd.read_csv("Galaxy Properties/Eagle Properties/stab3510_supplemental_file/table1.csv", comment="#")
+#
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # account for hte validation data and remove final 200 elements
+# structure_properties.drop(structure_properties.tail(200).index, inplace=True)
+# physical_properties.drop(physical_properties.tail(200).index, inplace=True)
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
 
 
 
 
-fig, axs = plt.subplots(2, 1, figsize=(12, 10))
+
+
+
 
 
 
@@ -51,25 +51,29 @@ df_loss = pd.DataFrame(columns=["Extracted Features", "Min Loss", "Min KL", "Med
 for i in range(1, 31):
     try:
 
-        loss_1 = list(np.load("Variational Eagle/Loss/Normalised Individually/" + str(i) + "_feature_300_epoch_loss_1.npy"))
-        loss_2 = list(np.load("Variational Eagle/Loss/Normalised Individually/" + str(i) + "_feature_300_epoch_loss_2.npy"))
-        loss_3 = list(np.load("Variational Eagle/Loss/Normalised Individually/" + str(i) + "_feature_300_epoch_loss_3.npy"))
-        # loss_2 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_2.npy"))
-        # loss_3 = list(np.load("Variational Eagle/Normalised Individually/Loss/" + str(i) + "_feature_300_epoch_loss_3.npy"))
+        # load the three different runs
+        loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_2.npy"))
+        loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_3.npy"))
 
+        # sort the reconstruction loss and kl divergence
         loss_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
         kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
 
+        # dataframe to store order of losses (reconstruction and kl divergence)
         df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
 
+    # if we don't have a run for this number of features, skip it
     except:
         print(i)
 
 print(df_loss)
 
+# find the size of the loss error bars for reconstruction loss
 loss_err_upper = np.array(df_loss["Max Loss"] - df_loss["Med Loss"])
 loss_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
 
+# find the size of the loss error bars for kl divergence
 kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
 kl_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
 
@@ -111,11 +115,16 @@ kl_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
 # axs1.plot(df_loss["Extracted Features"], df_loss["Med Loss"])
 # axs1.plot(df_loss["Extracted Features"], df_loss["Min Loss"])
 # axs1.plot(df_loss["Extracted Features"], df_loss["Max Loss"])
+
+
+fig, axs = plt.subplots(2, 1, figsize=(12, 10))
+
 loss = axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Loss"], yerr=[loss_err_lower, loss_err_upper], fmt="o", label="Loss")
 axs[0].set_ylabel("Loss")
 axs[0].set_xlabel("Extracted Features")
 
-axs2 = axs[0].twinx()
+# axs2 = axs[0].twinx()
+axs2 = axs[1]
 
 # axs2.plot(x_fit, y_fit, c="black")
 
@@ -125,7 +134,8 @@ axs2.set_ylabel("KL-Divergence")
 
 axs[0].legend([loss, kl_div], ["Loss", "KL-Divergence"], loc="center right")
 
-plt.savefig("Variational Eagle/Plots/Loss vs Extracted Features")
+
+plt.savefig("Variational Eagle/Plots/loss_plot_fully_balanced")
 plt.show()
 
 

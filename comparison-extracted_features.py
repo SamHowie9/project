@@ -108,7 +108,7 @@ for encoding_dim in [15, 20, 25]:
 
         # load the extracted features
         # extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+        extracted_features = np.load("Variational Eagle/Extracted Features/Original/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
         extracted_features_switch = extracted_features.T
 
         # perform pca on the extracted features
@@ -260,7 +260,7 @@ for encoding_dim in [15, 20, 25]:
 
 
 
-        plt.savefig("Variational Eagle/Correlation Plots/balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+        plt.savefig("Variational Eagle/Correlation Plots/original_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
         plt.show()
 
 
@@ -305,7 +305,7 @@ for encoding_dim in [15, 20, 25]:
                 axs[feature][i].set_ylabel(None)
                 axs[feature][i].tick_params(labelsize=12)
 
-        plt.savefig("Variational Eagle/Correlation Plots/scatter_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+        plt.savefig("Variational Eagle/Correlation Plots/scatter_original_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
         # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
         plt.show()
 
