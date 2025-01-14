@@ -209,7 +209,7 @@ def normalise_to_r(image):
 
 # load the images as a fully balanced dataset
 
-load structural and physical properties into dataframes
+# load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
