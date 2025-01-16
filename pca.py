@@ -2,11 +2,12 @@ from sklearn.decomposition import PCA
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+import random
 
 
 np.set_printoptions(linewidth=np.inf)
 
-encoding_dim = 25
+encoding_dim = 20
 
 run = 3
 
@@ -15,9 +16,47 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balance
 
 print(extracted_features.shape)
 
-pca = PCA(n_components=encoding_dim).fit(extracted_features)
-# pca_features = pca.transform(extracted_features)
+med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+print(med_features)
+
+random.seed(1)
+random_features = random.sample(range(0, extracted_features.shape[0]), 10)
+
+med_rmse = []
+
+for n_components in range(1, (extracted_features.shape[1])):
+
+    print(n_components)
+
+    pca = PCA(n_components=n_components).fit(extracted_features)
+    pca_features = pca.transform(extracted_features)
+
+    rmse = []
+
+    for i in random_features:
+
+        feature_reconstructions = pca.inverse_transform(pca_features[i])
+
+        # print(extracted_features[i])
+        # print(feature_reconstructions)
+        # print()
+
+        rmse.append(np.sqrt(np.mean(np.square(extracted_features[i] - feature_reconstructions))))
+
+    med_rmse.append(np.median(np.array(rmse)))
+
+plt.plot(med_rmse)
+plt.show()
+
+# pca_features = pca.transform(random_features)
 #
+# random_features_reconstruction = pca.inverse_transform(pca_features)
+#
+# print(random_features)
+# print(random_features_reconstruction)
+
+
+
 # print(extracted_features[0])
 # print(pca_features[0])
 #
@@ -40,15 +79,17 @@ pca = PCA(n_components=encoding_dim).fit(extracted_features)
 # print(new_features.shape)
 
 
-plt.plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
-
-plt.ylabel("Varience Explained")
-plt.xlabel("Principal Components")
-plt.xticks(range(1, encoding_dim+1))
+# plt.plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
+#
+# plt.ylabel("Varience Explained")
+# plt.xlabel("Principal Components")
+# plt.xticks(range(1, encoding_dim+1))
+#
+# print(pca.explained_variance_ratio_)
 
 
 # plt.savefig("Variational Eagle/Plots/pca_scree_normalised_individually_" + str(encoding_dim) + "_features")
-plt.show()
+# plt.show()
 
 
 
