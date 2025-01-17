@@ -18,7 +18,7 @@ import random
 # number of extracted features
 encoding_dim = 15
 
-run = 2
+run = 1
 
 # number of epochs for run
 epochs = 300
@@ -221,7 +221,7 @@ vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 
 # load the weights
-vae.load_weights("Variational Eagle/Weights/Balanced New/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5")
+vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5")
 
 
 
@@ -279,7 +279,7 @@ all_properties = all_properties.dropna()
 
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Balanced New/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
@@ -394,7 +394,7 @@ print(len(med_pca_features))
 
 # transition plot for group of features
 
-chosen_features = [0, 2, 3, 4]
+chosen_features = [0, 1, 2, 3, 4, 5]
 
 fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(15, 6))
 
@@ -422,7 +422,7 @@ for i, feature in enumerate(chosen_features):
         if j == 7:
             axs[i][j].set_xlabel(str(round(varying_feature_values[feature], 2)) + "\nPCA Feature " + str(feature))
 
-plt.savefig("Variational Eagle/Plots/new_transition_plot_vae_pca_0_2_3_4", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/transition_plot_" + str(encoding_dim) + "_features_" + str(run), bbox_inches='tight')
 plt.show()
 
 
