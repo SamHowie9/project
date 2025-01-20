@@ -436,7 +436,7 @@ print(len(med_pca_features))
 
 chosen_features = [0, 1, 2, 3, 4]
 
-fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(15, 6))
+fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(15, 8))
 
 for i, feature in enumerate(chosen_features):
 
