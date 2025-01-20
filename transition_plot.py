@@ -283,7 +283,7 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balance
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-pca = PCA(n_components=13).fit(extracted_features)
+pca = PCA(n_components=5).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
 extracted_features_switch = extracted_features.T
 
