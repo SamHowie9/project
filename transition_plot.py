@@ -1,5 +1,7 @@
 import os
 from matplotlib.pyplot import figure
+from pandas.io.formats.style import jinja2
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -457,12 +459,12 @@ for i, feature in enumerate(chosen_features):
 
         axs[i][j].imshow(reconstruction)
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-        axs[i][j].set_xlabel(round(varying_feature_values[feature], 2))
+        axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
 
         if j == 7:
-            axs[i][j].set_xlabel(str(round(varying_feature_values[feature], 2)) + "\nPCA Feature " + str(feature))
+            axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-plt.savefig("Variational Eagle/Plots/transition_plot_" + str(encoding_dim) + "_features_" + str(run) + "_2", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/transition_plot_" + str(encoding_dim) + "_features_" + str(run), bbox_inches='tight')
 plt.show()
 
 
