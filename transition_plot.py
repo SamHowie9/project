@@ -16,9 +16,9 @@ import random
 
 
 # number of extracted features
-encoding_dim = 15
+encoding_dim = 10
 
-run = 1
+run = 2
 
 # number of epochs for run
 epochs = 300

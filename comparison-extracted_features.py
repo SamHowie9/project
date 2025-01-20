@@ -22,30 +22,30 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
 
 
-# encoding_dim = 15
-# run = 2
-
-
-for encoding_dim in [5, 6, 7, 8, 10]:
-
-    for run in [1, 2, 3]:
-
-
-        # load structural and physical properties into dataframes
-        structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-        physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-
-        # dataframe for all properties
-        all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-
-        # find all bad fit galaxies
-        bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-
-        # remove those galaxies
-        for galaxy in bad_fit:
-            all_properties = all_properties.drop(galaxy, axis=0)
+encoding_dim = 10
+run = 2
+
+
+# for encoding_dim in [5, 6, 7, 8, 10]:
+#
+# for run in [1, 2, 3]:
+
+
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+
+# remove those galaxies
+for galaxy in bad_fit:
+    all_properties = all_properties.drop(galaxy, axis=0)
 
 
 
@@ -53,264 +53,264 @@ for encoding_dim in [5, 6, 7, 8, 10]:
 
 
 
-        # original dataset
+# original dataset
 
-        # # load the extracted features
-        # extracted_features = np.load("Variational Eagle/Extracted Features/Original/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        # # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
-        # encoding_dim = extracted_features.shape[1]
-        # extracted_features_switch = extracted_features.T
-        #
-        #
-        # # perform pca on the extracted features
-        # pca = PCA(n_components=13).fit(extracted_features)
-        # extracted_features = pca.transform(extracted_features)
-        # extracted_features_switch = extracted_features.T
-        #
-        #
-        # # account for the training data in the dataframe
-        # # all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
-        # all_properties = all_properties.iloc[:-200]
-        #
-        #
-        # print(all_properties)
-        # print()
+# # load the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Original/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
+# encoding_dim = extracted_features.shape[1]
+# extracted_features_switch = extracted_features.T
+#
+#
+# # perform pca on the extracted features
+# pca = PCA(n_components=13).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
+#
+#
+# # account for the training data in the dataframe
+# # all_properties = all_properties.drop(all_properties.tail(200).index, inplace=True)
+# all_properties = all_properties.iloc[:-200]
+#
+#
+# print(all_properties)
+# print()
 
 
 
-        # balanced dataset
+# balanced dataset
 
-        # # get the indices of the different types of galaxies (according to sersic index)
-        # spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
-        # unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
-        # ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
-        #
-        # # randomly sample half the spiral galaxies
-        # random.seed(1)
-        # chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
-        #
-        # # indices of the galaxies trained on the model that we have properties for
-        # chosen_indices = chosen_spiral_indices + unknown_indices + ellipticals_indices
-        #
-        # # reorder the properties dataframe to match the extracted features of the balanced dataset
-        # all_properties = all_properties.loc[chosen_indices]
-        #
-        # # get the indices of the randomly sampled testing set (from the full dataset with augmented images)
-        # random.seed(2)
-        # dataset_size = len(chosen_spiral_indices) + len(unknown_indices) + (4 * len(ellipticals_indices))
-        # test_indices = random.sample(range(0, dataset_size), 20)
-        #
-        # # flag the training set in the properties dataframe (removing individually effects the position of the other elements)
-        # for i in test_indices:
-        #     if i <= len(all_properties):
-        #         all_properties.iloc[i] = np.nan
-        #
-        # # remove the training set from the properties dataframe
-        # all_properties = all_properties.dropna()
-        #
-        #
-        # # load the extracted features
-        # # extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        # extracted_features_switch = extracted_features.T
-        #
-        # # perform pca on the extracted features
-        # pca = PCA(n_components=encoding_dim).fit(extracted_features)
-        # extracted_features = pca.transform(extracted_features)
-        # extracted_features_switch = extracted_features.T
-        #
-        # # get the indices of the different types of galaxies (according to sersic index) after restructuring of properties dataframe
-        # spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
-        # unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
-        # ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
-        #
-        # # split the extracted features array into the half with spirals and unknown and ellipticals
-        # extracted_features_spiral_unknown = extracted_features[:(len(spirals_indices) + len(unknown_indices))]
-        # extracted_features_elliptical = extracted_features[(len(spirals_indices) + len(unknown_indices)):]
-        #
-        # # remove the augmented images (3 of every 4 elliptical galaxies)
-        # extracted_features_elliptical = np.array([extracted_features_elliptical[i] for i in range(len(extracted_features_elliptical)) if i % 4 == 0])
-        #
-        # # join the two arrays back together
-        # extracted_features = np.array(list(extracted_features_spiral_unknown) + list(extracted_features_elliptical))
-        # extracted_features_switch = extracted_features.T
+# # get the indices of the different types of galaxies (according to sersic index)
+# spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+# unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+# ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+#
+# # randomly sample half the spiral galaxies
+# random.seed(1)
+# chosen_spiral_indices = random.sample(spirals_indices, round(len(spirals_indices)/2))
+#
+# # indices of the galaxies trained on the model that we have properties for
+# chosen_indices = chosen_spiral_indices + unknown_indices + ellipticals_indices
+#
+# # reorder the properties dataframe to match the extracted features of the balanced dataset
+# all_properties = all_properties.loc[chosen_indices]
+#
+# # get the indices of the randomly sampled testing set (from the full dataset with augmented images)
+# random.seed(2)
+# dataset_size = len(chosen_spiral_indices) + len(unknown_indices) + (4 * len(ellipticals_indices))
+# test_indices = random.sample(range(0, dataset_size), 20)
+#
+# # flag the training set in the properties dataframe (removing individually effects the position of the other elements)
+# for i in test_indices:
+#     if i <= len(all_properties):
+#         all_properties.iloc[i] = np.nan
+#
+# # remove the training set from the properties dataframe
+# all_properties = all_properties.dropna()
+#
+#
+# # load the extracted features
+# # extracted_features = np.load("Variational Eagle/Extracted Features/Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+# extracted_features_switch = extracted_features.T
+#
+# # perform pca on the extracted features
+# pca = PCA(n_components=encoding_dim).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
+#
+# # get the indices of the different types of galaxies (according to sersic index) after restructuring of properties dataframe
+# spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+# unknown_indices = list(all_properties.loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index)
+# ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+#
+# # split the extracted features array into the half with spirals and unknown and ellipticals
+# extracted_features_spiral_unknown = extracted_features[:(len(spirals_indices) + len(unknown_indices))]
+# extracted_features_elliptical = extracted_features[(len(spirals_indices) + len(unknown_indices)):]
+#
+# # remove the augmented images (3 of every 4 elliptical galaxies)
+# extracted_features_elliptical = np.array([extracted_features_elliptical[i] for i in range(len(extracted_features_elliptical)) if i % 4 == 0])
+#
+# # join the two arrays back together
+# extracted_features = np.array(list(extracted_features_spiral_unknown) + list(extracted_features_elliptical))
+# extracted_features_switch = extracted_features.T
 
 
 
 
 
 
-        # print(all_properties.sort_values(by="re_r"))
+# print(all_properties.sort_values(by="re_r"))
 
 
 
 
 
 
-        # fully balanced dataset
+# fully balanced dataset
+
+# account for the testing dataset
+all_properties = all_properties.iloc[:-200]
+
+# load the extracted features
+extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
+encoding_dim = extracted_features.shape[1]
+extracted_features_switch = extracted_features.T
+
+# print(extracted_features.shape)
+
+extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
+
+# perform pca on the extracted features
+pca = PCA(n_components=5).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+# extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
+
+
+
+
+
 
-        # account for the testing dataset
-        all_properties = all_properties.iloc[:-200]
 
-        # load the extracted features
-        extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
-        encoding_dim = extracted_features.shape[1]
-        extracted_features_switch = extracted_features.T
 
-        # print(extracted_features.shape)
-
-        extracted_features = extracted_features[:len(all_properties)]
-        extracted_features_switch = extracted_features.T
-
-        # perform pca on the extracted features
-        # pca = PCA(n_components=encoding_dim).fit(extracted_features)
-        # extracted_features = pca.transform(extracted_features)
-        # # extracted_features = extracted_features[:len(all_properties)]
-        # extracted_features_switch = extracted_features.T
-
-
-
-
-
-
-
-
-        # model = AgglomerativeClustering()
-        #
-        # visualizer = KElbowVisualizer(model, k=(1, 40), timings=False)
-        #
-        # visualizer.fit(extracted_features)        # Fit the data to the visualizer
-        # visualizer.show()
-
-
-
-
-
-
-
-        structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
-        physical_correlation_df = pd.DataFrame(columns=["Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
-        correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
-
-        for feature in range(0, len(extracted_features_switch)):
-
-            # create a list to contain the correlation between that feature and each property
-            structure_correlation_list = []
-            physical_correlation_list = []
-
-            correlation_list = []
-
-            # loop through each property
-            # for gal_property in range(1, len(structure_properties.columns)):
-            for gal_property in range(1, len(all_properties.columns)):
-
-                if gal_property == 6:
-                    continue
-
-                # calculate the correlation between that extracted feature and that property
-                # structure_correlation = np.corrcoef(extracted_features_switch[feature], abs(structure_properties.iloc[:, gal_property]))[0][1]
-                # structure_correlation_list.append(structure_correlation)
-
-                correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
-                correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-                correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties.iloc[:, gal_property])[0][1]
-                correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-
-                if gal_property == 1 and feature == 21:
-                    print(correlation_1, correlation_2, correlation_3, correlation_4)
-
-                correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
-
-            correlation_df.loc[len(correlation_df)] = correlation_list
-
-
-
-
-
-
-
-        # set the figure size
-        # plt.figure(figsize=(20, encoding_dim))
-        plt.figure(figsize=(20, extracted_features_switch.shape[0]))
-
-
-        # properties to plot
-        selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-
-
-        # plot a heatmap for the dataframe (with annotations)
-        ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-
-
-
-        plt.yticks(rotation=0)
-        plt.ylabel("Extracted Features", fontsize=15)
-        ax.xaxis.tick_top() # x axis on top
-        ax.xaxis.set_label_position('top')
-        ax.tick_params(length=0)
-        ax.figure.axes[-1].yaxis.label.set_size(15)
-
-
-        def wrap_labels(ax, width, break_long_words=False):
-            labels = []
-            for label in ax.get_xticklabels():
-                text = label.get_text()
-                labels.append(textwrap.fill(text, width=width,
-                              break_long_words=break_long_words))
-            ax.set_xticklabels(labels, rotation=0, fontsize=15)
-
-        wrap_labels(ax, 10)
-
-
-
-        plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-        plt.show()
-
-
-
-
-
-
-
-        # scatter plot
-
-        # properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-        properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
-
-
-        all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
-
-        # print(all_properties)
-
-        property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
-
-        # fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
-        fig, axs = plt.subplots(extracted_features_switch.shape[0], len(properties), figsize=(40, (encoding_dim * 4)))
-
-        # fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
-
-
-        for i, property in enumerate(properties):
-
-            axs[0][i].set_title(property_labels[i], fontsize=20)
-
-            # for feature in range(0, 19):
-            # for feature in range(0, encoding_dim):
-            for feature in range(0, extracted_features_switch.shape[0]):
-
-                axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
-                # axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
-
-                # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
-
-                axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
-                # axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
-                axs[feature][i].set_ylabel(None)
-                axs[feature][i].tick_params(labelsize=12)
-
-        plt.savefig("Variational Eagle/Correlation Plots/scatter_fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-        # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
-        plt.show()
+# model = AgglomerativeClustering()
+#
+# visualizer = KElbowVisualizer(model, k=(1, 40), timings=False)
+#
+# visualizer.fit(extracted_features)        # Fit the data to the visualizer
+# visualizer.show()
+
+
+
+
+
+# correlation plot
+
+# structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
+# physical_correlation_df = pd.DataFrame(columns=["Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+# correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+#
+# for feature in range(0, len(extracted_features_switch)):
+#
+#     # create a list to contain the correlation between that feature and each property
+#     structure_correlation_list = []
+#     physical_correlation_list = []
+#
+#     correlation_list = []
+#
+#     # loop through each property
+#     # for gal_property in range(1, len(structure_properties.columns)):
+#     for gal_property in range(1, len(all_properties.columns)):
+#
+#         if gal_property == 6:
+#             continue
+#
+#         # calculate the correlation between that extracted feature and that property
+#         # structure_correlation = np.corrcoef(extracted_features_switch[feature], abs(structure_properties.iloc[:, gal_property]))[0][1]
+#         # structure_correlation_list.append(structure_correlation)
+#
+#         correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
+#         correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+#         correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties.iloc[:, gal_property])[0][1]
+#         correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+#
+#         if gal_property == 1 and feature == 21:
+#             print(correlation_1, correlation_2, correlation_3, correlation_4)
+#
+#         correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+#
+#     correlation_df.loc[len(correlation_df)] = correlation_list
+#
+#
+#
+#
+#
+#
+#
+# # set the figure size
+# # plt.figure(figsize=(20, encoding_dim))
+# plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+#
+#
+# # properties to plot
+# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+#
+#
+# # plot a heatmap for the dataframe (with annotations)
+# ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+#
+#
+#
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=15)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+# ax.figure.axes[-1].yaxis.label.set_size(15)
+#
+#
+# def wrap_labels(ax, width, break_long_words=False):
+#     labels = []
+#     for label in ax.get_xticklabels():
+#         text = label.get_text()
+#         labels.append(textwrap.fill(text, width=width,
+#                       break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
+#
+# wrap_labels(ax, 10)
+#
+#
+#
+# plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# plt.show()
+
+
+
+
+
+
+
+# scatter plot
+
+# # properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+# properties = ["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]
+#
+#
+# all_properties = all_properties[["n_r", "pa_r", "q_r", "re_r", "InitialMassWeightedStellarAge", "StarFormationRate", "MassType_Star", "MassType_DM", "MassType_BH"]]
+#
+# # print(all_properties)
+#
+# property_labels = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Stellar Age", "Star Formation Rate", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass"]
+#
+# # fig, axs = plt.subplots(encoding_dim, len(properties), figsize=(40, (encoding_dim * 4)))
+# fig, axs = plt.subplots(extracted_features_switch.shape[0], len(properties), figsize=(40, (encoding_dim * 4)))
+#
+# # fig, axs = plt.subplots(19, len(properties), figsize=(40, 70))
+#
+#
+# for i, property in enumerate(properties):
+#
+#     axs[0][i].set_title(property_labels[i], fontsize=20)
+#
+#     # for feature in range(0, 19):
+#     # for feature in range(0, encoding_dim):
+#     for feature in range(0, extracted_features_switch.shape[0]):
+#
+#         axs[feature][i].scatter(x=extracted_features_switch[feature], y=all_properties[property], s=0.5)
+#         # axs[feature][i].scatter(x=extracted_features_switch[feature+19], y=all_properties[property], s=0.5)
+#
+#         # sns.kdeplot(data=all_properties, x=extracted_features_switch[feature], y=all_properties[property], gridsize=200)
+#
+#         axs[feature][i].set_xlabel("Feature " + str(feature), fontsize=12)
+#         # axs[feature][i].set_xlabel("Feature " + str(feature+19), fontsize=12)
+#         axs[feature][i].set_ylabel(None)
+#         axs[feature][i].tick_params(labelsize=12)
+#
+# plt.savefig("Variational Eagle/Correlation Plots/scatter_fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -332,24 +332,25 @@ def exponential(x, a, b, c):
 #
 # axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
 #
-# # fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
-# # print(fit)
-# #
-# # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-# # y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+# fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
+# print(fit)
 #
-# # params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, 1, 1))
+# # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+# x_fit = np.linspace(-3, 2.5, 100)
+# y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+#
+# axs.plot(x_fit, y_fit, c="black")
+#
+#
+# # params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
 # #
 # # print(params)
 # # print(covariance)
 # #
 # # x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
 # # y_fit = [exponential(x, *params) for x in x_fit]
-#
-#
-# # axs.plot(x_fit, y_fit, c="black")
-#
-# # axs.plot(x_fit, y_fit, c="black")
+# #
+# # axs.plot(x_fit, y_fit, c="red")
 #
 # axs.set_xlabel("PCA Feature 4")
 # axs.set_ylabel("Sersic Index")
@@ -395,34 +396,36 @@ def exponential(x, a, b, c):
 
 # fig, axs = plt.subplots(2, 1, figsize=(5, 10))
 #
-# axs[0].scatter(x=extracted_features_switch[2], y=all_properties["pa_r"], s=2)
+# axs[0].scatter(x=extracted_features_switch[1], y=all_properties["pa_r"], s=2)
 #
-# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[2], deg=3)
+# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[1], deg=3)
 # x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
 # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
 # axs[0].plot(y_fit, x_fit, c="black")
 #
-# axs[0].set_xlabel("PCA Feature 2", fontsize=10)
+# axs[0].set_xlabel("PCA Feature 1", fontsize=10)
 # axs[0].set_ylabel("Position Angle (°)", fontsize=10)
 # axs[0].tick_params(labelsize=10)
 # axs[0].set_yticks([-90, -45, 0, 45, 90])
 #
 #
 #
-# axs[1].scatter(x=extracted_features_switch[3], y=all_properties["pa_r"], s=2)
+# axs[1].scatter(x=extracted_features_switch[2], y=all_properties["pa_r"], s=2)
 #
-# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=3)
+# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[2], deg=3)
 # x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
 # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
 # axs[1].plot(y_fit, x_fit, c="black")
 #
-# axs[1].set_xlabel("PCA Feature 3", fontsize=10)
+# axs[1].set_xlabel("PCA Feature 2", fontsize=10)
 # axs[1].set_ylabel("Position Angle (°)", fontsize=10)
 # axs[1].tick_params(labelsize=10)
 # axs[1].set_yticks([-90, -45, 0, 45, 90])
 #
-# plt.savefig("Variational Eagle/Plots/pca_feature_2_and_3_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/pca_feature_1_and_2_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
+
+
 
 
 
@@ -467,36 +470,36 @@ def exponential(x, a, b, c):
 
 
 
-# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
-#
-# axs.scatter(x=extracted_features_switch[2], y=all_properties["q_r"], s=2)
-#
-#
-# # fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=1)
-# fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=2)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
-#
-# # x_fit = np.linspace(np.min(abs(extracted_features_switch[2])), np.max(abs(extracted_features_switch[3])), 100)
-# x_fit = np.linspace(0, 4, 100)
-# # y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
-# y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
-#
-# plt.plot(x_fit, y_fit, c="black")
-# plt.plot((-1 * x_fit), y_fit, c="black")
-#
-# axs.set_xlabel("PCA Feature 2")
-# axs.set_ylabel("Axis Ratio")
-#
-#
-# plt.savefig("Variational Eagle/Plots/pca_feature_2_vs_axis_ratio_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.show()
+fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+
+axs.scatter(x=extracted_features_switch[2], y=all_properties["q_r"], s=2)
+
+
+# fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=1)
+fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=2)
+# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
+# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
+# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
+# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
+
+# x_fit = np.linspace(np.min(abs(extracted_features_switch[2])), np.max(abs(extracted_features_switch[3])), 100)
+x_fit = np.linspace(0, 4, 100)
+# y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
+y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
+# y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
+# y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
+
+plt.plot(x_fit, y_fit, c="black")
+plt.plot((-1 * x_fit), y_fit, c="black")
+
+axs.set_xlabel("PCA Feature 2")
+axs.set_ylabel("Axis Ratio")
+
+
+plt.savefig("Variational Eagle/Plots/pca_feature_2_vs_axis_ratio_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.show()
 
 
 
@@ -511,11 +514,20 @@ def exponential(x, a, b, c):
 #
 # fit = np.polyfit(x=extracted_features_switch[0], y=all_properties["re_r"], deg=2)
 #
-# x_fit = np.linspace(-3, np.max(extracted_features_switch[0]), 100)
+# # x_fit = np.linspace(-3, np.max(extracted_features_switch[0]), 100)
+# x_fit = np.linspace(np.min(extracted_features_switch[0]), 4, 100)
 # y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
 #
-#
 # axs.plot(x_fit, y_fit, c="black")
+#
+#
+# # params, covariance = curve_fit(exponential, extracted_features_switch[0], all_properties["re_r"], p0=(1, -1, 1))
+# #
+# # x_fit = np.linspace(np.min(extracted_features_switch[0]), np.max(extracted_features_switch[0]), 100)
+# # y_fit = [exponential(x, *params) for x in x_fit]
+# #
+# # axs.plot(x_fit, y_fit, c="red")
+#
 #
 # axs.set_xlabel("PCA Feature 0")
 # axs.set_ylabel("Semi-Major Axis (pkpc)")
