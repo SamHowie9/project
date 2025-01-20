@@ -19,7 +19,7 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 9
+encoding_dim = 10
 
 run = 1
 
