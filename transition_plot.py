@@ -353,7 +353,7 @@ extracted_features_switch = extracted_features.T
 
 
 
-num_varying_features = 15
+num_varying_features = 10
 
 
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
@@ -435,7 +435,7 @@ print(len(med_pca_features))
 
 chosen_features = [0, 1, 2, 3, 4]
 
-fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(15, 8))
+fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features, 8))
 
 for i, feature in enumerate(chosen_features):
 
@@ -458,10 +458,10 @@ for i, feature in enumerate(chosen_features):
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
         axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
 
-        if j == 7:
+        if j == (num_varying_features - 1)/2:
             axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-plt.savefig("Variational Eagle/Plots/transition_plot_" + str(encoding_dim) + "_features_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/transition_plot_" + str(encoding_dim) + "_features_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
 plt.show()
 
 
