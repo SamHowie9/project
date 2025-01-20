@@ -353,7 +353,7 @@ extracted_features_switch = extracted_features.T
 
 
 
-num_varying_features = 9
+num_varying_features = 13
 
 
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
