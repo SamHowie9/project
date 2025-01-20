@@ -1,7 +1,4 @@
 import os
-from matplotlib.pyplot import figure
-from pandas.io.formats.style import jinja2
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
