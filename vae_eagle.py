@@ -19,16 +19,16 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 30
+encoding_dim = 10
 
-run = 3
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
-epochs = 300
+epochs = 500
 
 
 # normalise each band individually
@@ -514,7 +514,7 @@ axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
 axs2.set_ylabel("KL Loss")
 plt.legend()
 
-plt.savefig("Variational Eagle/Plots/fully_balanced_" + str(encoding_dim) + "_feature_loss_" + str(run))
+plt.savefig("Variational Eagle/Loss Plots/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_loss_" + str(run))
 plt.show()
 
 

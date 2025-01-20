@@ -48,69 +48,84 @@ sns.set_style("ticks")
 
 
 
-# # dataframe containing all losses
+# dataframe containing all losses
 # df_loss = pd.DataFrame(columns=["Extracted Features", "Min Loss", "Min KL", "Med Loss", "Med KL", "Max Loss", "Max KL"])
+df_loss = pd.DataFrame(columns=["Extracted Features", "Min Total", "Med Total", "Max Total", "Min Reconstruction", "Med Reconstruction", "Max Reconstruction", "Min KL", "Med KL", "Max KL"])
+
+for i in range(5, 31):
+    try:
+
+        # load the three different runs
+        loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_1.npy"))
+        loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_2.npy"))
+        loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_3.npy"))
+
+        # sort the reconstruction loss and kl divergence
+        total_sorted = np.sort(np.array([loss_1[0], loss_2[0], loss_3[0]]))
+        reconstruction_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
+        kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
+
+        # dataframe to store order of losses (reconstruction and kl divergence)
+        # df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
+        df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
+
+    # if we don't have a run for this number of features, skip it
+    except:
+        print(i)
+
+print(df_loss)
+
+
+# find the size of the loss error bars for total loss
+total_err_upper = np.array(df_loss["Max Total"] - df_loss["Med Total"])
+total_err_lower = np.array(df_loss["Med Total"] - df_loss["Min Total"])
+
+# find the size of the loss error bars for reconstruction loss
+reconstruction_err_upper = np.array(df_loss["Max Reconstruction"] - df_loss["Med Reconstruction"])
+reconstruction_err_lower = np.array(df_loss["Med Reconstruction"] - df_loss["Min Reconstruction"])
+
+# find the size of the loss error bars for kl divergence
+kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
+kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
+
+
+
+
+
+# def logfit(x, a, b):
+#     return a * np.log10(x) + b
 #
-# for i in range(1, 31):
-#     try:
+# params, covarience = curve_fit(logfit, range(1, 51), df_loss["Med Loss"])
+# a, b = params
+
+# def sigmoid_fit(x, a, b, c, d):
+#     return (a/(1 + (np.e ** (-b*x + c)))) + d
 #
-#         # load the three different runs
-#         loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_1.npy"))
-#         loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_2.npy"))
-#         loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_3.npy"))
+# params, covarience = curve_fit(sigmoid_fit, range(1, 51), df_loss["Med Loss"]/1000)
+# a, b, c, d = params
+
 #
-#         # sort the reconstruction loss and kl divergence
-#         loss_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
-#         kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
+# x_fit = np.linspace(1, 50, 100).tolist()
+# y_fit = []
 #
-#         # dataframe to store order of losses (reconstruction and kl divergence)
-#         df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
+# for x in x_fit:
+#     y_fit.append(sigmoid_fit(x, a, b, c, d)*1000)
 #
-#     # if we don't have a run for this number of features, skip it
-#     except:
-#         print(i)
-#
-# print(df_loss)
-#
-# # find the size of the loss error bars for reconstruction loss
-# loss_err_upper = np.array(df_loss["Max Loss"] - df_loss["Med Loss"])
-# loss_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
-#
-# # find the size of the loss error bars for kl divergence
-# kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
-# kl_err_lower = np.array(df_loss["Med Loss"] - df_loss["Min Loss"])
-#
-#
-#
-#
-#
-# # def logfit(x, a, b):
-# #     return a * np.log10(x) + b
-# #
-# # params, covarience = curve_fit(logfit, range(1, 51), df_loss["Med Loss"])
-# # a, b = params
-#
-# # def sigmoid_fit(x, a, b, c, d):
-# #     return (a/(1 + (np.e ** (-b*x + c)))) + d
-# #
-# # params, covarience = curve_fit(sigmoid_fit, range(1, 51), df_loss["Med Loss"]/1000)
-# # a, b, c, d = params
-#
-# #
-# # x_fit = np.linspace(1, 50, 100).tolist()
-# # y_fit = []
-# #
-# # for x in x_fit:
-# #     y_fit.append(sigmoid_fit(x, a, b, c, d)*1000)
-# #
-# # axs[0].plot(x_fit, y_fit, c="black")
-#
-#
-#
-#
-#
+# axs[0].plot(x_fit, y_fit, c="black")
+
+
+
+
+fig, axs = plt.subplots(1, 1, figsize=(8, 4))
 # fig, axs = plt.subplots(2, 1, figsize=(12, 10))
-#
+
+axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o")
+axs.set_ylabel("Loss")
+axs.set_xlabel("Extracted Features")
+
+plt.show()
+
+
 # loss = axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Loss"], yerr=[loss_err_lower, loss_err_upper], fmt="o", label="Loss")
 # axs[0].set_ylabel("Loss")
 # axs[0].set_xlabel("Extracted Features")
@@ -134,35 +149,35 @@ sns.set_style("ticks")
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(10, 5))
-
-df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
-
-for i in range(1, 31):
-
-    features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_1.npy")[0]
-    features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_2.npy")[0]
-    features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_3.npy")[0]
-
-    pca_1 = PCA(n_components=0.999).fit(features_1)
-    pca_2 = PCA(n_components=0.999).fit(features_2)
-    pca_3 = PCA(n_components=0.999).fit(features_3)
-
-    num_1 = pca_1.components_.shape[0]
-    num_2 = pca_2.components_.shape[0]
-    num_3 = pca_3.components_.shape[0]
-
-    sorted = np.sort(np.array([num_1, num_2, num_3]))
-
-    df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
-
-# find the size of the loss error bars for reconstruction loss
-num_err_upper = np.array(df_num["Max"] - df_num["Med"])
-num_err_lower = np.array(df_num["Med"] - df_num["Min"])
-
-axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
-
-plt.show()
+# fig, axs = plt.subplots(1, 1, figsize=(10, 5))
+#
+# df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
+#
+# for i in range(1, 31):
+#
+#     features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_1.npy")[0]
+#     features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_2.npy")[0]
+#     features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_3.npy")[0]
+#
+#     pca_1 = PCA(n_components=0.999).fit(features_1)
+#     pca_2 = PCA(n_components=0.999).fit(features_2)
+#     pca_3 = PCA(n_components=0.999).fit(features_3)
+#
+#     num_1 = pca_1.components_.shape[0]
+#     num_2 = pca_2.components_.shape[0]
+#     num_3 = pca_3.components_.shape[0]
+#
+#     sorted = np.sort(np.array([num_1, num_2, num_3]))
+#
+#     df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
+#
+# # find the size of the loss error bars for reconstruction loss
+# num_err_upper = np.array(df_num["Max"] - df_num["Med"])
+# num_err_lower = np.array(df_num["Med"] - df_num["Min"])
+#
+# axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
+#
+# plt.show()
 
 
 

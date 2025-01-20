@@ -7,9 +7,9 @@ import random
 
 np.set_printoptions(linewidth=np.inf)
 
-encoding_dim = 20
+encoding_dim = 15
 
-run = 3
+run = 1
 
 extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]

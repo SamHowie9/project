@@ -394,7 +394,7 @@ print(len(med_pca_features))
 
 # transition plot for group of features
 
-chosen_features = [0, 1, 2, 3, 4, 5]
+chosen_features = [0, 1, 2, 3, 4]
 
 fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(15, 6))
 
@@ -422,7 +422,7 @@ for i, feature in enumerate(chosen_features):
         if j == 7:
             axs[i][j].set_xlabel(str(round(varying_feature_values[feature], 2)) + "\nPCA Feature " + str(feature))
 
-plt.savefig("Variational Eagle/Plots/transition_plot_" + str(encoding_dim) + "_features_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/transition_plot_" + str(encoding_dim) + "_features_" + str(run) + "_2", bbox_inches='tight')
 plt.show()
 
 
