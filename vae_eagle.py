@@ -13,9 +13,11 @@ from matplotlib import image as mpimg
 
 
 
+
 # os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 # tf.config.list_physical_devices('GPU')
+
 
 
 
