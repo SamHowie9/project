@@ -14,20 +14,13 @@ from matplotlib import image as mpimg
 
 
 
-# os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-# tf.config.list_physical_devices('GPU')
 
-
-
-
-encoding_dim = 24
-
-run = 3
+encoding_dim = 25
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 500
