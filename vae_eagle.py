@@ -25,6 +25,9 @@ os.environ["CUDA_VISIBLE_DEVICES"]="1"
 # number of epochs for run
 epochs = 750
 
+# batch size for run
+batch_size = 32
+
 
 
 # normalise each band individually
@@ -475,18 +478,18 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 
 # train the model
-model_loss = vae.fit(train_images, epochs=epochs, batch_size=32)
+model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
 # or load the weights from a previous run
 # vae.load_weights("Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy", extracted_features)
+np.save("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
 
 print(np.array(extracted_features).shape)
 
@@ -494,7 +497,7 @@ print(np.array(extracted_features).shape)
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_loss_" + str(run) + ".npy", loss)
+np.save("Variational Eagle/Loss/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
 
 
 
@@ -510,7 +513,7 @@ axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
 axs2.set_ylabel("KL Loss")
 plt.legend()
 
-plt.savefig("Variational Eagle/Loss Plots/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_loss_" + str(run))
+plt.savefig("Variational Eagle/Loss Plots/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
 plt.show()
 
 
@@ -554,7 +557,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_reconstruction_" + str(run))
+plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
 plt.show()
 
 
