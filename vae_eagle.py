@@ -30,6 +30,7 @@ batch_size = 32
 
 
 
+
 # normalise each band individually
 def normalise_independently(image):
     image = image.T
