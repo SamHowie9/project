@@ -23,10 +23,10 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="7"
 
 # number of epochs for run
-epochs = 300
+epochs = 750
 
 # batch size for run
-batch_size = 32
+batch_size = 128
 
 
 
