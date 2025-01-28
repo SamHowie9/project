@@ -17,11 +17,11 @@ import cv2
 
 
 encoding_dim = 25
-run = 2
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="2"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 750
@@ -47,7 +47,7 @@ def normalise_independently(image):
 
 # load the original dataset
 
-galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/")
+galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/")
 
 # # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(galaxies):
