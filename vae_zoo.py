@@ -1,4 +1,7 @@
 import os
+
+from vae_eagle import all_images
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -47,6 +50,10 @@ def normalise_independently(image):
 
 # load the original dataset
 
+# list to store all the images
+all_images = []
+
+# list of the names of all galaxy images
 galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/")
 
 # # loop through each galaxy in the supplemental file
