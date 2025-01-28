@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from PIL.GimpGradientFile import linear
 from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
@@ -7,11 +8,9 @@ import random
 from sklearn.decomposition import PCA
 # from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
-
-from pca import n_components
-
 # from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
 # from sklearn.neighbors import NearestCentroid
+from sklearn.linear_model import LinearRegression
 
 
 plt.style.use("default")
@@ -19,12 +18,12 @@ plt.style.use("default")
 
 pd.set_option('display.max_columns', None)
 # pd.set_option('display.max_rows', None)
-pd.set_option('display.width', 500)
+pd.set_option('display.width', None)
 
 
 encoding_dim = 10
-run = 3
-epochs = 500
+run = 2
+epochs = 300
 
 
 # for encoding_dim in [5, 6, 7, 8, 10]:
@@ -36,9 +35,16 @@ epochs = 500
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+# load the non parametric properties (restructure the dataframe to match the others)
+non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+non_parametric_properties = non_parametric_properties.reset_index()
+non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+
+# add the non parametric properties to the other properties dataframe
+all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
 
 
 # find all bad fit galaxies
@@ -48,6 +54,8 @@ bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["fla
 for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
 
+
+print(all_properties)
 
 
 
@@ -187,85 +195,83 @@ extracted_features_switch = extracted_features.T
 
 
 
+
+
+
 # correlation plot
 
-structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
-physical_correlation_df = pd.DataFrame(columns=["Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Particle Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
-correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+# dataframe to contain correlations between each feature and each property
+# correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
 
+
+# loop through each extracted feature
 for feature in range(0, len(extracted_features_switch)):
 
     # create a list to contain the correlation between that feature and each property
-    structure_correlation_list = []
-    physical_correlation_list = []
-
     correlation_list = []
 
     # loop through each property
-    # for gal_property in range(1, len(structure_properties.columns)):
     for gal_property in range(1, len(all_properties.columns)):
 
-        if gal_property == 6:
-            continue
+        # skip the flag property
+        # if gal_property == 6:
+        #     continue
 
-        # calculate the correlation between that extracted feature and that property
-        # structure_correlation = np.corrcoef(extracted_features_switch[feature], abs(structure_properties.iloc[:, gal_property]))[0][1]
-        # structure_correlation_list.append(structure_correlation)
-
+        # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
         correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
         correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
         correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties.iloc[:, gal_property])[0][1]
         correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
 
-        if gal_property == 1 and feature == 21:
-            print(correlation_1, correlation_2, correlation_3, correlation_4)
 
+        # add the strongest type of correlation
         correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
 
+    # add all the correlations for that feature to the dataframe
     correlation_df.loc[len(correlation_df)] = correlation_list
 
 
 
+print(correlation_df)
 
 
 
-
-# set the figure size
-# plt.figure(figsize=(20, encoding_dim))
-plt.figure(figsize=(20, extracted_features_switch.shape[0]))
-
-
-# properties to plot
-selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-
-
-# plot a heatmap for the dataframe (with annotations)
-ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-
-
-
-plt.yticks(rotation=0)
-plt.ylabel("Extracted Features", fontsize=15)
-ax.xaxis.tick_top() # x axis on top
-ax.xaxis.set_label_position('top')
-ax.tick_params(length=0)
-ax.figure.axes[-1].yaxis.label.set_size(15)
-
-
-def wrap_labels(ax, width, break_long_words=False):
-    labels = []
-    for label in ax.get_xticklabels():
-        text = label.get_text()
-        labels.append(textwrap.fill(text, width=width,
-                      break_long_words=break_long_words))
-    ax.set_xticklabels(labels, rotation=0, fontsize=15)
-
-wrap_labels(ax, 10)
-
-
-
-# plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-plt.show()
+# # set the figure size
+# plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+#
+#
+# # properties to plot
+# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+#
+#
+# # plot a heatmap for the dataframe (with annotations)
+# ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+#
+#
+#
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=15)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+# ax.figure.axes[-1].yaxis.label.set_size(15)
+#
+#
+# def wrap_labels(ax, width, break_long_words=False):
+#     labels = []
+#     for label in ax.get_xticklabels():
+#         text = label.get_text()
+#         labels.append(textwrap.fill(text, width=width,
+#                       break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
+#
+# wrap_labels(ax, 10)
+#
+#
+#
+# # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# plt.show()
 
 
 
@@ -312,6 +318,30 @@ plt.show()
 # plt.savefig("Variational Eagle/Correlation Plots/scatter_fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # # plt.savefig("Variational Eagle/Correlation Plots/scatter_" + str(encoding_dim) + "_feature_all_property_correlation_p2", bbox_inches='tight')
 # plt.show()
+
+
+
+
+
+
+
+# combinations of features
+
+linear_model = LinearRegression()
+linear_model.fit(extracted_features, list(all_properties["m20"]))
+
+predicted_sersic = linear_model.predict(extracted_features)
+
+print(linear_model.coef_)
+print(predicted_sersic)
+
+plt.scatter(predicted_sersic, list(all_properties["m20"]))
+plt.show()
+
+
+
+
+
 
 
 
@@ -471,36 +501,36 @@ def exponential(x, a, b, c):
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(5, 5))
-
-axs.scatter(x=extracted_features_switch[2], y=all_properties["q_r"], s=2)
-
-
-# fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=1)
-fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=2)
-# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
-# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
-# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
-# fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
-
-# x_fit = np.linspace(np.min(abs(extracted_features_switch[2])), np.max(abs(extracted_features_switch[3])), 100)
-x_fit = np.linspace(0, 4, 100)
-# y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
-y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
-# y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
-# y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
-
-plt.plot(x_fit, y_fit, c="black")
-plt.plot((-1 * x_fit), y_fit, c="black")
-
-axs.set_xlabel("PCA Feature 2")
-axs.set_ylabel("Axis Ratio")
-
-
-plt.savefig("Variational Eagle/Plots/pca_feature_2_vs_axis_ratio_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+#
+# axs.scatter(x=extracted_features_switch[2], y=all_properties["q_r"], s=2)
+#
+#
+# # fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=1)
+# fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=2)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
+#
+# # x_fit = np.linspace(np.min(abs(extracted_features_switch[2])), np.max(abs(extracted_features_switch[3])), 100)
+# x_fit = np.linspace(0, 4, 100)
+# # y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
+# y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
+#
+# plt.plot(x_fit, y_fit, c="black")
+# plt.plot((-1 * x_fit), y_fit, c="black")
+#
+# axs.set_xlabel("PCA Feature 2")
+# axs.set_ylabel("Axis Ratio")
+#
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_2_vs_axis_ratio_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.show()
 
 
 

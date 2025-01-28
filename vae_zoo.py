@@ -16,12 +16,12 @@ import cv2
 
 
 
-encoding_dim = 15
-run = 3
+encoding_dim = 25
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 # number of epochs for run
 epochs = 750
@@ -202,53 +202,6 @@ class Sampling(Layer):
 
 
 
-# all_rmse_train = []
-# all_rmse_test = []
-#
-# for encoding_dim in range(1, 51):
-
-# number of extracted features
-# encoding_dim = 32
-
-# # Define keras tensor for the encoder
-# input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
-#
-# # layers for the encoder
-# x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)
-# x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (128, 128, 64)
-# x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 32)
-# x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (32, 32, 16)
-# x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)                           # (16, 16, 8)
-# x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)                           # (8, 8, 4)
-# x = Flatten()(x)                                                                                                # (256)
-# x = Dense(units=64)(x)                                                                                          # (64)
-# z_mean = Dense(encoding_dim, name="z_mean")(x)
-# z_log_var = Dense(encoding_dim, name="z_log_var")(x)
-# z = Sampling()([z_mean, z_log_var])
-#
-# # build the encoder
-# encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
-# encoder.summary()
-#
-#
-# # Define keras tensor for the decoder
-# latent_input = keras.Input(shape=(encoding_dim,))
-#
-# # layers for the decoder
-# x = Dense(units=64)(latent_input)                                                                               # (64)
-# x = Dense(units=256)(x)                                                                                         # (256)
-# x = Reshape((8, 8, 4))(x)                                                                                       # (8, 8, 4)
-# x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)                  # (16, 16, 4)
-# x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)                  # (32, 32, 8)
-# x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 16)
-# x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
-# x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (256, 256, 64)
-# # decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
-# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)       # (128, 128, 3)
-#
-# # build the decoder
-# decoder = keras.Model(latent_input, decoded, name="decoder")
-# decoder.summary()
 
 
 
@@ -310,11 +263,11 @@ model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
 
 # save the weights
-vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
+vae.save_weights(filepath="Variational Zoo/Weights/Original/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
 
 # generate extracted features from trained encoder and save as numpy array
 extracted_features = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
+np.save("Variational Zoo/Extracted Features/Original/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
 
 print(np.array(extracted_features).shape)
 
@@ -322,7 +275,7 @@ print(np.array(extracted_features).shape)
 loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
 print("\n \n" + str(encoding_dim))
 print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-np.save("Variational Eagle/Loss/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
+np.save("Variational Zoo/Loss/Original/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
 
 
 
@@ -338,7 +291,7 @@ axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
 axs2.set_ylabel("KL Loss")
 plt.legend()
 
-plt.savefig("Variational Eagle/Loss Plots/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
+plt.savefig("Variational Zoo/Loss Plots/original_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
 plt.show()
 
 
@@ -382,7 +335,7 @@ for i in range(0, n-1):
     axs[1,i].get_xaxis().set_visible(False)
     axs[1,i].get_yaxis().set_visible(False)
 
-plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
+plt.savefig("Variational Zoo/Reconstructions/Testing/original_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
 plt.show()
 
 
