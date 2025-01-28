@@ -54,7 +54,7 @@ for i, galaxy in enumerate(galaxies):
 
 
     # open the image and append it to the main list
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/" + galaxy)
+    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/" + galaxy)
 
     # find smallest non zero pixel value in the image and replace all zero values with this (for log transformation)
     smallest_non_zero = np.min(image[image > 0])
