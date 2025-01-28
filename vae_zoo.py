@@ -50,7 +50,7 @@ def normalise_independently(image):
 galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/")
 
 # # loop through each galaxy in the supplemental file
-for i, galaxy in enumerate(chosen_galaxies):
+for i, galaxy in enumerate(galaxies):
 
 
     # open the image and append it to the main list
