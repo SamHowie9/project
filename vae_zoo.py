@@ -1,7 +1,4 @@
 import os
-
-from vae_eagle import all_images
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
