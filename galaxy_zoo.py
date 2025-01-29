@@ -32,10 +32,10 @@ print(image.shape)
 
 if len(image[0] < 256):
     # enlarge (stretch) the image to 256x256 with bicubic interpolation (best for enlarging images although slower than bilinear)
-    image = cv2.resize(image.T, (256, 256), interpolation=cv2.INTER_CUBIC)
+    image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
 else:
     # shrink the image to 256x256 using area interpolation (best for shrinking images)
-    image = cv2.resize(image.T, (256, 256), interpolation=cv2.INTER_AREA)
+    image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
 
 print(image.shape)
 
