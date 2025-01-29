@@ -18,9 +18,17 @@ def normalise_independently(image):
 
 image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/587739379910508635.jpg")
 
+print(np.min(image))
+print(np.max(image))
+
 smallest_non_zero = np.min(image[image > 0])
 image = np.where(image == 0.0, smallest_non_zero, image)
+
+print(np.min(image))
+print(np.max(image))
 
 image = normalise_independently(image)
 
 print(image.shape)
+print(np.min(image))
+print(np.max(image))
