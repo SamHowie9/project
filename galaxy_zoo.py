@@ -4,6 +4,7 @@ from matplotlib import image as mpimg
 import numpy as np
 import cv2
 import random
+import os
 
 
 # with zipfile.ZipFile("gz2_images_all.zip", "r") as zip_ref:
