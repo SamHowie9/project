@@ -1,3 +1,5 @@
+from xml.sax.handler import all_properties
+
 import numpy as np
 import pandas as pd
 from PIL.GimpGradientFile import linear
@@ -5,6 +7,8 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 import random
+
+from numpy.lib.function_base import extract
 from sklearn.decomposition import PCA
 # from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
@@ -12,6 +16,8 @@ from scipy.optimize import curve_fit
 # from sklearn.neighbors import NearestCentroid
 from sklearn.linear_model import LinearRegression
 
+from transition_plot import extracted_features_switch
+from vae_eagle import extracted_features
 
 plt.style.use("default")
 
@@ -54,8 +60,17 @@ bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["fla
 for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
 
+# reset the index values
+all_properties = all_properties.reset_index(drop=True)
+
 
 print(all_properties)
+
+
+
+
+
+
 
 
 
@@ -184,14 +199,27 @@ extracted_features_switch = extracted_features.T
 
 
 
-# model = AgglomerativeClustering()
-#
-# visualizer = KElbowVisualizer(model, k=(1, 40), timings=False)
-#
-# visualizer.fit(extracted_features)        # Fit the data to the visualizer
-# visualizer.show()
+# only look at spirals
+
+# all properties dataframe only for spirals
+all_properties = all_properties.loc(all_properties["n_r"] <= 2.5)
+
+# extracted features only for spirals
+spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
+extracted_features = np.array([extracted_features[i] for i in spirals_indices])
+extracted_features_switch = extracted_features.T
 
 
+
+# only look at ellipticals
+
+# # all properties dataframe only for ellipticals
+# all_properties = all_properties.loc(all_properties["n_r"] >= 4)
+#
+# # extracted features only for ellipticals
+# ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
+# elliptical_features = np.array([extracted_features[i] for i in ellipticals_indices])
+# extracted_features_switch = extracted_features.T
 
 
 
@@ -327,16 +355,16 @@ print(correlation_df)
 
 # combinations of features
 
-linear_model = LinearRegression()
-linear_model.fit(extracted_features, list(all_properties["m20"]))
-
-predicted_sersic = linear_model.predict(extracted_features)
-
-print(linear_model.coef_)
-print(predicted_sersic)
-
-plt.scatter(predicted_sersic, list(all_properties["m20"]))
-plt.show()
+# linear_model = LinearRegression()
+# linear_model.fit(extracted_features, list(all_properties["m20"]))
+#
+# predicted_sersic = linear_model.predict(extracted_features)
+#
+# print(linear_model.coef_)
+# print(predicted_sersic)
+#
+# plt.scatter(predicted_sersic, list(all_properties["m20"]))
+# plt.show()
 
 
 
@@ -455,6 +483,29 @@ def exponential(x, a, b, c):
 #
 # plt.savefig("Variational Eagle/Plots/pca_feature_1_and_2_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
+
+
+
+
+
+
+
+fig, axs = plt.subplots(1, 1, figsize=(5, 10))
+
+axs.scatter(x=extracted_features_switch[1], y=all_properties["pa_r"], s=2)
+
+fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[1], deg=3)
+x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+axs.plot(y_fit, x_fit, c="black")
+
+axs.set_xlabel("PCA Feature 1", fontsize=10)
+axs.set_ylabel("Position Angle (°)", fontsize=10)
+axs.tick_params(labelsize=10)
+axs.set_yticks([-90, -45, 0, 45, 90])
+
+plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_position_angle_spirals_only_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.show()
 
 
 
