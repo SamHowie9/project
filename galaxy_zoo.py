@@ -29,6 +29,6 @@ print(np.max(image))
 
 image = normalise_independently(image)
 
-print(image.shape)
 print(np.min(image))
 print(np.max(image))
+print(image.shape)
