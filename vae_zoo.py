@@ -27,7 +27,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="1"
 epochs = 500
 
 # batch size for run
-batch_size = 16
+batch_size = 1
 
 
 
@@ -94,12 +94,14 @@ test_images = np.array(all_images[-200:])
 
 
 
-
-
-
+print()
+print()
+print()
 print(train_images.shape)
 print(test_images.shape)
-
+print()
+print()
+print()
 
 
 
