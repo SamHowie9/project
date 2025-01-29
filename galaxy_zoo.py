@@ -1,6 +1,7 @@
 import zipfile
 from matplotlib import image as mpimg
 import numpy as np
+import cv2
 
 
 # with zipfile.ZipFile("gz2_images_all.zip", "r") as zip_ref:
