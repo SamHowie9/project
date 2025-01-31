@@ -74,7 +74,7 @@ n = 0
 for i in range(0, 5):
     for j in range(0, 5):
 
-        axs[i, j].imshow(image_sample[n])
+        axs[i, j].imshow(image_sample[n], vmin=0, vmax=1)
         axs[i, j].get_xaxis().set_visible(False)
         axs[i, j].get_yaxis().set_visible(False)
 
