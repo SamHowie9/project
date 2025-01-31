@@ -57,7 +57,7 @@ image_sample = random.sample(all_images, 25)
 
 
 
-fig, axs = plt.subplot(5, 5, figsize=(10, 10))
+fig, axs = plt.subplot(5, 5, figsize=(10,10))
 
 n = 0
 
