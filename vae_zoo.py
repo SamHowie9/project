@@ -58,19 +58,10 @@ for i, galaxy in enumerate(galaxies):
 
 
     # open the image and append it to the main list
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/" + galaxy)
+    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/" + galaxy).astype('float64')
 
     # normalise each band independently between 0 and 1
     image = normalise_independently(image)
-
-    # image resizing (enlarging and shrinking use different interpolation algorithms for the best results
-    if len(image[0] < 256):
-        # enlarge (stretch) the image to 256x256 with bicubic interpolation (best for enlarging images although slower than bilinear)
-        image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
-    else:
-        # shrink the image to 256x256 using area interpolation (best for shrinking images)
-        image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
-
 
     # add the image to the dataset
     all_images.append(image)
@@ -90,14 +81,7 @@ test_images = np.array(all_images[-200:])
 
 
 
-print()
-print()
-print()
-print(train_images.shape)
-print(test_images.shape)
-print()
-print()
-print()
+
 
 
 
