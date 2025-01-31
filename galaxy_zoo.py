@@ -35,9 +35,11 @@ for i, galaxy in enumerate(galaxies):
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/" + galaxy)
 
-    # # normalise each band independently between 0 and 1
-    # image = normalise_independently(image)
-    #
+    # normalise each band independently between 0 and 1
+    image = normalise_independently(image)
+
+
+
     # # image resizing (enlarging and shrinking use different interpolation algorithms for the best results
     # if len(image[0] < 256):
     #     # enlarge (stretch) the image to 256x256 with bicubic interpolation (best for enlarging images although slower than bilinear)
