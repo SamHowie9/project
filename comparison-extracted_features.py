@@ -350,16 +350,16 @@ print(correlation_df)
 
 # combinations of features
 
-linear_model = LinearRegression()
-linear_model.fit(extracted_features, list(abs(all_properties["pa_r"])))
-
-predicted_sersic = linear_model.predict(extracted_features)
-
-print(linear_model.coef_)
-print(predicted_sersic)
-
-plt.scatter(predicted_sersic, list(abs(all_properties["pa_r"])))
-plt.show()
+# linear_model = LinearRegression()
+# linear_model.fit(extracted_features, list(abs(all_properties["pa_r"])))
+#
+# predicted_sersic = linear_model.predict(extracted_features)
+#
+# print(linear_model.coef_)
+# print(predicted_sersic)
+#
+# plt.scatter(predicted_sersic, list(abs(all_properties["pa_r"])))
+# plt.show()
 
 
 
@@ -512,32 +512,32 @@ def exponential(x, a, b, c):
 
 
 
-# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
-#
-# axs.scatter(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), s=2)
-#
-# fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=1)
-# # fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=2)
-# # fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=3)
-#
+fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+
+axs.scatter(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), s=2)
+
+fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=1)
+# fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=2)
+# fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=3)
+
 # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-# # x_fit = np.linspace(-2, 2, 100)
-#
-# y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-#
-# # axs.plot(x_fit, y_fit, c="black")
-#
+x_fit = np.linspace(-2.65, 2.65, 100)
+
+y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
+# y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+
+axs.plot(x_fit, y_fit, c="black")
+
 # axs.set_title("All Galaxies")
-#
-# axs.set_xlabel("PCA Feature 1", fontsize=10)
-# axs.set_ylabel("Position Angle (°)", fontsize=10)
-# axs.tick_params(labelsize=10)
-# axs.set_yticks([0, 45, 90])
-#
-# plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_position_angle_all_abs_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.show()
+
+axs.set_xlabel("PCA Feature 1", fontsize=10)
+axs.set_ylabel("Position Angle (°)", fontsize=10)
+axs.tick_params(labelsize=10)
+axs.set_yticks([0, 45, 90])
+
+plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_position_angle_all_abs_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.show()
 
 
 
