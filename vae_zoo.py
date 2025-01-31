@@ -17,11 +17,11 @@ import cv2
 
 
 encoding_dim = 35
-run = 2
+run = 3
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 # number of epochs for run
 epochs = 750
