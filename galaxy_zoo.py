@@ -31,7 +31,6 @@ galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo I
 # # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(galaxies):
 
-
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/" + galaxy).astype('float64')
 
@@ -40,10 +39,6 @@ for i, galaxy in enumerate(galaxies):
 
     # normalise each band independently between 0 and 1
     image = normalise_independently(image)
-
-
-
-    # print(image.shape)
 
     # add the image to the dataset
     all_images.append(image)

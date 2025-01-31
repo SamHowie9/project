@@ -32,6 +32,7 @@ batch_size = 32
 
 
 
+
 # normalise each band individually
 def normalise_independently(image):
     image = image.T
@@ -56,9 +57,11 @@ galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo I
 # # loop through each galaxy in the supplemental file
 for i, galaxy in enumerate(galaxies):
 
-
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/" + galaxy).astype('float64')
+
+    # shrink the image to 256x256 using area interpolation (best for shrinking images)
+    image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
 
     # normalise each band independently between 0 and 1
     image = normalise_independently(image)
