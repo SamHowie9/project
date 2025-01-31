@@ -46,7 +46,12 @@ for i, galaxy in enumerate(galaxies):
     #     # shrink the image to 256x256 using area interpolation (best for shrinking images)
     #     image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
 
-    print(image.shape)
+    if image.shape != (424, 424, 3):
+        print(galaxy)
+        print(image.shape)
+        print()
+
+    # print(image.shape)
 
     # add the image to the dataset
     all_images.append(image)
