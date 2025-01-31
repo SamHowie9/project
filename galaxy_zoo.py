@@ -35,12 +35,11 @@ for i, galaxy in enumerate(galaxies):
     # open the image and append it to the main list
     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/project/Galaxy Zoo Images/gz2_images_all/" + galaxy).astype('float64')
 
-    # normalise each band independently between 0 and 1
-    image = normalise_independently(image)
-
-
     # shrink the image to 256x256 using area interpolation (best for shrinking images)
     image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
+
+    # normalise each band independently between 0 and 1
+    image = normalise_independently(image)
 
 
 
