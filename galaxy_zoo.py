@@ -46,10 +46,7 @@ for i, galaxy in enumerate(galaxies):
     #     # shrink the image to 256x256 using area interpolation (best for shrinking images)
     #     image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_AREA)
 
-    if image.shape != (424, 424, 3):
-        print(galaxy)
-        print(image.shape)
-        print()
+
 
     # print(image.shape)
 
@@ -60,8 +57,8 @@ all_images = np.array(all_images)
 print(all_images.shape)
 
 random.seed(1)
-image_sample = random.sample(all_images, 25)
-
+image_sample_index = random.sample(range(0, len(all_images)-1), 25)
+image_sample = [all_images[i] for i in image_sample_index]
 
 
 fig, axs = plt.subplots(5, 5, figsize=(10,10))
