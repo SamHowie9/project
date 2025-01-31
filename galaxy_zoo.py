@@ -15,12 +15,8 @@ import os
 # normalise each band individually
 def normalise_independently(image):
     image = image.T
-    print()
-    print(image.shape)
     for i in range(0, 3):
-        print(np.min(image[i]), np.max(image[i]))
         image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
-        print(np.min(image[i]), np.max(image[i]))
     return image.T
 
 
