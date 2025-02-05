@@ -11,6 +11,7 @@ from scipy.optimize import curve_fit
 # from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
 # from sklearn.neighbors import NearestCentroid
 from sklearn.linear_model import LinearRegression
+
 plt.style.use("default")
 
 
@@ -22,6 +23,7 @@ pd.set_option('display.width', None)
 encoding_dim = 10
 run = 2
 epochs = 300
+batch_size = 32
 
 
 # for encoding_dim in [5, 6, 7, 8, 10]:
@@ -170,48 +172,24 @@ all_properties = all_properties.iloc[:-200]
 
 # load the extracted features
 extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
-# print(extracted_features.shape)
+print(extracted_features.shape)
 
 extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-pca = PCA(n_components=5).fit(extracted_features)
-extracted_features = pca.transform(extracted_features)
-# extracted_features = extracted_features[:len(all_properties)]
-extracted_features_switch = extracted_features.T
-
-
-
-
-
-
-
-
-# only look at spirals
-
-# all properties dataframe only for spirals
-# all_properties = all_properties[all_properties["n_r"] <= 2.5]
-#
-# # extracted features only for spirals
-# spirals_indices = list(all_properties.loc[all_properties["n_r"] <= 2.5].index)
-# extracted_features = np.array([extracted_features[i] for i in spirals_indices])
+# pca = PCA(n_components=encoding_dim).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# # extracted_features = extracted_features[:len(all_properties)]
 # extracted_features_switch = extracted_features.T
 
 
 
-# only look at ellipticals
 
-# # all properties dataframe only for ellipticals
-# all_properties = all_properties[all_properties["n_r"] >= 4]
-#
-# # extracted features only for ellipticals
-# ellipticals_indices = list(all_properties.loc[all_properties["n_r"] >= 4].index)
-# extracted_features = np.array([extracted_features[i] for i in ellipticals_indices])
-# extracted_features_switch = extracted_features.T
 
 
 print(all_properties)
@@ -261,12 +239,13 @@ print(correlation_df)
 
 
 # # set the figure size
-# plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+# # plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+# plt.figure(figsize=(25, extracted_features_switch.shape[0]))
 #
 #
 # # properties to plot
-# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-#
+# # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+# selected_properties = ["n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
 #
 # # plot a heatmap for the dataframe (with annotations)
 # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
@@ -285,8 +264,7 @@ print(correlation_df)
 #     labels = []
 #     for label in ax.get_xticklabels():
 #         text = label.get_text()
-#         labels.append(textwrap.fill(text, width=width,
-#                       break_long_words=break_long_words))
+#         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
 #     ax.set_xticklabels(labels, rotation=0, fontsize=15)
 #
 # wrap_labels(ax, 10)
@@ -294,6 +272,7 @@ print(correlation_df)
 #
 #
 # # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# # plt.savefig("Variational Eagle/Correlation Plots/Correlation New/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
 # plt.show()
 
 
@@ -351,14 +330,17 @@ print(correlation_df)
 # combinations of features
 
 # linear_model = LinearRegression()
-# linear_model.fit(extracted_features, list(abs(all_properties["pa_r"])))
+# linear_model.fit(extracted_features, list(all_properties["mag_r"]))
 #
-# predicted_sersic = linear_model.predict(extracted_features)
+# predicted_feature = linear_model.predict(extracted_features)
 #
-# print(linear_model.coef_)
-# print(predicted_sersic)
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
-# plt.scatter(predicted_sersic, list(abs(all_properties["pa_r"])))
+# # axs.set_ylim(0, 2.5e11)
+#
+# plt.scatter(predicted_feature, list(all_properties["mag_r"]), s=2)
+#
+# plt.savefig("Variational Eagle/Plots/ab_magnitude")
 # plt.show()
 
 
@@ -381,6 +363,7 @@ def exponential(x, a, b, c):
 
 
 
+# sersic
 
 # fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
@@ -415,93 +398,58 @@ def exponential(x, a, b, c):
 
 
 
+# concentration
 
-
-# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+# fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 #
-# axs.scatter(x=extracted_features_switch[3], y=all_properties["pa_r"], s=2)
+# axs[0].scatter(x=extracted_features_switch[0], y=all_properties["concentration"], s=2)
+# axs[0].set_title("Feature 0")
 #
+# axs[1].scatter(x=extracted_features_switch[4], y=all_properties["concentration"], s=2)
+# axs[1].set_title("Feature 4")
 #
-# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=3)
-# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=4)
-# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=5)
-# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=6)
+# axs[2].scatter(-1 * predicted_feature, list(all_properties["concentration"]), s=2)
+# axs[2].set_title("Weighted Sum")
 #
-# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
-#
-# plt.plot(y_fit, x_fit, c="black")
-#
-# axs.set_xlabel("PCA Feature 3")
-# axs.set_ylabel("Position Angle")
-#
-#
-# plt.savefig("Variational Eagle/Plots/pca_feature_3_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.savefig("Variational Eagle/concentration_correlation_plot")
 # plt.show()
 
 
 
 
 
+# cas parameters
 
-
-# fig, axs = plt.subplots(2, 1, figsize=(5, 10))
+# fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 #
-# axs[0].scatter(x=extracted_features_switch[1], y=all_properties["pa_r"], s=2)
+# linear_model = LinearRegression()
+# linear_model.fit(extracted_features, list(all_properties["concentration"]))
+# predicted_feature = linear_model.predict(extracted_features)
 #
-# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[1], deg=3)
-# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# axs[0].plot(y_fit, x_fit, c="black")
-#
-# axs[0].set_xlabel("PCA Feature 1", fontsize=10)
-# axs[0].set_ylabel("Position Angle (°)", fontsize=10)
-# axs[0].tick_params(labelsize=10)
-# axs[0].set_yticks([-90, -45, 0, 45, 90])
+# axs[0].scatter(predicted_feature, list(all_properties["concentration"]), s=2)
+# axs[0].set_title("Concentration")
+# axs[0].set_ylim(2, 5.25)
 #
 #
+# linear_model = LinearRegression()
+# linear_model.fit(extracted_features, list(all_properties["asymmetry"]))
+# predicted_feature = linear_model.predict(extracted_features)
 #
-# axs[1].scatter(x=extracted_features_switch[2], y=all_properties["pa_r"], s=2)
+# axs[1].scatter(predicted_feature, list(all_properties["asymmetry"]), s=2)
+# axs[1].set_title("Asymmetry")
+# axs[1].set_ylim(0, 0.6)
 #
-# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[2], deg=3)
-# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# axs[1].plot(y_fit, x_fit, c="black")
 #
-# axs[1].set_xlabel("PCA Feature 2", fontsize=10)
-# axs[1].set_ylabel("Position Angle (°)", fontsize=10)
-# axs[1].tick_params(labelsize=10)
-# axs[1].set_yticks([-90, -45, 0, 45, 90])
+# linear_model = LinearRegression()
+# linear_model.fit(extracted_features, list(all_properties["smoothness"]))
+# predicted_feature = linear_model.predict(extracted_features)
 #
-# plt.savefig("Variational Eagle/Plots/pca_feature_1_and_2_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.show()
-
-
-
-
-
-
-
-# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+# axs[2].scatter(predicted_feature, list(all_properties["smoothness"]), s=2)
+# axs[2].set_title("Smoothness")
+# axs[2].set_ylim(-0.0025, 0.11)
 #
-# axs.scatter(x=extracted_features_switch[1], y=all_properties["pa_r"], s=2)
 #
-# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[1], deg=3)
-# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# axs.plot(y_fit, x_fit, c="black")
-#
-# axs.set_title("Ellipticals Only")
-#
-# axs.set_xlabel("PCA Feature 1", fontsize=10)
-# axs.set_ylabel("Position Angle (°)", fontsize=10)
-# axs.tick_params(labelsize=10)
-# axs.set_yticks([-90, -45, 0, 45, 90])
-#
-# plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_position_angle_ellipticals_only_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/cas_parameters")
 # plt.show()
 
 
@@ -512,114 +460,8 @@ def exponential(x, a, b, c):
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 
-axs.scatter(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), s=2)
-
-fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=1)
-# fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=2)
-# fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=3)
-
-# x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-x_fit = np.linspace(-2.65, 2.65, 100)
-
-y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
-# y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-
-axs.plot(x_fit, y_fit, c="black")
-
-# axs.set_title("All Galaxies")
-
-axs.set_xlabel("PCA Feature 1", fontsize=10)
-axs.set_ylabel("Position Angle (°)", fontsize=10)
-axs.tick_params(labelsize=10)
-axs.set_yticks([0, 45, 90])
-
-plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_position_angle_all_abs_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-plt.show()
-
-
-
-
-
-
-
-# fig, axs = plt.subplots(2, 1, figsize=(5, 10))
-#
-#
-# axs[0].scatter(x=extracted_features_switch[2], y=abs(all_properties["pa_r"]), s=2)
-#
-# fit = np.polyfit(x=abs(all_properties["pa_r"]), y=extracted_features_switch[2], deg=3)
-# x_fit = np.linspace(np.min(abs(all_properties["pa_r"])), np.max(abs(all_properties["pa_r"])), 100)
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# axs[0].plot(y_fit, x_fit, c="black")
-#
-# axs[0].set_xlabel("PCA Feature 2", fontsize=10)
-# axs[0].set_ylabel("Position Angle (°)", fontsize=10)
-# axs[0].tick_params(labelsize=10)
-# axs[0].set_yticks([0, 45, 90])
-#
-#
-#
-# axs[1].scatter(x=extracted_features_switch[3], y=abs(all_properties["pa_r"]), s=2)
-#
-# fit = np.polyfit(x=abs(all_properties["pa_r"]), y=extracted_features_switch[3], deg=3)
-# x_fit = np.linspace(np.min(abs(all_properties["pa_r"])), np.max(abs(all_properties["pa_r"])), 100)
-# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# axs[1].plot(y_fit, x_fit, c="black")
-#
-# axs[1].set_xlabel("PCA Feature 3", fontsize=10)
-# axs[1].set_ylabel("Position Angle (°)", fontsize=10)
-# axs[1].tick_params(labelsize=10)
-# axs[1].set_yticks([0, 45, 90])
-# # axs[1].set_yticks([])
-#
-#
-# plt.savefig("Variational Eagle/Plots/pca_feature_2_and_3_vs_abs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.show()
-
-
-
-
-
-
-# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
-#
-# axs.scatter(x=extracted_features_switch[2], y=all_properties["q_r"], s=2)
-#
-#
-# # fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=1)
-# fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=2)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
-# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
-#
-# # x_fit = np.linspace(np.min(abs(extracted_features_switch[2])), np.max(abs(extracted_features_switch[3])), 100)
-# x_fit = np.linspace(0, 4, 100)
-# # y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
-# y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
-# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
-#
-# plt.plot(x_fit, y_fit, c="black")
-# plt.plot((-1 * x_fit), y_fit, c="black")
-#
-# axs.set_xlabel("PCA Feature 2")
-# axs.set_ylabel("Axis Ratio")
-#
-#
-# plt.savefig("Variational Eagle/Plots/pca_feature_2_vs_axis_ratio_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.show()
-
-
-
-
-
-
+# semi-major axis
 
 # fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
@@ -659,100 +501,92 @@ plt.show()
 
 
 
-# fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+
+# position angle
+
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
-# # 1, 10, 3
-#
-# axs[0].scatter(x=extracted_features_switch[1], y=all_properties["n_r"], s=0.5)
-# axs[0].set_title("VAE Feature 1")
-# axs[0].set_ylabel("Sersic Index")
-# axs[0].set_xlabel(None)
-#
-# axs[1].scatter(x=extracted_features_switch[10], y=all_properties["n_r"], s=0.5)
-# axs[1].set_title("VAE Feature 10")
-# axs[1].set_ylabel("Sersic Index")
-# axs[1].set_xlabel(None)
-#
-# axs[2].scatter(x=pca_extracted_features_switch[3], y=all_properties["n_r"], s=0.5)
-# axs[2].set_title("PCA Feature 3")
-# axs[2].set_ylabel("Sersic Index")
-# axs[2].set_xlabel(None)
+# axs.scatter(x=extracted_features_switch[3], y=all_properties["pa_r"], s=2)
 #
 #
-# plt.savefig("Variational Eagle/Plots/individually_normalised" + str(encoding_dim) + "_feature_sersic_scatter_" + str(run), bbox_inches='tight')
+# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=3)
+# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=4)
+# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=5)
+# # fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[3], deg=6)
+#
+# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
+#
+# plt.plot(y_fit, x_fit, c="black")
+#
+# axs.set_xlabel("PCA Feature 3")
+# axs.set_ylabel("Position Angle")
+#
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_3_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
 
 
 
 
 
+# position angle
 
-# # # sns.kdeplot(data=all_properties, x=extracted_features_switch[4], y=all_properties["MassType_Star"], levels=200, fill=True, cmap="mako")
-# #
-# # plt.hist2d(x=extracted_features_switch[4], y=all_properties["MassType_Star"], bins=50, cmap="jet")
-# #
-# # plt.show()
+# fig, axs = plt.subplots(2, 1, figsize=(5, 10))
+#
+# axs[0].scatter(x=extracted_features_switch[1], y=all_properties["pa_r"], s=2)
+#
+# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[1], deg=3)
+# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# axs[0].plot(y_fit, x_fit, c="black")
+#
+# axs[0].set_xlabel("PCA Feature 1", fontsize=10)
+# axs[0].set_ylabel("Position Angle (°)", fontsize=10)
+# axs[0].tick_params(labelsize=10)
+# axs[0].set_yticks([-90, -45, 0, 45, 90])
+#
+#
+#
+# axs[1].scatter(x=extracted_features_switch[2], y=all_properties["pa_r"], s=2)
+#
+# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[2], deg=3)
+# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# axs[1].plot(y_fit, x_fit, c="black")
+#
+# axs[1].set_xlabel("PCA Feature 2", fontsize=10)
+# axs[1].set_ylabel("Position Angle (°)", fontsize=10)
+# axs[1].tick_params(labelsize=10)
+# axs[1].set_yticks([-90, -45, 0, 45, 90])
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_1_and_2_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.show()
 
 
 
-# def fit_1(x, a, b):
-#     return a*x + b
-#
-# def fit_2(x, a, b, c):
-#     return a*x*x + b*x + c
-#
-# def fit_3(x, a, b, c, d):
-#     return a*x*x*x + b*x*x + c*x + d
-#
-# def fit_4(x, a, b, c, d, e):
-#     return a*x*x*x*x + b*x*x*x + c*x*x + d*x + e
 
 
+# position angle
 
-
-# params, covarience = curve_fit(fit_2, extracted_features_switch[3], all_properties["n_r"])
-# a, b, c = params
-# x_fit_1 = np.linspace(-5, 25, 100).tolist()
-# y_fit_1 = []
-# for x in x_fit_1:
-#     y_fit_1.append(fit_2(x, a, b, c))
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
-# params, covarience = curve_fit(fit_2, extracted_features_switch[12], all_properties["n_r"])
-# a, b, c = params
-# x_fit_2 = np.linspace(-25, 3, 100).tolist()
-# y_fit_2 = []
-# for x in x_fit_2:
-#     y_fit_2.append(fit_2(x, a, b, c))
+# axs.scatter(x=extracted_features_switch[1], y=all_properties["pa_r"], s=2)
 #
-# params, covarience = curve_fit(fit_2, extracted_features_switch[20], all_properties["n_r"])
-# a, b, c = params
-# x_fit_3 = np.linspace(-10, 10, 100).tolist()
-# y_fit_3 = []
-# for x in x_fit_3:
-#     y_fit_3.append(fit_2(x, a, b, c))
+# fit = np.polyfit(x=all_properties["pa_r"], y=extracted_features_switch[1], deg=3)
+# x_fit = np.linspace(np.min(all_properties["pa_r"]), np.max(all_properties["pa_r"]), 100)
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# axs.plot(y_fit, x_fit, c="black")
 #
+# axs.set_xlabel("PCA Feature 1", fontsize=10)
+# axs.set_ylabel("Position Angle (°)", fontsize=10)
+# axs.tick_params(labelsize=10)
+# axs.set_yticks([-90, -45, 0, 45, 90])
 #
-# fig, axs = plt.subplots(1, 3, figsize=(25, 5))
-#
-# axs[0].scatter(x=extracted_features_switch[3], y=all_properties["n_r"], s=3, alpha=0.5)
-# axs[0].plot(x_fit_1, y_fit_1, c="black")
-# axs[0].set_xlabel("Feature 3", fontsize=20)
-# axs[0].set_ylabel("Sersic Index", fontsize=20)
-# axs[0].tick_params(labelsize=20)
-#
-# axs[1].scatter(x=extracted_features_switch[12], y=all_properties["n_r"], s=3, alpha=0.5)
-# axs[1].plot(x_fit_2, y_fit_2, c="black")
-# axs[1].set_xlabel("Feature 12", fontsize=20)
-# axs[1].set_ylabel("Sersic Index", fontsize=20)
-# axs[1].tick_params(labelsize=20)
-#
-# axs[2].scatter(x=extracted_features_switch[20], y=all_properties["n_r"], s=3, alpha=0.5)
-# axs[2].plot(x_fit_3, y_fit_3, c="black")
-# axs[2].set_xlabel("Feature 20", fontsize=20)
-# axs[2].set_ylabel("Sersic Index", fontsize=20)
-# axs[2].tick_params(labelsize=20)
-#
-# plt.savefig("Plots/Sersic_scatter", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
 
 
@@ -761,197 +595,130 @@ plt.show()
 
 
 
-# params, covarience = curve_fit(fit_3, all_properties["pa_r"], extracted_features_switch[1])
-# a, b, c, d = params
-# x_fit_1 = np.linspace(-90, 90, 100).tolist()
-# y_fit_1 = []
-# for x in x_fit_1:
-#     y_fit_1.append(fit_3(x, a, b, c, d))
+# position angle
+
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
-# params, covarience = curve_fit(fit_4, all_properties["pa_r"], extracted_features_switch[8])
-# a, b, c, d, e = params
-# x_fit_2 = np.linspace(-90, 90, 100).tolist()
-# y_fit_2 = []
-# for x in x_fit_2:
-#     y_fit_2.append(fit_4(x, a, b, c, d, e))
+# axs.scatter(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), s=2)
 #
+# fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=1)
+# # fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=2)
+# # fit = np.polyfit(x=extracted_features_switch[1], y=abs(all_properties["pa_r"]), deg=3)
 #
-# params, covarience = curve_fit(fit_2, all_properties["pa_r"], extracted_features_switch[14])
-# a, b, c = params
-# x_fit_3 = np.linspace(-90, 90, 100).tolist()
-# y_fit_3 = []
-# for x in x_fit_3:
-#     y_fit_3.append(fit_2(x, a, b, c))
+# # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+# x_fit = np.linspace(-2.65, 2.65, 100)
 #
+# y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
 #
-# fig, axs = plt.subplots(1, 3, figsize=(25, 5))
+# axs.plot(x_fit, y_fit, c="black")
 #
-# axs[0].scatter(x=extracted_features_switch[1], y=all_properties["pa_r"], s=3, alpha=0.5)
-# axs[0].plot(y_fit_1, x_fit_1, c="black")
-# axs[0].set_xlabel("Feature 1", fontsize=20)
-# axs[0].set_ylabel("Position Angle", fontsize=20, labelpad=-10)
-# axs[0].set_yticks([-90, 0, 90])
-# axs[0].tick_params(labelsize=20)
+# axs.set_xlabel("PCA Feature 1", fontsize=10)
+# axs.set_ylabel("Position Angle (°)", fontsize=10)
+# axs.tick_params(labelsize=10)
+# axs.set_yticks([0, 45, 90])
 #
-# axs[1].scatter(x=extracted_features_switch[8], y=all_properties["pa_r"], s=3, alpha=0.5)
-# axs[1].plot(y_fit_2, x_fit_2, c="black")
-# axs[1].set_xlabel("Feature 8", fontsize=20)
-# axs[1].set_ylabel("Position Angle", fontsize=20, labelpad=-10)
-# axs[1].set_yticks([-90, 0, 90])
-# axs[1].tick_params(labelsize=20)
-#
-# axs[2].scatter(x=extracted_features_switch[14], y=all_properties["pa_r"], s=3, alpha=0.5)
-# axs[2].plot(y_fit_3, x_fit_3, c="black")
-# axs[2].set_xlabel("Feature 14", fontsize=20)
-# axs[2].set_ylabel("Position Angle", fontsize=20, labelpad=-10)
-# axs[2].set_yticks([-90, 0, 90])
-# axs[2].tick_params(labelsize=20)
-#
-# plt.savefig("Plots/position_angle_scatter", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/pca_feature_1_vs_position_angle_abs_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
 
 
 
 
 
-# params, covarience = curve_fit(fit_2, abs(extracted_features_switch[1]), all_properties["q_r"])
-# a, b, c = params
-# x_fit_1 = np.linspace(0, 11, 100).tolist()
-# neg_x_fit_1 = [-x for x in x_fit_1]
-# y_fit_1 = []
-# for x in x_fit_1:
-#     y_fit_1.append(fit_2(x, a, b, c))
+# position angle
+
+# fig, axs = plt.subplots(2, 1, figsize=(5, 10))
 #
 #
-# params, covarience = curve_fit(fit_2, abs(extracted_features_switch[8]), all_properties["q_r"])
-# a, b, c = params
-# x_fit_2 = np.linspace(0, 11, 100).tolist()
-# neg_x_fit_2 = [-x for x in x_fit_1]
-# y_fit_2 = []
-# for x in x_fit_1:
-#     y_fit_2.append(fit_2(x, a, b, c))
+# axs[0].scatter(x=extracted_features_switch[2], y=abs(all_properties["pa_r"]), s=2)
+#
+# fit = np.polyfit(x=abs(all_properties["pa_r"]), y=extracted_features_switch[2], deg=3)
+# x_fit = np.linspace(np.min(abs(all_properties["pa_r"])), np.max(abs(all_properties["pa_r"])), 100)
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# axs[0].plot(y_fit, x_fit, c="black")
+#
+# axs[0].set_xlabel("PCA Feature 2", fontsize=10)
+# axs[0].set_ylabel("Position Angle (°)", fontsize=10)
+# axs[0].tick_params(labelsize=10)
+# axs[0].set_yticks([0, 45, 90])
 #
 #
-# fig, axs = plt.subplots(1, 2, figsize=(17, 5))
 #
-# axs[0].scatter(x=extracted_features_switch[1], y=all_properties["q_r"], s=3, alpha=0.75)
-# axs[0].plot(x_fit_1, y_fit_1, c="black")
-# axs[0].plot(neg_x_fit_1, y_fit_1, c="black")
-# axs[0].set_xlabel("Feature 1", fontsize=20)
-# axs[0].set_ylabel("Axis Ratio", fontsize=20)
-# axs[0].tick_params(labelsize=20)
+# axs[1].scatter(x=extracted_features_switch[3], y=abs(all_properties["pa_r"]), s=2)
 #
-# axs[1].scatter(x=extracted_features_switch[8], y=all_properties["q_r"], s=3, alpha=0.75)
-# axs[1].plot(x_fit_2, y_fit_2, c="black")
-# axs[1].plot(neg_x_fit_2, y_fit_2, c="black")
-# axs[1].set_xlabel("Feature 8", fontsize=20)
-# axs[1].set_ylabel("Axis Ratio", fontsize=20)
-# axs[1].tick_params(labelsize=20)
+# fit = np.polyfit(x=abs(all_properties["pa_r"]), y=extracted_features_switch[3], deg=3)
+# x_fit = np.linspace(np.min(abs(all_properties["pa_r"])), np.max(abs(all_properties["pa_r"])), 100)
+# y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# axs[1].plot(y_fit, x_fit, c="black")
 #
-# plt.savefig("Plots/axis_ratio_scatter", bbox_inches='tight')
+# axs[1].set_xlabel("PCA Feature 3", fontsize=10)
+# axs[1].set_ylabel("Position Angle (°)", fontsize=10)
+# axs[1].tick_params(labelsize=10)
+# axs[1].set_yticks([0, 45, 90])
+# # axs[1].set_yticks([])
+#
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_2_and_3_vs_abs_position_angle_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.show()
+
+
+
+
+# axis ratio
+
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+#
+# axs.scatter(x=extracted_features_switch[2], y=all_properties["q_r"], s=2)
+#
+#
+# # fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=1)
+# fit = np.polyfit(x=abs(extracted_features_switch[2]), y=all_properties["q_r"], deg=2)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=3)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=4)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=5)
+# # fit = np.polyfit(x=extracted_features_switch[3], y=all_properties["q_r"], deg=6)
+#
+# # x_fit = np.linspace(np.min(abs(extracted_features_switch[2])), np.max(abs(extracted_features_switch[3])), 100)
+# x_fit = np.linspace(0, 4, 100)
+# # y_fit = [(fit[0] * x) + (fit[1]) for x in x_fit]
+# y_fit = [(fit[0] * x * x) + (fit[1] * x) + (fit[2]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x) + (fit[1] * x * x) + (fit[2] * x) + (fit[3]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x) + (fit[1] * x * x * x) + (fit[2] * x * x) + (fit[3] * x) + (fit[4]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x) + (fit[1] * x * x * x * x) + (fit[2] * x * x * x) + (fit[3] * x * x) + (fit[4] * x) + (fit[5]) for x in x_fit]
+# # y_fit = [(fit[0] * x * x * x * x * x * x) + (fit[1] * x * x * x * x * x) + (fit[2] * x * x * x * x) + (fit[3] * x * x * x) + (fit[4] * x * x) + (fit[5] * x) + (fit[6]) for x in x_fit]
+#
+# plt.plot(x_fit, y_fit, c="black")
+# plt.plot((-1 * x_fit), y_fit, c="black")
+#
+# axs.set_xlabel("PCA Feature 2")
+# axs.set_ylabel("Axis Ratio")
+#
+#
+# plt.savefig("Variational Eagle/Plots/pca_feature_2_vs_axis_ratio_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 # plt.show()
 
 
 
 
 
+fig, axs = plt.subplots(1, 3, figsize=(20, 5))
 
-# params, covarience = curve_fit(fit_2, extracted_features_switch[7], all_properties["StarFormationRate"])
-# a, b, c = params
-# x_fit_1 = np.linspace(-20, -3, 100).tolist()
-# y_fit_1 = []
-# for x in x_fit_1:
-#     y_fit_1.append(fit_2(x, a, b, c))
-#
-# params, covarience = curve_fit(fit_2, extracted_features_switch[12], all_properties["StarFormationRate"])
-# a, b, c = params
-# x_fit_2 = np.linspace(-20, 0, 100).tolist()
-# y_fit_2 = []
-# for x in x_fit_1:
-#     y_fit_2.append(fit_2(x, a, b, c))
-#
-# params, covarience = curve_fit(fit_2, extracted_features_switch[7], all_properties["re_r"])
-# a, b, c = params
-# x_fit_3 = np.linspace(-20, -3, 100).tolist()
-# y_fit_3 = []
-# for x in x_fit_1:
-#     y_fit_3.append(fit_2(x, a, b, c))
-#
-# params, covarience = curve_fit(fit_2, extracted_features_switch[12], all_properties["InitialMassWeightedStellarAge"])
-# a, b, c = params
-# x_fit_4 = np.linspace(-20, 0, 100).tolist()
-# y_fit_4 = []
-# for x in x_fit_1:
-#     y_fit_4.append(fit_2(x, a, b, c))
-#
-#
-# fig, axs = plt.subplots(2, 2, figsize=(17, 10))
-#
-# axs[0, 0].scatter(x=extracted_features_switch[7], y=all_properties["StarFormationRate"], s=3, alpha=0.5)
-# axs[0, 0].plot(x_fit_1, y_fit_1, c="black")
-# axs[0, 0].set_xlabel("Feature 7", fontsize=20)
-# axs[0, 0].set_ylabel("Star Formation Rate", fontsize=20)
-# axs[0, 0].tick_params(labelsize=20)
-#
-# axs[0, 1].scatter(x=extracted_features_switch[12], y=all_properties["StarFormationRate"], s=3, alpha=0.5)
-# axs[0, 1].plot(x_fit_2, y_fit_2, c="black")
-# axs[0, 1].set_xlabel("Feature 12", fontsize=20)
-# axs[0, 1].set_ylabel("Star Formation Rate", fontsize=20)
-# axs[0, 1].tick_params(labelsize=20)
-#
-# axs[1, 0].scatter(x=extracted_features_switch[7], y=all_properties["re_r"], s=3, alpha=0.5)
-# axs[1, 0].plot(x_fit_3, y_fit_3, c="black")
-# axs[1, 0].set_xlabel("Feature 7", fontsize=20)
-# axs[1, 0].set_ylabel("Semi-Major Axis", fontsize=20)
-# axs[1, 0].tick_params(labelsize=20)
-#
-# axs[1, 1].scatter(x=extracted_features_switch[12], y=all_properties["InitialMassWeightedStellarAge"], s=3, alpha=0.5)
-# axs[1, 1].plot(x_fit_4, y_fit_4, c="black")
-# axs[1, 1].set_xlabel("Feature 12", fontsize=20)
-# axs[1, 1].set_ylabel("Stellar Age", fontsize=20)
-# axs[1, 1].tick_params(labelsize=20)
-#
-# plt.savefig("Plots/physical_scatter", bbox_inches='tight')
-# plt.show()
+axs[0].scatter(x=all_properties["re_r"], y=all_properties["n_r"], s=2)
+axs[0].set_xlabel("Semi-Major Axis")
+axs[0].set_ylabel("Sersic Index")
+
+axs[1].scatter(x=all_properties["asymmetry"], y=all_properties["n_r"], s=2)
+axs[1].set_xlabel("Asymmetry")
+axs[1].set_ylabel("Sersic Index")
+
+axs[2].scatter(x=all_properties["asymmetry"], y=all_properties["re_r"], s=2)
+axs[2].set_xlabel("Asymmetry")
+axs[2].set_ylabel("Semi-Major Axis")
+
+plt.savefig("Variational Eagle/Plots/semi-major_vs_sersic_vs_asymmetry", bbox_inches='tight')
+plt.show()
 
 
 
 
-
-
-
-
-# semi_major_7 = np.array([all_properties["re_r"]] + [extracted_features_switch[7]])
-# semi_major_7 = semi_major_7.T
-#
-# # perform hierarchical ward clustering
-# hierarchical = SpectralClustering(n_clusters=2)
-#
-# # get hierarchical clusters
-# clusters = hierarchical.fit_predict(semi_major_7)
-# all_properties["Semi-Major Type"] = clusters
-#
-#
-# plt.figure(figsize=(20, 20))
-#
-# a = sns.scatterplot(x=extracted_features_switch[7], y=all_properties["re_r"], hue=all_properties["Semi-Major Type"], s=100)
-# # plt.scatter(x=extracted_features_switch[7], y=all_properties["re_r"], hue=all_properties["Semi-Major Type"], s=3, alpha=0.5)
-# # plt.plot(x_fit_3, y_fit_3, c="black")
-# a.set_xlabel("Feature 7", fontsize=20)
-# a.set_ylabel("Semi-Major Axis", fontsize=20)
-# a.tick_params(labelsize=20)
-#
-# plt.show()
-
-
-
-# spirals = all_properties["n_r"] <= 2.5
-# all_properties["Spiral"] = spirals
-#
-# print(all_properties)
-#
-# plt.figure(figsize=(10, 8))
-#
-# # plt.scatter(x=extracted_features_switch[7], y=all_properties["re_r"], hue=all_properties["Spiral"])
-# sns.scatterplot(x=extracted_features_switch[7], y=all_properties["re_r"], hue=all_properties["Spiral"])
-# plt.show()

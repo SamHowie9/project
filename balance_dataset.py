@@ -21,23 +21,33 @@ def normalise_independently(image):
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-# account for hte validation data and remove final 200 elements
-structure_properties.drop(structure_properties.tail(200).index, inplace=True)
-physical_properties.drop(physical_properties.tail(200).index, inplace=True)
-
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
+# load the non parametric properties (restructure the dataframe to match the others)
+non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+non_parametric_properties = non_parametric_properties.reset_index()
+non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
 
+# add the non parametric properties to the other properties dataframe
+all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
 
 
 # find all bad fit galaxies
 bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-print(bad_fit)
 
 # remove those galaxies
-for i, galaxy in enumerate(bad_fit):
+for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
+
+# reset the index values
+all_properties = all_properties.reset_index(drop=True)
+
+
+print(all_properties)
+
+
+
 
 
 index = list(all_properties["GalaxyID"])
