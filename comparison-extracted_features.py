@@ -58,7 +58,8 @@ for galaxy in bad_fit:
 all_properties = all_properties.reset_index(drop=True)
 
 
-print(all_properties)
+# print(all_properties)
+print(all_properties[all_properties["n_r"] >=4].sort_values("re_r"))
 
 
 
@@ -182,10 +183,10 @@ extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-# pca = PCA(n_components=encoding_dim).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# # extracted_features = extracted_features[:len(all_properties)]
-# extracted_features_switch = extracted_features.T
+pca = PCA(n_components=5).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+# extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
 
 
 
@@ -702,23 +703,115 @@ def exponential(x, a, b, c):
 
 
 
-fig, axs = plt.subplots(1, 3, figsize=(20, 5))
+# fig, axs = plt.subplots(1, 3, figsize=(20, 5))
 
-axs[0].scatter(x=all_properties["re_r"], y=all_properties["n_r"], s=2)
-axs[0].set_xlabel("Semi-Major Axis")
-axs[0].set_ylabel("Sersic Index")
+# # axs[0].scatter(x=all_properties["re_r"], y=all_properties["n_r"], s=2)
+# sns.kdeplot(data=all_properties, x="re_r", y="n_r", levels=20, fill=True)
+# axs[0].set_xlabel("Semi-Major Axis")
+# axs[0].set_ylabel("Sersic Index")
+#
+# axs[1].scatter(x=all_properties["asymmetry"], y=all_properties["n_r"], s=2)
+# sns.kdeplot(data=all_properties, x="asymmetry", y="n_r", levels=20, fill=True)
+# axs[1].set_xlabel("Asymmetry")
+# axs[1].set_ylabel("Sersic Index")
+#
+# axs[2].scatter(x=all_properties["asymmetry"], y=all_properties["re_r"], s=2)
+# axs[2].set_xlabel("Asymmetry")
+# axs[2].set_ylabel("Semi-Major Axis")
+#
+# plt.savefig("Variational Eagle/Plots/semi-major_vs_sersic_vs_asymmetry", bbox_inches='tight')
+# plt.show()
 
-axs[1].scatter(x=all_properties["asymmetry"], y=all_properties["n_r"], s=2)
-axs[1].set_xlabel("Asymmetry")
-axs[1].set_ylabel("Sersic Index")
 
-axs[2].scatter(x=all_properties["asymmetry"], y=all_properties["re_r"], s=2)
-axs[2].set_xlabel("Asymmetry")
-axs[2].set_ylabel("Semi-Major Axis")
 
-plt.savefig("Variational Eagle/Plots/semi-major_vs_sersic_vs_asymmetry", bbox_inches='tight')
+# fig, axs = plt.subplots(3, 3, figsize=(15, 15))
+#
+# sns.kdeplot(ax = axs[0][0], data=all_properties, x="re_r", y="n_r", levels=30, gridsize=300, fill=True)
+# axs[0][0].set_xlim(-2, 30)
+# axs[0][0].set_ylim(-0.25, 8.25)
+# axs[0][0].set_title("All Galaxies")
+# axs[0][0].set_xlabel("Semi-Major Axis")
+# axs[0][0].set_ylabel("Sersic Index")
+#
+# sns.kdeplot(ax = axs[0][1], data=all_properties[all_properties["n_r"] <= 2.5], x="re_r", y="n_r", levels=30, gridsize=300, fill=True)
+# axs[0][1].set_xlim(-2, 30)
+# axs[0][1].set_ylim(-0.25, 8.25)
+# axs[0][1].set_title("Spirals")
+# axs[0][1].set_xlabel("Semi-Major Axis")
+# axs[0][1].set_ylabel("Sersic Index")
+#
+# sns.kdeplot(ax = axs[0][2], data=all_properties[all_properties["n_r"] >=4], x="re_r", y="n_r", levels=30, gridsize=300, fill=True)
+# axs[0][2].set_xlim(-2, 30)
+# axs[0][2].set_ylim(-0.25, 8.25)
+# axs[0][2].set_title("Ellipticals")
+# axs[0][2].set_xlabel("Semi-Major Axis")
+# axs[0][2].set_ylabel("Sersic Index")
+#
+#
+#
+#
+# sns.kdeplot(ax = axs[1][0], data=all_properties, x="asymmetry", y="n_r", levels=30, gridsize=300, fill=True)
+# axs[1][0].set_xlim(-0.025, 0.5)
+# axs[1][0].set_ylim(-0.25, 8.25)
+# axs[1][0].set_xlabel("Asymmetry")
+# axs[1][0].set_ylabel("Sersic Index")
+#
+# sns.kdeplot(ax = axs[1][1], data=all_properties[all_properties["n_r"] <= 2.5], x="asymmetry", y="n_r", levels=30, gridsize=300, fill=True)
+# axs[1][1].set_xlim(-0.025, 0.5)
+# axs[1][1].set_ylim(-0.25, 8.25)
+# axs[1][1].set_xlabel("Asymmetry")
+# axs[1][1].set_ylabel("Sersic Index")
+#
+# sns.kdeplot(ax = axs[1][2], data=all_properties[all_properties["n_r"] >=4], x="asymmetry", y="n_r", levels=30, gridsize=300, fill=True)
+# axs[1][2].set_xlim(-0.025, 0.5)
+# axs[1][2].set_ylim(-0.25, 8.25)
+# axs[1][2].set_xlabel("Asymmetry")
+# axs[1][2].set_ylabel("Sersic Index")
+#
+#
+#
+#
+# sns.kdeplot(ax = axs[2][0], data=all_properties, x="re_r", y="asymmetry", levels=30, gridsize=300, fill=True)
+# axs[2][0].set_xlim(-2, 30)
+# axs[2][0].set_ylim(-0.025, 0.5)
+# axs[2][0].set_xlabel("Semi-Major Axis")
+# axs[2][0].set_ylabel("Asymmetry")
+#
+# sns.kdeplot(ax = axs[2][1], data=all_properties[all_properties["n_r"] <= 2.5], x="re_r", y="asymmetry", levels=30, gridsize=300, fill=True)
+# axs[2][1].set_xlim(-2, 30)
+# axs[2][1].set_ylim(-0.025, 0.5)
+# axs[2][1].set_xlabel("Semi-Major Axis")
+# axs[2][1].set_ylabel("Asymmetry")
+#
+# sns.kdeplot(ax = axs[2][2], data=all_properties[all_properties["n_r"] >=4], x="re_r", y="asymmetry", levels=30, gridsize=300, fill=True)
+# axs[2][2].set_xlim(-2, 30)
+# axs[2][2].set_ylim(-0.025, 0.5)
+# axs[2][2].set_xlabel("Semi-Major Axis")
+# axs[2][2].set_ylabel("Asymmetry")
+#
+# plt.savefig("Variational Eagle/Plots/semi-major_vs_sersic_vs_asymmetry_density", bbox_inches='tight')
+# plt.show()
+
+
+
+
+all_properties.loc[list(all_properties[all_properties["n_r"] <= 2.5].index), "sersic_cut"] = "Spiral"
+all_properties.loc[list(all_properties[all_properties["n_r"] >= 4].index), "sersic_cut"] = "Elliptical"
+all_properties.loc[list(all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index), "sersic_cut"] = "Unknown"
+
+print(all_properties)
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+
+# sns.histplot(ax = axs[0], data=all_properties, x="n_r", hue="sersic_cut", stat="density", common_norm=False, element="poly", bins=10)
+# # sns.histplot(ax = axs[0], data=all_properties, x="n_r", hue="sersic_cut", element="poly", bins=10)
+# sns.histplot(ax = axs[1], data=all_properties, x="re_r", hue="sersic_cut", stat="density", common_norm=False, element="poly", bins=10)
+# sns.histplot(ax = axs[2], data=all_properties, x="asymmetry", hue="sersic_cut", stat="density", common_norm=False, element="poly", bins=10)
+
+sns.histplot(ax = axs[0], data=all_properties, x="n_r", hue="sersic_cut", stat="density", common_norm=False, bins=15)
+sns.histplot(ax = axs[1], data=all_properties, x="re_r", hue="sersic_cut", stat="density", common_norm=False, bins=15)
+sns.histplot(ax = axs[2], data=all_properties, x="asymmetry", hue="sersic_cut", stat="density", common_norm=False, bins=15)
+
+
 plt.show()
-
-
-
 
