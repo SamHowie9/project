@@ -106,7 +106,14 @@ def normalise_to_r(image):
 
 
 
-# load the images as a partially balanced dataset
+
+
+
+
+
+
+
+# load the images as a balanced dataset
 
 # # load structural and physical properties into dataframes
 # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
@@ -123,82 +130,48 @@ def normalise_to_r(image):
 # for galaxy in bad_fit:
 #     all_properties = all_properties.drop(galaxy, axis=0)
 #
+# # get a list of all the ids of the galaxies
+# chosen_galaxies = list(all_properties["GalaxyID"])
 #
-# spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
-# unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
-# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
-#
-#
-# # randomly sample half the spirals (seed for reproducibility)
-# random.seed(1)
-# spirals = random.sample(spirals, round(len(spirals)/2))
-#
-# fig, axs = plt.subplots(4, 4)
-#
+# # list to contain all galaxy images
 # all_images = []
 #
-# # open and add the spiral galaxies to the dataset
-# for galaxy in spirals:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
+# # # loop through each galaxy
+# for i, galaxy in enumerate(chosen_galaxies):
 #
-# # open and add the 'unknown' galaxies to the dataset (sersic index between 2.5 and 4)
-# for galaxy in unknown:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
+#     # get the filename of each galaxy in the supplemental file
+#     filename = "galrand_" + str(galaxy) + ".png"
 #
-# # open and add all the elliptical galaxies to the dataset
-# for n, galaxy in enumerate(ellipticals):
+#     # open the image and append it to the main list
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
 #
-#     # open and add each elliptical galaxy
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     all_images.append(normalise_independently(image))
+#     # normalise the image (each band independently)
+#     image = normalise_independently(image)
 #
-#     # add three more variants of this image
-#
-#     # rotate the image by 90 degrees and add random noise
-#     image_rot_90 = np.rot90(np.copy(image), k=1)
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_rot_90[0]), len(image_rot_90[0])))
-#         image_rot_90.T[i] = image_rot_90.T[i] + gaussian
-#
-#     # flip the original image horizontally and add random noise
-#     image_flip = np.fliplr(np.copy(image))
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_flip[0]), len(image_flip[0])))
-#         image_flip.T[i] = image_flip.T[i] + gaussian
-#
-#     # flip the rotated image horizontally and add random noise
-#     image_flip_90 = np.fliplr(np.copy(image_rot_90))
-#     for i in range(0, 3):
-#         gaussian = np.random.normal(0, 0.01, (len(image_flip_90[0]), len(image_flip_90[0])))
-#         image_flip_90.T[i] = image_flip_90.T[i] + gaussian
-#
-#     # add the three variants to the dataset
-#     all_images.append(normalise_independently(image_rot_90))
-#     all_images.append(normalise_independently(image_flip))
-#     all_images.append(normalise_independently(image_flip_90))
+#     # add the image to the dataset
+#     all_images.append(image)
 #
 #
-# # convert the training dataset to an array and define a list to contain the testing dataset
-# # train_images = np.array(all_images)
-# train_images = []
-# test_images = []
+# # split the data into training and testing data (200 images used for testing)
+# train_images = all_images[:-200]
+# test_images = np.array(all_images[-200:])
 #
-# # randomly sample 20 items to make up the testing set
-# random.seed(2)
-# test_indices = random.sample(range(0, len(all_images)), 20)
+# # load the filenames of the augmented images
+# augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
 #
-# # add the images to either the training set or the testing set based on this
-# for i, image in enumerate(all_images):
-#     if i in test_indices:
-#         test_images.append(image)
-#     else:
-#         train_images.append(image)
+# for galaxy in augmented_galaxies:
 #
-# # convert the datasets to numpy arrays
+#     # load each augmented image
+#     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + galaxy)
+#
+#     # normalise the image
+#     image = normalise_independently(image)
+#
+#     # add the image to the training set (not the testing set)
+#     train_images.append(image)
+#
+# # convert the training set to a numpy array
 # train_images = np.array(train_images)
-# test_images = np.array(test_images)
 
 
 
@@ -206,8 +179,7 @@ def normalise_to_r(image):
 
 
 
-
-# load the images as a fully balanced dataset
+# load only the spiral galaxies
 
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
@@ -223,6 +195,13 @@ print("Bad Fit Indices:", bad_fit)
 # remove those galaxies
 for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
+
+print(all_properties)
+
+# take only the sprial galaxies
+all_properties = all_properties["n_r"] <= 2.5
+
+print(all_properties)
 
 # get a list of all the ids of the galaxies
 chosen_galaxies = list(all_properties["GalaxyID"])
@@ -247,25 +226,9 @@ for i, galaxy in enumerate(chosen_galaxies):
 
 
 # split the data into training and testing data (200 images used for testing)
-train_images = all_images[:-200]
+train_images = np.array(all_images[:-200])
 test_images = np.array(all_images[-200:])
 
-# load the filenames of the augmented images
-augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/")
-
-for galaxy in augmented_galaxies:
-
-    # load each augmented image
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/" + galaxy)
-
-    # normalise the image
-    image = normalise_independently(image)
-
-    # add the image to the training set (not the testing set)
-    train_images.append(image)
-
-# convert the training set to a numpy array
-train_images = np.array(train_images)
 
 
 
@@ -380,53 +343,7 @@ class Sampling(Layer):
 
 
 
-# all_rmse_train = []
-# all_rmse_test = []
-#
-# for encoding_dim in range(1, 51):
 
-# number of extracted features
-# encoding_dim = 32
-
-# # Define keras tensor for the encoder
-# input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
-#
-# # layers for the encoder
-# x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)
-# x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (128, 128, 64)
-# x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 32)
-# x = Conv2D(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (32, 32, 16)
-# x = Conv2D(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)                           # (16, 16, 8)
-# x = Conv2D(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)                           # (8, 8, 4)
-# x = Flatten()(x)                                                                                                # (256)
-# x = Dense(units=64)(x)                                                                                          # (64)
-# z_mean = Dense(encoding_dim, name="z_mean")(x)
-# z_log_var = Dense(encoding_dim, name="z_log_var")(x)
-# z = Sampling()([z_mean, z_log_var])
-#
-# # build the encoder
-# encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
-# encoder.summary()
-#
-#
-# # Define keras tensor for the decoder
-# latent_input = keras.Input(shape=(encoding_dim,))
-#
-# # layers for the decoder
-# x = Dense(units=64)(latent_input)                                                                               # (64)
-# x = Dense(units=256)(x)                                                                                         # (256)
-# x = Reshape((8, 8, 4))(x)                                                                                       # (8, 8, 4)
-# x = Conv2DTranspose(filters=4, kernel_size=3, strides=2, activation="relu", padding="same")(x)                  # (16, 16, 4)
-# x = Conv2DTranspose(filters=8, kernel_size=3, strides=2, activation="relu", padding="same")(x)                  # (32, 32, 8)
-# x = Conv2DTranspose(filters=16, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 16)
-# x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
-# x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (256, 256, 64)
-# # decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="sigmoid", padding="same", name="decoded")(x)    # (128, 128, 3)
-# decoded = Conv2DTranspose(filters=3, kernel_size=3, activation="relu", padding="same", name="decoded")(x)       # (128, 128, 3)
-#
-# # build the decoder
-# decoder = keras.Model(latent_input, decoded, name="decoder")
-# decoder.summary()
 
 
 
