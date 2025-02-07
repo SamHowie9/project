@@ -11,6 +11,9 @@ from scipy.optimize import curve_fit
 # from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
 # from sklearn.neighbors import NearestCentroid
 from sklearn.linear_model import LinearRegression
+from matplotlib import cm
+from matplotlib.colors import Normalize
+from scipy.interpolate import interpn
 
 plt.style.use("default")
 
@@ -363,13 +366,44 @@ def exponential(x, a, b, c):
 
 
 
+def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
+
+    # find the density colour based on the histogram
+    data ,x_e, y_e = np.histogram2d(x, y, bins=bins, density=True )
+    z = interpn((0.5*(x_e[1:] + x_e[:-1]), 0.5*(y_e[1:] + y_e[:-1])), data ,np.vstack([x,y]).T, method="splinef2d", bounds_error=False)
+
+    # replace nan with 0 (where there are no points)
+    z[np.where(np.isnan(z))] = 0.0
+
+    # sort the points by density, so that the densest points are plotted last
+    if sort:
+        idx = z.argsort()
+        x, y, z = x[idx], y[idx], z[idx]
+
+    # make the scatter plot with the colour corresponding to the density
+    axs.scatter(x, y, c=z, **kwargs )
+
+    # create a (normalised) colourbar corresponding to the density
+    # norm = Normalize(vmin=np.min(z), vmax=np.max(z))
+    # cbar = fig.colorbar(cm.ScalarMappable(norm=norm), ax=ax)
+    # cbar.ax.set_ylabel("Density")
+
+    # return the plot
+    return axs
+
+
+
+
+
 
 # sersic
 
-# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
-#
+fig, axs = plt.subplots(1, 1, figsize=(5, 5))
+
 # axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
-#
+
+density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=2)
+
 # fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
 # print(fit)
 #
@@ -378,23 +412,23 @@ def exponential(x, a, b, c):
 # y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
 #
 # axs.plot(x_fit, y_fit, c="black")
+
+
+# params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
 #
+# print(params)
+# print(covariance)
 #
-# # params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
-# #
-# # print(params)
-# # print(covariance)
-# #
-# # x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
-# # y_fit = [exponential(x, *params) for x in x_fit]
-# #
-# # axs.plot(x_fit, y_fit, c="red")
+# x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
+# y_fit = [exponential(x, *params) for x in x_fit]
 #
-# axs.set_xlabel("PCA Feature 4")
-# axs.set_ylabel("Sersic Index")
-#
+# axs.plot(x_fit, y_fit, c="red")
+
+axs.set_xlabel("PCA Feature 4")
+axs.set_ylabel("Sersic Index")
+
 # plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.show()
+plt.show()
 
 
 
