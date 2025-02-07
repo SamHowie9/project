@@ -380,15 +380,8 @@ def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
         idx = z.argsort()
         x, y, z = x[idx], y[idx], z[idx]
 
-    # make the scatter plot with the colour corresponding to the density
+    # make and return the scatter plot with the colour corresponding to the density
     axs.scatter(x, y, c=z, **kwargs )
-
-    # create a (normalised) colourbar corresponding to the density
-    # norm = Normalize(vmin=np.min(z), vmax=np.max(z))
-    # cbar = fig.colorbar(cm.ScalarMappable(norm=norm), ax=ax)
-    # cbar.ax.set_ylabel("Density")
-
-    # return the plot
     return axs
 
 
@@ -402,7 +395,7 @@ fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 
 # axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
 
-density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=2)
+density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=5)
 
 # fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
 # print(fit)
