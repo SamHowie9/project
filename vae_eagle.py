@@ -199,7 +199,7 @@ for galaxy in bad_fit:
 print(all_properties)
 
 # take only the sprial galaxies
-all_properties = all_properties["n_r"] <= 2.5
+all_properties = all_properties[all_properties["n_r"] <= 2.5]
 
 print(all_properties)
 
