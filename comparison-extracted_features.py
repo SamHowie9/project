@@ -23,9 +23,9 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-encoding_dim = 10
-run = 2
-epochs = 300
+encoding_dim = 15
+run = 3
+epochs = 750
 batch_size = 32
 
 
@@ -168,15 +168,14 @@ print(all_properties[all_properties["n_r"] >=4].sort_values("re_r"))
 
 
 
-
 # fully balanced dataset
 
 # account for the testing dataset
 all_properties = all_properties.iloc[:-200]
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
-# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -242,42 +241,48 @@ print(correlation_df)
 
 
 
-# # set the figure size
-# # plt.figure(figsize=(20, extracted_features_switch.shape[0]))
-# plt.figure(figsize=(25, extracted_features_switch.shape[0]))
-#
-#
-# # properties to plot
-# # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-# selected_properties = ["n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
-#
-# # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-#
-#
-#
-# plt.yticks(rotation=0)
-# plt.ylabel("Extracted Features", fontsize=15)
-# ax.xaxis.tick_top() # x axis on top
-# ax.xaxis.set_label_position('top')
-# ax.tick_params(length=0)
-# ax.figure.axes[-1].yaxis.label.set_size(15)
-#
-#
-# def wrap_labels(ax, width, break_long_words=False):
-#     labels = []
-#     for label in ax.get_xticklabels():
-#         text = label.get_text()
-#         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
-#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
-#
-# wrap_labels(ax, 10)
-#
-#
-#
-# # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-# # plt.savefig("Variational Eagle/Correlation Plots/Correlation New/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-# plt.show()
+# set the figure size
+# plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+plt.figure(figsize=(30, extracted_features_switch.shape[0]))
+
+
+# properties to plot
+# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+selected_properties = ["n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
+
+# plot a heatmap for the dataframe (with annotations)
+ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+
+plt.yticks(rotation=0)
+plt.ylabel("Extracted Features", fontsize=15)
+ax.xaxis.tick_top() # x axis on top
+ax.xaxis.set_label_position('top')
+ax.tick_params(length=0)
+ax.figure.axes[-1].yaxis.label.set_size(15)
+
+
+
+def wrap_labels(ax, width, break_long_words=False):
+
+    labels = []
+    # for label in ax.get_xticklabels():
+        # text = label.get_text()
+
+    label_names = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "Concentration", "Asymmetry", "Smoothness"]
+
+    for text in label_names:
+        labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+
+wrap_labels(ax, 10)
+
+
+
+# plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Correlation Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
+plt.show()
 
 
 
@@ -391,37 +396,37 @@ def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
 
 # sersic
 
-fig, axs = plt.subplots(1, 1, figsize=(5, 5))
-
-# axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
-
-density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=5)
-
-# fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
-# print(fit)
+# fig, axs = plt.subplots(1, 1, figsize=(5, 5))
 #
-# # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-# x_fit = np.linspace(-3, 2.5, 100)
-# y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+# # axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
 #
-# axs.plot(x_fit, y_fit, c="black")
-
-
-# params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
+# density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=5)
 #
-# print(params)
-# print(covariance)
+# # fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
+# # print(fit)
+# #
+# # # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+# # x_fit = np.linspace(-3, 2.5, 100)
+# # y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+# #
+# # axs.plot(x_fit, y_fit, c="black")
 #
-# x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
-# y_fit = [exponential(x, *params) for x in x_fit]
 #
-# axs.plot(x_fit, y_fit, c="red")
-
-axs.set_xlabel("PCA Feature 4")
-axs.set_ylabel("Sersic Index")
-
-# plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-plt.show()
+# # params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
+# #
+# # print(params)
+# # print(covariance)
+# #
+# # x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
+# # y_fit = [exponential(x, *params) for x in x_fit]
+# #
+# # axs.plot(x_fit, y_fit, c="red")
+#
+# axs.set_xlabel("PCA Feature 4")
+# axs.set_ylabel("Sersic Index")
+#
+# # plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.show()
 
 
 
@@ -847,94 +852,94 @@ plt.show()
 
 
 
-# fig, axs = plt.subplots(3, 3, figsize=(15, 15))
-fig, axs = plt.subplots(4, 3, figsize=(15, 25))
-
-sns.scatterplot(ax = axs[0][0], data=all_properties, x="re_r", y="n_r", edgecolor=None, s=2, legend=False)
-axs[0][0].set_xlim(-2, 30)
-axs[0][0].set_ylim(-0.25, 8.25)
-# axs[0][0].set_title("All Galaxies")
-axs[0][0].set_xlabel("Semi-Major Axis")
-axs[0][0].set_ylabel("Sersic Index")
-
-sns.scatterplot(ax = axs[1][0], data=all_properties[all_properties["n_r"] <= 2.5], x="re_r", y="n_r", edgecolor=None, s=2, legend=False)
-axs[1][0].set_xlim(-2, 30)
-axs[1][0].set_ylim(-0.25, 8.25)
-# axs[1][0].set_title("Spirals")
-axs[1][0].set_xlabel("Semi-Major Axis")
-axs[1][0].set_ylabel("Sersic Index")
-
-sns.scatterplot(ax = axs[2][0], data=all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")], x="re_r", y="n_r", edgecolor=None, s=5, legend=False)
-axs[2][0].set_xlim(-2, 30)
-axs[2][0].set_ylim(-0.25, 8.25)
-# axs[2][0].set_title("Ellipticals")
-axs[2][0].set_xlabel("Semi-Major Axis")
-axs[2][0].set_ylabel("Sersic Index")
-
-sns.scatterplot(ax = axs[3][0], data=all_properties[all_properties["n_r"] >=4], x="re_r", y="n_r", edgecolor=None, s=10, legend=False)
-axs[3][0].set_xlim(-2, 30)
-axs[3][0].set_ylim(-0.25, 8.25)
-# axs[2][0].set_title("Ellipticals")
-axs[3][0].set_xlabel("Semi-Major Axis")
-axs[3][0].set_ylabel("Sersic Index")
-
-
-
-
-sns.scatterplot(ax = axs[0][1], data=all_properties, x="asymmetry", y="n_r", edgecolor=None, s=2, legend=False)
-axs[0][1].set_xlim(-0.025, 0.5)
-axs[0][1].set_ylim(-0.25, 8.25)
-axs[0][1].set_xlabel("Asymmetry")
-axs[0][1].set_ylabel("Sersic Index")
-
-sns.scatterplot(ax = axs[1][1], data=all_properties[all_properties["n_r"] <= 2.5], x="asymmetry", y="n_r", edgecolor=None, s=2, legend=False)
-axs[1][1].set_xlim(-0.025, 0.5)
-axs[1][1].set_ylim(-0.25, 8.25)
-axs[1][1].set_xlabel("Asymmetry")
-axs[1][1].set_ylabel("Sersic Index")
-
-sns.scatterplot(ax = axs[2][1], data=all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")], x="asymmetry", y="n_r", edgecolor=None, s=5, legend=False)
-axs[2][1].set_xlim(-0.025, 0.5)
-axs[2][1].set_ylim(-0.25, 8.25)
-axs[2][1].set_xlabel("Asymmetry")
-axs[2][1].set_ylabel("Sersic Index")
-
-sns.scatterplot(ax = axs[3][1], data=all_properties[all_properties["n_r"] >= 4], x="asymmetry", y="n_r", edgecolor=None, s=10, legend=False)
-axs[3][1].set_xlim(-0.025, 0.5)
-axs[3][1].set_ylim(-0.25, 8.25)
-axs[3][1].set_xlabel("Asymmetry")
-axs[3][1].set_ylabel("Sersic Index")
-
-
-
-
-sns.scatterplot(ax = axs[0][2], data=all_properties, x="re_r", y="asymmetry", edgecolor=None, s=2, legend=False)
-axs[0][2].set_xlim(-2, 30)
-axs[0][2].set_ylim(-0.025, 0.5)
-axs[0][2].set_xlabel("Semi-Major Axis")
-axs[0][2].set_ylabel("Asymmetry")
-
-sns.scatterplot(ax = axs[1][2], data=all_properties[all_properties["n_r"] <= 2.5], x="re_r", y="asymmetry", edgecolor=None, s=2, legend=False)
-axs[1][2].set_xlim(-2, 30)
-axs[1][2].set_ylim(-0.025, 0.5)
-axs[1][2].set_xlabel("Semi-Major Axis")
-axs[1][2].set_ylabel("Asymmetry")
-
-sns.scatterplot(ax = axs[2][2], data=all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")], x="re_r", y="asymmetry", edgecolor=None, s=5, legend=False)
-axs[2][2].set_xlim(-2, 30)
-axs[2][2].set_ylim(-0.025, 0.5)
-axs[2][2].set_xlabel("Semi-Major Axis")
-axs[2][2].set_ylabel("Asymmetry")
-
-sns.scatterplot(ax = axs[3][2], data=all_properties[all_properties["n_r"] >=4], x="re_r", y="asymmetry", edgecolor=None, s=10, legend=False)
-axs[3][2].set_xlim(-2, 30)
-axs[3][2].set_ylim(-0.025, 0.5)
-axs[3][2].set_xlabel("Semi-Major Axis")
-axs[3][2].set_ylabel("Asymmetry")
-
-
-plt.savefig("Variational Eagle/Plots/semi-major_vs_sersic_vs_asymmetry_scatter", bbox_inches='tight')
-plt.show()
+# # fig, axs = plt.subplots(3, 3, figsize=(15, 15))
+# fig, axs = plt.subplots(4, 3, figsize=(15, 25))
+#
+# sns.scatterplot(ax = axs[0][0], data=all_properties, x="re_r", y="n_r", edgecolor=None, s=2, legend=False)
+# axs[0][0].set_xlim(-2, 30)
+# axs[0][0].set_ylim(-0.25, 8.25)
+# # axs[0][0].set_title("All Galaxies")
+# axs[0][0].set_xlabel("Semi-Major Axis")
+# axs[0][0].set_ylabel("Sersic Index")
+#
+# sns.scatterplot(ax = axs[1][0], data=all_properties[all_properties["n_r"] <= 2.5], x="re_r", y="n_r", edgecolor=None, s=2, legend=False)
+# axs[1][0].set_xlim(-2, 30)
+# axs[1][0].set_ylim(-0.25, 8.25)
+# # axs[1][0].set_title("Spirals")
+# axs[1][0].set_xlabel("Semi-Major Axis")
+# axs[1][0].set_ylabel("Sersic Index")
+#
+# sns.scatterplot(ax = axs[2][0], data=all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")], x="re_r", y="n_r", edgecolor=None, s=5, legend=False)
+# axs[2][0].set_xlim(-2, 30)
+# axs[2][0].set_ylim(-0.25, 8.25)
+# # axs[2][0].set_title("Ellipticals")
+# axs[2][0].set_xlabel("Semi-Major Axis")
+# axs[2][0].set_ylabel("Sersic Index")
+#
+# sns.scatterplot(ax = axs[3][0], data=all_properties[all_properties["n_r"] >=4], x="re_r", y="n_r", edgecolor=None, s=10, legend=False)
+# axs[3][0].set_xlim(-2, 30)
+# axs[3][0].set_ylim(-0.25, 8.25)
+# # axs[2][0].set_title("Ellipticals")
+# axs[3][0].set_xlabel("Semi-Major Axis")
+# axs[3][0].set_ylabel("Sersic Index")
+#
+#
+#
+#
+# sns.scatterplot(ax = axs[0][1], data=all_properties, x="asymmetry", y="n_r", edgecolor=None, s=2, legend=False)
+# axs[0][1].set_xlim(-0.025, 0.5)
+# axs[0][1].set_ylim(-0.25, 8.25)
+# axs[0][1].set_xlabel("Asymmetry")
+# axs[0][1].set_ylabel("Sersic Index")
+#
+# sns.scatterplot(ax = axs[1][1], data=all_properties[all_properties["n_r"] <= 2.5], x="asymmetry", y="n_r", edgecolor=None, s=2, legend=False)
+# axs[1][1].set_xlim(-0.025, 0.5)
+# axs[1][1].set_ylim(-0.25, 8.25)
+# axs[1][1].set_xlabel("Asymmetry")
+# axs[1][1].set_ylabel("Sersic Index")
+#
+# sns.scatterplot(ax = axs[2][1], data=all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")], x="asymmetry", y="n_r", edgecolor=None, s=5, legend=False)
+# axs[2][1].set_xlim(-0.025, 0.5)
+# axs[2][1].set_ylim(-0.25, 8.25)
+# axs[2][1].set_xlabel("Asymmetry")
+# axs[2][1].set_ylabel("Sersic Index")
+#
+# sns.scatterplot(ax = axs[3][1], data=all_properties[all_properties["n_r"] >= 4], x="asymmetry", y="n_r", edgecolor=None, s=10, legend=False)
+# axs[3][1].set_xlim(-0.025, 0.5)
+# axs[3][1].set_ylim(-0.25, 8.25)
+# axs[3][1].set_xlabel("Asymmetry")
+# axs[3][1].set_ylabel("Sersic Index")
+#
+#
+#
+#
+# sns.scatterplot(ax = axs[0][2], data=all_properties, x="re_r", y="asymmetry", edgecolor=None, s=2, legend=False)
+# axs[0][2].set_xlim(-2, 30)
+# axs[0][2].set_ylim(-0.025, 0.5)
+# axs[0][2].set_xlabel("Semi-Major Axis")
+# axs[0][2].set_ylabel("Asymmetry")
+#
+# sns.scatterplot(ax = axs[1][2], data=all_properties[all_properties["n_r"] <= 2.5], x="re_r", y="asymmetry", edgecolor=None, s=2, legend=False)
+# axs[1][2].set_xlim(-2, 30)
+# axs[1][2].set_ylim(-0.025, 0.5)
+# axs[1][2].set_xlabel("Semi-Major Axis")
+# axs[1][2].set_ylabel("Asymmetry")
+#
+# sns.scatterplot(ax = axs[2][2], data=all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")], x="re_r", y="asymmetry", edgecolor=None, s=5, legend=False)
+# axs[2][2].set_xlim(-2, 30)
+# axs[2][2].set_ylim(-0.025, 0.5)
+# axs[2][2].set_xlabel("Semi-Major Axis")
+# axs[2][2].set_ylabel("Asymmetry")
+#
+# sns.scatterplot(ax = axs[3][2], data=all_properties[all_properties["n_r"] >=4], x="re_r", y="asymmetry", edgecolor=None, s=10, legend=False)
+# axs[3][2].set_xlim(-2, 30)
+# axs[3][2].set_ylim(-0.025, 0.5)
+# axs[3][2].set_xlabel("Semi-Major Axis")
+# axs[3][2].set_ylabel("Asymmetry")
+#
+#
+# plt.savefig("Variational Eagle/Plots/semi-major_vs_sersic_vs_asymmetry_scatter", bbox_inches='tight')
+# plt.show()
 
 
 
