@@ -15,7 +15,7 @@ import random
 
 
 encoding_dim = 10
-run = 3
+run = 1
 epochs = 750
 batch_size = 32
 
@@ -176,8 +176,8 @@ vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 
 # load the weights
-vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5")
-
+# vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5")
+vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
 
 
 
