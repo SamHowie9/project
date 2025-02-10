@@ -15,7 +15,7 @@ import random
 
 
 encoding_dim = 10
-run = 1
+run = 2
 epochs = 750
 batch_size = 32
 
