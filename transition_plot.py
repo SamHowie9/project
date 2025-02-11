@@ -244,54 +244,8 @@ vae.compile(optimizer=keras.optimizers.Adam())
 
 # spirals only
 
-# # load the weights
-# vae.load_weights("Variational Eagle/Weights/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
-#
-#
-# # load structural and physical properties into dataframes
-# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-#
-#
-# # dataframe for all properties
-# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-#
-#
-# # find all bad fit galaxies
-# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-#
-# # remove those galaxies
-# for galaxy in bad_fit:
-#     all_properties = all_properties.drop(galaxy, axis=0)
-#
-# # take only the sprial galaxies
-# all_properties = all_properties[all_properties["n_r"] <= 2.5]
-#
-# # account for the training data in the dataframe
-# all_properties = all_properties.iloc[:-200]
-#
-#
-# # load the extracted features
-# extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-# encoding_dim = extracted_features.shape[1]
-# extracted_features_switch = extracted_features.T
-#
-# # perform pca on the extracted features
-# pca = PCA(n_components=5).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
-
-
-
-
-
-
-
-
-# ellipticals only
-
 # load the weights
-vae.load_weights("Variational Eagle/Weights/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+vae.load_weights("Variational Eagle/Weights/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
 
 
 # load structural and physical properties into dataframes
@@ -310,14 +264,15 @@ bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["fla
 for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
 
-# # take only the sprial galaxies
-all_properties = all_properties[all_properties["n_r"] >= 4]
+# take only the sprial galaxies
+all_properties = all_properties[all_properties["n_r"] <= 2.5]
 
 # account for the training data in the dataframe
-all_properties = all_properties.iloc[:-12]
+all_properties = all_properties.iloc[:-200]
+
 
 # load the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -327,10 +282,56 @@ extracted_features = pca.transform(extracted_features)
 extracted_features_switch = extracted_features.T
 
 
-print(extracted_features.shape)
 
 
 
+
+
+
+# ellipticals only
+
+# # load the weights
+# vae.load_weights("Variational Eagle/Weights/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+#
+#
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+#
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+# # # take only the sprial galaxies
+# all_properties = all_properties[all_properties["n_r"] >= 4]
+#
+# # account for the training data in the dataframe
+# all_properties = all_properties.iloc[:-12]
+#
+# # load the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+# encoding_dim = extracted_features.shape[1]
+# extracted_features_switch = extracted_features.T
+#
+# # perform pca on the extracted features
+# pca = PCA(n_components=5).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features_switch = extracted_features.T
+
+
+
+
+
+
+# print(extracted_features.shape)
 
 
 
@@ -446,7 +447,7 @@ for i, feature in enumerate(chosen_features):
         if j == (num_varying_features - 1)/2:
             axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-plt.savefig("Variational Eagle/Transition Plots/Ellipticals/" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Spirals/" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
 plt.show()
 
 
