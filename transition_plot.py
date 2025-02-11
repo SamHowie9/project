@@ -175,9 +175,10 @@ decoder.summary()
 vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 
-# load the weights
+
+# # load the weights
 # vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5")
-vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+# vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
 
 
 
@@ -192,6 +193,11 @@ vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim)
 
 # balanced dataset
 
+# # load the weights
+# # vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_" + str(run) + ".weights.h5")
+# vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+#
+#
 # # load structural and physical properties into dataframes
 # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
@@ -238,6 +244,10 @@ vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim)
 
 # spirals only
 
+# # load the weights
+# vae.load_weights("Variational Eagle/Weights/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+#
+#
 # # load structural and physical properties into dataframes
 # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
@@ -279,6 +289,10 @@ vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim)
 
 
 # ellipticals only
+
+# load the weights
+vae.load_weights("Variational Eagle/Weights/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+
 
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
