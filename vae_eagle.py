@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 1
+encoding_dim = 2
 run = 3
 
 # select which gpu to use
