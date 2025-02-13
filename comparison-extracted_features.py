@@ -242,12 +242,12 @@ for i in range(5, 21):
 
     # set the figure size
     # plt.figure(figsize=(20, extracted_features_switch.shape[0]))
-    plt.figure(figsize=(30, extracted_features_switch.shape[0]))
+    plt.figure(figsize=(32, extracted_features_switch.shape[0]))
 
 
     # properties to plot
     # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-    selected_properties = ["n_r", "pa_r", "q_r", "re_r", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
+    selected_properties = ["n_r", "pa_r", "q_r", "re_r", "rhalf_ellip", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
 
     # plot a heatmap for the dataframe (with annotations)
     ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
@@ -269,7 +269,7 @@ for i in range(5, 21):
         # for label in ax.get_xticklabels():
             # text = label.get_text()
 
-        label_names = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "Concentration", "Asymmetry", "Smoothness"]
+        label_names = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Half Light Radius", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "Concentration", "Asymmetry", "Smoothness"]
 
         for text in label_names:
             labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
