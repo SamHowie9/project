@@ -110,7 +110,7 @@ print(all_properties)
 
 # fully balanced dataset
 
-for i in range(5, 21):
+for encoding_dim in range(5, 21):
 
     # account for the testing dataset
     all_properties = all_properties.iloc[:-200]
@@ -280,8 +280,8 @@ for i in range(5, 21):
 
 
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Correlation Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-    plt.show()
+    plt.savefig("Variational Eagle/Correlation Plots/Correlation Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
+    # plt.show()
 
 
 
