@@ -235,6 +235,9 @@ for run in range(1, 4):
 
         print(galaxy)
 
+        if galaxy == "10056399_0_1594.png":
+            continue
+
         # load each augmented image
         image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/" + galaxy)
 
