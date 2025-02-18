@@ -99,6 +99,8 @@ datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_
 
 for galaxy in ellipticals:
 
+    print(".")
+
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     image = image.reshape(1, 256, 256, 3)
 
@@ -108,6 +110,8 @@ for galaxy in ellipticals:
         if i >= 25:
             break
 
+
+print()
 
 
 # augment the 'unknown' images
