@@ -109,6 +109,8 @@ for galaxy in ellipticals:
 
 for galaxy in unknown:
 
+    print(".")
+
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     image = image.reshape(1, 256, 256, 3)
 
