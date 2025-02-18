@@ -229,12 +229,12 @@ for run in range(1, 4):
 
 
     # load the filenames of the augmented elliptical images
-    augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Elliptical/")
+    augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
 
     for galaxy in augmented_galaxies:
 
         # load each augmented image
-        image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Elliptical/" + galaxy)
+        image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/" + galaxy)
 
         # normalise the image
         image = normalise_independently(image)
