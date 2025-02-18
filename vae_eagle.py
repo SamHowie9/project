@@ -235,7 +235,7 @@ for run in range(1, 4):
 
         print(galaxy)
 
-        if galaxy == "10056399_0_1594.png":
+        if galaxy == "10056399_0_1594.png" or galaxy == "18849993_0_280.png"
             continue
 
         # load each augmented image
@@ -253,6 +253,8 @@ for run in range(1, 4):
 
     # load the filenames of the augmented unknown images
     augmented_galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
+
+    print()
 
     for galaxy in augmented_galaxies:
 
