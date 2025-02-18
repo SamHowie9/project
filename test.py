@@ -19,114 +19,12 @@ import random
 A = np.array([10, 12, 414, 62, 62, 8, 9])
 B = np.array([1, 2, 3, 4, 5, 6, 7])
 
-print(A - B)
-print(np.square(A - B))
-
-for i in range(1, 10):
-    print(i)
 
 
-# chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/Chosen Galaxies.npy")
-#
-# print(len(chosen_galaxies))
-#
-#
-# # load structural and physical properties into dataframes
-# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-#
-# # # account for hte validation data and remove final 200 elements
-# # structure_properties.drop(structure_properties.tail(200).index, inplace=True)
-# # physical_properties.drop(physical_properties.tail(200).index, inplace=True)
-#
-# # dataframe for all properties
-# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-#
-# print(len(all_properties))
-#
-# # find all bad fit galaxies
-# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-# # print(bad_fit)
-#
-# # remove those galaxies
-# for galaxy in bad_fit:
-#     all_properties = all_properties.drop(galaxy, axis=0)
-#
-# print(len(list(all_properties["GalaxyID"])))
-#
-# print(len(all_properties))
-#
-# print(list(all_properties["GalaxyID"]))
+i = 0
 
-
-
-# # normalise each band individually
-# def normalise_independently(image):
-#     image = image.T
-#     for i in range(0, 3):
-#         image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
-#     return image.T
-#
-#
-# data_ids = [2, 13632, 21794, 23302, 24478]
-# reconstruction_ids = [26264, 27474, 28851, 29818, 30903]
-#
-# data = []
-# reconstruction = []
-#
-# for galaxy in data_ids:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     data.append(normalise_independently(image))
-#
-# for galaxy in reconstruction_ids:
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     reconstruction.append(normalise_independently(image))
-#
-# data_image = np.expand_dims(data[0], axis=0)
-# reconstruction_image = np.expand_dims(reconstruction[0], axis=0)
-#
-# def root_mean_squared_error(data, reconstruction):
-#
-#     rmse_0 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[0] - tf.transpose(data)[0])))
-#     rmse_1 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[1] - tf.transpose(data)[1])))
-#     rmse_2 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[2] - tf.transpose(data)[2])))
-#
-#     rmse = ops.mean([rmse_0, rmse_1, rmse_2])
-#
-#     return rmse
-#
-#     # rmse_0 = np.sqrt(np.mean(np.square(reconstruction[0] - data[0])))
-#     # rmse_1 = np.sqrt(np.mean(np.square(reconstruction[1] - data[1])))
-#     # rmse_2 = np.sqrt(np.mean(np.square(reconstruction[2] - data[2])))
-#     #
-#     # return np.mean([rmse_0, rmse_1, rmse_2])
-#
-#
-#     # print(np.max(diff))
-#     #
-#     # print(pd.DataFrame(diff))
-#     #
-#     # print(data.shape)
-#     # print(reconstruction.shape)
-#
-#
-#
-#
-#     # diff = reconstruction - data
-#     #
-#     # print(pd.DataFrame(diff))
-#     #
-#     # return np.sqrt(np.mean(np.square(reconstruction - data)))
-#
-#
-#
-# print(data_image.shape)
-# print(reconstruction_image.shape)
-#
-# data_image = tf.convert_to_tensor(data_image)
-# reconstruction_image = tf.convert_to_tensor(reconstruction_image)
-#
-# loss = root_mean_squared_error(data_image, reconstruction_image)
-# # loss = keras.losses.binary_crossentropy(data_image, reconstruction_image)
-#
-# print(loss)
+for j in range(1, 100):
+    print(".")
+    i += 1
+    if i >= 5:
+        break
