@@ -235,7 +235,7 @@ for run in range(1, 4):
 
         print(galaxy)
 
-        if galaxy == "10056399_0_1594.png" or galaxy == "18849993_0_280.png"
+        if galaxy == "10056399_0_1594.png" or galaxy == "18849993_0_280.png":
             continue
 
         # load each augmented image
