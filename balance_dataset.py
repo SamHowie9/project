@@ -30,13 +30,13 @@ physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_p
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
-# # load the non parametric properties (restructure the dataframe to match the others)
-# non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
-# non_parametric_properties = non_parametric_properties.reset_index()
-# non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
-#
-# # add the non parametric properties to the other properties dataframe
-# all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
+# load the non-parametric properties (restructure the dataframe to match the others)
+non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+non_parametric_properties = non_parametric_properties.reset_index()
+non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+
+# add the non parametric properties to the other properties dataframe
+all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
 
 
 
@@ -53,8 +53,30 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 # print(len(all_properties[(all_properties["flag"] == 1) & (all_properties["flag_sersic"] == 1)]))
 
 
+
+spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
+unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
+
+
+
+print(len(all_properties))
+
+print(len(spirals), "-", len(spirals)/len(all_properties))
+print(len(unknown), "-", len(unknown)/len(all_properties))
+print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
+print()
+
+
+
+
+
+
 # find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+                          (all_properties["flag_r"] == 4) |
+                          (all_properties["flag_r"] == 5) |
+                          (all_properties["flag_r"] == 6))].index.tolist()
 
 # remove those galaxies
 for galaxy in bad_fit:
@@ -84,9 +106,9 @@ ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
 
 print(len(all_properties))
 
-print(len(spirals))
-print(len(unknown))
-print(len(ellipticals))
+print(len(spirals), "-", len(spirals)/len(all_properties))
+print(len(unknown), "-", len(unknown)/len(all_properties))
+print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 
