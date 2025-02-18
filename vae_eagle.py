@@ -233,8 +233,6 @@ for run in range(1, 4):
 
     for galaxy in augmented_galaxies:
 
-        print(galaxy)
-
         if galaxy == "10056399_0_1594.png" or galaxy == "18849993_0_280.png":
             continue
 
@@ -247,8 +245,6 @@ for run in range(1, 4):
         # add the image to the training set (not the testing set)
         train_images.append(image)
 
-    # convert the training set to a numpy array
-    train_images = np.array(train_images)
 
 
     # load the filenames of the augmented unknown images
@@ -257,8 +253,6 @@ for run in range(1, 4):
     print()
 
     for galaxy in augmented_galaxies:
-
-        print(galaxy)
 
         # load each augmented image
         image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/" + galaxy)
