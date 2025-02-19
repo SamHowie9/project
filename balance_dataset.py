@@ -119,7 +119,7 @@ datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_
 
 # augment the elliptical images
 
-ellipticals = [10056399, 18849993]
+# ellipticals = [10056399, 18849993]
 
 for galaxy in ellipticals:
 
