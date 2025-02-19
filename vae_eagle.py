@@ -233,8 +233,8 @@ for run in range(1, 4):
 
     for galaxy in augmented_galaxies:
 
-        # if galaxy == "10056399_0_1594.png" or galaxy == "18849993_0_280.png":
-        #     continue
+        if galaxy == "10056399_0_1594.png" or galaxy == "18849993_0_280.png":
+            continue
 
         print(galaxy)
 
