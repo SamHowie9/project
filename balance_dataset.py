@@ -30,13 +30,13 @@ physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_p
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
-# load the non-parametric properties (restructure the dataframe to match the others)
-non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
-non_parametric_properties = non_parametric_properties.reset_index()
-non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
-
-# add the non parametric properties to the other properties dataframe
-all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
+# # load the non-parametric properties (restructure the dataframe to match the others)
+# non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+# non_parametric_properties = non_parametric_properties.reset_index()
+# non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+#
+# # add the non parametric properties to the other properties dataframe
+# all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
 
 
 
