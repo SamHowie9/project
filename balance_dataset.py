@@ -122,36 +122,45 @@ datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_
 # ellipticals = [10056399, 18849993]
 
 
+augmented_ellipticals =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
+augmented_spirals = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
 
 for galaxy in ellipticals:
+    count = 0
+    for file in augmented_ellipticals:
+        if file.startswith(galaxy):
+            count += 1
+    print(count)
 
-    # print(".")
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 256, 256, 3)
-
-
-    i = 0
-    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/", save_prefix=galaxy, save_format="png"):
-        i += 1
-        if i >= 25:
-            break
-
-
-print("...")
-
-
-# augment the 'unknown' images
-
-for galaxy in unknown:
-
-    # print(".")
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 256, 256, 3)
-
-    i = 0
-    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/", save_prefix=galaxy, save_format="png"):
-        i += 1
-        if i >= 6:
-            break
+# for galaxy in ellipticals:
+#
+#     # print(".")
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     image = image.reshape(1, 256, 256, 3)
+#
+#
+#     i = 0
+#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/", save_prefix=galaxy, save_format="png"):
+#         i += 1
+#         if i >= 25:
+#             break
+#
+#
+# print("...")
+#
+#
+# # augment the 'unknown' images
+#
+# for galaxy in unknown:
+#
+#     # print(".")
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     image = image.reshape(1, 256, 256, 3)
+#
+#     i = 0
+#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/", save_prefix=galaxy, save_format="png"):
+#         i += 1
+#         if i >= 6:
+#             break
