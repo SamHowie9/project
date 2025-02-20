@@ -123,7 +123,7 @@ print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 augmented_ellipticals =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
-augmented_spirals = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
+augmented_unknown = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
 
 for galaxy in ellipticals:
     count = 0
@@ -135,9 +135,9 @@ for galaxy in ellipticals:
 
 print()
 
-for galaxy in spirals:
+for galaxy in unknown:
     count = 0
-    for file in augmented_spirals:
+    for file in augmented_unknown:
         if file.startswith(str(galaxy)):
             count += 1
     if count < 6:
