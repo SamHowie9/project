@@ -128,7 +128,7 @@ augmented_spirals = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augme
 for galaxy in ellipticals:
     count = 0
     for file in augmented_ellipticals:
-        if file.startswith(galaxy):
+        if file.startswith(str(galaxy)):
             count += 1
     print(count)
 
