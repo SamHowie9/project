@@ -113,7 +113,7 @@ print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 # specify how the images are to be augmented (for both unknown and ellipticals)
-# datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
 
 
 
