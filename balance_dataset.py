@@ -112,15 +112,12 @@ print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 
-# specify how the images are to be augmented (for both unknown and ellipticals)
-datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+
 
 
 
 # augment the elliptical images
 
-# ellipticals = [10056399, 18849993]
-
 
 augmented_ellipticals =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
 augmented_unknown = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
@@ -148,70 +145,49 @@ for galaxy in unknown:
     if count < 6:
         print(galaxy, count)
 
-ellipticals = [15289521, 16351397, 18816265]
-
-for galaxy in ellipticals:
-
-    # print(".")
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 256, 256, 3)
-
-
-    i = 0
-    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/", save_prefix=galaxy, save_format="png"):
-        i += 1
-        if i >= 25:
-            break
-
-
-print("...")
-
-
-# augment the 'unknown' images
-
-unknown = [15125933]
-
-for galaxy in unknown:
-
-    # print(".")
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 256, 256, 3)
-
-    i = 0
-    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/", save_prefix=galaxy, save_format="png"):
-        i += 1
-        if i >= 6:
-            break
-
-
-
-augmented_ellipticals =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
-augmented_unknown = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
-
-print()
-print(len(augmented_unknown))
-print(len(augmented_ellipticals))
 print()
 
 
-for galaxy in ellipticals:
-    count = 0
-    for file in augmented_ellipticals:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count < 25:
-        print(galaxy, count)
 
-print()
 
-for galaxy in unknown:
-    count = 0
-    for file in augmented_unknown:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count < 6:
-        print(galaxy, count)
-
-print(".")
+# specify how the images are to be augmented (for both unknown and ellipticals)
+# datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+#
+# # augment the elliptical images
+#
+# # ellipticals = [15289521, 16351397, 18816265]
+#
+# for galaxy in ellipticals:
+#
+#     # print(".")
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     image = image.reshape(1, 256, 256, 3)
+#
+#
+#     i = 0
+#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/", save_prefix=galaxy, save_format="png"):
+#         i += 1
+#         if i >= 25:
+#             break
+#
+#
+# print("...")
+#
+#
+# # augment the 'unknown' images
+#
+# # unknown = [15125933]
+#
+# for galaxy in unknown:
+#
+#     # print(".")
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     image = image.reshape(1, 256, 256, 3)
+#
+#     i = 0
+#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/", save_prefix=galaxy, save_format="png"):
+#         i += 1
+#         if i >= 6:
+#             break
