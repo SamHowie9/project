@@ -113,7 +113,7 @@ print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 # specify how the images are to be augmented (for both unknown and ellipticals)
-datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+# datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
 
 
 
@@ -130,7 +130,18 @@ for galaxy in ellipticals:
     for file in augmented_ellipticals:
         if file.startswith(str(galaxy)):
             count += 1
-    print(count)
+    if count < 25:
+        print(galaxy, count)
+
+print()
+
+for galaxy in spirals:
+    count = 0
+    for file in augmented_spirals:
+        if file.startswith(str(galaxy)):
+            count += 1
+    if count < 6:
+        print(galaxy, count)
 
 # for galaxy in ellipticals:
 #
