@@ -140,9 +140,9 @@ for i in range(4, 20):
     try:
 
         # load the three different runs
-        loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_1.npy"))
-        loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_2.npy"))
-        loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_3.npy"))
+        loss_1 = list(np.load("Variational Eagle/Loss/Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_1.npy"))
+        loss_2 = list(np.load("Variational Eagle/Loss/Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_2.npy"))
+        loss_3 = list(np.load("Variational Eagle/Loss/Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_3.npy"))
 
         # sort the reconstruction loss and kl divergence
         total_sorted = np.sort(np.array([loss_1[0], loss_2[0], loss_3[0]]))
@@ -174,7 +174,7 @@ kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
 
 
 
-# fig, axs = plt.subplots(1, 1, figsize=(8, 4))
+fig, axs = plt.subplots(1, 1, figsize=(8, 4))
 # fig, axs = plt.subplots(2, 1, figsize=(12, 10))
 
 # axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
@@ -188,53 +188,53 @@ axs.set_xlabel("Extracted Features")
 
 
 
-df_loss = pd.DataFrame(columns=["Extracted Features", "Min Total", "Med Total", "Max Total", "Min Reconstruction", "Med Reconstruction", "Max Reconstruction", "Min KL", "Med KL", "Max KL"])
-
-for i in range(4, 20):
-    try:
-
-        # load the three different runs
-        loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_1.npy"))
-        loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_2.npy"))
-        loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_3.npy"))
-
-        # sort the reconstruction loss and kl divergence
-        total_sorted = np.sort(np.array([loss_1[0], loss_2[0], loss_3[0]]))
-        reconstruction_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
-        kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
-
-        # dataframe to store order of losses (reconstruction and kl divergence)
-        # df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
-        df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
-
-    # if we don't have a run for this number of features, skip it
-    except:
-        print(i)
-
-print(df_loss)
-
-
-# find the size of the loss error bars for total loss
-total_err_upper = np.array(df_loss["Max Total"] - df_loss["Med Total"])
-total_err_lower = np.array(df_loss["Med Total"] - df_loss["Min Total"])
-
-# find the size of the loss error bars for reconstruction loss
-reconstruction_err_upper = np.array(df_loss["Max Reconstruction"] - df_loss["Med Reconstruction"])
-reconstruction_err_lower = np.array(df_loss["Med Reconstruction"] - df_loss["Min Reconstruction"])
-
-# find the size of the loss error bars for kl divergence
-kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
-kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
-
-
-
+# df_loss = pd.DataFrame(columns=["Extracted Features", "Min Total", "Med Total", "Max Total", "Min Reconstruction", "Med Reconstruction", "Max Reconstruction", "Min KL", "Med KL", "Max KL"])
+#
+# for i in range(4, 20):
+#     try:
+#
+#         # load the three different runs
+#         loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_1.npy"))
+#         loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_2.npy"))
+#         loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_3.npy"))
+#
+#         # sort the reconstruction loss and kl divergence
+#         total_sorted = np.sort(np.array([loss_1[0], loss_2[0], loss_3[0]]))
+#         reconstruction_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
+#         kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
+#
+#         # dataframe to store order of losses (reconstruction and kl divergence)
+#         # df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
+#         df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
+#
+#     # if we don't have a run for this number of features, skip it
+#     except:
+#         print(i)
+#
+# print(df_loss)
+#
+#
+# # find the size of the loss error bars for total loss
+# total_err_upper = np.array(df_loss["Max Total"] - df_loss["Med Total"])
+# total_err_lower = np.array(df_loss["Med Total"] - df_loss["Min Total"])
+#
+# # find the size of the loss error bars for reconstruction loss
+# reconstruction_err_upper = np.array(df_loss["Max Reconstruction"] - df_loss["Med Reconstruction"])
+# reconstruction_err_lower = np.array(df_loss["Med Reconstruction"] - df_loss["Min Reconstruction"])
+#
+# # find the size of the loss error bars for kl divergence
+# kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
+# kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
+#
+#
+#
 # fig, axs = plt.subplots(1, 1, figsize=(8, 4))
-# fig, axs = plt.subplots(2, 1, figsize=(12, 10))
-
-# axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-axs.set_ylabel("Loss")
-axs.set_xlabel("Extracted Features")
+# # fig, axs = plt.subplots(2, 1, figsize=(12, 10))
+#
+# # axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+# axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+# axs.set_ylabel("Loss")
+# axs.set_xlabel("Extracted Features")
 
 
 

@@ -15,12 +15,12 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 20
+encoding_dim = 11
 run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 # number of epochs for run
 epochs = 750
@@ -32,8 +32,8 @@ batch_size = 32
 
 
 
-for run in range(2, 4):
-
+# for run in range(2, 4):
+for run in [1]:
 
     # normalise each band individually
     def normalise_independently(image):
@@ -442,19 +442,6 @@ for run in range(2, 4):
 
 
 
-    # root meaan squared error between two tensors
-    def root_mean_squared_error(data, reconstruction):
-
-        # calculate the rmse for each band
-        rmse_0 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[0] - tf.transpose(data)[0])))
-        rmse_1 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[1] - tf.transpose(data)[1])))
-        rmse_2 = ops.sqrt(ops.mean(ops.square(tf.transpose(reconstruction)[2] - tf.transpose(data)[2])))
-
-        # calculate the average rmse of the three bands
-        rmse = ops.mean([rmse_0, rmse_1, rmse_2])
-
-        # return the average rmse
-        return rmse
 
 
 
@@ -490,15 +477,9 @@ for run in range(2, 4):
 
                 # binary cross entropy reconstruction loss
                 reconstruction_loss = ops.mean(
-                    ops.sum(
-                        keras.losses.binary_crossentropy(data, reconstruction),
-                        axis=(1, 2),
+                    ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
                     )
                 )
-
-                # root mean squared error reconstruction loss
-                # reconstruction_loss = root_mean_squared_error(data, reconstruction)
-                # reconstruction_loss = ops.sqrt(ops.mean(ops.sum(ops.square(data - reconstruction), axis=(1, 2, 3))))
 
                 # get the kl divergence (mean for each extracted feature)
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
