@@ -10,7 +10,16 @@ import random
 # import tensorflow as tf
 
 
+def transformString(input):
+    output = ""
+    input = input.lower()
 
+    for char in input:
+        if input.count(char) == 1:
+            output += "x"
+        else:
+            output += "y"
 
+    return output
 
-
+print(transformString("Hello"))
