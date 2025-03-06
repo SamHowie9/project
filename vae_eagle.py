@@ -467,30 +467,33 @@ for run in [1]:
 
         # custom train step
         def train_step(self, data):
+
             with tf.GradientTape() as tape:
 
-                # run image through encoder (get latent representation)
+                # get the latent representation (run image through the encoder)
                 z_mean, z_log_var, z = self.encoder(data)
 
-                # form reconstruction (run latent representation through decoder)
+                # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
 
-                # binary cross entropy reconstruction loss
+                # calculate the binary cross entropy reconstruction loss
                 reconstruction_loss = ops.mean(
                     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
                     )
                 )
 
-                # get the kl divergence (mean for each extracted feature)
+                # calculate the kl divergence (mean of all latent features)
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
 
-                # loss is the sum of reconstruction loss and kl divergence
+                # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
 
-            # gradient decent based on loss
+            # gradient decent based on total loss
             grads = tape.gradient(total_loss, self.trainable_weights)
             self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+
+            # update loss trackers
             self.total_loss_tracker.update_state(total_loss)
             self.reconstruction_loss_tracker.update_state(reconstruction_loss)
             self.kl_loss_tracker.update_state(kl_loss)

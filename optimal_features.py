@@ -326,7 +326,7 @@ for i in range(1, 21):
     # features_2 = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(i) + "_feature_300_epoch_32_bs_features_2.npy")[0]
     # features_3 = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(i) + "_feature_300_epoch_32_bs_features_3.npy")[0]
 
-    # pca_1 = PCA(n_components=0.999).fit(features_1)
+    pca_1 = PCA(n_components=0.99).fit(features_1)
     pca_2 = PCA(n_components=0.99).fit(features_2)
     pca_3 = PCA(n_components=0.99).fit(features_3)
 

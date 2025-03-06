@@ -117,7 +117,7 @@ all_properties = all_properties.iloc[:-200]
 
 # load the extracted features
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[2]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -436,38 +436,38 @@ plt.show()
 
 # sersic
 
-# fig, axs = plt.subplots(1, 1, figsize=(6, 5))
+fig, axs = plt.subplots(1, 1, figsize=(6, 5))
+
+# axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
+
+density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=5)
+
+# fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
+# print(fit)
 #
-# # axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
+# # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+# x_fit = np.linspace(-3, 2.5, 100)
+# y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
 #
-# density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=5)
+# axs.plot(x_fit, y_fit, c="black")
+
+
+# params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
 #
-# # fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
-# # print(fit)
-# #
-# # # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-# # x_fit = np.linspace(-3, 2.5, 100)
-# # y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
-# #
-# # axs.plot(x_fit, y_fit, c="black")
+# print(params)
+# print(covariance)
 #
+# x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
+# y_fit = [exponential(x, *params) for x in x_fit]
 #
-# # params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
-# #
-# # print(params)
-# # print(covariance)
-# #
-# # x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
-# # y_fit = [exponential(x, *params) for x in x_fit]
-# #
-# # axs.plot(x_fit, y_fit, c="red")
-#
-# axs.set_xlabel("PCA Feature 4")
-# axs.set_ylabel("Sersic Index")
-#
-# # plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_density_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run), bbox_inches='tight')
-# plt.show()
+# axs.plot(x_fit, y_fit, c="red")
+
+axs.set_xlabel("PCA Feature 4")
+axs.set_ylabel("Sersic Index")
+
+# plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_density_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run), bbox_inches='tight')
+plt.show()
 
 
 
