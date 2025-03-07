@@ -1,26 +1,14 @@
-from setuptools import setup
+from pydrawnet.renderers import SeqRenderer, FreeformRenderer
+from pydrawnet import layers, operations
+import math
+import matplotlib.pyplot as plt
 
-setup(
-    name="pydrawnet",
-    version="0.1.0",
-    description="A utility for drawing neural network and other diagrams",
-    url="https://github.com/nhansendev/PyDrawNet",
-    author="Nathan Hansen",
-    author_email="nato5342@hotmail.com",
-    license="BSD 3-clause",
-    packages=["pydrawnet"],
-    install_requires=["matplotlib"],
-    classifiers=[
-        "Development Status :: 1 - Planning",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: BSD License",
-        "Operating System :: Microsoft :: Windows :: Windows 10",
-        "Topic :: Scientific/Engineering :: Visualization",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.14",
-    ],
-)
+SR = SeqRenderer()
+
+
+SR.add_layer(layers.BlockLayer(256, 256))
+SR.add_operation(operations.LinearOp())
+SR.add_layer(layers.BlockLayer(128, 128))
+
+SR.make_figure((16, 5))
+SR.render(20)
