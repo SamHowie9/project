@@ -299,7 +299,7 @@ kl_loss = ops.mean(kl_loss)
 
 total_loss_all.append(reconstruction_loss + kl_loss)
 reconstruction_loss_all.append(reconstruction_loss)
-kl_loss_all.append(reconstruction_loss)
+kl_loss_all.append(kl_loss)
 
 
 print(total_loss_all)
