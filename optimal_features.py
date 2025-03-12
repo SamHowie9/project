@@ -307,9 +307,14 @@ print(total_loss_all)
 print(reconstruction_loss_all)
 print(kl_loss_all)
 
+##############
+SAVE THE NUMPY ARRAYS INSTEAD, WILL BE MUCH EASIER
+##############
+
+
 fig, axs = plt.subplots(3, 1, figsize=(10, 10))
 
-axs[0].scatter(total_loss_all)
+axs[0].scatter(x=total_loss_all)
 axs[1].scatter(reconstruction_loss_all)
 axs[2].scatter(kl_loss_all)
 
