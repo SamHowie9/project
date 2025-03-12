@@ -10,8 +10,7 @@ from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
 from sklearn.decomposition import PCA
 
-
-
+from vae_eagle import reconstructed_image
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
@@ -24,19 +23,195 @@ sns.set_style("ticks")
 
 
 
-# # load supplemental file (find galaxies with stellar mass > 10^10 solar masses
-# df1 = pd.read_csv("Galaxy Properties/Eagle Properties/stab3510_supplemental_file/table1.csv", comment="#")
-#
-# # load structural and physical properties into dataframes
-# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-#
-# # account for hte validation data and remove final 200 elements
-# structure_properties.drop(structure_properties.tail(200).index, inplace=True)
-# physical_properties.drop(physical_properties.tail(200).index, inplace=True)
-#
-# # dataframe for all properties
-# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+encoding_dim = 10
+run = 3
+epochs = 750
+batch_size = 32
+
+
+
+
+
+# normalise each band individually
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
+
+
+# load the images as a fully balanced dataset
+
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+print("Bad Fit Indices:", bad_fit)
+
+# remove those galaxies
+for galaxy in bad_fit:
+    all_properties = all_properties.drop(galaxy, axis=0)
+
+# get a list of all the ids of the galaxies
+chosen_galaxies = list(all_properties["GalaxyID"])
+
+# list to contain all galaxy images
+all_images = []
+
+# # loop through each galaxy
+for i, galaxy in enumerate(chosen_galaxies):
+
+    # get the filename of each galaxy in the supplemental file
+    filename = "galrand_" + str(galaxy) + ".png"
+
+    # open the image and append it to the main list
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+
+    # normalise the image (each band independently)
+    image = normalise_independently(image)
+
+    # add the image to the dataset
+    all_images.append(image)
+
+
+# split the data into training and testing data (200 images used for testing)
+train_images = all_images[:-200]
+test_images = np.array(all_images[-200:])
+
+
+# load the filenames of the augmented elliptical images
+augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
+
+for galaxy in augmented_galaxies:
+
+    # load each augmented image
+    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/" + galaxy)
+
+    # normalise the image
+    image = normalise_independently(image)
+
+    # add the image to the training set (not the testing set)
+    train_images.append(image)
+
+
+
+# load the filenames of the augmented unknown images
+augmented_galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
+
+print("...")
+
+for galaxy in augmented_galaxies:
+
+    # load each augmented image
+    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/" + galaxy)
+
+    # normalise the image
+    image = normalise_independently(image)
+
+    # add the image to the training set (not the testing set)
+    train_images.append(image)
+
+# convert the training set to a numpy array
+train_images = np.array(train_images)
+
+
+
+
+
+# Define VAE model with custom train step
+class VAE(keras.Model):
+
+    def __init__(self, encoder, decoder, **kwargs):
+        super().__init__(**kwargs)
+        self.encoder = encoder
+        self.decoder = decoder
+        self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
+        self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
+        self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+
+    @property
+    def metrics(self):
+        return[
+            self.total_loss_tracker,
+            self.reconstruction_loss_tracker,
+            self.kl_loss_tracker,
+        ]
+
+    # custom train step
+    def train_step(self, data):
+
+        with tf.GradientTape() as tape:
+
+            # get the latent representation (run image through the encoder)
+            z_mean, z_log_var, z = self.encoder(data)
+
+            # form the reconstruction (run latent representation through decoder)
+            reconstruction = self.decoder(z)
+
+            # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
+            # reconstruction_loss = ops.mean(
+            #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+            #     )
+            # )
+            reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+
+            # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
+            kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+            # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+            kl_loss = ops.mean(kl_loss)
+
+            # total loss is the sum of reconstruction loss and kl divergence
+            total_loss = reconstruction_loss + kl_loss
+
+        # gradient decent based on total loss
+        grads = tape.gradient(total_loss, self.trainable_weights)
+        self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+
+        # update loss trackers
+        self.total_loss_tracker.update_state(total_loss)
+        self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+        self.kl_loss_tracker.update_state(kl_loss)
+
+        # return total loss, reconstruction loss and kl divergence
+        return {
+            "loss": self.total_loss_tracker.result(),
+            "reconstruction_loss": self.reconstruction_loss_tracker.result(),
+            "kl_loss": self.kl_loss_tracker.result(),
+        }
+
+
+
+
+
+
+# define sampling layer
+class Sampling(Layer):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.seed_generator = keras.random.SeedGenerator(1337)
+
+    def call(self, inputs):
+
+        # get the latent distribution
+        z_mean, z_log_var = inputs
+
+        # find the batch size and number of latent features (dim)
+        batch = ops.shape(z_mean)[0]
+        dim = ops.shape(z_mean)[1]
+
+        # generate the random variables
+        epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
+
+        # perform reparameterization trick
+        return z_mean + ops.exp(0.5 * z_log_var) * epsilon
 
 
 
@@ -45,211 +220,114 @@ sns.set_style("ticks")
 
 
 
+# Define keras tensor for the encoder
+input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
+
+# layers for the encoder
+x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
+x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
+x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
+x = Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
+x = Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
+# x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
+x = GlobalAveragePooling2D()(x)                                                                                 # (512)
+x = Dense(128, activation="relu")(x)                                                                            # (128)
+
+z_mean = Dense(encoding_dim, name="z_mean")(x)
+z_log_var = Dense(encoding_dim, name="z_log_var")(x)
+z = Sampling()([z_mean, z_log_var])
+
+# build the encoder
+encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
+encoder.summary()
 
 
 
-# dataframe containing all losses
-# # df_loss = pd.DataFrame(columns=["Extracted Features", "Min Loss", "Min KL", "Med Loss", "Med KL", "Max Loss", "Max KL"])
+
+# Define keras tensor for the decoder
+latent_input = keras.Input(shape=(encoding_dim,))
+
+# layers for the decoder
+x = Dense(units=128, activation="relu")(latent_input)                                                           # (64)
+x = Dense(units=512, activation="relu")(x)                                                                      # (256)
+x = Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
+x = Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
+x = Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
+x = Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
+x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
+x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
+decoded = Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
+
+
+# build the decoder
+decoder = keras.Model(latent_input, decoded, name="decoder")
+decoder.summary()
+
+
+
+total_loss_all = []
+reconstruction_loss_all = []
+kl_loss_all = []
+
+
+
+
+# build and compile the VAE
+vae = VAE(encoder, decoder)
+vae.compile(optimizer=keras.optimizers.Adam())
+
+
+# # load the weights
+vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+
+
+
+# get the latent representations (run image through the encoder)
+z_mean, z_log_var, z = vae.encoder.predict(train_images)
+
+# reconstruct the image
+reconstructed_images = vae.decoder.predict(z_mean)
+
+# get the reconstruction loss
+reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(original_image, reconstructed_image))
+
+# calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
+kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+# kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+kl_loss = ops.mean(kl_loss)
+
+total_loss_all.append(reconstruction_loss + kl_loss)
+reconstruction_loss_all.append(reconstruction_loss)
+kl_loss_all.append(reconstruction_loss)
+
+
+print(total_loss_all)
+print(reconstruction_loss_all)
+print(kl_loss_all)
+
+
+
+
+
+
+# loss of final batch
+
 # df_loss = pd.DataFrame(columns=["Extracted Features", "Min Total", "Med Total", "Max Total", "Min Reconstruction", "Med Reconstruction", "Max Reconstruction", "Min KL", "Med KL", "Max KL"])
 #
-# for i in range(4, 20):
+# for i in range(1, 21):
 #     try:
 #
 #         # load the three different runs
-#         loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_1.npy"))
-#         loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_2.npy"))
-#         loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_300_epoch_loss_3.npy"))
-#
-#         # sort the reconstruction loss and kl divergence
-#         total_sorted = np.sort(np.array([loss_1[0], loss_2[0], loss_3[0]]))
-#         reconstruction_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
-#         kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
-#
-#         # dataframe to store order of losses (reconstruction and kl divergence)
-#         # df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
-#         df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
-#
-#     # if we don't have a run for this number of features, skip it
-#     except:
-#         print(i)
-#
-# print(df_loss)
-#
-#
-# # find the size of the loss error bars for total loss
-# total_err_upper = np.array(df_loss["Max Total"] - df_loss["Med Total"])
-# total_err_lower = np.array(df_loss["Med Total"] - df_loss["Min Total"])
-#
-# # find the size of the loss error bars for reconstruction loss
-# reconstruction_err_upper = np.array(df_loss["Max Reconstruction"] - df_loss["Med Reconstruction"])
-# reconstruction_err_lower = np.array(df_loss["Med Reconstruction"] - df_loss["Min Reconstruction"])
-#
-# # find the size of the loss error bars for kl divergence
-# kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
-# kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
-#
-#
-#
-#
-#
-# # def logfit(x, a, b):
-# #     return a * np.log10(x) + b
-# #
-# # params, covarience = curve_fit(logfit, range(1, 51), df_loss["Med Loss"])
-# # a, b = params
-#
-# # def sigmoid_fit(x, a, b, c, d):
-# #     return (a/(1 + (np.e ** (-b*x + c)))) + d
-# #
-# # params, covarience = curve_fit(sigmoid_fit, range(1, 51), df_loss["Med Loss"]/1000)
-# # a, b, c, d = params
-#
-# #
-# # x_fit = np.linspace(1, 50, 100).tolist()
-# # y_fit = []
-# #
-# # for x in x_fit:
-# #     y_fit.append(sigmoid_fit(x, a, b, c, d)*1000)
-# #
-# # axs[0].plot(x_fit, y_fit, c="black")
-#
-#
-#
-#
-# fig, axs = plt.subplots(1, 1, figsize=(8, 4))
-# # fig, axs = plt.subplots(2, 1, figsize=(12, 10))
-#
-# # axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="300 Epoch, 32 Batch Size")
-# axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="300 Epoch, 32 Batch Size")
-# axs.set_ylabel("Loss")
-# axs.set_xlabel("Extracted Features")
-
-
-
-
-
-
-
-
-
-
-
-df_loss = pd.DataFrame(columns=["Extracted Features", "Min Total", "Med Total", "Max Total", "Min Reconstruction", "Med Reconstruction", "Max Reconstruction", "Min KL", "Med KL", "Max KL"])
-
-for i in range(1, 21):
-    try:
-
-        # load the three different runs
-        loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_1.npy"))
-        loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_2.npy"))
-        loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_3.npy"))
-
-        # sort the reconstruction loss and kl divergence
-        total_sorted = np.sort(np.array([loss_1[0], loss_2[0], loss_3[0]]))
-        reconstruction_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
-        kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
-
-        # dataframe to store order of losses (reconstruction and kl divergence)
-        # df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
-        df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
-
-    # if we don't have a run for this number of features, skip it
-    except:
-        print(i)
-
-print(df_loss)
-
-
-# find the size of the loss error bars for total loss
-total_err_upper = np.array(df_loss["Max Total"] - df_loss["Med Total"])
-total_err_lower = np.array(df_loss["Med Total"] - df_loss["Min Total"])
-
-# find the size of the loss error bars for reconstruction loss
-reconstruction_err_upper = np.array(df_loss["Max Reconstruction"] - df_loss["Med Reconstruction"])
-reconstruction_err_lower = np.array(df_loss["Med Reconstruction"] - df_loss["Min Reconstruction"])
-
-# find the size of the loss error bars for kl divergence
-kl_err_upper = np.array(df_loss["Max KL"] - df_loss["Med KL"])
-kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
-
-
-
-fig, axs = plt.subplots(1, 1, figsize=(8, 4))
-# fig, axs = plt.subplots(2, 1, figsize=(12, 10))
-
-# axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-# axs.errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-
-axs.set_ylabel("Loss")
-axs.set_xlabel("Extracted Features")
-
-
-
-
-
-
-
-# df_loss = pd.DataFrame(columns=["Extracted Features", "Min Total", "Max Total", "Min Reconstruction", "Max Reconstruction", "Min KL", "Max KL"])
-#
-# for i in range(1, 20):
-#     try:
-#
-#         # load the three different runs
-#         # loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_1.npy"))
+#         loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_1.npy"))
 #         loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_2.npy"))
 #         loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_loss_3.npy"))
 #
 #         # sort the reconstruction loss and kl divergence
-#         total_sorted = np.sort(np.array([loss_2[0], loss_3[0]]))
-#         reconstruction_sorted = np.sort(np.array([loss_2[1], loss_3[1]]))
-#         kl_sorted = np.sort(np.array([loss_2[2], loss_3[2]]))
-#
-#         # dataframe to store order of losses (reconstruction and kl divergence)
-#         # df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
-#         df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
-#
-#     # if we don't have a run for this number of features, skip it
-#     except:
-#         print(i)
-#
-# print(df_loss)
-#
-#
-#
-# fig, axs = plt.subplots(1, 1, figsize=(8, 4))
-# # fig, axs = plt.subplots(2, 1, figsize=(12, 10))
-#
-# # axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-# # axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-# axs.scatter(df_loss["Extracted Features"], df_loss["Min Reconstruction"])
-# axs.scatter(df_loss["Extracted Features"], df_loss["Max Reconstruction"])
-# axs.set_ylabel("Loss")
-# axs.set_xlabel("Extracted Features")
-
-
-
-
-
-
-
-# df_loss = pd.DataFrame(columns=["Extracted Features", "Min Total", "Med Total", "Max Total", "Min Reconstruction", "Med Reconstruction", "Max Reconstruction", "Min KL", "Med KL", "Max KL"])
-#
-# for i in range(5, 31):
-#     try:
-#
-#         # load the three different runs
-#         loss_1 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_128_bs_loss_1.npy"))
-#         loss_2 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_128_bs_loss_2.npy"))
-#         loss_3 = list(np.load("Variational Eagle/Loss/Fully Balanced/" + str(i) + "_feature_750_epoch_128_bs_loss_3.npy"))
-#
-#         # sort the reconstruction loss and kl divergence
 #         total_sorted = np.sort(np.array([loss_1[0], loss_2[0], loss_3[0]]))
 #         reconstruction_sorted = np.sort(np.array([loss_1[1], loss_2[1], loss_3[1]]))
 #         kl_sorted = np.sort(np.array([loss_1[2], loss_2[2], loss_3[2]]))
 #
 #         # dataframe to store order of losses (reconstruction and kl divergence)
-#         # df_loss.loc[len(df_loss)] = [i, loss_sorted[0], kl_sorted[0], loss_sorted[1], kl_sorted[1], loss_sorted[2], kl_sorted[2]]
 #         df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
 #
 #     # if we don't have a run for this number of features, skip it
@@ -273,350 +351,58 @@ axs.set_xlabel("Extracted Features")
 #
 #
 #
-# # fig, axs = plt.subplots(1, 1, figsize=(8, 4))
-# # fig, axs = plt.subplots(2, 1, figsize=(12, 10))
+# fig, axs = plt.subplots(1, 1, figsize=(8, 4))
 #
-# axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 128 Batch Size")
+# # axs.errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+# axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+# # axs.errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+#
 # axs.set_ylabel("Loss")
 # axs.set_xlabel("Extracted Features")
-#
-#
-#
-# plt.legend()
-# plt.show()
-#
-#
-# loss = axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Loss"], yerr=[loss_err_lower, loss_err_upper], fmt="o", label="Loss")
-# axs[0].set_ylabel("Loss")
-# axs[0].set_xlabel("Extracted Features")
-#
-# # axs2 = axs[0].twinx()
-# axs2 = axs[1]
-#
-# # axs2.plot(x_fit, y_fit, c="black")
-#
-# # axs2.plot(df_loss["Extracted Features"], df_loss["Med KL"], color="red")
-# kl_div = axs2.errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", color="red", label="KL-Divergence")
-# axs2.set_ylabel("KL-Divergence")
-#
-# axs[0].legend([loss, kl_div], ["Loss", "KL-Divergence"], loc="center right")
-
-
-# plt.savefig("Variational Eagle/Plots/loss_plot_fully_balanced")
-plt.show()
 
 
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(10, 5))
 
+
+
+# Meaningful extracted features
+
+# fig, axs = plt.subplots(1, 1, figsize=(10, 5))
+#
 # df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
-df_num = pd.DataFrame(columns=["Extracted Features", "2", "3"])
-
-for i in range(1, 21):
-
-    # features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_1.npy")[0]
-    # features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_2.npy")[0]
-    # features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_300_epoch_features_3.npy")[0]
-
-    features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_1.npy")[0]
-    features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_2.npy")[0]
-    features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_3.npy")[0]
-
-    # features_1 = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(i) + "_feature_300_epoch_32_bs_features_1.npy")[0]
-    # features_2 = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(i) + "_feature_300_epoch_32_bs_features_2.npy")[0]
-    # features_3 = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(i) + "_feature_300_epoch_32_bs_features_3.npy")[0]
-
-    pca_1 = PCA(n_components=0.99).fit(features_1)
-    pca_2 = PCA(n_components=0.99).fit(features_2)
-    pca_3 = PCA(n_components=0.99).fit(features_3)
-
-    num_1 = pca_1.components_.shape[0]
-    num_2 = pca_2.components_.shape[0]
-    num_3 = pca_3.components_.shape[0]
-
-    sorted = np.sort(np.array([num_1, num_2, num_3]))
-
-    # df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
-    # df_num.loc[len(df_num)] = [i, num_2, num_3]
-
-# find the size of the loss error bars for reconstruction loss
-num_err_upper = np.array(df_num["Max"] - df_num["Med"])
-num_err_lower = np.array(df_num["Med"] - df_num["Min"])
-
-axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
-
-# plt.scatter(df_num["Extracted Features"], df_num["2"])
-# plt.scatter(df_num["Extracted Features"], df_num["3"])
-
-plt.show()
-
-
-
-
-
-
-# relevant_feature_number = []
-# relevant_feature_ratio = []
+# # df_num = pd.DataFrame(columns=["Extracted Features", "1, "2", "3"])
 #
-# med_relevant_feature_number = []
-# max_relevant_feature_number = []
-# min_relevant_feature_number = []
+# for i in range(1, 21):
 #
-# relevant_property_count = []
+#     features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_1.npy")[0]
+#     features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_2.npy")[0]
+#     features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_3.npy")[0]
 #
-# # med_relevant_feature_ratio = []
-# # max_relevant_feature_ratio = []
-# # min_relevant_feature_ratio = []
+#     pca_1 = PCA(n_components=0.99).fit(features_1)
+#     pca_2 = PCA(n_components=0.99).fit(features_2)
+#     pca_3 = PCA(n_components=0.99).fit(features_3)
 #
-# for encoding_dim in range(1, 31):
+#     num_1 = pca_1.components_.shape[0]
+#     num_2 = pca_2.components_.shape[0]
+#     num_3 = pca_3.components_.shape[0]
 #
-#     extracted_features = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
-#     extracted_features_switch = np.flipud(np.rot90(extracted_features))
+#     sorted = np.sort(np.array([num_1, num_2, num_3]))
 #
-#     structure_correlation_df = pd.DataFrame(columns=["Sersic Index", "Axis Ratio", "Semi - Major Axis", "AB Magnitude"])
+#     df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
+#     # df_num.loc[len(df_num)] = [i, i, num_2, num_3]
 #
+# # find the size of the loss error bars for reconstruction loss
+# num_err_upper = np.array(df_num["Max"] - df_num["Med"])
+# num_err_lower = np.array(df_num["Med"] - df_num["Min"])
 #
-#     extracted_features_1 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_1.npy")[0]
-#     extracted_features_2 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
-#     extracted_features_3 = np.load("Variational Eagle/Extracted Features/Normalised Individually/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
-#     # extracted_features_2 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_2.npy")[0]
-#     # extracted_features_3 = np.load("Variational Eagle/Extracted Features/" + str(encoding_dim) + "_feature_300_epoch_features_3.npy")[0]
+# axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
 #
-#     extracted_features_switch_1 = np.flipud(np.rot90(extracted_features_1))
-#     extracted_features_switch_2 = np.flipud(np.rot90(extracted_features_2))
-#     extracted_features_switch_3 = np.flipud(np.rot90(extracted_features_3))
+# # plt.scatter(df_num["Extracted Features"], df_num["1"])
+# # plt.scatter(df_num["Extracted Features"], df_num["2"])
+# # plt.scatter(df_num["Extracted Features"], df_num["3"])
 #
-#     correlation_df_1 = pd.DataFrame(columns=all_properties.columns[1:])
-#     correlation_df_2 = pd.DataFrame(columns=all_properties.columns[1:])
-#     correlation_df_3 = pd.DataFrame(columns=all_properties.columns[1:])
-#
-#     # print(correlation_df_1)
-#
-#     for feature in range(0, len(extracted_features_switch)):
-#
-#         # create a list to contain the correlation between that feature and each property
-#         correlation_list = []
-#
-#         correlation_list_1 = []
-#         correlation_list_2 = []
-#         correlation_list_3 = []
-#
-#         # loop through each property
-#         for gal_property in range(1, len(all_properties.columns)):
-#
-#             # calculate the correlation between that extracted feature and that property
-#             # correlation = np.corrcoef(extracted_features_switch[feature], structure_properties.iloc[:, gal_property])[0][1]
-#             # correlation = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
-#             # correlation_list.append(correlation)
-#
-#             correlation_1_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
-#             correlation_1_2 = np.corrcoef(extracted_features_switch_1[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-#             correlation_1_3 = np.corrcoef(abs(extracted_features_switch_1[feature]), all_properties.iloc[:, gal_property])[0][1]
-#             correlation_1_4 = np.corrcoef(abs(extracted_features_switch_1[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-#             correlation_1 = max(abs(correlation_1_1), abs(correlation_1_2), abs(correlation_1_3), abs(correlation_1_4))
-#
-#             correlation_2_1 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
-#             correlation_2_2 = np.corrcoef(extracted_features_switch_2[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-#             correlation_2_3 = np.corrcoef(abs(extracted_features_switch_2[feature]), all_properties.iloc[:, gal_property])[0][1]
-#             correlation_2_4 = np.corrcoef(abs(extracted_features_switch_2[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-#             correlation_2 = max(abs(correlation_2_1), abs(correlation_2_2), abs(correlation_2_3), abs(correlation_2_4))
-#
-#             correlation_3_1 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
-#             correlation_3_2 = np.corrcoef(extracted_features_switch_3[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-#             correlation_3_3 = np.corrcoef(abs(extracted_features_switch_3[feature]), all_properties.iloc[:, gal_property])[0][1]
-#             correlation_3_4 = np.corrcoef(abs(extracted_features_switch_3[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-#             correlation_3 = max(abs(correlation_3_1), abs(correlation_3_2), abs(correlation_3_3), abs(correlation_3_4))
-#
-#
-#             # correlation_1 = np.corrcoef(extracted_features_switch_1[feature], all_properties.iloc[:, gal_property])[0][1]
-#             # correlation_2 = np.corrcoef(extracted_features_switch_2[feature], all_properties.iloc[:, gal_property])[0][1]
-#             # correlation_3 = np.corrcoef(extracted_features_switch_3[feature], all_properties.iloc[:, gal_property])[0][1]
-#
-#
-#             correlation_list_1.append(correlation_1)
-#             correlation_list_2.append(correlation_2)
-#             correlation_list_3.append(correlation_3)
-#
-#         correlation_df_1.loc[len(correlation_df_1)] = correlation_list_1
-#         correlation_df_2.loc[len(correlation_df_2)] = correlation_list_2
-#         correlation_df_3.loc[len(correlation_df_3)] = correlation_list_3
-#
-#
-#     relevant_properties = ["n_r", "q_r", "re_r", "mag_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-#     # relevant_properties = ["StarFormationRate"]
-#
-#     # find the number of features at least slightly correlating with a property
-#     relevant_features = (abs(structure_correlation_df).max(axis=1) > 0.4).sum()
-#
-#     relevant_features_1 = (abs(correlation_df_1[relevant_properties]).max(axis=1) > 0.4).sum()
-#     relevant_features_2 = (abs(correlation_df_2[relevant_properties]).max(axis=1) > 0.4).sum()
-#     relevant_features_3 = (abs(correlation_df_3[relevant_properties]).max(axis=1) > 0.4).sum()
-#
-#     relevant_feature_number.append(relevant_features)
-#     # relevant_feature_ratio.append(relevant_features/encoding_dim)
-#
-#     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
-#     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
-#     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
-#
-#     # med_relevant_feature_ratio.append(np.median((relevant_features_1/encoding_dim, relevant_features_2/encoding_dim, relevant_features_3/encoding_dim)))
-#     # max_relevant_feature_ratio.append(max((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
-#     # min_relevant_feature_ratio.append(min((relevant_features_1/encoding_dim), (relevant_features_2/encoding_dim), (relevant_features_3/encoding_dim)))
-#
-#
-#     # for property in relevant_properties:
-#     #
-#     #     relevant_features_1 = (abs(correlation_df_1[property]).max(axis=1) > 0.4).sum()
-#     #     relevant_features_2 = (abs(correlation_df_2[property]).max(axis=1) > 0.4).sum()
-#     #     relevant_features_3 = (abs(correlation_df_3[property]).max(axis=1) > 0.4).sum()
-#     #
-#     #     med_relevant_feature_number.append(np.median((relevant_features_1, relevant_features_2, relevant_features_3)))
-#     #     max_relevant_feature_number.append(max(relevant_features_1, relevant_features_2, relevant_features_3))
-#     #     min_relevant_feature_number.append(min(relevant_features_1, relevant_features_2, relevant_features_3))
-#     #
-#     #     relevant_property_count.append([min_relevant_feature_number, med_relevant_feature_number, max_relevant_feature_number])
-#
-#
-#
-# axs[1].errorbar(range(1, 31), med_relevant_feature_number, yerr=[np.array(med_relevant_feature_number) - np.array(min_relevant_feature_number), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
-# # axs[1].errorbar(range(1, 51), relevant_property_count[0][1], yerr=[relevant_property_count[0][1] - relevant_property_count[0][1]), np.array(max_relevant_feature_number) - np.array(med_relevant_feature_number)], fmt="o")
-# axs[1].set_ylabel("Meaningful Extracted Features")
-# axs[1].set_xlabel("Extracted Features")
-#
-# # plt.savefig("Variational Eagle/Plots/Meaningful Extracted Features vs Total Extracted Features")
-# # plt.show()
-#
-#
-#
-# plt.savefig("Variational Eagle/Plots/Individual Normalisation - Optimal Extracted Features")
-# plt.show()
-
-
-
-
-
-
-# relevant_err = []
-# ratio_err = []
-#
-# for i in range(len(med_relevant_feature_number)):
-#     relevant_err.append([(med_relevant_feature_number[i] - min_relevant_feature_number[i]), (max_relevant_feature_number[i] - med_relevant_feature_number[i])])
-#     ratio_err.append([(med_relevant_feature_ratio[i] - min_relevant_feature_ratio[i]), (max_relevant_feature_ratio[i] - med_relevant_feature_ratio[i])])
-#
-# relevant_err = np.array(relevant_err).T
-# ratio_err = np.array(ratio_err).T
-#
-#
-#
-# # plt.figure(figsize=(10, 8))
-#
-# # x_values = range(1, 46)
-#
-# # plt.scatter(x=x_values, y=med_relevant_feature_number)
-# # plt.errorbar(x=x_values, y=med_relevant_feature_number, yerr=relevant_err, ls="none", capsize=3, alpha=0.6)
-#
-# # sns.lmplot(x=list(range(1, 46))*3, y=(min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number))
-#
-# df = pd.DataFrame()
-# df["Extracted Features"] = list(range(1, 51))*3
-# df["med_relevant_feature_number"] = min_relevant_feature_number + med_relevant_feature_number + max_relevant_feature_number
-# print(df)
-
-# sns.set_style("ticks")
-
-# plt.figure(figsize=(10, 8))
-
-
-# with sns.axes_style("ticks"):
-#     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
-    # sns.lmplot(ax=axs[1], data=df, x="Extracted Features", y="med_relevant_feature_number", logx=True, ci=0, height=8, aspect=1.5, line_kws={"color": "black"}, scatter_kws={"s": 0})
-
-# with sns.axes_style("ticks"):
-#     sns.lmplot(data=df, x="Extracted Features", y="med_relevant_feature_number", order=2, ci=0, height=8, aspect=1.25, line_kws={"color": "red"}, scatter_kws={"s": 0})
-
-# logfit = scipy.optimize.curve_fit(lambda t, a, b: a*np.log(t), range(1, 51), med_relevant_feature_number, p0=(0.6, 2.3))
-# a = logfit[0]
-# b = logfit[1]
-#
-# yfit = []
-#
-# for i in range(1, 51):
-#     yfit.append(a * np.log(i))
-#
-# print(logfit)
-
-
-# plt.plot(range(1, 51), yfit, c="red")
-
-
-# sns.despine(left=False, bottom=False, top=False, right=False)
-
-
-
-# plt.scatter(x=range(1, 51), y=med_relevant_feature_number)
-# plt.errorbar(x=range(1, 51), y=med_relevant_feature_number, yerr=relevant_err, ls="none", alpha=0.6)
-#
-# plt.xlabel("Total Extracted Features", fontsize=20)
-# plt.ylabel("Meaningful Extracted Features", fontsize=20)
-#
-# plt.tick_params(labelsize=20)
-
-
-
-# def logfit(x, a, b):
-#     return a * np.log10(x) + b
-#
-# params, covarience = curve_fit(logfit, range(1, 51), med_relevant_feature_number)
-#
-# a, b = params
-#
-# print("Logfit params: " + str(a) + " " + str(b))
-#
-# x_fit = np.linspace(1, 50, 100).tolist()
-#
-# print(x_fit)
-#
-# y_fit = []
-#
-# for x in x_fit:
-#     y_fit.append(logfit(x, a, b))
-#
-#
-#
-#
-# plt.figure(figsize=(12, 5))
-#
-# plt.plot(x_fit, y_fit, c="black")
-#
-# plt.scatter(x=range(1, 51), y=med_relevant_feature_number, c=colours_blue)
-# plt.errorbar(x=range(1, 51), y=med_relevant_feature_number, yerr=relevant_err, ecolor=colours_blue, ls="none", alpha=0.6)
-#
-# plt.xlabel("Total Extracted Features", fontsize=18)
-# plt.ylabel("Meaningful Extracted Features", fontsize=18)
-#
-# plt.tick_params(labelsize=18)
-#
-# plt.savefig("Plots/rand_meaningful_extracted_features_0-3_abs", bbox_inches='tight')
-# plt.show()
-
-
-
-
-# axs[1].plot(x_fit, y_fit, c="black")
-#
-# axs[1].scatter(x=range(1, 51), y=med_relevant_feature_number, c=colours_blue)
-# axs[1].errorbar(x=range(1, 51), y=med_relevant_feature_number, yerr=relevant_err, ecolor=colours_blue, ls="none", alpha=0.6)
-#
-# axs[1].set_xlabel("Total Extracted Features", fontsize=18)
-# axs[1].set_ylabel("Meaningful Extracted Features", fontsize=18)
-#
-# axs[1].tick_params(labelsize=15)
-#
-# fig.tight_layout()
-#
-# plt.savefig("Plots/optimal_extracted_features")
 # plt.show()
 
 
@@ -627,22 +413,5 @@ plt.show()
 
 
 
-# plt.figure(figsize=(10, 8))
-#
-# plt.scatter(x=range(1, 46), y=med_relevant_feature_ratio)
-# plt.errorbar(x=range(1, 46), y=med_relevant_feature_ratio, yerr=ratio_err, ls="none", capsize=3, alpha=0.6)
-#
-# plt.xlabel("Total Number of Extracted Features", fontsize=15)
-# plt.ylabel("Ratio of Meaningful to Total Extracted Features", fontsize=15)
-#
-# plt.tick_params(labelsize=12)
-#
-# plt.savefig("Plots/rand_meaningful_extracted_features_ratio_abs")
-# plt.show()
 
 
-
-
-
-# sns.histplot(data=structure_properties, x="q_r", bins=300)
-# plt.show()

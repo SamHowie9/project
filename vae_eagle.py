@@ -520,10 +520,18 @@ for run in [1]:
             self.seed_generator = keras.random.SeedGenerator(1337)
 
         def call(self, inputs):
+
+            # get the latent distributions
             z_mean, z_log_var = inputs
+
+            # find the batch size and number of latent features (dim)
             batch = ops.shape(z_mean)[0]
             dim = ops.shape(z_mean)[1]
+
+            # generate the random variables
             epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
+
+            # perform reparameterization trick
             return z_mean + ops.exp(0.5 * z_log_var) * epsilon
 
 
