@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+# from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import random
@@ -119,33 +119,33 @@ print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 # augment the elliptical images
 
 
-augmented_ellipticals =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
-augmented_unknown = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
-
-print()
-print(len(augmented_ellipticals))
-print(len(augmented_unknown))
-print()
-
-for galaxy in ellipticals:
-    count = 0
-    for file in augmented_ellipticals:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count < 25:
-        print(galaxy, count)
-
-print()
-
-for galaxy in unknown:
-    count = 0
-    for file in augmented_unknown:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count < 6:
-        print(galaxy, count)
-
-print()
+# augmented_ellipticals =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
+# augmented_unknown = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
+#
+# print()
+# print(len(augmented_ellipticals))
+# print(len(augmented_unknown))
+# print()
+#
+# for galaxy in ellipticals:
+#     count = 0
+#     for file in augmented_ellipticals:
+#         if file.startswith(str(galaxy)):
+#             count += 1
+#     if count < 25:
+#         print(galaxy, count)
+#
+# print()
+#
+# for galaxy in unknown:
+#     count = 0
+#     for file in augmented_unknown:
+#         if file.startswith(str(galaxy)):
+#             count += 1
+#     if count < 6:
+#         print(galaxy, count)
+#
+# print()
 
 
 
