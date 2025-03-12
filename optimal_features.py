@@ -26,7 +26,7 @@ sns.set_style("ticks")
 
 
 encoding_dim = 10
-run = 3
+run = 1
 epochs = 750
 batch_size = 32
 
@@ -273,6 +273,8 @@ kl_loss_all = []
 
 
 for encoding_dim in range(1, 21):
+
+    print(encoding_dim)
 
     # build and compile the VAE
     vae = VAE(encoder, decoder)
