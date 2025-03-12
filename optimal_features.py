@@ -272,39 +272,49 @@ kl_loss_all = []
 
 
 
+for encoding_dim in range(1, 21):
 
-# build and compile the VAE
-vae = VAE(encoder, decoder)
-vae.compile(optimizer=keras.optimizers.Adam())
-
-
-# # load the weights
-vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+    # build and compile the VAE
+    vae = VAE(encoder, decoder)
+    vae.compile(optimizer=keras.optimizers.Adam())
 
 
+    # # load the weights
+    vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
 
-# get the latent representations (run image through the encoder)
-z_mean, z_log_var, z = vae.encoder.predict(train_images)
 
-# reconstruct the image
-reconstructed_images = vae.decoder.predict(z_mean)
 
-# get the reconstruction loss
-reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
+    # get the latent representations (run image through the encoder)
+    z_mean, z_log_var, z = vae.encoder.predict(train_images)
 
-# calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-# kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
-kl_loss = ops.mean(kl_loss).numpy().item()
+    # reconstruct the image
+    reconstructed_images = vae.decoder.predict(z_mean)
 
-total_loss_all.append(reconstruction_loss + kl_loss)
-reconstruction_loss_all.append(reconstruction_loss)
-kl_loss_all.append(kl_loss)
+    # get the reconstruction loss
+    reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
+
+    # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
+    kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+    # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+    kl_loss = ops.mean(kl_loss).numpy().item()
+
+    total_loss_all.append(reconstruction_loss + kl_loss)
+    reconstruction_loss_all.append(reconstruction_loss)
+    kl_loss_all.append(kl_loss)
 
 
 print(total_loss_all)
 print(reconstruction_loss_all)
 print(kl_loss_all)
+
+fig, axs = plt.subplots(3, 1, figsize=(10, 10))
+
+axs[0].scatter(total_loss_all)
+axs[1].scatter(reconstruction_loss_all)
+axs[2].scatter(kl_loss_all)
+
+plt.savefig("Variational Eagle/Plots/Loss", bbox_inches='tight')
+plt.show()
 
 
 
