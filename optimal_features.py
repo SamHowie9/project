@@ -272,7 +272,7 @@ kl_loss_all = []
 
 
 
-for encoding_dim in range(1, 21):
+for encoding_dim in range(2, 21):
 
     print(encoding_dim)
 
