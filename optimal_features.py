@@ -290,12 +290,12 @@ z_mean, z_log_var, z = vae.encoder.predict(train_images)
 reconstructed_images = vae.decoder.predict(z_mean)
 
 # get the reconstruction loss
-reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images))
+reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
 
 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
 # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
-kl_loss = ops.mean(kl_loss)
+kl_loss = ops.mean(kl_loss).numpy().item()
 
 total_loss_all.append(reconstruction_loss + kl_loss)
 reconstruction_loss_all.append(reconstruction_loss)
