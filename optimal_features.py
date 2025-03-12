@@ -1,16 +1,17 @@
+
+import os
+os.environ["KERAS_BACKEND"] = "tensorflow"
+import tensorflow as tf
+import keras
+from keras import ops
+from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
+from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
-import scipy.optimize
+import random
 from matplotlib import pyplot as plt
+from matplotlib import image as mpimg
 import seaborn as sns
-from scipy.optimize import curve_fit
-import textwrap
-from sklearn.cluster import AgglomerativeClustering
-from yellowbrick.cluster import KElbowVisualizer
-from scipy.optimize import curve_fit
-from sklearn.decomposition import PCA
-
-from vae_eagle import reconstructed_image
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
@@ -289,7 +290,7 @@ z_mean, z_log_var, z = vae.encoder.predict(train_images)
 reconstructed_images = vae.decoder.predict(z_mean)
 
 # get the reconstruction loss
-reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(original_image, reconstructed_image))
+reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images))
 
 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
