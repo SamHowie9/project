@@ -305,9 +305,9 @@ for run in [1, 2, 3]:
 
 
 
-    np.save("Variational Eagle/Plots/Loss/Fully Balanced/total_loss_" + str(run), total_loss_all)
-    np.save("Variational Eagle/Plots/Loss/Fully Balanced/reconstruction_loss_" + str(run), reconstruction_loss_all)
-    np.save("Variational Eagle/Plots/Loss/Fully Balanced/kl_loss_" + str(run), reconstruction_loss_all)
+    np.save("Variational Eagle/Loss/Fully Balanced/total_loss_" + str(run), total_loss_all)
+    np.save("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_" + str(run), reconstruction_loss_all)
+    np.save("Variational Eagle/Loss/Fully Balanced/kl_loss_" + str(run), reconstruction_loss_all)
 
 
 
