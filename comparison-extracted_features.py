@@ -23,8 +23,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-encoding_dim = 13
-run = 3
+encoding_dim = 10
+run = 1
 epochs = 750
 batch_size = 32
 
@@ -288,7 +288,7 @@ for run in [1, 2, 3]:
 
 
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/Sampled" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.show()
 
 

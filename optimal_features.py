@@ -56,7 +56,7 @@ for i in range(len(total_loss_1)):
     kl_sorted = np.sort(np.array([kl_loss_1[i], kl_loss_2[i], kl_loss_3[i]]))
 
     # add the sorted values to the loss dataframe
-    df_loss.loc[len(df_loss)] = [i] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
+    df_loss.loc[len(df_loss)] = [i+1] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
 
 print(df_loss)
 
@@ -74,13 +74,31 @@ kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
 
 
 
-fig, axs = plt.subplots(3, 1, figsize=(12, 12))
+fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
 axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
 axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
 axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
 
+axs[0].set_xticks([2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
+axs[1].set_xticks([2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
+axs[2].set_xticks([2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
+
+axs[0].set_title("Total Loss")
+axs[1].set_title("Reconstruction Loss")
+axs[2].set_title("KL Loss")
+
+axs[0].set_ylabel("Loss")
+axs[1].set_ylabel("BCE Loss")
+axs[2].set_ylabel("KL Divergence")
+
+axs[0].set_xlabel("Latent Features")
+axs[1].set_xlabel("Latent Features")
+axs[2].set_xlabel("Latent Features")
+
+plt.savefig("Variational Eagle/Plots/loss_pot", bbox_inches='tight')
 plt.show()
+
 
 
 
