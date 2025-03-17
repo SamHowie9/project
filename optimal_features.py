@@ -96,7 +96,7 @@ axs[0].set_xlabel("Latent Features")
 axs[1].set_xlabel("Latent Features")
 axs[2].set_xlabel("Latent Features")
 
-plt.savefig("Variational Eagle/Plots/loss_pot", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/loss_pot_2", bbox_inches='tight')
 plt.show()
 
 
