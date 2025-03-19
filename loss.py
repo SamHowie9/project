@@ -288,8 +288,12 @@ for run in [1, 2, 3]:
         # get the latent representations (run image through the encoder)
         z_mean, z_log_var, z = vae.encoder.predict(train_images)
 
+        print(z_mean.shape)
+
         # reconstruct the image
         reconstructed_images = vae.decoder.predict(z_mean)
+
+        print(reconstructed_images.shape)
 
         # get the reconstruction loss
         reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
