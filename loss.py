@@ -221,7 +221,7 @@ for run in [1, 2, 3]:
     reconstruction_loss_all = []
     kl_loss_all = []
 
-    for encoding_dim in range(1, 21):
+    for encoding_dim in range(1, 29):
 
 
         # Define keras tensor for the encoder
