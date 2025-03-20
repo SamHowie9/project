@@ -8,6 +8,7 @@ from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
+from sklearn.linear_model import LinearRegression
 import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
@@ -119,10 +120,20 @@ axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=
 axs.set_xticks(range(6, 30, 2))
 
 axs.set_title("Reconstruction Loss")
-
 axs.set_ylabel("BCE Loss")
-
 axs.set_xlabel("Latent Features")
+
+
+
+x_val = np.array(list(df_loss["Extracted Features"]) + list(df_loss["Extracted Features"]) + list(df_loss["Extracted Features"])).reshape(-1, 1)
+y_val = np.array(list(df_loss["Med Reconstruction"]) + list(df_loss["Min Reconstruction"]) + list(df_loss["Max Reconstruction"])).reshape(-1, 1)
+
+fit = LinearRegression().fit(x_val, y_val)
+fit_line = fit.predict(x_val)
+axs.plot(x_val, fit_line, color="black")
+
+print(fit.coef_, fit.intercept_)
+
 
 
 plt.savefig("Variational Eagle/Plots/loss_pot_zoomed_reconstruction", bbox_inches='tight')
