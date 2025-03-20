@@ -7,6 +7,7 @@ from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose
 from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
+from sklearn.decomposition import PCA
 import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
@@ -58,6 +59,8 @@ for i in range(len(total_loss_1)):
     # add the sorted values to the loss dataframe
     df_loss.loc[len(df_loss)] = [i+1] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
 
+df_loss = df_loss.tail(23)
+
 print(df_loss)
 
 # find the size of the loss error bars for total loss
@@ -74,35 +77,56 @@ kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
 
 
 
-fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
-axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
-axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
 
-axs[0].set_xticks([2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
-axs[1].set_xticks([2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
-axs[2].set_xticks([2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
+# fig, axs = plt.subplots(3, 1, figsize=(12, 15))
+#
+# axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+# axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+# axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+#
+# # axs[0].set_xticks(range(2, 30, 2))
+# # axs[1].set_xticks(range(2, 30, 2))
+# # axs[2].set_xticks(range(2, 30, 2))
+#
+# axs[0].set_xticks(range(14, 29))
+# axs[1].set_xticks(range(14, 29))
+# axs[2].set_xticks(range(14, 29))
+#
+# axs[0].set_title("Total Loss")
+# axs[1].set_title("Reconstruction Loss")
+# axs[2].set_title("KL Loss")
+#
+# axs[0].set_ylabel("Loss")
+# axs[1].set_ylabel("BCE Loss")
+# axs[2].set_ylabel("KL Divergence")
+#
+# axs[0].set_xlabel("Latent Features")
+# axs[1].set_xlabel("Latent Features")
+# axs[2].set_xlabel("Latent Features")
+#
+#
+# plt.savefig("Variational Eagle/Plots/loss_pot_zoomed", bbox_inches='tight')
+# plt.show()
 
-axs[0].set_title("Total Loss")
-axs[1].set_title("Reconstruction Loss")
-axs[2].set_title("KL Loss")
 
-axs[0].set_ylabel("Loss")
-axs[1].set_ylabel("BCE Loss")
-axs[2].set_ylabel("KL Divergence")
 
-axs[0].set_xlabel("Latent Features")
-axs[1].set_xlabel("Latent Features")
-axs[2].set_xlabel("Latent Features")
 
-plt.savefig("Variational Eagle/Plots/loss_pot_2", bbox_inches='tight')
+fig, axs = plt.subplots(1, 1, figsize=(15, 5))
+
+axs.errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="750 Epoch, 32 Batch Size")
+
+axs.set_xticks(range(6, 30, 2))
+
+axs.set_title("Reconstruction Loss")
+
+axs.set_ylabel("BCE Loss")
+
+axs.set_xlabel("Latent Features")
+
+
+plt.savefig("Variational Eagle/Plots/loss_pot_zoomed_reconstruction", bbox_inches='tight')
 plt.show()
-
-
-
-
-
 
 
 
@@ -166,41 +190,46 @@ plt.show()
 
 # Meaningful extracted features
 
-# fig, axs = plt.subplots(1, 1, figsize=(10, 5))
-#
-# df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
-# # df_num = pd.DataFrame(columns=["Extracted Features", "1, "2", "3"])
-#
-# for i in range(1, 21):
-#
-#     features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_1.npy")[0]
-#     features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_2.npy")[0]
-#     features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_3.npy")[0]
-#
-#     pca_1 = PCA(n_components=0.99).fit(features_1)
-#     pca_2 = PCA(n_components=0.99).fit(features_2)
-#     pca_3 = PCA(n_components=0.99).fit(features_3)
-#
-#     num_1 = pca_1.components_.shape[0]
-#     num_2 = pca_2.components_.shape[0]
-#     num_3 = pca_3.components_.shape[0]
-#
-#     sorted = np.sort(np.array([num_1, num_2, num_3]))
-#
-#     df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
-#     # df_num.loc[len(df_num)] = [i, i, num_2, num_3]
-#
-# # find the size of the loss error bars for reconstruction loss
-# num_err_upper = np.array(df_num["Max"] - df_num["Med"])
-# num_err_lower = np.array(df_num["Med"] - df_num["Min"])
-#
-# axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
-#
-# # plt.scatter(df_num["Extracted Features"], df_num["1"])
-# # plt.scatter(df_num["Extracted Features"], df_num["2"])
-# # plt.scatter(df_num["Extracted Features"], df_num["3"])
-#
-# plt.show()
+fig, axs = plt.subplots(1, 1, figsize=(10, 5))
+
+df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
+# df_num = pd.DataFrame(columns=["Extracted Features", "1, "2", "3"])
+
+for i in range(1, 29):
+
+    features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_1.npy")[0]
+    features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_2.npy")[0]
+    features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_3.npy")[0]
+
+    pca_1 = PCA(n_components=0.99).fit(features_1)
+    pca_2 = PCA(n_components=0.99).fit(features_2)
+    pca_3 = PCA(n_components=0.99).fit(features_3)
+
+    num_1 = pca_1.components_.shape[0]
+    num_2 = pca_2.components_.shape[0]
+    num_3 = pca_3.components_.shape[0]
+
+    sorted = np.sort(np.array([num_1, num_2, num_3]))
+
+    df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
+    # df_num.loc[len(df_num)] = [i, i, num_2, num_3]
+
+# find the size of the loss error bars for reconstruction loss
+num_err_upper = np.array(df_num["Max"] - df_num["Med"])
+num_err_lower = np.array(df_num["Med"] - df_num["Min"])
+
+axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
+
+axs.set_xticks(range(2, 30, 2))
+axs.set_xlabel("Latent Features")
+axs.set_ylabel("Meaningful Extracted Features")
+
+# plt.scatter(df_num["Extracted Features"], df_num["1"])
+# plt.scatter(df_num["Extracted Features"], df_num["2"])
+# plt.scatter(df_num["Extracted Features"], df_num["3"])
+
+plt.show()
+
 
 
 
