@@ -217,11 +217,17 @@ class Sampling(Layer):
 
 for run in [1, 2, 3]:
 
-    total_loss_all = []
-    reconstruction_loss_all = []
-    kl_loss_all = []
+    # total_loss_all = []
+    # reconstruction_loss_all = []
+    # kl_loss_all = []
 
-    for encoding_dim in range(1, 29):
+    total_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/total_loss_" + str(run)))
+    reconstruction_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_" + str(run)))
+    kl_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/kl_loss_" + str(run)))
+
+
+
+    for encoding_dim in range(29, 37):
 
 
         # Define keras tensor for the encoder
