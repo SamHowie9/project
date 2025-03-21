@@ -20,7 +20,7 @@ run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="6"
+os.environ["CUDA_VISIBLE_DEVICES"]="7"
 
 # number of epochs for run
 epochs = 750
@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [1]:
+for run in [2]:
 
     # normalise each band individually
     def normalise_independently(image):
