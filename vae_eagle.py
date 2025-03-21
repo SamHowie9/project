@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 36
+encoding_dim = 31
 run = 1
 
 # select which gpu to use
@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [3]:
+for run in [1]:
 
     # normalise each band individually
     def normalise_independently(image):
