@@ -15,12 +15,12 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 38
+encoding_dim = 5
 run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 750
@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [3]:
+for run in [1, 2, 3]:
 
     # normalise each band individually
     def normalise_independently(image):
@@ -477,16 +477,19 @@ for run in [3]:
                 reconstruction = self.decoder(z)
 
                 # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
-                reconstruction_loss = ops.mean(
-                    ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
-                    )
-                )
-                # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+                # reconstruction_loss = ops.mean(
+                #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+                #     )
+                # )
+
+                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
+                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
-                # kl_loss = ops.mean(kl_loss)
+                kl_loss = ops.mean(kl_loss)
 
                 # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
@@ -600,11 +603,11 @@ for run in [3]:
 
 
     # save the weights
-    vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
-    np.save("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
+    np.save("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
 
     print(np.array(extracted_features).shape)
 
@@ -612,7 +615,7 @@ for run in [3]:
     loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-    np.save("Variational Eagle/Loss/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
+    np.save("Variational Eagle/Loss/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
 
 
 
@@ -628,7 +631,7 @@ for run in [3]:
     axs2.set_ylabel("KL Loss")
     plt.legend()
 
-    plt.savefig("Variational Eagle/Loss Plots/fully_balanced_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
+    plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
     plt.show()
 
 
@@ -671,7 +674,7 @@ for run in [3]:
         axs[1,i].get_xaxis().set_visible(False)
         axs[1,i].get_yaxis().set_visible(False)
 
-    plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
+    plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
     plt.show()
 
 
