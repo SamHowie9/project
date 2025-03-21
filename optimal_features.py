@@ -45,6 +45,14 @@ reconstruction_loss_1 = np.load("Variational Eagle/Loss/Fully Balanced/reconstru
 reconstruction_loss_2 = np.load("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_2.npy")
 reconstruction_loss_3 = np.load("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_3.npy")
 
+print(reconstruction_loss_1[25])
+print(reconstruction_loss_2[25])
+print(reconstruction_loss_3[25])
+print()
+print(reconstruction_loss_1[23])
+print(reconstruction_loss_2[23])
+print(reconstruction_loss_3[23])
+
 # load kl losses for each run
 kl_loss_1 = np.load("Variational Eagle/Loss/Fully Balanced/kl_loss_1.npy")
 kl_loss_2 = np.load("Variational Eagle/Loss/Fully Balanced/kl_loss_2.npy")
