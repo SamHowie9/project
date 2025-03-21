@@ -221,9 +221,9 @@ for run in [1, 2, 3]:
     # reconstruction_loss_all = []
     # kl_loss_all = []
 
-    total_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/total_loss_" + str(run)))
-    reconstruction_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_" + str(run)))
-    kl_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/kl_loss_" + str(run)))
+    total_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/total_loss_" + str(run) + ".npy"))
+    reconstruction_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_" + str(run) + ".npy"))
+    kl_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/kl_loss_" + str(run) + ".npy"))
 
 
 
