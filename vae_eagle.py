@@ -15,12 +15,12 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 22
+encoding_dim = 1
 run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 750
@@ -477,19 +477,17 @@ for run in [1, 2, 3]:
                 reconstruction = self.decoder(z)
 
                 # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
-                # reconstruction_loss = ops.mean(
-                #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
-                #     )
-                # )
-
-                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+                reconstruction_loss = ops.mean(
+                    ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+                    )
+                )
+                # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
-
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(kl_loss)
+                kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                # kl_loss = ops.mean(kl_loss)
 
                 # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
