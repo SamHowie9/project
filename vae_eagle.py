@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 1
+encoding_dim = 6
 run = 1
 
 # select which gpu to use
@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [1, 2, 3]:
+for run in [1]:
 
     # normalise each band individually
     def normalise_independently(image):
@@ -477,17 +477,17 @@ for run in [1, 2, 3]:
                 reconstruction = self.decoder(z)
 
                 # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
-                reconstruction_loss = ops.mean(
-                    ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
-                    )
-                )
-                # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+                # reconstruction_loss = ops.mean(
+                #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+                #     )
+                # )
+                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-                kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.mean(kl_loss)
+                # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+                kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                kl_loss = ops.mean(kl_loss)
 
                 # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
