@@ -487,7 +487,7 @@ for run in [1]:
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(ops.sum(kl_loss, axis=1)) / encoding_dim
+                kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
 
                 # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
