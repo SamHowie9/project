@@ -480,7 +480,7 @@ for run in [1]:
                 reconstruction_loss = ops.mean(
                     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
                     )
-                )
+                ) / (256 * 256)
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
