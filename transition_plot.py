@@ -447,7 +447,7 @@ for i, feature in enumerate(chosen_features):
         if j == (num_varying_features - 1)/2:
             axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-plt.savefig("Variational Eagle/Transition Plots/Balanced/" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
 plt.show()
 
 

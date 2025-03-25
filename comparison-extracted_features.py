@@ -387,15 +387,28 @@ def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
 # plt.scatter(all_properties["re_r"], all_properties["rhalf_ellip"])
 # plt.show()
 
-fig, axs = plt.subplots(1, 1, figsize=(7, 5))
-density_scatter(all_properties["n_r"], all_properties["sersic_n"], axs=axs, s=2)
-# density_scatter(np.log10(all_properties["n_r"]), np.log10(all_properties["sersic_n"]), axs=axs, s=2)
-axs.set_xlabel("sersic (galfit)")
-axs.set_ylabel("sersic (non-parametric)")
-# plt.savefig("Variational Eagle/Plots/rhalf_ellip_vs_stellar_mass", bbox_inches='tight')
+# fig, axs = plt.subplots(1, 1, figsize=(7, 5))
+# density_scatter(all_properties["n_r"], all_properties["sersic_n"], axs=axs, s=2)
+# # density_scatter(np.log10(all_properties["n_r"]), np.log10(all_properties["sersic_n"]), axs=axs, s=2)
+# axs.set_xlabel("sersic (galfit)")
+# axs.set_ylabel("sersic (non-parametric)")
+# # plt.savefig("Variational Eagle/Plots/rhalf_ellip_vs_stellar_mass", bbox_inches='tight')
+# plt.show()
+
+
+
+
+fig, axs = plt.subplots(1, 4, figsize=(20, 5))
+
+density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs[0])
+axs[0].set_xlabel("PCA Feature 4")
+axs[0].set_ylabel("Sersic Index")
+
+density_scatter(x=extracted_features_switch[4], y=all_properties["gini"], axs=axs[1])
+axs[1].set_xlabel("PCA Feature 4")
+axs[1].set_ylabel("Gini Coefficient")
+
 plt.show()
-
-
 
 
 
@@ -439,38 +452,38 @@ plt.show()
 
 # sersic
 
-fig, axs = plt.subplots(1, 1, figsize=(6, 5))
-
-# axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
-
-density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=5)
-
-# fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
-# print(fit)
+# fig, axs = plt.subplots(1, 1, figsize=(6, 5))
 #
-# # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
-# x_fit = np.linspace(-3, 2.5, 100)
-# y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+# # axs.scatter(x=extracted_features_switch[4], y=all_properties["n_r"], s=2)
 #
-# axs.plot(x_fit, y_fit, c="black")
-
-
-# params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
+# density_scatter(x=extracted_features_switch[4], y=all_properties["n_r"], axs=axs, s=5)
 #
-# print(params)
-# print(covariance)
+# # fit = np.polyfit(x=extracted_features_switch[4], y=all_properties["n_r"], deg=2)
+# # print(fit)
+# #
+# # # x_fit = np.linspace(np.min(extracted_features_switch[1]), np.max(extracted_features_switch[1]), 100)
+# # x_fit = np.linspace(-3, 2.5, 100)
+# # y_fit = [(fit[0] * x * x) + (fit[1] * x) + fit[2] for x in x_fit]
+# #
+# # axs.plot(x_fit, y_fit, c="black")
 #
-# x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
-# y_fit = [exponential(x, *params) for x in x_fit]
 #
-# axs.plot(x_fit, y_fit, c="red")
-
-axs.set_xlabel("PCA Feature 4")
-axs.set_ylabel("Sersic Index")
-
-# plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_density_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run), bbox_inches='tight')
-plt.show()
+# # params, covariance = curve_fit(exponential, extracted_features_switch[4], all_properties["n_r"], p0=(1, -1, 1))
+# #
+# # print(params)
+# # print(covariance)
+# #
+# # x_fit = np.linspace(np.min(extracted_features_switch[4]), np.max(extracted_features_switch[4]), 100)
+# # y_fit = [exponential(x, *params) for x in x_fit]
+# #
+# # axs.plot(x_fit, y_fit, c="red")
+#
+# axs.set_xlabel("PCA Feature 4")
+# axs.set_ylabel("Sersic Index")
+#
+# # plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/pca_feature_4_vs_sersic_density_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run), bbox_inches='tight')
+# plt.show()
 
 
 
