@@ -44,6 +44,91 @@ def normalise_independently(image):
 
 # load the images as a fully balanced dataset
 
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# print("Bad Fit Indices:", bad_fit)
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+# # get a list of all the ids of the galaxies
+# chosen_galaxies = list(all_properties["GalaxyID"])
+#
+# # list to contain all galaxy images
+# all_images = []
+#
+# # # loop through each galaxy
+# for i, galaxy in enumerate(chosen_galaxies):
+#
+#     # get the filename of each galaxy in the supplemental file
+#     filename = "galrand_" + str(galaxy) + ".png"
+#
+#     # open the image and append it to the main list
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+#
+#     # normalise the image (each band independently)
+#     image = normalise_independently(image)
+#
+#     # add the image to the dataset
+#     all_images.append(image)
+#
+#
+# # split the data into training and testing data (200 images used for testing)
+# train_images = all_images[:-200]
+# test_images = np.array(all_images[-200:])
+#
+#
+# # load the filenames of the augmented elliptical images
+# augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
+#
+# for galaxy in augmented_galaxies:
+#
+#     # load each augmented image
+#     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/" + galaxy)
+#
+#     # normalise the image
+#     image = normalise_independently(image)
+#
+#     # add the image to the training set (not the testing set)
+#     train_images.append(image)
+#
+#
+#
+# # load the filenames of the augmented unknown images
+# augmented_galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
+#
+# print("...")
+#
+# for galaxy in augmented_galaxies:
+#
+#     # load each augmented image
+#     image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/" + galaxy)
+#
+#     # normalise the image
+#     image = normalise_independently(image)
+#
+#     # add the image to the training set (not the testing set)
+#     train_images.append(image)
+#
+# # convert the training set to a numpy array
+# train_images = np.array(train_images)
+
+
+
+
+
+
+
+# load only the spiral galaxies
+
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
@@ -58,6 +143,10 @@ print("Bad Fit Indices:", bad_fit)
 # remove those galaxies
 for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)
+
+
+# take only the sprial galaxies
+all_properties = all_properties[all_properties["n_r"] <= 2.5]
 
 # get a list of all the ids of the galaxies
 chosen_galaxies = list(all_properties["GalaxyID"])
@@ -82,44 +171,122 @@ for i, galaxy in enumerate(chosen_galaxies):
 
 
 # split the data into training and testing data (200 images used for testing)
-train_images = all_images[:-200]
+train_images = np.array(all_images[:-200])
 test_images = np.array(all_images[-200:])
 
 
-# load the filenames of the augmented elliptical images
-augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
-
-for galaxy in augmented_galaxies:
-
-    # load each augmented image
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/" + galaxy)
-
-    # normalise the image
-    image = normalise_independently(image)
-
-    # add the image to the training set (not the testing set)
-    train_images.append(image)
 
 
 
-# load the filenames of the augmented unknown images
-augmented_galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
 
-print("...")
 
-for galaxy in augmented_galaxies:
 
-    # load each augmented image
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/" + galaxy)
 
-    # normalise the image
-    image = normalise_independently(image)
+# load only the 'unknown' galaxies
 
-    # add the image to the training set (not the testing set)
-    train_images.append(image)
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# print("Bad Fit Indices:", bad_fit)
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+#
+# # take only the sprial galaxies
+# all_properties = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")]
+#
+# # get a list of all the ids of the galaxies
+# chosen_galaxies = list(all_properties["GalaxyID"])
+#
+# # list to contain all galaxy images
+# all_images = []
+#
+# # # loop through each galaxy
+# for i, galaxy in enumerate(chosen_galaxies):
+#
+#     # get the filename of each galaxy in the supplemental file
+#     filename = "galrand_" + str(galaxy) + ".png"
+#
+#     # open the image and append it to the main list
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+#
+#     # normalise the image (each band independently)
+#     image = normalise_independently(image)
+#
+#     # add the image to the dataset
+#     all_images.append(image)
+#
+#
+# # split the data into training and testing data (12 images used for testing)
+# train_images = np.array(all_images[:-12])
+# test_images = np.array(all_images[-12:])
 
-# convert the training set to a numpy array
-train_images = np.array(train_images)
+
+
+
+
+
+
+
+
+
+# load only the elliptical galaxies
+
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# print("Bad Fit Indices:", bad_fit)
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+#
+# # take only the sprial galaxies
+# all_properties = all_properties[all_properties["n_r"] >= 4]
+#
+# # get a list of all the ids of the galaxies
+# chosen_galaxies = list(all_properties["GalaxyID"])
+#
+# # list to contain all galaxy images
+# all_images = []
+#
+# # # loop through each galaxy
+# for i, galaxy in enumerate(chosen_galaxies):
+#
+#     # get the filename of each galaxy in the supplemental file
+#     filename = "galrand_" + str(galaxy) + ".png"
+#
+#     # open the image and append it to the main list
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+#
+#     # normalise the image (each band independently)
+#     image = normalise_independently(image)
+#
+#     # add the image to the dataset
+#     all_images.append(image)
+#
+#
+# # split the data into training and testing data (12 images used for testing)
+# train_images = np.array(all_images[:-12])
+# test_images = np.array(all_images[-12:])
+
+
+
 
 
 
@@ -217,17 +384,17 @@ class Sampling(Layer):
 
 for run in [1, 2, 3]:
 
-    # total_loss_all = []
-    # reconstruction_loss_all = []
-    # kl_loss_all = []
+    total_loss_all = []
+    reconstruction_loss_all = []
+    kl_loss_all = []
 
-    total_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/total_loss_" + str(run) + ".npy"))
-    reconstruction_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_" + str(run) + ".npy"))
-    kl_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/kl_loss_" + str(run) + ".npy"))
+    # total_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/total_loss_" + str(run) + ".npy"))
+    # reconstruction_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_" + str(run) + ".npy"))
+    # kl_loss_all = list(np.load("Variational Eagle/Loss/Fully Balanced/kl_loss_" + str(run) + ".npy"))
 
 
 
-    for encoding_dim in range(29, 37):
+    for encoding_dim in range(1, 21):
 
 
         # Define keras tensor for the encoder
@@ -287,7 +454,7 @@ for run in [1, 2, 3]:
 
 
         # # load the weights
-        vae.load_weights("Variational Eagle/Weights/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+        vae.load_weights("Variational Eagle/Weights/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
 
 
 
@@ -315,9 +482,9 @@ for run in [1, 2, 3]:
 
 
 
-    np.save("Variational Eagle/Loss/Fully Balanced/total_loss_" + str(run), total_loss_all)
-    np.save("Variational Eagle/Loss/Fully Balanced/reconstruction_loss_" + str(run), reconstruction_loss_all)
-    np.save("Variational Eagle/Loss/Fully Balanced/kl_loss_" + str(run), kl_loss_all)
+    np.save("Variational Eagle/Loss/Spirals/total_loss_" + str(run), total_loss_all)
+    np.save("Variational Eagle/Loss/Spirals/reconstruction_loss_" + str(run), reconstruction_loss_all)
+    np.save("Variational Eagle/Loss/Spirals/kl_loss_" + str(run), kl_loss_all)
 
 
 
