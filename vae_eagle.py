@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [1]:
+for run in [2]:
 
     # normalise each band individually
     def normalise_independently(image):
