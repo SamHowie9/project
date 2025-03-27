@@ -20,7 +20,7 @@ run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 750
@@ -491,14 +491,14 @@ for run in [1, 2, 3]:
                 reconstruction_loss = ops.mean(
                     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
                     )
-                ) / (256 * 256)
+                )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(kl_loss, axis=1)
+                kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                # kl_loss = ops.mean(kl_loss, axis=1)
 
                 # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
