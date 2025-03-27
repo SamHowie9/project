@@ -457,7 +457,7 @@ for run in [1, 2, 3]:
 
 
         # # load the weights
-        vae.load_weights("Variational Eagle/Weights/Elliptical/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
+        vae.load_weights("Variational Eagle/Weights/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5")
 
 
 
@@ -485,9 +485,9 @@ for run in [1, 2, 3]:
 
 
 
-    np.save("Variational Eagle/Loss/Elliptical/total_loss_" + str(run), total_loss_all)
-    np.save("Variational Eagle/Loss/Elliptical/reconstruction_loss_" + str(run), reconstruction_loss_all)
-    np.save("Variational Eagle/Loss/Elliptical/kl_loss_" + str(run), kl_loss_all)
+    np.save("Variational Eagle/Loss/Ellipticals/total_loss_" + str(run), total_loss_all)
+    np.save("Variational Eagle/Loss/Ellipticals/reconstruction_loss_" + str(run), reconstruction_loss_all)
+    np.save("Variational Eagle/Loss/Ellipticals/kl_loss_" + str(run), kl_loss_all)
 
 
 
