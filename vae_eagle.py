@@ -264,60 +264,63 @@ for run in [1]:
     train_images = np.array(train_images)
 
 
-
+    print(train_images.shape)
+    print(test_images.shape)
+    print()
 
 
 
 
     # load only the spiral galaxies
 
-    # # load structural and physical properties into dataframes
-    # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-    # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-    #
-    # # dataframe for all properties
-    # all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-    #
-    # # find all bad fit galaxies
-    # bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-    # print("Bad Fit Indices:", bad_fit)
-    #
-    # # remove those galaxies
-    # for galaxy in bad_fit:
-    #     all_properties = all_properties.drop(galaxy, axis=0)
-    #
-    #
-    # # take only the sprial galaxies
-    # all_properties = all_properties[all_properties["n_r"] <= 2.5]
-    #
-    # # get a list of all the ids of the galaxies
-    # chosen_galaxies = list(all_properties["GalaxyID"])
-    #
-    # # list to contain all galaxy images
-    # all_images = []
-    #
-    # # # loop through each galaxy
-    # for i, galaxy in enumerate(chosen_galaxies):
-    #
-    #     # get the filename of each galaxy in the supplemental file
-    #     filename = "galrand_" + str(galaxy) + ".png"
-    #
-    #     # open the image and append it to the main list
-    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-    #
-    #     # normalise the image (each band independently)
-    #     image = normalise_independently(image)
-    #
-    #     # add the image to the dataset
-    #     all_images.append(image)
-    #
-    #
-    # # split the data into training and testing data (200 images used for testing)
-    # train_images = np.array(all_images[:-200])
-    # test_images = np.array(all_images[-200:])
+    # load structural and physical properties into dataframes
+    structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+    physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+    # dataframe for all properties
+    all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+    # find all bad fit galaxies
+    bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+    print("Bad Fit Indices:", bad_fit)
+
+    # remove those galaxies
+    for galaxy in bad_fit:
+        all_properties = all_properties.drop(galaxy, axis=0)
 
 
+    # take only the sprial galaxies
+    all_properties = all_properties[all_properties["n_r"] <= 2.5]
 
+    # get a list of all the ids of the galaxies
+    chosen_galaxies = list(all_properties["GalaxyID"])
+
+    # list to contain all galaxy images
+    all_images = []
+
+    # # loop through each galaxy
+    for i, galaxy in enumerate(chosen_galaxies):
+
+        # get the filename of each galaxy in the supplemental file
+        filename = "galrand_" + str(galaxy) + ".png"
+
+        # open the image and append it to the main list
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+
+        # normalise the image (each band independently)
+        image = normalise_independently(image)
+
+        # add the image to the dataset
+        all_images.append(image)
+
+
+    # split the data into training and testing data (200 images used for testing)
+    train_images = np.array(all_images[:-200])
+    test_images = np.array(all_images[-200:])
+
+    print(train_images.shape)
+    print(test_images.shape)
+    print()
 
 
 
@@ -326,50 +329,54 @@ for run in [1]:
 
     # load only the 'unknown' galaxies
 
-    # # load structural and physical properties into dataframes
-    # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-    # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-    #
-    # # dataframe for all properties
-    # all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-    #
-    # # find all bad fit galaxies
-    # bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-    # print("Bad Fit Indices:", bad_fit)
-    #
-    # # remove those galaxies
-    # for galaxy in bad_fit:
-    #     all_properties = all_properties.drop(galaxy, axis=0)
-    #
-    #
-    # # take only the sprial galaxies
-    # all_properties = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")]
-    #
-    # # get a list of all the ids of the galaxies
-    # chosen_galaxies = list(all_properties["GalaxyID"])
-    #
-    # # list to contain all galaxy images
-    # all_images = []
-    #
-    # # # loop through each galaxy
-    # for i, galaxy in enumerate(chosen_galaxies):
-    #
-    #     # get the filename of each galaxy in the supplemental file
-    #     filename = "galrand_" + str(galaxy) + ".png"
-    #
-    #     # open the image and append it to the main list
-    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-    #
-    #     # normalise the image (each band independently)
-    #     image = normalise_independently(image)
-    #
-    #     # add the image to the dataset
-    #     all_images.append(image)
-    #
-    #
-    # # split the data into training and testing data (12 images used for testing)
-    # train_images = np.array(all_images[:-12])
-    # test_images = np.array(all_images[-12:])
+    # load structural and physical properties into dataframes
+    structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+    physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+    # dataframe for all properties
+    all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+    # find all bad fit galaxies
+    bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+    print("Bad Fit Indices:", bad_fit)
+
+    # remove those galaxies
+    for galaxy in bad_fit:
+        all_properties = all_properties.drop(galaxy, axis=0)
+
+
+    # take only the sprial galaxies
+    all_properties = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")]
+
+    # get a list of all the ids of the galaxies
+    chosen_galaxies = list(all_properties["GalaxyID"])
+
+    # list to contain all galaxy images
+    all_images = []
+
+    # # loop through each galaxy
+    for i, galaxy in enumerate(chosen_galaxies):
+
+        # get the filename of each galaxy in the supplemental file
+        filename = "galrand_" + str(galaxy) + ".png"
+
+        # open the image and append it to the main list
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+
+        # normalise the image (each band independently)
+        image = normalise_independently(image)
+
+        # add the image to the dataset
+        all_images.append(image)
+
+
+    # split the data into training and testing data (12 images used for testing)
+    train_images = np.array(all_images[:-12])
+    test_images = np.array(all_images[-12:])
+
+    print(train_images.shape)
+    print(test_images.shape)
+    print()
 
 
 
@@ -382,59 +389,63 @@ for run in [1]:
 
     # load only the elliptical galaxies
 
-    # # load structural and physical properties into dataframes
-    # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-    # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-    #
-    # # dataframe for all properties
-    # all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-    #
-    # # find all bad fit galaxies
-    # bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-    # print("Bad Fit Indices:", bad_fit)
-    #
-    # # remove those galaxies
-    # for galaxy in bad_fit:
-    #     all_properties = all_properties.drop(galaxy, axis=0)
-    #
-    #
-    # # take only the sprial galaxies
-    # all_properties = all_properties[all_properties["n_r"] >= 4]
-    #
-    # # get a list of all the ids of the galaxies
-    # chosen_galaxies = list(all_properties["GalaxyID"])
-    #
-    # # list to contain all galaxy images
-    # all_images = []
-    #
-    # # # loop through each galaxy
-    # for i, galaxy in enumerate(chosen_galaxies):
-    #
-    #     # get the filename of each galaxy in the supplemental file
-    #     filename = "galrand_" + str(galaxy) + ".png"
-    #
-    #     # open the image and append it to the main list
-    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
-    #
-    #     # normalise the image (each band independently)
-    #     image = normalise_independently(image)
-    #
-    #     # add the image to the dataset
-    #     all_images.append(image)
-    #
-    #
-    # # split the data into training and testing data (12 images used for testing)
-    # train_images = np.array(all_images[:-12])
-    # test_images = np.array(all_images[-12:])
+    # load structural and physical properties into dataframes
+    structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+    physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+    # dataframe for all properties
+    all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+    # find all bad fit galaxies
+    bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+    print("Bad Fit Indices:", bad_fit)
+
+    # remove those galaxies
+    for galaxy in bad_fit:
+        all_properties = all_properties.drop(galaxy, axis=0)
 
 
+    # take only the sprial galaxies
+    all_properties = all_properties[all_properties["n_r"] >= 4]
+
+    # get a list of all the ids of the galaxies
+    chosen_galaxies = list(all_properties["GalaxyID"])
+
+    # list to contain all galaxy images
+    all_images = []
+
+    # # loop through each galaxy
+    for i, galaxy in enumerate(chosen_galaxies):
+
+        # get the filename of each galaxy in the supplemental file
+        filename = "galrand_" + str(galaxy) + ".png"
+
+        # open the image and append it to the main list
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+
+        # normalise the image (each band independently)
+        image = normalise_independently(image)
+
+        # add the image to the dataset
+        all_images.append(image)
 
 
-
-
+    # split the data into training and testing data (12 images used for testing)
+    train_images = np.array(all_images[:-12])
+    test_images = np.array(all_images[-12:])
 
     print(train_images.shape)
     print(test_images.shape)
+    print()
+
+
+
+
+
+
+
+    # print(train_images.shape)
+    # print(test_images.shape)
 
 
 
