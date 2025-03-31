@@ -11,47 +11,42 @@ import random
 # import tensorflow as tf
 
 
-features = np.load("Variational Eagle/Extracted Features/Fully Balanced/15_feature_750_epoch_32_bs_features_1.npy")[0]
+encoding_dim = 24
+run = 2
+epochs = 750
+batch_size = 32
 
-print(features.shape)
-
-fig, axs = plt.subplots(3, 5, figsize=(15, 12))
-
-for i in range(0, 5):
-    print(i)
-
-    mean_1 = np.round(np.mean(features.T[i]), 2)
-    mean_2 = np.round(np.mean(features.T[i+5]), 2)
-    mean_3 = np.round(np.mean(features.T[i+10]), 2)
-
-    std_1 = np.round(np.std(features.T[i]), 2)
-    std_2 = np.round(np.std(features.T[i+5]), 2)
-    std_3 = np.round(np.std(features.T[i+10]), 2)
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
 
-    sns.histplot(ax=axs[0][i], x=features.T[i])
-    sns.histplot(ax=axs[1][i], x=features.T[i+5])
-    sns.histplot(ax=axs[2][i], x=features.T[i+10])
-
-    axs[0][i].set_title("μ=" + str(mean_1) + ", σ=" + str(std_1))
-    axs[1][i].set_title("μ=" + str(mean_2) + ", σ=" + str(std_2))
-    axs[2][i].set_title("μ=" + str(mean_3) + ", σ=" + str(std_3))
-
-    axs[0][i].set_yticks([])
-    axs[1][i].set_yticks([])
-    axs[2][i].set_yticks([])
-
-    axs[0][i].set_yticklabels([])
-    axs[1][i].set_yticklabels([])
-    axs[2][i].set_yticklabels([])
-
-    axs[0][i].set_ylabel(None)
-    axs[1][i].set_ylabel(None)
-    axs[2][i].set_ylabel(None)
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
 
-    # axs[0][i].hist(features[i])
-    # axs[1][i].hist(features[i+6])
-    # axs[2][i].hist(features[i+11])
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
 
-plt.show()
+# remove those galaxies
+for galaxy in bad_fit:
+    all_properties = all_properties.drop(galaxy, axis=0)
+
+# account for the testing dataset
+all_properties = all_properties.iloc[:-200]
+
+# load the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+encoding_dim = extracted_features.shape[1]
+extracted_features_switch = extracted_features.T
+
+# print(extracted_features.shape)
+
+extracted_features = extracted_features[:len(all_properties)]
+
+
+print(extracted_features.shape)
+disk_structures = np.array(all_properties["n_r"] <= 2.5)
+extracted_features = extracted_features[disk_structures]
+print(extracted_features.shape)
