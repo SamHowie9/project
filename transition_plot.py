@@ -233,8 +233,12 @@ extracted_features = pca.transform(extracted_features)
 extracted_features_switch = extracted_features.T
 
 
-# take just the spirals
-disk_structures = np.array(all_properties["n_r"] <= 2.5)
+# # take just the spirals
+# disk_structures = np.array(all_properties["n_r"] <= 2.5)
+# extracted_features = extracted_features[disk_structures]
+
+# take just the ellipticals
+disk_structures = np.array(all_properties["n_r"] >= 4)
 extracted_features = extracted_features[disk_structures]
 
 
@@ -382,7 +386,7 @@ for i, feature in enumerate(chosen_features):
         if j == (num_varying_features - 1)/2:
             axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/spirals_median_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/ellipticals_median_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
 plt.show()
 
 
