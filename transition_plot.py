@@ -54,35 +54,33 @@ class VAE(keras.Model):
     # custom train step
     def train_step(self, data):
         with tf.GradientTape() as tape:
-
-            # run image through encoder (get latent representation)
+            # get the latent representation (run image through the encoder)
             z_mean, z_log_var, z = self.encoder(data)
 
-            # form reconstruction (run latent representation through decoder)
+            # form the reconstruction (run latent representation through decoder)
             reconstruction = self.decoder(z)
 
-            # binary cross entropy reconstruction loss
+            # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
             reconstruction_loss = ops.mean(
-                ops.sum(
-                    keras.losses.binary_crossentropy(data, reconstruction),
-                    axis=(1, 2),
-                )
+                ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+                        )
             )
+            # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
-            # root mean squared error reconstruction loss
-            # reconstruction_loss = root_mean_squared_error(data, reconstruction)
-            # reconstruction_loss = ops.sqrt(ops.mean(ops.sum(ops.square(data - reconstruction), axis=(1, 2, 3))))
-
-            # get the kl divergence (mean for each extracted feature)
+            # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
             kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
             kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+            # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+            # kl_loss = ops.mean(kl_loss, axis=1)
 
-            # loss is the sum of reconstruction loss and kl divergence
+            # total loss is the sum of reconstruction loss and kl divergence
             total_loss = reconstruction_loss + kl_loss
 
-        # gradient decent based on loss
+        # gradient decent based on total loss
         grads = tape.gradient(total_loss, self.trainable_weights)
         self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+
+        # update loss trackers
         self.total_loss_tracker.update_state(total_loss)
         self.reconstruction_loss_tracker.update_state(reconstruction_loss)
         self.kl_loss_tracker.update_state(kl_loss)
@@ -347,6 +345,56 @@ print(len(med_pca_features))
 
 
 
+
+
+# transition plot for group of features
+
+chosen_features = [0, 1, 2, 3, 4]
+
+fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features, 8))
+
+for i, feature in enumerate(chosen_features):
+
+    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+
+    for j in range(num_varying_features):
+
+        temp_pca_features = med_pca_features.copy()
+        temp_pca_features[feature] = varying_feature_values[j]
+
+        temp_features = temp_pca_features
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        temp_features = pca.inverse_transform(temp_pca_features)
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        reconstruction = vae.decoder.predict(temp_features)[0]
+
+        axs[i][j].imshow(reconstruction)
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
+
+        if j == (num_varying_features - 1)/2:
+            axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
+
+plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # transition plot for all extracted features
 
 # fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(15, 25))
@@ -417,38 +465,11 @@ print(len(med_pca_features))
 
 
 
-# transition plot for group of features
 
-chosen_features = [0, 1, 2, 3, 4]
 
-fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features, 8))
 
-for i, feature in enumerate(chosen_features):
 
-    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
 
-    for j in range(num_varying_features):
-
-        temp_pca_features = med_pca_features.copy()
-        temp_pca_features[feature] = varying_feature_values[j]
-
-        temp_features = temp_pca_features
-        temp_features = np.expand_dims(temp_features, axis=0)
-
-        temp_features = pca.inverse_transform(temp_pca_features)
-        temp_features = np.expand_dims(temp_features, axis=0)
-
-        reconstruction = vae.decoder.predict(temp_features)[0]
-
-        axs[i][j].imshow(reconstruction)
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-        axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
-
-        if j == (num_varying_features - 1)/2:
-            axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
-
-plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
-plt.show()
 
 
 
