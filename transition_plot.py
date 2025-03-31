@@ -14,7 +14,8 @@ import random
 
 
 
-encoding_dim = 24
+# encoding_dim = 24
+encoding_dim = 18
 run = 2
 epochs = 750
 batch_size = 32
