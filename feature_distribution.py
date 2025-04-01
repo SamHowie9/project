@@ -79,10 +79,10 @@ sns.histplot(x=np.log10(extracted_features.T[0]), ax=axs, bins=50)
 
 # sns.kdeplot(extracted_features.T[0], common_norm=False, ax=axs, color="black")
 
-np.set_printoptions(precision=15)
+np.set_printoptions(precision=3)
 
-print(np.log10(extracted_features.T[0]))
-print(np.min(extracted_features.T[0]))
-print(np.max(extracted_features.T[0]))
+print(np.log10(extracted_features.T[3]))
+print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
+print(np.max(extracted_features.T[3]))
 
 plt.show()
