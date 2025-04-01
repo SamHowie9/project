@@ -16,11 +16,11 @@ from matplotlib import image as mpimg
 
 
 encoding_dim = 25
-run = 5
+run = 6
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="6"
 
 # number of epochs for run
 epochs = 750
@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [5]:
+for run in [6]:
 
     # normalise each band individually
     def normalise_independently(image):
