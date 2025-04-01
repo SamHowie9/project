@@ -418,11 +418,12 @@ for run in [1, 2, 3]:
                 reconstruction = self.decoder(z)
 
                 # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
-                reconstruction_loss = ops.mean(
-                    ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
-                    )
-                )
+                # reconstruction_loss = ops.mean(
+                #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+                #     )
+                # )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
