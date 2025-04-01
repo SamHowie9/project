@@ -16,11 +16,11 @@ from matplotlib import image as mpimg
 
 
 encoding_dim = 25
-run = 3
+run = 4
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 # number of epochs for run
 epochs = 200
@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [3]:
+for run in [4]:
 
     # normalise each band individually
     def normalise_independently(image):
@@ -431,6 +431,7 @@ for run in [3]:
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
                 reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
                 reconstruction_loss = reconstruction_loss / (256 * 256)
+                reconstruction_loss = ops.mean(reconstruction_loss)
 
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
@@ -442,6 +443,7 @@ for run in [3]:
                 # kl_loss = ops.mean(kl_loss, axis=1)
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 kl_loss = ops.sum(kl_loss, axis=1) / encoding_dim
+                kl_loss = ops.mean(kl_loss)
 
                 print("KL Loss Shape:", kl_loss.shape)
 
