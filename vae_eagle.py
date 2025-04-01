@@ -595,14 +595,14 @@ for run in [1, 2, 3]:
 
     fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
-    axs[0].plot(model_loss.history["total_loss"], label="Total Loss", color="black")
+    axs[0].plot(model_loss.history["loss"], label="Total Loss", color="black")
     axs[0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
     axs[0].plot(model_loss.history["kl_loss"], label="KL Divergence")
     axs[0].lengend()
     axs[0].set_xlabel("Epoch")
     axs[0].set_ylabel("Loss")
 
-    axs[1].plot(np.log10(model_loss.history["total_loss"]), label="Total Loss", color="black")
+    axs[1].plot(np.log10(model_loss.history["loss"]), label="Total Loss", color="black")
     axs[1].plot(np.log10(model_loss.history["reconstruction_loss"]), label="Reconstruction Loss", color="C0")
     axs[1].plot(np.log10(model_loss.history["kl_loss"]), label="KL Divergence", color="C1")
     axs[1].legend()
