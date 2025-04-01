@@ -598,7 +598,7 @@ for run in [1, 2, 3]:
     axs[0].plot(model_loss.history["loss"], label="Total Loss", color="black")
     axs[0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
     axs[0].plot(model_loss.history["kl_loss"], label="KL Divergence")
-    axs[0].lengend()
+    axs[0].legend()
     axs[0].set_xlabel("Epoch")
     axs[0].set_ylabel("Loss")
 
