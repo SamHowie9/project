@@ -415,6 +415,7 @@ for run in [1, 2, 3]:
                 z_mean, z_log_var, z = self.encoder(data)
 
                 print("Z Mean Shape", z_mean.shape)
+                print("Z Shape", z.shape)
 
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
