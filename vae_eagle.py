@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [1, 2, 3]:
+for run in [1]:
 
     # normalise each band individually
     def normalise_independently(image):
@@ -597,7 +597,7 @@ for run in [1, 2, 3]:
 
     axs[0].plot(model_loss.history["loss"], label="Total Loss", color="black")
     axs[0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
-    axs[0].plot(model_loss.history["kl_loss"], label="KL Divergence")
+    axs[0].plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
     axs[0].legend()
     axs[0].set_xlabel("Epoch")
     axs[0].set_ylabel("Loss")
@@ -609,10 +609,13 @@ for run in [1, 2, 3]:
     axs[1].set_xlabel("Epoch")
     axs[1].set_ylabel("Log(Loss)")
 
-    axs[2].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    reconstruction_plot = axs[2].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
     axs2 = axs[2].twinx()
-    axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
-    axs[2].legend()
+    kl_plot = axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    plots = [reconstruction_plot, kl_plot]
+    labels = [plot.get_label() for plot in plots]
+    axs[2].legend(plots, labels)
+    # axs[2].legend()
     axs[2].set_xlabel("Epoch")
     axs[2].set_ylabel("Reconstruction Loss")
     axs2.set_ylabel("KL Divergence")
