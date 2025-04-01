@@ -414,6 +414,8 @@ for run in [1, 2, 3]:
                 # get the latent representation (run image through the encoder)
                 z_mean, z_log_var, z = self.encoder(data)
 
+                print("Z Mean Shape", z_mean.shape)
+
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
 
@@ -424,6 +426,10 @@ for run in [1, 2, 3]:
                 # )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
                 reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
+                reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2)) / (256 * 256)
+
+                print("reconstruction shape", reconstruction_loss.shape)
+
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
@@ -431,8 +437,14 @@ for run in [1, 2, 3]:
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 kl_loss = ops.mean(kl_loss, axis=1)
 
+                print("kl shape", kl_loss.shape)
+
+
                 # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
+
+                print("total loss shape", total_loss.shape)
+
 
             # gradient decent based on total loss
             grads = tape.gradient(total_loss, self.trainable_weights)
