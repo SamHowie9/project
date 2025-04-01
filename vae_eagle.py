@@ -407,6 +407,8 @@ for run in [1, 2, 3]:
         # custom train step
         def train_step(self, data):
 
+            print(data.shape)
+
             with tf.GradientTape() as tape:
 
                 # get the latent representation (run image through the encoder)
