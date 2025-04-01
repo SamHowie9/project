@@ -609,12 +609,12 @@ for run in [1]:
     axs[1].set_xlabel("Epoch")
     axs[1].set_ylabel("Log(Loss)")
 
-    reconstruction_plot = axs[2].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    axs[2].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
     axs2 = axs[2].twinx()
-    kl_plot = axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
-    plots = [axs[2].get_lines(), axs2.get_lines()]
-    labels = [plot.get_label() for plot in plots]
-    axs[2].legend(plots, labels)
+    axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    lines = axs[2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    labels = axs[2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    axs[2].legend(lines, labels)
     # axs[2].legend()
     axs[2].set_xlabel("Epoch")
     axs[2].set_ylabel("Reconstruction Loss")
