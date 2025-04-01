@@ -449,7 +449,7 @@ for run in [1, 2, 3]:
                 # total loss is the sum of reconstruction loss and kl divergence
                 total_loss = reconstruction_loss + kl_loss
 
-                print("total loss shape", total_loss.shape)
+                print("Total Loss Shape:", total_loss.shape)
 
 
             # gradient decent based on total loss
@@ -593,7 +593,7 @@ for run in [1, 2, 3]:
     # log scale and normal
 
 
-    fig, axs = plt.subplot(3, 1, figsize=(12, 15))
+    fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
     axs[0].plot(model_loss.history["total_loss"], label="Total Loss", color="black")
     axs[0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
