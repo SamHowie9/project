@@ -426,7 +426,7 @@ for run in [1, 2, 3]:
                 #     )
                 # )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
-                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
+                # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
                 reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2)) / (256 * 256)
 
                 print("reconstruction shape", reconstruction_loss.shape)
@@ -435,8 +435,10 @@ for run in [1, 2, 3]:
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                # kl_loss = ops.mean(kl_loss, axis=1)
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(kl_loss, axis=1)
+                kl_loss = ops.sum(kl_loss, axis=1) / encoding_dim
 
                 print("kl shape", kl_loss.shape)
 
