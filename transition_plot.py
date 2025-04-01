@@ -1,4 +1,7 @@
 import os
+
+from pyexpat import features
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -388,6 +391,9 @@ for i, feature in enumerate(chosen_features):
 
 plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/ellipticals_median_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run) + "_" + str(num_varying_features) + "_images", bbox_inches='tight')
 plt.show()
+
+
+not subset of extracted features
 
 
 
