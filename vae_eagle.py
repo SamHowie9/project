@@ -23,7 +23,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
-epochs = 750
+epochs = 10
 
 # batch size for run
 batch_size = 32
@@ -407,18 +407,20 @@ for run in [1, 2, 3]:
         # custom train step
         def train_step(self, data):
 
-            print("Data Shape", data.shape)
+            print("Data Shape:", data.shape)
 
             with tf.GradientTape() as tape:
 
                 # get the latent representation (run image through the encoder)
                 z_mean, z_log_var, z = self.encoder(data)
 
-                print("Z Mean Shape", z_mean.shape)
-                print("Z Shape", z.shape)
+                print("Z Mean Shape:", z_mean.shape)
+                print("Z Shape:", z.shape)
 
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
+
+                print("Reconstruction Shape:", reconstruction.shape)
 
                 # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
                 # reconstruction_loss = ops.mean(
@@ -427,9 +429,10 @@ for run in [1, 2, 3]:
                 # )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
-                reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2)) / (256 * 256)
+                reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
+                reconstruction_loss = reconstruction_loss / (256 * 256)
 
-                print("reconstruction shape", reconstruction_loss.shape)
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
@@ -440,7 +443,7 @@ for run in [1, 2, 3]:
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 kl_loss = ops.sum(kl_loss, axis=1) / encoding_dim
 
-                print("kl shape", kl_loss.shape)
+                print("KL Loss Shape:", kl_loss.shape)
 
 
                 # total loss is the sum of reconstruction loss and kl divergence
@@ -575,16 +578,44 @@ for run in [1, 2, 3]:
 
 
 
+    # # loss plot for individual run
+    # fig, axs1 = plt.subplots()
+    # axs1.plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss")
+    # axs1.set_ylabel("reconstruction loss")
+    # axs2 = axs1.twinx()
+    # axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
+    # axs2.set_ylabel("KL Loss")
+    # plt.legend()
+    #
+    # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
+    # plt.show()
+
+    # log scale and normal
 
 
-    # loss plot for individual run
-    fig, axs1 = plt.subplots()
-    axs1.plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss")
-    axs1.set_ylabel("reconstruction loss")
-    axs2 = axs1.twinx()
-    axs2.plot(model_loss.history["kl_loss"], label="KL Loss", color="y")
-    axs2.set_ylabel("KL Loss")
-    plt.legend()
+    fig, axs = plt.subplot(3, 1, figsize=(12, 15))
+
+    axs[0].plot(model_loss.history["total_loss"], label="Total Loss", color="black")
+    axs[0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    axs[0].plot(model_loss.history["kl_loss"], label="KL Divergence")
+    axs[0].lengend()
+    axs[0].set_xlabel("Epoch")
+    axs[0].set_ylabel("Loss")
+
+    axs[1].plot(np.log10(model_loss.history["total_loss"]), label="Total Loss", color="black")
+    axs[1].plot(np.log10(model_loss.history["reconstruction_loss"]), label="Reconstruction Loss", color="C0")
+    axs[1].plot(np.log10(model_loss.history["kl_loss"]), label="KL Divergence", color="C1")
+    axs[1].legend()
+    axs[1].set_xlabel("Epoch")
+    axs[1].set_ylabel("Log(Loss)")
+
+    axs[2].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    axs2 = axs[2].twinx()
+    axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    axs[2].legend()
+    axs[2].set_xlabel("Epoch")
+    axs[2].set_ylabel("Reconstruction Loss")
+    axs2.set_ylabel("KL Divergence")
 
     plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
     plt.show()
@@ -593,7 +624,50 @@ for run in [1, 2, 3]:
 
 
 
-    # Form reconstructions
+
+
+
+
+    # Training Reconstructions
+
+    # number of images to reconstruct
+    n = 12
+
+    # create a subset of the validation data to reconstruct (first 10 images)
+    images_to_reconstruct = train_images[n:]
+
+    # reconstruct the images
+    test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
+    reconstructed_images = vae.decoder.predict(test_features)
+
+    # create figure to hold subplots
+    fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
+
+    # plot each subplot
+    for i in range(0, n - 1):
+        original_image = normalise_independently(images_to_reconstruct[i])
+        reconstructed_image = normalise_independently(reconstructed_images[i])
+
+        # show the original image (remove axes)
+        axs[0, i].imshow(original_image)
+        axs[0, i].get_xaxis().set_visible(False)
+        axs[0, i].get_yaxis().set_visible(False)
+
+        # show the reconstructed image (remove axes)
+        axs[1, i].imshow(reconstructed_image)
+        axs[1, i].get_xaxis().set_visible(False)
+        axs[1, i].get_yaxis().set_visible(False)
+
+    plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
+    plt.show()
+
+
+
+
+
+
+
+    # Testing Reconstructions
 
     # number of images to reconstruct
     n = 12
@@ -601,8 +675,6 @@ for run in [1, 2, 3]:
     # create a subset of the validation data to reconstruct (first 10 images)
     images_to_reconstruct = test_images[:n]
     # images_to_reconstruct = train_images[n:]
-
-    # print(images_to_reconstruct.shape)
 
     # reconstruct the images
     test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
@@ -618,13 +690,11 @@ for run in [1, 2, 3]:
         reconstructed_image = normalise_independently(reconstructed_images[i])
 
         # show the original image (remove axes)
-        # axs[0,i].imshow(images_to_reconstruct[i])
         axs[0,i].imshow(original_image)
         axs[0,i].get_xaxis().set_visible(False)
         axs[0,i].get_yaxis().set_visible(False)
 
         # show the reconstructed image (remove axes)
-        # axs[1,i].imshow(reconstructed_images[i])
         axs[1,i].imshow(reconstructed_image)
         axs[1,i].get_xaxis().set_visible(False)
         axs[1,i].get_yaxis().set_visible(False)
