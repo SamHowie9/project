@@ -24,7 +24,7 @@ from scipy.interpolate import interpn
 
 encoding_dim = 25
 run = 1
-epochs = 750
+epochs = 200
 batch_size = 32
 
 
