@@ -33,7 +33,7 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [6]:
+for run in [1]:
 
     # normalise each band individually
     def normalise_independently(image):
@@ -449,7 +449,7 @@ for run in [6]:
 
 
                 # total loss is the sum of reconstruction loss and kl divergence
-                total_loss = reconstruction_loss + kl_loss
+                total_loss = reconstruction_loss + (10 * kl_loss)
 
                 print("Total Loss Shape:", total_loss.shape)
 
