@@ -20,7 +20,7 @@ run = 6
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 # number of epochs for run
 epochs = 750
@@ -451,7 +451,7 @@ for run in [1]:
 
                 # total loss is the sum of reconstruction loss and kl divergence
                 # total_loss = reconstruction_loss + kl_loss
-                total_loss = reconstruction_loss + (10 * kl_loss)
+                total_loss = reconstruction_loss + (20 * kl_loss)
 
                 print("Total Loss Shape:", total_loss.shape)
 
@@ -566,13 +566,13 @@ for run in [1]:
 
     # save the weights
     # vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
-    vae.save_weights(filepath="Variational Eagle/Weights/Test/min_beta_10.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Test/min_beta_20.weights.h5", overwrite=True)
 
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
     # np.save("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
-    np.save("Variational Eagle/Extracted Features/Test/min_beta_10.npy", extracted_features)
+    np.save("Variational Eagle/Extracted Features/Test/min_beta_20.npy", extracted_features)
 
     print(np.array(extracted_features).shape)
 
@@ -581,7 +581,7 @@ for run in [1]:
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
     # np.save("Variational Eagle/Loss/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
-    np.save("Variational Eagle/Loss/Test/min_beta_10.npy", loss)
+    np.save("Variational Eagle/Loss/Test/min_beta_20.npy", loss)
 
 
 
@@ -617,7 +617,7 @@ for run in [1]:
     axs2.set_ylabel("KL Divergence")
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/test_min_beta_10")
+    plt.savefig("Variational Eagle/Loss Plots/test_min_beta_20")
     plt.show()
 
 
@@ -659,7 +659,7 @@ for run in [1]:
         axs[1, i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/test_min_beta_10")
+    plt.savefig("Variational Eagle/Reconstructions/Training/test_min_beta_20")
     plt.show()
 
 
@@ -701,7 +701,7 @@ for run in [1]:
         axs[1,i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/test_min_beta_10")
+    plt.savefig("Variational Eagle/Reconstructions/Testing/test_min_beta_20")
     plt.show()
 
 
