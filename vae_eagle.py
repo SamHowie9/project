@@ -1,4 +1,7 @@
 import os
+
+from loss import reconstruction_loss
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -16,14 +19,14 @@ from matplotlib import image as mpimg
 
 
 encoding_dim = 25
-run = 6
+run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
-epochs = 750
+epochs = 12
 
 # batch size for run
 batch_size = 32
@@ -429,22 +432,31 @@ for run in [1]:
                 # )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
-                reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
-                reconstruction_loss = reconstruction_loss / (256 * 256)
-                reconstruction_loss = ops.mean(reconstruction_loss)
+                # reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
+                # reconstruction_loss = reconstruction_loss / (256 * 256)
+                # reconstruction_loss = ops.mean(reconstruction_loss)
+                reconstruction_loss = ops.mean(ops.sqrt(keras.losses.mean_squared_error(data, reconstruction)))
 
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
+                # rmse over bce (per pixel)
+
+                # train reconstruction sum over pixel, kl per feature (and with beta)
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 # kl_loss = ops.mean(kl_loss, axis=1)
+                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                # kl_loss = ops.sum(kl_loss, axis=1) / encoding_dim
+                # kl_loss = ops.mean(kl_loss)
+                # kl_loss = ops.maximum(kl_loss, 1e-3)
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.sum(kl_loss, axis=1) / encoding_dim
                 kl_loss = ops.mean(kl_loss)
-                kl_loss = ops.maximum(kl_loss, 1e-3)
+
+
+                # 0.01, 0.1
 
                 print("KL Loss Shape:", kl_loss.shape)
 
@@ -566,13 +578,13 @@ for run in [1]:
 
     # save the weights
     # vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
-    vae.save_weights(filepath="Variational Eagle/Weights/Test/min_normal.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Test/rmse.weights.h5", overwrite=True)
 
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
     # np.save("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
-    np.save("Variational Eagle/Extracted Features/Test/min_normal.npy", extracted_features)
+    np.save("Variational Eagle/Extracted Features/Test/rmse.npy", extracted_features)
 
     print(np.array(extracted_features).shape)
 
@@ -581,7 +593,7 @@ for run in [1]:
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
     # np.save("Variational Eagle/Loss/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
-    np.save("Variational Eagle/Loss/Test/min_normal.npy", loss)
+    np.save("Variational Eagle/Loss/Test/rmse.npy", loss)
 
 
 
@@ -589,37 +601,104 @@ for run in [1]:
 
 
 
-    fig, axs = plt.subplots(3, 1, figsize=(12, 15))
+    fig, axs = plt.subplots(3, 2, figsize=(20, 15))
 
-    axs[0].plot(model_loss.history["loss"], label="Total Loss", color="black")
-    axs[0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
-    axs[0].plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
-    axs[0].legend()
-    axs[0].set_xlabel("Epoch")
-    axs[0].set_ylabel("Loss")
+    axs[0][0].plot(model_loss.history["loss"], label="Total Loss", color="black")
+    axs[0][0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    axs[0][0].plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    axs[0][0].legend()
+    axs[0][0].set_xlabel("Epoch")
+    axs[0][0].set_ylabel("Loss")
 
-    axs[1].plot(np.log10(model_loss.history["loss"]), label="Total Loss", color="black")
-    axs[1].plot(np.log10(model_loss.history["reconstruction_loss"]), label="Reconstruction Loss", color="C0")
-    axs[1].plot(np.log10(model_loss.history["kl_loss"]), label="KL Divergence", color="C1")
-    axs[1].legend()
-    axs[1].set_xlabel("Epoch")
-    axs[1].set_ylabel("Log(Loss)")
+    axs[0][1].plot(model_loss.history["loss"][:10], label="Total Loss", color="black")
+    axs[0][1].plot(model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
+    axs[0][1].plot(model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
+    axs[0][1].legend()
+    axs[0][1].set_xlabel("Epoch")
+    axs[0][1].set_ylabel("Loss")
 
-    axs[2].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
-    axs2 = axs[2].twinx()
+
+    axs[1][0].plot(np.log10(model_loss.history["loss"]), label="Total Loss", color="black")
+    axs[1][0].plot(np.log10(model_loss.history["reconstruction_loss"]), label="Reconstruction Loss", color="C0")
+    axs[1][0].plot(np.log10(model_loss.history["kl_loss"]), label="KL Divergence", color="C1")
+    axs[1][0].legend()
+    axs[1][0].set_xlabel("Epoch")
+    axs[1][0].set_ylabel("Log(Loss)")
+
+    axs[1][1].plot(np.log10(model_loss.history["loss"][:10]), label="Total Loss", color="black")
+    axs[1][1].plot(np.log10(model_loss.history["reconstruction_loss"][:10]), label="Reconstruction Loss", color="C0")
+    axs[1][1].plot(np.log10(model_loss.history["kl_loss"][:10]), label="KL Divergence", color="C1")
+    axs[1][1].legend()
+    axs[1][1].set_xlabel("Epoch")
+    axs[1][1].set_ylabel("Log(Loss)")
+
+
+    axs[2][0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    axs2 = axs[2][0].twinx()
     axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
-    lines = axs[2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
-    labels = axs[2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
-    axs[2].legend(lines, labels)
+    lines = axs[2][0].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    labels = axs[2][0].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    axs[2][0].legend(lines, labels)
     # axs[2].legend()
-    axs[2].set_xlabel("Epoch")
-    axs[2].set_ylabel("Reconstruction Loss")
+    axs[2][0].set_xlabel("Epoch")
+    axs[2][0].set_ylabel("Reconstruction Loss")
     axs2.set_ylabel("KL Divergence")
 
+    axs[2][1].plot(model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
+    axs2 = axs[2][1].twinx()
+    axs2.plot(model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
+    lines = axs[2][1].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    labels = axs[2][1].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    axs[2][1].legend(lines, labels)
+    # axs[2].legend()
+    axs[2][1].set_xlabel("Epoch")
+    axs[2][1].set_ylabel("Reconstruction Loss")
+    axs2.set_ylabel("KL Divergence")
+
+
+
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/test_min_normal")
+    plt.savefig("Variational Eagle/Loss Plots/test_rmse")
     plt.show()
 
+
+
+
+
+
+    # fig, axs = plt.subplots(3, 1, figsize=(12, 15))
+    #
+    # axs[0].plot(model_loss.history["loss"], label="Total Loss", color="black")
+    # axs[0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    # axs[0].plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    # axs[0].legend()
+    # axs[0].set_xlabel("Epoch")
+    # axs[0].set_ylabel("Loss")
+    #
+    # axs[1].plot(np.log10(model_loss.history["loss"]), label="Total Loss", color="black")
+    # axs[1].plot(np.log10(model_loss.history["reconstruction_loss"]), label="Reconstruction Loss", color="C0")
+    # axs[1].plot(np.log10(model_loss.history["kl_loss"]), label="KL Divergence", color="C1")
+    # axs[1].legend()
+    # axs[1].set_xlabel("Epoch")
+    # axs[1].set_ylabel("Log(Loss)")
+    #
+    # axs[2].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    # axs2 = axs[2].twinx()
+    # axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    # lines = axs[2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    # labels = axs[2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    # axs[2].legend(lines, labels)
+    # # axs[2].legend()
+    # axs[2].set_xlabel("Epoch")
+    # axs[2].set_ylabel("Reconstruction Loss")
+    # axs2.set_ylabel("KL Divergence")
+    #
+    # # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
+    # plt.savefig("Variational Eagle/Loss Plots/test_min_normal")
+    # plt.show()
+
+
+    zoom in on loss plot and place to the right (epoch 1-10)
 
 
 
@@ -659,7 +738,7 @@ for run in [1]:
         axs[1, i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/test_min_normal")
+    plt.savefig("Variational Eagle/Reconstructions/Training/test_rmse")
     plt.show()
 
 
@@ -701,7 +780,7 @@ for run in [1]:
         axs[1,i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/test_min_normal")
+    plt.savefig("Variational Eagle/Reconstructions/Testing/test_rmse")
     plt.show()
 
 
