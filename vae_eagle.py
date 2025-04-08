@@ -698,7 +698,7 @@ for run in [1]:
     # plt.show()
 
 
-    zoom in on loss plot and place to the right (epoch 1-10)
+    # zoom in on loss plot and place to the right (epoch 1-10)
 
 
 
