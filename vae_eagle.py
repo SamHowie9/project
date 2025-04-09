@@ -432,7 +432,8 @@ for run in [1]:
                 # reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
                 # reconstruction_loss = reconstruction_loss / (256 * 256)
                 # reconstruction_loss = ops.mean(reconstruction_loss)
-                reconstruction_loss = ops.mean(ops.sqrt(keras.losses.mean_squared_error(data, reconstruction)))
+                # reconstruction_loss = ops.mean(ops.sqrt(keras.losses.mean_squared_error(data, reconstruction)))
+                reconstruction_loss = ops.sqrt(keras.losses.mean_squared_error(data, reconstruction))
 
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape, reconstruction_loss)
 
