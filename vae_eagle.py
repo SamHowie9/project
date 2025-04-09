@@ -499,7 +499,7 @@ for run in [1]:
 
 
 
-                reconstruction_loss = keras.losses.MeanSquaredError(data, reconstruction)
+                reconstruction_loss = keras.losses.binary_crossentropy(data, reconstruction)
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
