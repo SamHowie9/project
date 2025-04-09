@@ -436,13 +436,13 @@ for run in [1]:
                 # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction)))
 
                 reconstruction_loss = data - reconstruction
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape, K.eval(reconstruction_loss))
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
                 reconstruction_loss = ops.square(data - reconstruction)
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape, K.eval(reconstruction_loss))
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
                 reconstruction_loss = ops.mean(ops.square(data - reconstruction))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape, K.eval(reconstruction_loss))
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
                 reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction)))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape, K.eval(reconstruction_loss))
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
                 # rmse over bce (per pixel)
