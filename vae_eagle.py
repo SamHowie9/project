@@ -439,9 +439,11 @@ for run in [1]:
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
                 reconstruction_loss = ops.square(data - reconstruction)
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.mean(ops.square(data - reconstruction))
+                reconstruction_loss = ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
                 reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction)))
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                reconstruction_loss = ops.mean(ops.sqrt(ops.mean(ops.square(data - reconstruction))))
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
