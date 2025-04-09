@@ -499,12 +499,12 @@ for run in [1]:
 
 
 
-                reconstruction_loss = keras.losses.binary_crossentropy(data, reconstruction)
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                reconstruction_loss_test = keras.losses.MeanSquaredError(data, reconstruction)
+                print("Reconstruction Loss Shape:", reconstruction_loss_test.shape)
 
 
                 # reconstruction loss
-                reconstruction_loss = ops.sum(ops.mean(keras.losses.MeanSquaredError(data, reconstruction), axis=(1, 2, 3)))
+                reconstruction_loss = ops.sum(ops.mean(keras.losses.MeanSquaredError(data, reconstruction), axis=(1, 2)))
 
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
