@@ -434,7 +434,7 @@ for run in [1]:
                 # reconstruction_loss = ops.mean(reconstruction_loss)
                 reconstruction_loss = ops.mean(ops.sqrt(keras.losses.mean_squared_error(data, reconstruction)))
 
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape, reconstruction_loss)
 
                 # rmse over bce (per pixel)
 
