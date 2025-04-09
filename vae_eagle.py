@@ -1,4 +1,7 @@
 import os
+
+from loss import reconstruction_loss
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -499,6 +502,8 @@ for run in [1]:
 
 
 
+                reconstruction_loss = keras.losses.MeanSquaredError(data, reconstruction)
+                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
                 # reconstruction loss
