@@ -447,9 +447,14 @@ for run in [1]:
                 # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
+
+
                 # rmse over bce (per pixel)
 
                 # train reconstruction sum over pixel, kl per feature (and with beta)
+
+
+
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
@@ -461,12 +466,13 @@ for run in [1]:
                 # kl_loss = ops.mean(kl_loss)
                 # kl_loss = ops.maximum(kl_loss, 1e-3)
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(kl_loss)
-
-
-                # 0.01, 0.1
-
                 print("KL Loss Shape:", kl_loss.shape)
+                kl_loss = ops.mean(kl_loss)
+                print("KL Loss Shape:", kl_loss.shape)
+
+
+
+
 
 
                 # total loss is the sum of reconstruction loss and kl divergence
