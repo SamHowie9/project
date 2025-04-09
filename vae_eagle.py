@@ -423,10 +423,10 @@ for run in [1]:
                 print("Reconstruction Shape:", reconstruction.shape)
 
                 # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
-                # reconstruction_loss = ops.mean(
-                #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
-                #     )
-                # )
+                reconstruction_loss = ops.mean(
+                    ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+                    )
+                )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
                 # reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
@@ -435,16 +435,16 @@ for run in [1]:
                 # reconstruction_loss = ops.mean(ops.sqrt(keras.losses.mean_squared_error(data, reconstruction)))
                 # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction)))
 
-                reconstruction_loss = data - reconstruction
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.square(data - reconstruction)
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3)))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.mean(ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = data - reconstruction
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.square(data - reconstruction)
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3)))
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.mean(ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))))
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
                 # rmse over bce (per pixel)
