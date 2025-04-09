@@ -23,7 +23,7 @@ os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
-epochs = 12
+epochs = 750
 
 # batch size for run
 batch_size = 32
@@ -423,10 +423,10 @@ for run in [1]:
                 print("Reconstruction Shape:", reconstruction.shape)
 
                 # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
-                # reconstruction_loss = ops.mean(
-                #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
-                #     )
-                # )
+                reconstruction_loss = ops.mean(
+                    ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
+                    )
+                )
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
                 # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
                 # reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
@@ -435,16 +435,16 @@ for run in [1]:
                 # reconstruction_loss = ops.mean(ops.sqrt(keras.losses.mean_squared_error(data, reconstruction)))
                 # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction)))
 
-                reconstruction_loss = data - reconstruction
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.square(data - reconstruction)
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3)))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                reconstruction_loss = ops.mean(ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))))
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = data - reconstruction
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.square(data - reconstruction)
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3)))
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                # reconstruction_loss = ops.mean(ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))))
+                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
 
 
 
@@ -457,19 +457,22 @@ for run in [1]:
 
 
                 # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+                kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 # kl_loss = ops.mean(kl_loss, axis=1)
                 # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 # kl_loss = ops.sum(kl_loss, axis=1) / encoding_dim
                 # kl_loss = ops.mean(kl_loss)
                 # kl_loss = ops.maximum(kl_loss, 1e-3)
-                kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                print("KL Loss Shape:", kl_loss.shape)
-                kl_loss = ops.mean(kl_loss)
-                print("KL Loss Shape:", kl_loss.shape)
+                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                # print("KL Loss Shape:", kl_loss.shape)
+                # kl_loss = ops.mean(kl_loss)
+                # print("KL Loss Shape:", kl_loss.shape)
 
+
+
+                print("KL Loss Shape:", kl_loss.shape)
 
 
 
@@ -592,13 +595,13 @@ for run in [1]:
 
     # save the weights
     # vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
-    vae.save_weights(filepath="Variational Eagle/Weights/Test/bce_sum.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Test/bce_sum_sum.weights.h5", overwrite=True)
 
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
     # np.save("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
-    np.save("Variational Eagle/Extracted Features/Test/bce_sum.npy", extracted_features)
+    np.save("Variational Eagle/Extracted Features/Test/bce_sum_sum.npy", extracted_features)
 
     print(np.array(extracted_features).shape)
 
@@ -607,7 +610,7 @@ for run in [1]:
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
     # np.save("Variational Eagle/Loss/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
-    np.save("Variational Eagle/Loss/Test/bce_sum.npy", loss)
+    np.save("Variational Eagle/Loss/Test/bce_sum_sum.npy", loss)
 
 
 
@@ -672,7 +675,7 @@ for run in [1]:
 
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/test_bce_sum")
+    plt.savefig("Variational Eagle/Loss Plots/test_bce_sum_sum")
     plt.show()
 
 
@@ -752,7 +755,7 @@ for run in [1]:
         axs[1, i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/test_bce_sum")
+    plt.savefig("Variational Eagle/Reconstructions/Training/test_bce_sum_sum")
     plt.show()
 
 
@@ -794,7 +797,7 @@ for run in [1]:
         axs[1,i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/test_bce_sum")
+    plt.savefig("Variational Eagle/Reconstructions/Testing/test_bce_sum_sum")
     plt.show()
 
 

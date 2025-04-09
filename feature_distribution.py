@@ -29,43 +29,43 @@ batch_size = 32
 
 
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Test/rmse.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Test/min_normal.npy")[0]
 
 print(extracted_features.shape)
 
-# # standard normal distribution
+# standard normal distribution
 # standard_normal = np.random.normal(0, 1, size=10000)
-#
-# fig, axs = plt.subplots(5, 5, figsize=(20, 20))
-#
-# for i in range(0, 5):
-#
-#     sns.histplot(x=extracted_features.T[i],ax=axs[0][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+5],ax=axs[1][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+10],ax=axs[2][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+15],ax=axs[3][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+20],ax=axs[4][i], bins=50)
-#
-#     # weights = np.ones_like(extracted_features.T[i]) * len(extracted_features.T[i])
-#
-#     # sns.kdeplot(x=standard_normal, ax=axs[i][0], color="black")
-#     # sns.kdeplot(x=extracted_features.T[i], weights=weights, ax=axs[0][i], color="black")
-#
-#
-#     axs[0][i].set_xlabel("Feature " + str(i))
-#     axs[1][i].set_xlabel("Feature " + str(i+5))
-#     axs[2][i].set_xlabel("Feature " + str(i+10))
-#     axs[3][i].set_xlabel("Feature " + str(i+15))
-#     axs[4][i].set_xlabel("Feature " + str(i+20))
-#
-#     for j in range(0, 5):
-#         axs[j][i].set_ylabel("")
+
+fig, axs = plt.subplots(5, 5, figsize=(20, 20))
+
+for i in range(0, 5):
+
+    sns.histplot(x=extracted_features.T[i],ax=axs[0][i], bins=50)
+    sns.histplot(x=extracted_features.T[i+5],ax=axs[1][i], bins=50)
+    sns.histplot(x=extracted_features.T[i+10],ax=axs[2][i], bins=50)
+    sns.histplot(x=extracted_features.T[i+15],ax=axs[3][i], bins=50)
+    sns.histplot(x=extracted_features.T[i+20],ax=axs[4][i], bins=50)
+
+    # weights = np.ones_like(extracted_features.T[i]) * len(extracted_features.T[i])
+
+    # sns.kdeplot(x=standard_normal, ax=axs[i][0], color="black")
+    # sns.kdeplot(x=extracted_features.T[i], weights=weights, ax=axs[0][i], color="black")
 
 
-fig, axs = plt.subplots(1, 1, figsize=(8, 5))
+    axs[0][i].set_xlabel("Feature " + str(i))
+    axs[1][i].set_xlabel("Feature " + str(i+5))
+    axs[2][i].set_xlabel("Feature " + str(i+10))
+    axs[3][i].set_xlabel("Feature " + str(i+15))
+    axs[4][i].set_xlabel("Feature " + str(i+20))
 
-# sns.histplot(x=np.log10(extracted_features.T[0]), ax=axs, bins=50)
-sns.histplot(x=extracted_features.T[0], ax=axs, bins=50, kde=True, fill=False, color="black")
+    for j in range(0, 5):
+        axs[j][i].set_ylabel("")
+
+
+# fig, axs = plt.subplots(1, 1, figsize=(8, 5))
+#
+# # sns.histplot(x=np.log10(extracted_features.T[0]), ax=axs, bins=50)
+# sns.histplot(x=extracted_features.T[0], ax=axs, bins=50, kde=True, fill=False, color="black")
 
 # standard_normal = np.random.normal(0, 1, size=10000)
 # sns.histplot(x=standard_normal, ax=axs, bins=50, kde=True, fill=False, color="black")
