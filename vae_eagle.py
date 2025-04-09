@@ -1,7 +1,4 @@
 import os
-
-from loss import reconstruction_loss
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -504,7 +501,7 @@ for run in [1]:
 
 
 
-                # # reconstruction loss
+                # reconstruction loss
                 # reconstruction_loss = ops.sum(ops.mean(keras.losses.MeanSquaredError(data, reconstruction), axis=(1, 2, 3)))
                 #
                 # # kl loss
