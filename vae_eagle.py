@@ -1,7 +1,4 @@
 import os
-
-from loss import reconstruction_loss
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
