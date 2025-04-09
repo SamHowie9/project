@@ -28,8 +28,10 @@ epochs = 200
 batch_size = 32
 
 
-extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Test/rmse.npy")
 
+print(extracted_features.shape)
 
 # # standard normal distribution
 # standard_normal = np.random.normal(0, 1, size=10000)
@@ -62,8 +64,8 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balance
 
 fig, axs = plt.subplots(1, 1, figsize=(8, 5))
 
-sns.histplot(x=np.log10(extracted_features.T[0]), ax=axs, bins=50)
-# sns.histplot(x=extracted_features.T[0], ax=axs, bins=50, kde=True, fill=False, color="black")
+# sns.histplot(x=np.log10(extracted_features.T[0]), ax=axs, bins=50)
+sns.histplot(x=extracted_features.T[0], ax=axs, bins=50, kde=True, fill=False, color="black")
 
 # standard_normal = np.random.normal(0, 1, size=10000)
 # sns.histplot(x=standard_normal, ax=axs, bins=50, kde=True, fill=False, color="black")
