@@ -499,8 +499,8 @@ for run in [1]:
 
 
 
-                reconstruction_loss_test = keras.losses.MeanSquaredError(data, reconstruction)
-                print("Reconstruction Loss Shape:", reconstruction_loss_test.shape)
+                # reconstruction_loss_test = keras.losses.MeanSquaredError(data, reconstruction)
+                # print("Reconstruction Loss Shape:", reconstruction_loss_test.shape)
 
 
                 # # reconstruction loss
