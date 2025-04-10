@@ -125,7 +125,7 @@ fig, axs = plt.subplots(6, 12, figsize=(12, 6))
 # plot each subplot
 for i in range(0, 12):
 
-    original_image = normalise_independently(images_to_reconstruct[i])
+    original_image = normalise_independently(test_images[:12])
 
     # show the original image (remove axes)
     axs[0, i].imshow(original_image)
