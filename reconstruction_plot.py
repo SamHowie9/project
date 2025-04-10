@@ -317,7 +317,7 @@ for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"],
 
 
 
-    vae.load_weights("Variational Eagle/Weights/Test/bce_" + filename + ".weights.h5")
+    vae.load_weights("Variational Eagle/Weights/Test/bce_beta_" + filename + ".weights.h5")
 
 
 
