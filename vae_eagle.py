@@ -601,7 +601,7 @@ for run in [1]:
     x = GlobalAveragePooling2D()(x)                                                                                 # (512)
     x = Dense(128, activation="relu")(x)                                                                            # (128)
 
-    z_mean = Dense(encoding_dim, name="z_mean")(x)
+    z_mean = Dense(encoding_dim, name="z_mean", activation="tanh")(x)
     z_log_var = Dense(encoding_dim, name="z_log_var", activation="relu")(x)
     z = Sampling()([z_mean, z_log_var])
 
