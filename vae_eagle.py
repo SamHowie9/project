@@ -603,8 +603,8 @@ for run in [1]:
     x = GlobalAveragePooling2D()(x)                                                                                 # (512)
     x = Dense(128, activation="relu")(x)                                                                            # (128)
 
-    z_mean = Dense(encoding_dim, name="z_mean", kernal_initialiser='zeros')(x)
-    z_log_var = Dense(encoding_dim, name="z_log_var", kernal_initialiser='zeros')(x)
+    z_mean = Dense(encoding_dim, name="z_mean", kernel_initializer='zeros')(x)
+    z_log_var = Dense(encoding_dim, name="z_log_var", kernel_initializer='zeros')(x)
     z = Sampling()([z_mean, z_log_var])
 
     # build the encoder
