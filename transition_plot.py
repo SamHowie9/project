@@ -1,7 +1,4 @@
 import os
-
-from pyexpat import features
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -393,7 +390,7 @@ plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/ellipticals_media
 plt.show()
 
 
-not subset of extracted features
+# not subset of extracted features
 
 
 
