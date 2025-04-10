@@ -524,10 +524,11 @@ for run in [1]:
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 kl_loss = ops.mean(kl_loss)
-                kl_loss = np.tanh(kl_loss)
+                # kl_loss = np.tanh(kl_loss)
 
                 # total loss
-                total_loss = reconstruction_loss + kl_loss
+                # total_loss = reconstruction_loss + kl_loss
+                total_loss = reconstruction_loss + np.tanh(kl_loss)
                 # total_loss = reconstruction_loss + (0.0000001 * kl_loss)
 
 
