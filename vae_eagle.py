@@ -516,14 +516,17 @@ for run in [1]:
 
 
                 # reconstruction loss
-                reconstruction_loss = ops.sum(ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2)))
+                # reconstruction_loss = ops.sum(ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2)))
+                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.sum(ops.mean(kl_loss, axis=1))
+                # kl_loss = ops.sum(ops.mean(kl_loss, axis=1))
+                kl_loss = ops.mean(kl_loss)
 
                 # total loss
-                total_loss = reconstruction_loss + kl_loss
+                # total_loss = reconstruction_loss + kl_loss
+                total_loss = reconstruction_loss + (0.1 * kl_loss)
 
 
 

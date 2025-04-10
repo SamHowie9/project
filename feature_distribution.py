@@ -29,7 +29,7 @@ batch_size = 32
 
 
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Test/min_normal.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_2.npy")[0]
 
 print(extracted_features.shape)
 
