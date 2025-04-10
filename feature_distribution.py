@@ -87,4 +87,5 @@ print(np.log10(extracted_features.T[3]))
 print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
 print(np.max(extracted_features.T[3]))
 
+plt.savefig("Variational Eagle/Plots/feature_distributions", bbox_inches='tight')
 plt.show()

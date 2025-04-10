@@ -599,7 +599,7 @@ for run in [1]:
     x = Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
     # x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
     x = GlobalAveragePooling2D()(x)                                                                                 # (512)
-    x = Dense(128, activation="tanh")(x)                                                                            # (128)
+    x = Dense(128, activation="relu")(x)                                                                            # (128)
 
     z_mean = Dense(encoding_dim, name="z_mean")(x)
     z_log_var = Dense(encoding_dim, name="z_log_var")(x)
