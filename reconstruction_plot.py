@@ -15,6 +15,22 @@ import random
 
 
 
+encoding_dim = 25
+run = 1
+
+# select which gpu to use
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
+# number of epochs for run
+epochs = 750
+
+# batch size for run
+batch_size = 32
+
+
+
+
 
 
 def normalise_independently(image):
@@ -264,8 +280,8 @@ for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"],
     x = GlobalAveragePooling2D()(x)                                                                                 # (512)
     x = Dense(128, activation="relu")(x)                                                                            # (128)
 
-    z_mean = Dense(encoding_dim, name="z_mean", kernel_initializer='zeros')(x)
-    z_log_var = Dense(encoding_dim, name="z_log_var", kernel_initializer='zeros')(x)
+    z_mean = Dense(encoding_dim, name="z_mean")(x)
+    z_log_var = Dense(encoding_dim, name="z_log_var")(x)
     z = Sampling()([z_mean, z_log_var])
 
     # build the encoder
