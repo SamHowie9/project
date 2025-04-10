@@ -122,10 +122,12 @@ train_images = np.array(train_images)
 
 fig, axs = plt.subplots(6, 12, figsize=(12, 6))
 
+images_to_reconstruct = test_images[:12]
+
 # plot each subplot
 for i in range(0, 12):
 
-    original_image = normalise_independently(test_images[:12])
+    original_image = normalise_independently(images_to_reconstruct[i])
 
     # show the original image (remove axes)
     axs[0, i].imshow(original_image)
