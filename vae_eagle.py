@@ -525,8 +525,8 @@ for run in [1]:
                 kl_loss = ops.mean(kl_loss)
 
                 # total loss
-                # total_loss = reconstruction_loss + kl_loss
-                total_loss = reconstruction_loss + (0.01 * kl_loss)
+                total_loss = reconstruction_loss + kl_loss
+                # total_loss = reconstruction_loss + (0.01 * kl_loss)
 
 
 
@@ -601,8 +601,8 @@ for run in [1]:
     x = GlobalAveragePooling2D()(x)                                                                                 # (512)
     x = Dense(128, activation="relu")(x)                                                                            # (128)
 
-    z_mean = Dense(encoding_dim, name="z_mean")(x)
-    z_log_var = Dense(encoding_dim, name="z_log_var")(x)
+    z_mean = Dense(encoding_dim, name="z_mean", activation="sigmoid")(x)
+    z_log_var = Dense(encoding_dim, name="z_log_var", activation="relu")(x)
     z = Sampling()([z_mean, z_log_var])
 
     # build the encoder
