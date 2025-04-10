@@ -14,6 +14,19 @@ import random
 
 
 
+
+
+
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
+
+
+
+
 # load the images as a fully balanced dataset
 
 # load structural and physical properties into dataframes
@@ -99,11 +112,7 @@ train_images = np.array(train_images)
 
 
 
-def normalise_independently(image):
-    image = image.T
-    for i in range(0, 3):
-        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
-    return image.T
+
 
 
 
