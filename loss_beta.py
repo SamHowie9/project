@@ -330,6 +330,6 @@ for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"],
 
 
 
-np.save("Variational Eagle/Loss/Ellipticals/total_loss_" + str(run), total_loss_all)
-np.save("Variational Eagle/Loss/Ellipticals/reconstruction_loss_" + str(run), reconstruction_loss_all)
-np.save("Variational Eagle/Loss/Ellipticals/kl_loss_" + str(run), kl_loss_all)
+np.save("Variational Eagle/Loss/Test/total_loss_beta", total_loss_all)
+np.save("Variational Eagle/Loss/Test/reconstruction_loss_beta", reconstruction_loss_all)
+np.save("Variational Eagle/Loss/Test/kl_loss_beta", kl_loss_all)
