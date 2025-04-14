@@ -32,7 +32,7 @@ batch_size = 32
 
 
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_0000001.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_00001.npy")[0]
 
 print(extracted_features.shape)
 
@@ -90,5 +90,5 @@ print(np.log10(extracted_features.T[3]))
 print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
 print(np.max(extracted_features.T[3]))
 
-plt.savefig("Variational Eagle/Plots/feature_distributions_0000001", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/feature_distributions_00001", bbox_inches='tight')
 plt.show()

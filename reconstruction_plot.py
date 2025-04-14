@@ -136,7 +136,8 @@ train_images = np.array(train_images)
 
 
 
-fig, axs = plt.subplots(6, 12, figsize=(12, 6))
+# fig, axs = plt.subplots(6, 12, figsize=(12, 6))
+fig, axs = plt.subplots(3, 12, figsize=(12, 3))
 
 images_to_reconstruct = test_images[:12]
 
@@ -154,7 +155,8 @@ for i in range(0, 12):
 
 
 
-for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"], [0.00001, "00001"], [0.000001, "000001"], [0.0000001, "0000001"]]):
+# for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"], [0.00001, "00001"], [0.000001, "000001"], [0.0000001, "0000001"]]):
+    for run_number, (beta, filename) in enumerate([[0.0001, "0001"], [0.00001, "00001"]]):
 
 
     # Define VAE model with custom train step
@@ -347,6 +349,6 @@ for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"],
         axs[run_number+1, i].get_yaxis().set_visible(False)
 
 # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-plt.savefig("Variational Eagle/Plots/beta_comparison_reconstruction")
+plt.savefig("Variational Eagle/Plots/beta_comparison_reconstruction_0001_00001")
 plt.show()
 
