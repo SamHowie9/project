@@ -20,7 +20,7 @@ run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 750
@@ -33,7 +33,10 @@ batch_size = 32
 
 
 # for run in range(2, 4):
-for run in [1]:
+# for run in [1]:
+for beta, beta_name in [[0.01, "01"], [0.05, "05"]]:
+
+    print("Beta:", beta, beta_name)
 
     # normalise each band individually
     def normalise_independently(image):
@@ -528,7 +531,7 @@ for run in [1]:
 
                 # total loss
                 # total_loss = reconstruction_loss + kl_loss
-                total_loss = reconstruction_loss + (0.0002 * kl_loss)
+                total_loss = reconstruction_loss + (beta * kl_loss)
 
 
 
@@ -603,8 +606,8 @@ for run in [1]:
     x = GlobalAveragePooling2D()(x)                                                                                 # (512)
     x = Dense(128, activation="relu")(x)                                                                            # (128)
 
-    z_mean = Dense(encoding_dim, name="z_mean", kernel_initializer='zeros')(x)
-    z_log_var = Dense(encoding_dim, name="z_log_var", kernel_initializer='zeros')(x)
+    z_mean = Dense(encoding_dim, name="z_mean")(x)
+    z_log_var = Dense(encoding_dim, name="z_log_var")(x)
     z = Sampling()([z_mean, z_log_var])
 
     # build the encoder
@@ -649,13 +652,13 @@ for run in [1]:
 
     # save the weights
     # vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
-    vae.save_weights(filepath="Variational Eagle/Weights/Test/bce_beta_0002.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Test/bce_beta_" + beta_name + ".weights.h5", overwrite=True)
 
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
     # np.save("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
-    np.save("Variational Eagle/Extracted Features/Test/bce_beta_0002.npy", extracted_features)
+    np.save("Variational Eagle/Extracted Features/Test/bce_beta_" + beta_name + ".npy", extracted_features)
 
     print(np.array(extracted_features).shape)
 
@@ -664,7 +667,7 @@ for run in [1]:
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
     # np.save("Variational Eagle/Loss/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
-    np.save("Variational Eagle/Loss/Test/bce_beta_0002.npy", loss)
+    np.save("Variational Eagle/Loss/Test/bce_beta_" + beta_name + ".npy", loss)
 
 
 
@@ -729,7 +732,7 @@ for run in [1]:
 
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/test_bce_beta_0002")
+    plt.savefig("Variational Eagle/Loss Plots/test_bce_beta_" + beta_name)
     plt.show()
 
 
@@ -809,7 +812,7 @@ for run in [1]:
         axs[1, i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/test_bce_beta_0002")
+    plt.savefig("Variational Eagle/Reconstructions/Training/test_bce_beta_" + beta_name)
     plt.show()
 
 
@@ -851,7 +854,7 @@ for run in [1]:
         axs[1,i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/test_bce_beta_0002")
+    plt.savefig("Variational Eagle/Reconstructions/Testing/test_bce_beta_" + beta_name)
     plt.show()
 
 
