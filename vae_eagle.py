@@ -20,7 +20,7 @@ run = 1
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="5"
 
 # number of epochs for run
 epochs = 750
@@ -34,7 +34,7 @@ batch_size = 32
 
 # for run in range(2, 4):
 # for run in [1]:
-for beta, beta_name in [[0.00001, "01"], [0.00005, "05"]]:
+for beta, beta_name in [[0.000001, "01"], [0.000005, "05"]]:
 
     print("Beta:", beta, beta_name)
 
