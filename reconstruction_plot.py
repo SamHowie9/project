@@ -156,7 +156,7 @@ for i in range(0, 12):
 
 
 # for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"], [0.00001, "00001"], [0.000001, "000001"], [0.0000001, "0000001"]]):
-    for run_number, (beta, filename) in enumerate([[0.0001, "0001"], [0.00001, "00001"]]):
+for run_number, (beta, filename) in enumerate([[0.0001, "0001"], [0.00001, "00001"]]):
 
 
     # Define VAE model with custom train step
