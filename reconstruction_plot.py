@@ -151,6 +151,8 @@ for i in range(0, 12):
     axs[0, i].get_xaxis().set_visible(False)
     axs[0, i].get_yaxis().set_visible(False)
 
+axs[0][0].set_ylabel("Original")
+
 
 
 
@@ -348,7 +350,9 @@ for run_number, (beta, filename) in enumerate([[0.01, "01"], [0.001, "001"], [0.
         axs[run_number+1, i].get_xaxis().set_visible(False)
         axs[run_number+1, i].get_yaxis().set_visible(False)
 
+    axs[run_number+1][0].set_ylabel("β = " + str(beta))
+
 # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-plt.savefig("Variational Eagle/Plots/beta_comparison_reconstruction")
+plt.savefig("Variational Eagle/Plots/beta_comparison_reconstruction", bbox_inches='tight')
 plt.show()
 
