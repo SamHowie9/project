@@ -148,8 +148,10 @@ for i in range(0, 12):
 
     # show the original image (remove axes)
     axs[0, i].imshow(original_image)
-    axs[0, i].get_xaxis().set_visible(False)
-    axs[0, i].get_yaxis().set_visible(False)
+    # axs[0, i].get_xaxis().set_visible(False)
+    # axs[0, i].get_yaxis().set_visible(False)
+
+    axs[0, i].tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
 
 axs[0][0].set_ylabel("Original")
 
@@ -347,8 +349,11 @@ for run_number, (beta, filename) in enumerate([[0.01, "01"], [0.001, "001"], [0.
 
         # show the reconstructed image (remove axes)
         axs[run_number+1, i].imshow(reconstructed_image)
-        axs[run_number+1, i].get_xaxis().set_visible(False)
-        axs[run_number+1, i].get_yaxis().set_visible(False)
+        # axs[run_number+1, i].get_xaxis().set_visible(False)
+        # axs[run_number+1, i].get_yaxis().set_visible(False)
+
+        axs[run_number+1, i].tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+
 
     axs[run_number+1][0].set_ylabel("β = " + str(beta))
 
