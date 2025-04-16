@@ -129,120 +129,125 @@ train_images = np.array(train_images)
 
 
 
-total_loss_all = []
-reconstruction_loss_all = []
-kl_loss_all = []
+# total_loss_all = []
+# reconstruction_loss_all = []
+# kl_loss_all = []
 
 
 
 
 # for run_number, (beta, filename) in enumerate([[0.01, "01"], [0.001, "001"], [0.0009, "0009"], [0.0008, "0008"], [0.0007, "0007"], [0.0006, "0006"], [0.0005, "0005"],  [0.0004, "0004"],  [0.0003, "0003"],  [0.0002, "0002"], [0.0001, "0001"],[0.00005, "00005"], [0.00001, "00001"], [0.000005, "000005"], [0.000001, "000001"], [0.0000005, "0000005"], [0.0000001, "0000001"], [0.00000005, "00000005"], [0.00000001, "00000001"]]):
-for run_number, (beta, filename) in enumerate([[0.05, "05"], [0.01, "01"], [0.005, "005"], [0.001, "001"], [0.0005, "0005"], [0.0001, "0001"],[0.00005, "00005"], [0.00001, "00001"], [0.000005, "000005"], [0.000001, "000001"], [0.0000005, "0000005"], [0.0000001, "0000001"], [0.00000005, "00000005"], [0.00000001, "00000001"]]):
+# for run_number, (beta, filename) in enumerate([[0.05, "05"], [0.01, "01"], [0.005, "005"], [0.001, "001"], [0.0005, "0005"], [0.0001, "0001"],[0.00005, "00005"], [0.00001, "00001"], [0.000005, "000005"], [0.000001, "000001"], [0.0000005, "0000005"], [0.0000001, "0000001"], [0.00000005, "00000005"], [0.00000001, "00000001"]]):
 
+for encoding_dim in [5, 10, 15, 20, 25, 30]:
 
-    # Define VAE model with custom train step
-    class VAE(keras.Model):
+    total_loss_all = []
+    reconstruction_loss_all = []
+    kl_loss_all = []
 
-        def __init__(self, encoder, decoder, **kwargs):
-            super().__init__(**kwargs)
-            self.encoder = encoder
-            self.decoder = decoder
-            self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
-            self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
-            self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+    for run_number, (beta, filename) in enumerate([[0.001, "001"], [0.0001, "0001"], [0.00001, "00001"], [0.000001, "000001"]]):
 
-        @property
-        def metrics(self):
-            return[
-                self.total_loss_tracker,
-                self.reconstruction_loss_tracker,
-                self.kl_loss_tracker,
-            ]
+        # Define VAE model with custom train step
+        class VAE(keras.Model):
 
-        # custom train step
-        def train_step(self, data):
+            def __init__(self, encoder, decoder, **kwargs):
+                super().__init__(**kwargs)
+                self.encoder = encoder
+                self.decoder = decoder
+                self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
+                self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
+                self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
 
-            print("Data Shape:", data.shape)
+            @property
+            def metrics(self):
+                return[
+                    self.total_loss_tracker,
+                    self.reconstruction_loss_tracker,
+                    self.kl_loss_tracker,
+                ]
 
-            with tf.GradientTape() as tape:
+            # custom train step
+            def train_step(self, data):
 
-                # get the latent representation (run image through the encoder)
-                z_mean, z_log_var, z = self.encoder(data)
+                print("Data Shape:", data.shape)
 
-                print("Z Mean Shape:", z_mean.shape)
-                print("Z Shape:", z.shape)
+                with tf.GradientTape() as tape:
 
-                # form the reconstruction (run latent representation through decoder)
-                reconstruction = self.decoder(z)
+                    # get the latent representation (run image through the encoder)
+                    z_mean, z_log_var, z = self.encoder(data)
 
-                print("Reconstruction Shape:", reconstruction.shape)
+                    print("Z Mean Shape:", z_mean.shape)
+                    print("Z Shape:", z.shape)
 
-                # reconstruction loss
-                # reconstruction_loss = ops.sum(ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2)))
-                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+                    # form the reconstruction (run latent representation through decoder)
+                    reconstruction = self.decoder(z)
 
-                # kl loss
-                kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(kl_loss)
-                # kl_loss = np.tanh(kl_loss)
+                    print("Reconstruction Shape:", reconstruction.shape)
 
-                # total loss
-                # total_loss = reconstruction_loss + kl_loss
-                # total_loss = reconstruction_loss + (0.0000001 * kl_loss)
-                total_loss = reconstruction_loss + (beta * kl_loss)
+                    # reconstruction loss
+                    # reconstruction_loss = ops.sum(ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2)))
+                    reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
+                    # kl loss
+                    kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+                    kl_loss = ops.mean(kl_loss)
+                    # kl_loss = np.tanh(kl_loss)
 
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                print("KL Loss Shape:", kl_loss.shape)
-                print("Total Loss Shape:", total_loss.shape)
+                    # total loss
+                    # total_loss = reconstruction_loss + kl_loss
+                    # total_loss = reconstruction_loss + (0.0000001 * kl_loss)
+                    total_loss = reconstruction_loss + (beta * kl_loss)
 
 
+                    print("Reconstruction Loss Shape:", reconstruction_loss.shape)
+                    print("KL Loss Shape:", kl_loss.shape)
+                    print("Total Loss Shape:", total_loss.shape)
 
 
-            # gradient decent based on total loss
-            grads = tape.gradient(total_loss, self.trainable_weights)
-            self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
 
-            # update loss trackers
-            self.total_loss_tracker.update_state(total_loss)
-            self.reconstruction_loss_tracker.update_state(reconstruction_loss)
-            self.kl_loss_tracker.update_state(kl_loss)
 
-            # return total loss, reconstruction loss and kl divergence
-            return {
-                "loss": self.total_loss_tracker.result(),
-                "reconstruction_loss": self.reconstruction_loss_tracker.result(),
-                "kl_loss": self.kl_loss_tracker.result(),
-            }
+                # gradient decent based on total loss
+                grads = tape.gradient(total_loss, self.trainable_weights)
+                self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
 
+                # update loss trackers
+                self.total_loss_tracker.update_state(total_loss)
+                self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+                self.kl_loss_tracker.update_state(kl_loss)
 
+                # return total loss, reconstruction loss and kl divergence
+                return {
+                    "loss": self.total_loss_tracker.result(),
+                    "reconstruction_loss": self.reconstruction_loss_tracker.result(),
+                    "kl_loss": self.kl_loss_tracker.result(),
+                }
 
 
 
 
-    # define sampling layer
-    class Sampling(Layer):
 
-        def __init__(self, **kwargs):
-            super().__init__(**kwargs)
-            self.seed_generator = keras.random.SeedGenerator(1337)
 
-        def call(self, inputs):
+        # define sampling layer
+        class Sampling(Layer):
 
-            # get the latent distributions
-            z_mean, z_log_var = inputs
+            def __init__(self, **kwargs):
+                super().__init__(**kwargs)
+                self.seed_generator = keras.random.SeedGenerator(1337)
 
-            # find the batch size and number of latent features (dim)
-            batch = ops.shape(z_mean)[0]
-            dim = ops.shape(z_mean)[1]
+            def call(self, inputs):
 
-            # generate the random variables
-            epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
+                # get the latent distributions
+                z_mean, z_log_var = inputs
 
-            # perform reparameterization trick
-            return z_mean + ops.exp(0.5 * z_log_var) * epsilon
+                # find the batch size and number of latent features (dim)
+                batch = ops.shape(z_mean)[0]
+                dim = ops.shape(z_mean)[1]
 
+                # generate the random variables
+                epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
 
+                # perform reparameterization trick
+                return z_mean + ops.exp(0.5 * z_log_var) * epsilon
 
 
 
@@ -250,87 +255,90 @@ for run_number, (beta, filename) in enumerate([[0.05, "05"], [0.01, "01"], [0.00
 
 
 
-    # Define keras tensor for the encoder
-    input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
 
-    # layers for the encoder
-    x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
-    x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
-    x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
-    x = Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
-    x = Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
-    # x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
-    x = GlobalAveragePooling2D()(x)                                                                                 # (512)
-    x = Dense(128, activation="relu")(x)                                                                            # (128)
 
-    z_mean = Dense(encoding_dim, name="z_mean")(x)
-    z_log_var = Dense(encoding_dim, name="z_log_var")(x)
-    z = Sampling()([z_mean, z_log_var])
+        # Define keras tensor for the encoder
+        input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
 
-    # build the encoder
-    encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
-    encoder.summary()
+        # layers for the encoder
+        x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
+        x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
+        x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
+        x = Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
+        x = Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
+        # x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
+        x = GlobalAveragePooling2D()(x)                                                                                 # (512)
+        x = Dense(128, activation="relu")(x)                                                                            # (128)
 
+        z_mean = Dense(encoding_dim, name="z_mean")(x)
+        z_log_var = Dense(encoding_dim, name="z_log_var")(x)
+        z = Sampling()([z_mean, z_log_var])
 
-    # Define keras tensor for the decoder
-    latent_input = keras.Input(shape=(encoding_dim,))
+        # build the encoder
+        encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
+        encoder.summary()
 
-    # layers for the decoder
-    x = Dense(units=128, activation="relu")(latent_input)                                                           # (64)
-    x = Dense(units=512, activation="relu")(x)                                                                      # (256)
-    x = Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
-    x = Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
-    x = Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
-    x = Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
-    x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
-    x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
-    decoded = Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
 
-    # build the decoder
-    decoder = keras.Model(latent_input, decoded, name="decoder")
-    decoder.summary()
+        # Define keras tensor for the decoder
+        latent_input = keras.Input(shape=(encoding_dim,))
 
+        # layers for the decoder
+        x = Dense(units=128, activation="relu")(latent_input)                                                           # (64)
+        x = Dense(units=512, activation="relu")(x)                                                                      # (256)
+        x = Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
+        x = Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
+        x = Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
+        x = Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
+        x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
+        x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
+        decoded = Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
 
+        # build the decoder
+        decoder = keras.Model(latent_input, decoded, name="decoder")
+        decoder.summary()
 
-    # build and compile the VAE
-    vae = VAE(encoder, decoder)
-    vae.compile(optimizer=keras.optimizers.Adam())
 
 
+        # build and compile the VAE
+        vae = VAE(encoder, decoder)
+        vae.compile(optimizer=keras.optimizers.Adam())
 
 
 
-    vae.load_weights("Variational Eagle/Weights/Test/bce_beta_" + filename + ".weights.h5")
 
-    # get the latent representations (run image through the encoder)
-    z_mean, z_log_var, z = vae.encoder.predict(train_images)
 
-    print(z_mean.shape)
+        # vae.load_weights("Variational Eagle/Weights/Test/bce_beta_" + filename + ".weights.h5")
+        vae.load_weights("Variational Eagle/Weights/Test/bce_latent_" + str(encoding_dim) + "_beta_" + filename + ".weights.h5")
 
-    # reconstruct the image
-    reconstructed_images = vae.decoder.predict(z_mean)
+        # get the latent representations (run image through the encoder)
+        z_mean, z_log_var, z = vae.encoder.predict(train_images)
 
-    print(reconstructed_images.shape)
+        print(z_mean.shape)
 
-    # get the reconstruction loss
-    reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
+        # reconstruct the image
+        reconstructed_images = vae.decoder.predict(z_mean)
 
-    # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-    kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-    # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
-    kl_loss = ops.mean(kl_loss).numpy().item()
+        print(reconstructed_images.shape)
 
-    # total loss
-    total_loss = reconstruction_loss + (beta * kl_loss)
+        # get the reconstruction loss
+        reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
 
+        # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
+        kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
+        # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
+        kl_loss = ops.mean(kl_loss).numpy().item()
 
+        # total loss
+        total_loss = reconstruction_loss + (beta * kl_loss)
 
-    total_loss_all.append(total_loss)
-    reconstruction_loss_all.append(reconstruction_loss)
-    kl_loss_all.append(kl_loss)
 
 
+        total_loss_all.append(total_loss)
+        reconstruction_loss_all.append(reconstruction_loss)
+        kl_loss_all.append(kl_loss)
 
-np.save("Variational Eagle/Loss/Test/total_loss_beta", total_loss_all)
-np.save("Variational Eagle/Loss/Test/reconstruction_loss_beta", reconstruction_loss_all)
-np.save("Variational Eagle/Loss/Test/kl_loss_beta", kl_loss_all)
+
+
+    np.save("Variational Eagle/Loss/Test/total_loss_beta_" + str(encoding_dim), total_loss_all)
+    np.save("Variational Eagle/Loss/Test/reconstruction_loss_beta_" + str(encoding_dim), reconstruction_loss_all)
+    np.save("Variational Eagle/Loss/Test/kl_loss_beta_" + str(encoding_dim), kl_loss_all)
