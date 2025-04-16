@@ -17,10 +17,12 @@ from matplotlib import image as mpimg
 
 encoding_dim = 5
 run = 1
+beta = 0.00002
+beta_name = "00002"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 # number of epochs for run
 epochs = 750
@@ -34,7 +36,9 @@ batch_size = 32
 
 # for run in range(2, 4):
 # for run in [1]:
-for beta, beta_name in [[0.001, "001"], [0.0001, "0001"], [0.00001, "00001"], [0.000001, "000001"]]:
+# for beta, beta_name in [[0.001, "001"], [0.0001, "0001"], [0.00001, "00001"], [0.000001, "000001"]]:
+
+for run in [1]:
 
     print("Beta:", beta, beta_name)
 
