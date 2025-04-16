@@ -17,12 +17,12 @@ from matplotlib import image as mpimg
 
 encoding_dim = 5
 run = 1
-beta = 0.00003
-beta_name = "00003"
+beta = 0.00004
+beta_name = "00004"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 # number of epochs for run
 epochs = 750
