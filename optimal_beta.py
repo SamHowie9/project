@@ -64,7 +64,7 @@ axs[2].set_xticklabels(beta_words)
 
 
 # plt.legend()
-# plt.savefig("Variational Eagle/Plots/optimal_beta", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/optimal_beta_30_feat", bbox_inches='tight')
 plt.show()
 
 
