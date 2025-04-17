@@ -101,25 +101,81 @@ print(correlation_df)
 
 
 
+# create string labels for each of the correlations with the extracted feature index
+correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"#{row.name}: {val:.2f}"), axis=1)
+
+
+
+
+print(correlation_text_df)
+
 
 # order each of the columns (remove the number corresponding to each feature)
-# correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+
+# order the original dataframe
+correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+
+# order the annotation dataframe
+for col in correlation_text_df.columns:
+    correlation_text_df[col] = correlation_text_df[col].iloc[
+        correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
+    ].values
+
+print(correlation_text_df)
 
 
 
 
+# plt.figure(figsize=(10, encoding_dim/2))
+#
+# ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+#
+#
+#
+# plt.yticks(rotation=0)
+# plt.ylabel("Extracted Features", fontsize=15)
+# ax.xaxis.tick_top() # x axis on top
+# ax.xaxis.set_label_position('top')
+# ax.tick_params(length=0)
+# ax.figure.axes[-1].yaxis.label.set_size(15)
+#
+# def wrap_labels(ax, width, break_long_words=False):
+#
+#     labels = []
+#     # for label in ax.get_xticklabels():
+#         # text = label.get_text()
+#
+#     label_names = ["β = 1e-3", "β = 1e-4", "β = 1e-5", "β = 1e-6"]
+#
+#     for text in label_names:
+#         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
+#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
+#
+# wrap_labels(ax, 10)
 
 
-plt.figure(figsize=(10, encoding_dim/2))
 
-ax = sns.heatmap(abs(correlation_df), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+fig, axs = plt.subplots(1, 1, figsize=(10, encoding_dim/2))
 
-plt.yticks(rotation=0)
-plt.ylabel("Extracted Features", fontsize=15)
-ax.xaxis.tick_top() # x axis on top
-ax.xaxis.set_label_position('top')
-ax.tick_params(length=0)
-ax.figure.axes[-1].yaxis.label.set_size(15)
+# sns.heatmap(abs(correlation_df), ax=axs, annot=False, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+print(correlation_text_df)
+
+sns.heatmap(abs(correlation_df), ax=axs, annot=correlation_text_df, fmt="", cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+# sns.heatmap(abs(correlation_df), ax=axs, annot=correlation_text_df, fmt="", cmap="Greys", alpha=0, cbar=False)
+
+
+# axs.yticks(rotation=0)
+# axs.set_tickparams(axis)
+axs.set_yticks([])
+axs.set_ylabel("Extracted Features", fontsize=15)
+axs.xaxis.tick_top() # x axis on top
+axs.xaxis.set_label_position('top')
+axs.tick_params(length=0)
+axs.figure.axes[-1].yaxis.label.set_size(15)
 
 def wrap_labels(ax, width, break_long_words=False):
 
@@ -131,12 +187,12 @@ def wrap_labels(ax, width, break_long_words=False):
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
-    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+    axs.set_xticklabels(labels, rotation=0, fontsize=15)
 
-wrap_labels(ax, 10)
+wrap_labels(axs, 10)
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Test/beta_sersic", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Test/beta_sersic_sorted_2", bbox_inches='tight')
 plt.show()
 
 

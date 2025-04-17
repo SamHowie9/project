@@ -20,9 +20,13 @@ import random
 # betas = [0.01, 0.001, 0.0009, 0.0008, 0.0007, 0.0006, 0.0005, 0.0004, 0.0003, 0.0002, 0.0001, 0.00005, 0.00001, 0.000005, 0.000001, 0.0000005, 0.0000001, 0.00000005, 0.00000001]
 betas = [0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001, 0.000005, 0.000001, 0.0000005, 0.0000001, 0.00000005, 0.00000001]
 
-total_loss = np.load("Variational Eagle/Loss/Test/total_loss_beta.npy")
-reconstruction_loss = np.load("Variational Eagle/Loss/Test/reconstruction_loss_beta.npy")
-kl_loss = np.load("Variational Eagle/Loss/Test/kl_loss_beta.npy")
+# total_loss = np.load("Variational Eagle/Loss/Test/total_loss_beta.npy")
+# reconstruction_loss = np.load("Variational Eagle/Loss/Test/reconstruction_loss_beta.npy")
+# kl_loss = np.load("Variational Eagle/Loss/Test/kl_loss_beta.npy")
+
+total_loss = np.load("Variational Eagle/Loss/Test/total_loss_beta_30.npy")
+reconstruction_loss = np.load("Variational Eagle/Loss/Test/reconstruction_loss_beta_30.npy")
+kl_loss = np.load("Variational Eagle/Loss/Test/kl_loss_beta_30.npy")
 
 fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
