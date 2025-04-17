@@ -28,7 +28,7 @@ run = 1
 
 
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_750_epoch_32_bs_features_3.npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_0001.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_latent_30_beta_00008.npy")[0]
 pca = PCA(n_components=encoding_dim).fit(extracted_features)
 plt.plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
 
