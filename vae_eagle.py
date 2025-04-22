@@ -15,14 +15,14 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 35
+encoding_dim = 30
 run = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -132,6 +132,7 @@ for run in [1]:
                               (all_properties["flag_r"] == 6))].index.tolist()
 
     print("Bad Fit Indices:", bad_fit)
+    print()
 
     # remove those galaxies
     for galaxy in bad_fit:
@@ -140,7 +141,6 @@ for run in [1]:
     # get a list of all the ids of the galaxies
     chosen_galaxies = list(all_properties["GalaxyID"])
 
-    print(len(chosen_galaxies))
 
     # list to contain all galaxy images
     all_images = []
@@ -160,20 +160,21 @@ for run in [1]:
         # add the image to the dataset
         all_images.append(image)
 
-    print(len(all_images))
+    print("Original Dataset", len(all_images))
 
     # split the data into training and testing data (200 images used for testing)
     train_images = all_images[:-200]
     test_images = np.array(all_images[-200:])
 
-    print(len(train_images))
-    print(len(test_images))
+    print("Training Set", len(train_images))
+    print("Testing Set", len(test_images))
+    print()
 
 
     # load the filenames of the augmented elliptical images
     augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
 
-    print(len(augmented_galaxies))
+    print("Augmented Ellipticals", len(augmented_galaxies))
 
     for galaxy in augmented_galaxies:
 
@@ -186,15 +187,14 @@ for run in [1]:
         # add the image to the training set (not the testing set)
         train_images.append(image)
 
-    print(len(train_images))
+    print("Training Set", len(train_images))
+    print()
 
 
     # load the filenames of the augmented unknown images
     augmented_galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
 
-    print("...")
-
-    print(len(augmented_galaxies))
+    print("Augmented Unknown", len(augmented_galaxies))
 
 
     for galaxy in augmented_galaxies:
@@ -212,8 +212,8 @@ for run in [1]:
     train_images = np.array(train_images)
 
 
-    print(train_images.shape)
-    print(test_images.shape)
+    print("Training Set", train_images.shape)
+    print("Testing Set", test_images.shape)
     print()
 
 
@@ -437,123 +437,20 @@ for run in [1]:
                 # get the latent representation (run image through the encoder)
                 z_mean, z_log_var, z = self.encoder(data)
 
-                print("Z Mean Shape:", z_mean.shape)
-                print("Z Shape:", z.shape)
-
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
 
-                print("Reconstruction Shape:", reconstruction.shape)
-
-                # calculate the binary cross entropy reconstruction loss (sum over each pixel and average (mean) across each channel and across the batch)
-                # reconstruction_loss = ops.mean(
-                #     ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2),
-                #     )
-                # )
-                # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
-                # reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
-                # reconstruction_loss = ops.sum(keras.losses.binary_crossentropy(data, reconstruction), axis=(1,2))
-                # reconstruction_loss = reconstruction_loss / (256 * 256)
-                # reconstruction_loss = ops.mean(reconstruction_loss)
-                # reconstruction_loss = ops.mean(ops.sqrt(keras.losses.mean_squared_error(data, reconstruction)))
-                # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction)))
-
-                # reconstruction_loss = data - reconstruction
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.square(data - reconstruction)
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3)))
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.mean(ops.sqrt(ops.mean(ops.square(data - reconstruction), axis=(1, 2, 3))))
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-
-                # reconstruction_loss = ops.mean(ops.sum(ops.sqrt(ops.mean(ops.square(data-reconstruction), axis=3)), axis=(1, 2)))
-                # reconstruction_loss = reconstruction_loss * 256 * 256
-
-                # reconstruction_loss = ops.square(data-reconstruction)
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.mean(ops.square(data-reconstruction), axis=3)
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.sqrt(ops.mean(ops.square(data-reconstruction), axis=3))
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.sum(ops.sqrt(ops.mean(ops.square(data-reconstruction), axis=3)), axis=(1, 2))
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                # reconstruction_loss = ops.mean(ops.sum(ops.sqrt(ops.mean(ops.square(data-reconstruction), axis=3)), axis=(1, 2)))
-                # print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-
-
-
-
-                # rmse over bce (per pixel)
-
-                # train reconstruction sum over pixel, kl per feature (and with beta)
-
-
-
-
-                # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.mean(ops.sum(kl_loss, axis=1))
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.mean(kl_loss, axis=1)
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.sum(kl_loss, axis=1) / encoding_dim
-                # kl_loss = ops.mean(kl_loss)
-                # kl_loss = ops.maximum(kl_loss, 1e-3)
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # print("KL Loss Shape:", kl_loss.shape)
-                # kl_loss = ops.mean(kl_loss)
-                # print("KL Loss Shape:", kl_loss.shape)
-
-
-
-                # print("KL Loss Shape:", kl_loss.shape)
-
-
-
-                # # total loss is the sum of reconstruction loss and kl divergence
-                # # total_loss = reconstruction_loss + kl_loss
-                # total_loss = reconstruction_loss + (256 * 256 * kl_loss)
-                #
-                # print("Total Loss Shape:", total_loss.shape)
-
-
-
-
-                # reconstruction_loss_test = keras.losses.MeanSquaredError(data, reconstruction)
-                # print("Reconstruction Loss Shape:", reconstruction_loss_test.shape)
-
-
-                # # reconstruction loss
-                # reconstruction_loss = ops.sum(ops.mean(keras.losses.MeanSquaredError(data, reconstruction), axis=(1, 2)))
-                #
-                # # kl loss
-                # kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                # kl_loss = ops.mean(kl_loss)
-                #
-                # # total loss
-                # total_loss = reconstruction_loss + kl_loss
-
-
-
-
 
                 # reconstruction loss
-                # reconstruction_loss = ops.sum(ops.mean(keras.losses.binary_crossentropy(data, reconstruction), axis=(1, 2)))
                 reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
 
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
                 kl_loss = ops.mean(kl_loss)
-                # kl_loss = np.tanh(kl_loss)
 
                 # total loss
                 # total_loss = reconstruction_loss + kl_loss
                 total_loss = reconstruction_loss + (beta * kl_loss)
-
-
 
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
                 print("KL Loss Shape:", kl_loss.shape)
@@ -694,6 +591,7 @@ for run in [1]:
 
 
 
+    # loss plot for run
 
     fig, axs = plt.subplots(3, 2, figsize=(20, 15))
 
