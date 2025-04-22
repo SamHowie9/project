@@ -22,7 +22,7 @@ beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 # number of epochs for run
 epochs = 300
@@ -136,6 +136,8 @@ for run in [3]:
     # get a list of all the ids of the galaxies
     chosen_galaxies = list(all_properties["GalaxyID"])
 
+    print(len(chosen_galaxies))
+
     # list to contain all galaxy images
     all_images = []
 
@@ -154,14 +156,20 @@ for run in [3]:
         # add the image to the dataset
         all_images.append(image)
 
+    print(len(all_images))
 
     # split the data into training and testing data (200 images used for testing)
     train_images = all_images[:-200]
     test_images = np.array(all_images[-200:])
 
+    print(len(train_images))
+    print(len(test_images))
+
 
     # load the filenames of the augmented elliptical images
     augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
+
+    print(len(augmented_galaxies))
 
     for galaxy in augmented_galaxies:
 
@@ -174,12 +182,16 @@ for run in [3]:
         # add the image to the training set (not the testing set)
         train_images.append(image)
 
+    print(len(train_images))
 
 
     # load the filenames of the augmented unknown images
     augmented_galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
 
     print("...")
+
+    print(len(augmented_galaxies))
+
 
     for galaxy in augmented_galaxies:
 
