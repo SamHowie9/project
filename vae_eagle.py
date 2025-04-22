@@ -126,7 +126,11 @@ for run in [1]:
     all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
     # find all bad fit galaxies
-    bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+    bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+                              (all_properties["flag_r"] == 4) |
+                              (all_properties["flag_r"] == 5) |
+                              (all_properties["flag_r"] == 6))].index.tolist()
+
     print("Bad Fit Indices:", bad_fit)
 
     # remove those galaxies
