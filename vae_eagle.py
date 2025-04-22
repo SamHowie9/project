@@ -41,6 +41,9 @@ batch_size = 32
 for run in [1]:
 
     print("Beta:", beta, beta_name)
+    print()
+
+
 
     # normalise each band individually
     def normalise_independently(image):
@@ -49,12 +52,6 @@ for run in [1]:
             image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
         return image.T
 
-    # normalise each band to r
-    def normalise_to_r(image):
-        image = image.T
-        for i in range(0, 3):
-            image[i] = (image[i] - np.min(image[i])) / (np.max(image[1]) - np.min(image[1]))
-        return image.T
 
 
 
