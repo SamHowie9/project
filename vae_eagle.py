@@ -17,12 +17,12 @@ from matplotlib import image as mpimg
 
 encoding_dim = 30
 run = 1
-beta = 0.000095
-beta_name = "000095"
+beta = 0.0001
+beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="6"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 750
@@ -656,13 +656,13 @@ for run in [1]:
 
     # save the weights
     # vae.save_weights(filepath="Variational Eagle/Weights/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_weights_" + str(run) + ".weights.h5", overwrite=True)
-    vae.save_weights(filepath="Variational Eagle/Weights/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + ".weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_" + str(run) + ".weights.h5", overwrite=True)
 
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
     # np.save("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy", extracted_features)
-    np.save("Variational Eagle/Extracted Features/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + ".npy", extracted_features)
+    np.save("Variational Eagle/Extracted Features/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_" + str(run) + ".npy", extracted_features)
 
     print(np.array(extracted_features).shape)
 
@@ -671,7 +671,7 @@ for run in [1]:
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
     # np.save("Variational Eagle/Loss/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_loss_" + str(run) + ".npy", loss)
-    np.save("Variational Eagle/Loss/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + ".npy", loss)
+    np.save("Variational Eagle/Loss/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_" + str(run) + ".npy", loss)
 
 
 
@@ -736,7 +736,7 @@ for run in [1]:
 
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/test_bce_latent_" + str(encoding_dim) + "_beta_" + beta_name)
+    plt.savefig("Variational Eagle/Loss Plots/test_bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_" + str(run) + )
     plt.show()
 
 
@@ -816,7 +816,7 @@ for run in [1]:
         axs[1, i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/test_bce_latent_" + str(encoding_dim) + "_beta_" + beta_name)
+    plt.savefig("Variational Eagle/Reconstructions/Training/Test/test_bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_" + str(run))
     plt.show()
 
 
@@ -858,7 +858,7 @@ for run in [1]:
         axs[1,i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/test_bce_latent_" + str(encoding_dim) + "_beta_" + beta_name)
+    plt.savefig("Variational Eagle/Reconstructions/Testing/Test/test_bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_" + str(run))
     plt.show()
 
 
