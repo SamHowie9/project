@@ -40,7 +40,11 @@ batch_size = 32
 
 for run in [2]:
 
-    print("Beta:", beta, beta_name)
+    print("Encoding Dim", encoding_dim)
+    print("Run", run)
+    print("Beta", beta, beta_name)
+    print("Epochs", epochs)
+    print("Batch Size", batch_size)
     print()
 
 
