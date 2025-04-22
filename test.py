@@ -11,6 +11,18 @@ import random
 # import tensorflow as tf
 
 
+
+
+
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
+
+
+
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
