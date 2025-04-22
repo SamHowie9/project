@@ -15,7 +15,7 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 30
+encoding_dim = 5
 run = 1
 beta = 0.0001
 beta_name = "0001"
