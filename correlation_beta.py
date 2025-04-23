@@ -26,7 +26,11 @@ all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyI
 
 
 # find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+                          (all_properties["flag_r"] == 4) |
+                          (all_properties["flag_r"] == 5) |
+                          (all_properties["flag_r"] == 6))].index.tolist()
 
 # remove those galaxies
 for galaxy in bad_fit:
