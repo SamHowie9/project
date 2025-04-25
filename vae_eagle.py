@@ -14,14 +14,14 @@ from matplotlib import image as mpimg
 
 
 
-encoding_dim = 40
+encoding_dim = 41
 run = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 # number of epochs for run
 epochs = 300
@@ -37,7 +37,7 @@ batch_size = 32
 # for run in [1]:
 # for beta, beta_name in [[0.001, "001"], [0.0001, "0001"], [0.00001, "00001"], [0.000001, "000001"]]:
 
-for run in [2, 3]:
+for run in [1, 2, 3]:
 
     print()
     print("Encoding Dim", encoding_dim)
