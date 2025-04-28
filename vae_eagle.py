@@ -39,7 +39,7 @@ batch_size = 32
 
 # for run in [1]:
 
-for encoding_dim in [35, 40]:
+for encoding_dim in [45, 50]:
 
     print()
     print("Encoding Dim", encoding_dim)
