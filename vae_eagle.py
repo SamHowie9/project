@@ -516,8 +516,6 @@ for encoding_dim in [45, 50]:
 
 
 
-
-
     # Define keras tensor for the encoder
     input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
 
@@ -540,6 +538,7 @@ for encoding_dim in [45, 50]:
     encoder.summary()
 
 
+
     # Define keras tensor for the decoder
     latent_input = keras.Input(shape=(encoding_dim,))
 
@@ -560,11 +559,9 @@ for encoding_dim in [45, 50]:
 
 
 
-
     # build and compile the VAE
     vae = VAE(encoder, decoder)
     vae.compile(optimizer=keras.optimizers.Adam())
-
 
 
 
