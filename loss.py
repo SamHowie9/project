@@ -21,9 +21,7 @@ plt.style.use("default")
 sns.set_style("ticks")
 
 
-# select which gpu to use
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
 
 
 encoding_dim = 10
