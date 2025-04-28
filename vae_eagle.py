@@ -21,7 +21,7 @@ beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="2"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 # number of epochs for run
 epochs = 300
@@ -39,7 +39,7 @@ batch_size = 32
 
 # for run in [1]:
 
-for encoding_dim in [15, 20]:
+for encoding_dim in [25, 30]:
 
     print()
     print("Encoding Dim", encoding_dim)
