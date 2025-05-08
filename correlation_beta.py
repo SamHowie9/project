@@ -7,6 +7,15 @@ from sklearn.decomposition import PCA
 
 
 
+encoding_dim = 35
+run = 3
+beta = 0.0001
+beta_name = "0001"
+epochs = 300
+batch_size = 32
+
+
+
 
 
 # load structural and physical properties into dataframes
@@ -174,29 +183,34 @@ print(all_properties)
 
 
 
-encoding_dim = 30
+# encoding_dim = 30
 
 
 # fig, axs = plt.subplots(1, 1, figsize=(25, encoding_dim/2))
 # fig, axs = plt.subplots(2, 1, figsize=(25, encoding_dim))
-fig, axs = plt.subplots(2, 1, figsize=(25, 15))
+fig, axs = plt.subplots(2, 1, figsize=(55, 15))
 
 
 
 
-correlation_df = pd.DataFrame(columns=["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"])
+# correlation_df = pd.DataFrame(columns=["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"])
+# correlation_df = pd.DataFrame(columns=["20 - 1", "20 - 2", "20 - 3", "25 - 1", "25 - 2", "25 - 3", "30 - 1", "30 - 2", "30 - 3", "35 - 1", "35 - 2", "35 - 3", "40 - 1", "40 - 2", "40 - 3"])
+correlation_df = pd.DataFrame(columns=["25 - 1", "25 - 2", "25 - 3", "26 - 1", "26 - 2", "26 - 3", "27 - 1", "27 - 2", "27 - 3", "28 - 1", "28 - 2", "28 - 3", "29 - 1", "29 - 2", "29 - 3", "30 - 1", "30 - 2", "30 - 3", "31 - 1", "31 - 2", "31 - 3", "32 - 1", "32 - 2", "32 - 3", "33 - 1", "33 - 2", "33 - 3", "34 - 1", "34 - 2", "34 - 3", "35 - 1", "35 - 2", "35 - 3", "36 - 1", "36 - 2", "36 - 3", "37 - 1", "37 - 2", "37 - 3", "38 - 1", "38 - 2", "38 - 3", "39 - 1", "39 - 2", "39 - 3", "40 - 1", "40 - 2", "40 - 3"])
 
 # for feature in range(0, encoding_dim):
 for feature in range(0, 15):
 
     correlation_list = []
 
-    for beta in ["001", "0001", "00009", "00008", "00007", "00006", "00005", "00004", "00003", "00002", "00001", "000001"]:
-
+    # for beta in ["001", "0001", "00009", "00008", "00007", "00006", "00005", "00004", "00003", "00002", "00001", "000001"]:
+    # for encoding_dim, run in [[20, 1], [20, 2], [20, 3], [25, 1], [25, 2], [25, 3], [30, 1], [30, 2], [30, 3], [35, 1], [35, 2], [35, 3], [40, 1], [40, 2], [40, 3]]:
+    for encoding_dim, run in [[25, 1], [25, 2], [25, 3], [26, 1], [26, 2], [25, 3], [27, 1], [27, 2], [27, 3], [28, 1], [28, 2], [28, 3], [29, 1], [29, 2], [29, 3], [30, 1], [30, 2], [30, 3], [31, 1], [31, 2], [31, 3], [32, 1], [32, 2], [32, 3], [33, 1], [33, 2], [33, 3], [34, 1], [34, 2], [34, 3], [35, 1], [35, 2], [35, 3], [36, 1], [36, 2], [36, 3], [37, 1], [37, 2], [37, 3], [38, 1], [38, 2], [38, 3], [39, 1], [39, 2], [39, 3], [40, 1], [40, 2], [40, 3]]:
 
         # load the extracted features
         # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta + ".npy")[0]
+        # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta + ".npy")[0]
+        extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+
         encoding_dim = extracted_features.shape[1]
         extracted_features_switch = extracted_features.T
 
@@ -273,8 +287,9 @@ def wrap_labels(ax, width, break_long_words=False):
 
     # label_names = ["β = 1e-3", "β = 1e-4", "β = 1e-5", "β = 1e-6"]
     # label_names = ["β = 1e-3", "β = 1e-4", "β = 9e-5", "β = 8e-5", "β = 7e-5", "β = 6e-5", "β = 5e-5", "β = 4e-5", "β = 3e-5", "β = 2e-5", "β = 1e-5", "β = 1e-6"]
-    label_names = ["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"]
-
+    # label_names = ["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"]
+    # label_names = ["20 - 1", "20 - 2", "20 - 3", "25 - 1", "25 - 2", "25 - 3", "30 - 1", "30 - 2", "30 - 3", "35 - 1", "35 - 2", "35 - 3", "40 - 1", "40 - 2", "40 - 3"]
+    label_names = ["25 - 1", "25 - 2", "25 - 3", "26 - 1", "26 - 2", "26 - 3", "27 - 1", "27 - 2", "27 - 3", "28 - 1", "28 - 2", "28 - 3", "29 - 1", "29 - 2", "29 - 3", "30 - 1", "30 - 2", "30 - 3", "31 - 1", "31 - 2", "31 - 3", "32 - 1", "32 - 2", "32 - 3", "33 - 1", "33 - 2", "33 - 3", "34 - 1", "34 - 2", "34 - 3", "35 - 1", "35 - 2", "35 - 3", "36 - 1", "36 - 2", "36 - 3", "37 - 1", "37 - 2", "37 - 3", "38 - 1", "38 - 2", "38 - 3", "39 - 1", "39 - 2", "39 - 3", "40 - 1", "40 - 2", "40 - 3"]
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -291,19 +306,25 @@ wrap_labels(axs[0], 10)
 
 
 
-correlation_df = pd.DataFrame(columns=["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"])
+# correlation_df = pd.DataFrame(columns=["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"])
+# correlation_df = pd.DataFrame(columns=["20 - 1", "20 - 2", "20 - 3", "25 - 1", "25 - 2", "25 - 3", "30 - 1", "30 - 2", "30 - 3", "35 - 1", "35 - 2", "35 - 3", "40 - 1", "40 - 2", "40 - 3"])
+correlation_df = pd.DataFrame(columns=["25 - 1", "25 - 2", "25 - 3", "26 - 1", "26 - 2", "26 - 3", "27 - 1", "27 - 2", "27 - 3", "28 - 1", "28 - 2", "28 - 3", "29 - 1", "29 - 2", "29 - 3", "30 - 1", "30 - 2", "30 - 3", "31 - 1", "31 - 2", "31 - 3", "32 - 1", "32 - 2", "32 - 3", "33 - 1", "33 - 2", "33 - 3", "34 - 1", "34 - 2", "34 - 3", "35 - 1", "35 - 2", "35 - 3", "36 - 1", "36 - 2", "36 - 3", "37 - 1", "37 - 2", "37 - 3", "38 - 1", "38 - 2", "38 - 3", "39 - 1", "39 - 2", "39 - 3", "40 - 1", "40 - 2", "40 - 3"])
 
 # for feature in range(0, encoding_dim):
 for feature in range(0, 15):
 
     correlation_list = []
 
-    for beta in ["001", "0001", "00009", "00008", "00007", "00006", "00005", "00004", "00003", "00002", "00001", "000001"]:
+    # for beta in ["001", "0001", "00009", "00008", "00007", "00006", "00005", "00004", "00003", "00002", "00001", "000001"]:
 
+    # for encoding_dim, run in [[20, 1], [20, 2], [20, 3], [25, 1], [25, 2], [25, 3], [30, 1], [30, 2], [30, 3], [35, 1], [35, 2], [35, 3], [40, 1], [40, 2], [40, 3]]:
+    for encoding_dim, run in [[25, 1], [25, 2], [25, 3], [26, 1], [26, 2], [25, 3], [27, 1], [27, 2], [27, 3], [28, 1], [28, 2], [28, 3], [29, 1], [29, 2], [29, 3], [30, 1], [30, 2], [30, 3], [31, 1], [31, 2], [31, 3], [32, 1], [32, 2], [32, 3], [33, 1], [33, 2], [33, 3], [34, 1], [34, 2], [34, 3], [35, 1], [35, 2], [35, 3], [36, 1], [36, 2], [36, 3], [37, 1], [37, 2], [37, 3], [38, 1], [38, 2], [38, 3], [39, 1], [39, 2], [39, 3], [40, 1], [40, 2], [40, 3]]:
 
         # load the extracted features
         # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta + ".npy")[0]
+        # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_latent_" + str(encoding_dim) + "_beta_" + beta + ".npy")[0]
+        extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+
         encoding_dim = extracted_features.shape[1]
         extracted_features_switch = extracted_features.T
 
@@ -384,8 +405,9 @@ def wrap_labels(ax, width, break_long_words=False):
 
     # label_names = ["β = 1e-3", "β = 1e-4", "β = 1e-5", "β = 1e-6"]
     # label_names = ["β = 1e-3", "β = 1e-4", "β = 9e-5", "β = 8e-5", "β = 7e-5", "β = 6e-5", "β = 5e-5", "β = 4e-5", "β = 3e-5", "β = 2e-5", "β = 1e-5", "β = 1e-6"]
-    label_names = ["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"]
-
+    # label_names = ["1e-3", "1e-4", "9e-5", "8e-5", "7e-5", "6e-5", "5e-5", "4e-5", "3e-5", "2e-5", "1e-5", "1e-6"]
+    # label_names = ["20 - 1", "20 - 2", "20 - 3", "25 - 1", "25 - 2", "25 - 3", "30 - 1", "30 - 2", "30 - 3", "35 - 1", "35 - 2", "35 - 3", "40 - 1", "40 - 2", "40 - 3"]
+    label_names = ["25 - 1", "25 - 2", "25 - 3", "26 - 1", "26 - 2", "26 - 3", "27 - 1", "27 - 2", "27 - 3", "28 - 1", "28 - 2", "28 - 3", "29 - 1", "29 - 2", "29 - 3", "30 - 1", "30 - 2", "30 - 3", "31 - 1", "31 - 2", "31 - 3", "32 - 1", "32 - 2", "32 - 3", "33 - 1", "33 - 2", "33 - 3", "34 - 1", "34 - 2", "34 - 3", "35 - 1", "35 - 2", "35 - 3", "36 - 1", "36 - 2", "36 - 3", "37 - 1", "37 - 2", "37 - 3", "38 - 1", "38 - 2", "38 - 3", "39 - 1", "39 - 2", "39 - 3", "40 - 1", "40 - 2", "40 - 3"]
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -399,7 +421,7 @@ wrap_labels(axs[1], 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Test/beta_sersic_semi_major_sorted_pca", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Final/latent_run_2", bbox_inches='tight')
 plt.show()
 
 

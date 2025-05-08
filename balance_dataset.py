@@ -78,6 +78,9 @@ bad_fit = all_properties[((all_properties["flag_r"] == 1) |
                           (all_properties["flag_r"] == 5) |
                           (all_properties["flag_r"] == 6))].index.tolist()
 
+print(bad_fit)
+print(len(bad_fit))
+
 # remove those galaxies
 for galaxy in bad_fit:
     all_properties = all_properties.drop(galaxy, axis=0)

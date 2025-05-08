@@ -15,6 +15,8 @@ from matplotlib import cm
 from matplotlib.colors import Normalize
 from scipy.interpolate import interpn
 
+
+
 plt.style.use("default")
 
 
@@ -23,10 +25,13 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-encoding_dim = 24
-run = 2
-epochs = 750
+encoding_dim = 35
+run = 3
+beta = 0.0001
+beta_name = "0001"
+epochs = 300
 batch_size = 32
+
 
 
 
@@ -49,7 +54,10 @@ all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyI
 
 
 # find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
+bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+                          (all_properties["flag_r"] == 4) |
+                          (all_properties["flag_r"] == 5) |
+                          (all_properties["flag_r"] == 6))].index.tolist()
 
 # remove those galaxies
 for galaxy in bad_fit:
@@ -120,7 +128,8 @@ all_properties = all_properties.iloc[:-200]
 
 # load the extracted features
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -131,10 +140,10 @@ extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-# pca = PCA(n_components=11).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features = extracted_features[:len(all_properties)]
-# extracted_features_switch = extracted_features.T
+pca = PCA(n_components=12).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
 
 
 
@@ -289,6 +298,7 @@ wrap_labels(ax, 10)
 
 # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
 plt.show()
 
 
@@ -381,6 +391,16 @@ def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
     # make and return the scatter plot with the colour corresponding to the density
     axs.scatter(x, y, c=z, **kwargs )
     return axs
+
+
+
+fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+
+density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0])
+density_scatter(extracted_features_switch[4], all_properties["n_r"], axs=axs[1])
+
+plt.show()
+
 
 
 
