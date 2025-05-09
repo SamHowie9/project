@@ -415,7 +415,7 @@ print(len(med_pca_features))
 
 # transition plot for all extracted features
 
-fig, axs = plt.subplots(num_varying_features, len(extracted_features.T), figsize=(15, 25))
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(15, 12))
 
 for i in range(len(extracted_features.T)):
 
