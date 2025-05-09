@@ -1,4 +1,7 @@
 import os
+
+from optimal_features import num_3
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
@@ -412,7 +415,7 @@ print(len(med_pca_features))
 
 # transition plot for all extracted features
 
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(15, 25))
+fig, axs = plt.subplots(num_varying_features, len(extracted_features.T), figsize=(15, 25))
 
 for i in range(len(extracted_features.T)):
 
@@ -434,6 +437,10 @@ for i in range(len(extracted_features.T)):
         axs[i][j].imshow(reconstruction)
         axs[i][j].get_xaxis().set_visible(False)
         axs[i][j].get_yaxis().set_visible(False)
+
+    axs[i][0].set_ylabel(i, rotation=0)
+
+fig.text(0.04, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
 
 plt.savefig("Variational Eagle/Plots/transition_plot_all_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
 plt.show()
