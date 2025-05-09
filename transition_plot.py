@@ -357,8 +357,7 @@ extracted_features_switch = extracted_features.T
 #
 
 
-# med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-# print(len(med_pca_features))
+
 #
 #
 #
@@ -368,6 +367,9 @@ extracted_features_switch = extracted_features.T
 # # transition plot for group of features
 #
 # num_varying_features = 13
+#
+# med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+# print(len(med_pca_features))
 #
 # # chosen_features = [0, 1, 2, 3, 4]
 # #
@@ -415,6 +417,9 @@ extracted_features_switch = extracted_features.T
 # transition plot for all extracted features
 
 num_varying_features = 13
+
+med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+print(len(med_pca_features))
 
 fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(15, 12))
 
