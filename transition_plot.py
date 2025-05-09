@@ -1,7 +1,4 @@
 import os
-
-from optimal_features import num_3
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 import keras
