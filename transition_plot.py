@@ -436,7 +436,7 @@ for i in range(len(extracted_features.T)):
         axs[i][j].get_xaxis().set_visible(False)
         axs[i][j].get_yaxis().set_visible(False)
 
-    axs[i][0].set_ylabel(i, rotation=0)
+    axs[i][0].set_ylabel(i, rotation=0, labelpad=20)
 
 fig.text(0.04, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
 
