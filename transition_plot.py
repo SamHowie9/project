@@ -443,7 +443,7 @@ for i in range(len(extracted_features.T)):
         axs[i][j].imshow(reconstruction)
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[i][0].set_ylabel(i, rotation=0, labelpad=-5, va='center')
+    axs[i][0].set_ylabel(i, rotation=0, labelpad=5, va='center')
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
 
