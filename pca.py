@@ -7,7 +7,7 @@ import random
 
 np.set_printoptions(linewidth=np.inf)
 
-encoding_dim = 24
+encoding_dim = 30
 run = 1
 
 # 0.2113601416349411

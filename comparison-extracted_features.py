@@ -25,8 +25,8 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-encoding_dim = 35
-run = 3
+encoding_dim = 30
+run = 1
 beta = 0.0001
 beta_name = "0001"
 epochs = 300
@@ -220,86 +220,86 @@ extracted_features_switch = extracted_features.T
 
 # correlation plot
 
-# # dataframe to contain correlations between each feature and each property
-# # correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
-# correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
-#
-#
-# # loop through each extracted feature
-# for feature in range(0, len(extracted_features_switch)):
-#
-#     # create a list to contain the correlation between that feature and each property
-#     correlation_list = []
-#
-#     # loop through each property
-#     for gal_property in range(1, len(all_properties.columns)):
-#
-#         # skip the flag property
-#         # if gal_property == 6:
-#         #     continue
-#
-#         # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-#         correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
-#         correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-#         correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties.iloc[:, gal_property])[0][1]
-#         correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-#
-#
-#         # add the strongest type of correlation
-#         correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
-#
-#     # add all the correlations for that feature to the dataframe
-#     correlation_df.loc[len(correlation_df)] = correlation_list
-#
-#
-#
-# print(correlation_df)
-#
-#
-#
-# # set the figure size
-# # plt.figure(figsize=(20, extracted_features_switch.shape[0]))
-# plt.figure(figsize=(32, extracted_features_switch.shape[0]))
-#
-#
-# # properties to plot
-# # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-# selected_properties = ["n_r", "pa_r", "q_r", "re_r", "rhalf_ellip", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
-#
-# # plot a heatmap for the dataframe (with annotations)
-# ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-#
-#
-#
-# plt.yticks(rotation=0)
-# plt.ylabel("Extracted Features", fontsize=15)
-# ax.xaxis.tick_top() # x axis on top
-# ax.xaxis.set_label_position('top')
-# ax.tick_params(length=0)
-# ax.figure.axes[-1].yaxis.label.set_size(15)
-#
-#
-#
-# def wrap_labels(ax, width, break_long_words=False):
-#
-#     labels = []
-#     # for label in ax.get_xticklabels():
-#         # text = label.get_text()
-#
-#     label_names = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Half Light Radius", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "Concentration", "Asymmetry", "Smoothness"]
-#
-#     for text in label_names:
-#         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
-#     ax.set_xticklabels(labels, rotation=0, fontsize=15)
-#
-# wrap_labels(ax, 10)
-#
-#
-#
-# # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-# # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-# plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-# plt.show()
+# dataframe to contain correlations between each feature and each property
+# correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
+correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
+
+
+# loop through each extracted feature
+for feature in range(0, len(extracted_features_switch)):
+
+    # create a list to contain the correlation between that feature and each property
+    correlation_list = []
+
+    # loop through each property
+    for gal_property in range(1, len(all_properties.columns)):
+
+        # skip the flag property
+        # if gal_property == 6:
+        #     continue
+
+        # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+        correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties.iloc[:, gal_property])[0][1]
+        correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+        correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties.iloc[:, gal_property])[0][1]
+        correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+
+
+        # add the strongest type of correlation
+        correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+
+    # add all the correlations for that feature to the dataframe
+    correlation_df.loc[len(correlation_df)] = correlation_list
+
+
+
+print(correlation_df)
+
+
+
+# set the figure size
+# plt.figure(figsize=(20, extracted_features_switch.shape[0]))
+plt.figure(figsize=(32, extracted_features_switch.shape[0]))
+
+
+# properties to plot
+# selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
+selected_properties = ["n_r", "pa_r", "q_r", "re_r", "rhalf_ellip", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
+
+# plot a heatmap for the dataframe (with annotations)
+ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+
+
+
+plt.yticks(rotation=0)
+plt.ylabel("Extracted Features", fontsize=15)
+ax.xaxis.tick_top() # x axis on top
+ax.xaxis.set_label_position('top')
+ax.tick_params(length=0)
+ax.figure.axes[-1].yaxis.label.set_size(15)
+
+
+
+def wrap_labels(ax, width, break_long_words=False):
+
+    labels = []
+    # for label in ax.get_xticklabels():
+        # text = label.get_text()
+
+    label_names = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Half Light Radius", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "Concentration", "Asymmetry", "Smoothness"]
+
+    for text in label_names:
+        labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
+    ax.set_xticklabels(labels, rotation=0, fontsize=15)
+
+wrap_labels(ax, 10)
+
+
+
+# plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+# plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
+plt.show()
 
 
 
@@ -400,38 +400,88 @@ def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
 
 # structure measurement comparison
 
-fig, axs = plt.subplots(1, 5, figsize=(25, 5))
+# fig, axs = plt.subplots(1, 5, figsize=(25, 5))
+#
+# density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0], s=2)
+# axs[0].set_title("Sersic Index")
+# axs[0].set_xlabel("Feature 3")
+# axs[0].set_ylabel("Sersic Index")
+#
+# density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1], s=2)
+# axs[1].set_title("Gini Coefficient")
+# axs[1].set_xlabel("Feature 3")
+# axs[1].set_ylabel("Gini Coefficient")
+#
+# density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[2], s=2)
+# axs[2].set_title("Concentration")
+# axs[2].set_xlabel("Feature 3")
+# axs[2].set_ylabel("Concentration")
+#
+# density_scatter(extracted_features_switch[0], all_properties["asymmetry"], axs=axs[3], s=2)
+# axs[3].set_title("Asymmetry")
+# axs[3].set_xlabel("Feature 0")
+# axs[3].set_ylabel("Asymmetry")
+#
+# density_scatter(extracted_features_switch[0], all_properties["smoothness"], axs=axs[4], s=2)
+# axs[4].set_title("Smoothness")
+# axs[4].set_xlabel("Feature 0")
+# axs[4].set_ylabel("Smoothness")
+#
+#
+# plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_30_1", bbox_inches='tight')
+# plt.show()
 
-density_scatter(extracted_features_switch[4], all_properties["n_r"], axs=axs[0], s=2)
-axs[0].set_title("Sersic Index")
-axs[0].set_xlabel("Feature *****")
-axs[0].set_ylabel("Sersic Index")
-
-density_scatter(abs(extracted_features_switch[0]), all_properties["gini"], axs=axs[1], s=2)
-axs[1].set_title("Gini Coefficient")
-axs[1].set_xlabel("Feature *****")
-axs[1].set_ylabel("Gini Coefficient")
-
-density_scatter(extracted_features_switch[0], all_properties["concentration"], axs=axs[2], s=2)
-axs[2].set_title("Concentration")
-axs[2].set_xlabel("Feature *****")
-axs[2].set_ylabel("Concentration")
-
-density_scatter(extracted_features_switch[0], all_properties["asymmetry"], axs=axs[3], s=2)
-axs[3].set_title("Asymmetry")
-axs[3].set_xlabel("Feature *****")
-axs[3].set_ylabel("Asymmetry")
-
-density_scatter(extracted_features_switch[0], all_properties["smoothness"], axs=axs[4], s=2)
-axs[4].set_title("Smoothness")
-axs[4].set_xlabel("Feature *****")
-axs[4].set_ylabel("Smoothness")
 
 
-plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_35", bbox_inches='tight')
+fig, axs = plt.subplots(2, 3, figsize=(20, 10))
+
+density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
+axs[0][0].set_title("Sersic Index")
+axs[0][0].set_xlabel("Feature 3")
+axs[0][0].set_ylabel("Sersic Index")
+axs[0][0].set_xlim(-4, 4)
+axs[0][0].set_ylim(0, 6)
+
+# density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[0][1], s=2)
+# axs[0][1].set_title("Gini Coefficient")
+# axs[0][1].set_xlabel("Feature 3")
+# axs[0][1].set_ylabel("Gini Coefficient")
+
+density_scatter(extracted_features_switch[1], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
+axs[0][1].set_title("Position Angle")
+axs[0][1].set_xlabel("Feature 1")
+axs[0][1].set_ylabel("Position Angle (°)")
+axs[0][1].set_yticks([0, 45, 90])
+
+density_scatter(extracted_features_switch[2], all_properties["q_r"], axs=axs[0][2], s=10)
+axs[0][2].set_title("Axis Ratio")
+axs[0][2].set_xlabel("Feature 2")
+axs[0][2].set_ylabel("Axis Ratio")
+
+density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][0], s=10)
+axs[1][0].set_title("Concentration")
+axs[1][0].set_xlabel("Feature 3")
+axs[1][0].set_ylabel("Concentration")
+axs[1][0].set_ylim(2, 5)
+axs[1][0].set_xlim(-3, 3)
+
+density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][1], s=10)
+axs[1][1].set_title("Asymmetry")
+axs[1][1].set_xlabel("Feature 0")
+axs[1][1].set_ylabel("Asymmetry")
+axs[1][1].set_ylim(0, 0.5)
+axs[1][1].set_xlim(-4, 4)
+
+density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][2], s=10)
+axs[1][2].set_title("Smoothness")
+axs[1][2].set_xlabel("Feature 0")
+axs[1][2].set_ylabel("Smoothness")
+axs[1][2].set_ylim(0, 0.1)
+axs[1][2].set_xlim(-4, 4)
+
+
+plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_30_1_zoomed_4", bbox_inches='tight')
 plt.show()
-
-
 
 
 
@@ -453,7 +503,7 @@ density_scatter(extracted_features_switch[0], all_properties["StarFormationRate"
 
 
 
-plt.savefig("Variational Eagle/Plots/physical_property_comparisons_35", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/physical_property_comparisons_30_1", bbox_inches='tight')
 plt.show()
 
 
