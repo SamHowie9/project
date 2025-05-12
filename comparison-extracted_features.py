@@ -71,7 +71,7 @@ all_properties = all_properties.reset_index(drop=True)
 
 print(all_properties)
 
-
+# print(all_properties[all_properties["smoothness"] <= 0].sort_values(by="smoothness"))
 
 
 
