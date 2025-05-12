@@ -14,6 +14,8 @@ from sklearn.linear_model import LinearRegression
 from matplotlib import cm
 from matplotlib.colors import Normalize
 from scipy.interpolate import interpn
+from scipy.stats import gaussian_kde
+
 
 
 
@@ -374,24 +376,37 @@ def exponential(x, a, b, c):
 
 
 
+# def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
+#
+#     # find the density colour based on the histogram
+#     data ,x_e, y_e = np.histogram2d(x, y, bins=bins, density=True )
+#     # z = interpn((0.5*(x_e[1:] + x_e[:-1]), 0.5*(y_e[1:] + y_e[:-1])), data ,np.vstack([x,y]).T, method="splinef2d", bounds_error=False)
+#     z = interpn((0.5*(x_e[1:] + x_e[:-1]), 0.5*(y_e[1:] + y_e[:-1])), data ,np.vstack([x,y]).T, method="nearest", bounds_error=False)
+#
+#     # replace nan with 0 (where there are no points)
+#     z[np.where(np.isnan(z))] = 0.0
+#
+#     # sort the points by density, so that the densest points are plotted last
+#     if sort:
+#         idx = z.argsort()
+#         x, y, z = x[idx], y[idx], z[idx]
+#
+#     # make and return the scatter plot with the colour corresponding to the density
+#     axs.scatter(x, y, c=z, **kwargs )
+#     return axs
+
+
 def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
 
-    # find the density colour based on the histogram
-    data ,x_e, y_e = np.histogram2d(x, y, bins=bins, density=True )
-    z = interpn((0.5*(x_e[1:] + x_e[:-1]), 0.5*(y_e[1:] + y_e[:-1])), data ,np.vstack([x,y]).T, method="splinef2d", bounds_error=False)
+    xy = np.vstack([x, y])
+    z = gaussian_kde(xy)(xy)
 
-    # replace nan with 0 (where there are no points)
-    z[np.where(np.isnan(z))] = 0.0
-
-    # sort the points by density, so that the densest points are plotted last
     if sort:
         idx = z.argsort()
         x, y, z = x[idx], y[idx], z[idx]
 
-    # make and return the scatter plot with the colour corresponding to the density
-    axs.scatter(x, y, c=z, **kwargs )
+    axs.scatter(x, y, c=z, **kwargs)
     return axs
-
 
 
 
@@ -433,7 +448,7 @@ def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
 
 
 
-fig, axs = plt.subplots(2, 3, figsize=(20, 10))
+fig, axs = plt.subplots(2, 4, figsize=(25, 10))
 
 density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
 axs[0][0].set_title("Sersic Index")
@@ -442,45 +457,56 @@ axs[0][0].set_ylabel("Sersic Index")
 axs[0][0].set_xlim(-4, 4)
 axs[0][0].set_ylim(0, 6)
 
-# density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[0][1], s=2)
-# axs[0][1].set_title("Gini Coefficient")
-# axs[0][1].set_xlabel("Feature 3")
-# axs[0][1].set_ylabel("Gini Coefficient")
-
 density_scatter(extracted_features_switch[1], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
 axs[0][1].set_title("Position Angle")
 axs[0][1].set_xlabel("Feature 1")
 axs[0][1].set_ylabel("Position Angle (°)")
 axs[0][1].set_yticks([0, 45, 90])
+axs[0][1].set_xlim(-3.5, 3.5)
 
 density_scatter(extracted_features_switch[2], all_properties["q_r"], axs=axs[0][2], s=10)
 axs[0][2].set_title("Axis Ratio")
 axs[0][2].set_xlabel("Feature 2")
 axs[0][2].set_ylabel("Axis Ratio")
+axs[0][2].set_xlim(-3, 3)
 
-density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][0], s=10)
-axs[1][0].set_title("Concentration")
+density_scatter(extracted_features_switch[0], all_properties["m20"], axs=axs[0][3], s=10)
+axs[0][3].set_title("M20")
+axs[0][3].set_xlabel("Feature 0")
+axs[0][3].set_ylabel("M20")
+axs[0][3].set_xlim(-6, 4)
+axs[0][3].set_ylim(-2.5, -1.2)
+
+density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1][0], s=10)
+axs[1][0].set_title("Gini Coefficient")
 axs[1][0].set_xlabel("Feature 3")
-axs[1][0].set_ylabel("Concentration")
-axs[1][0].set_ylim(2, 5)
-axs[1][0].set_xlim(-3, 3)
+axs[1][0].set_ylabel("Gini Coefficient")
+axs[1][0].set_xlim(-4, 4)
+axs[1][0].set_ylim(0.4, 0.65)
 
-density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][1], s=10)
-axs[1][1].set_title("Asymmetry")
-axs[1][1].set_xlabel("Feature 0")
-axs[1][1].set_ylabel("Asymmetry")
-axs[1][1].set_ylim(0, 0.5)
-axs[1][1].set_xlim(-4, 4)
+density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][1], s=10)
+axs[1][1].set_title("Concentration")
+axs[1][1].set_xlabel("Feature 3")
+axs[1][1].set_ylabel("Concentration")
+axs[1][1].set_xlim(-3, 3)
+axs[1][1].set_ylim(2, 5)
 
-density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][2], s=10)
-axs[1][2].set_title("Smoothness")
+density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
+axs[1][2].set_title("Asymmetry")
 axs[1][2].set_xlabel("Feature 0")
-axs[1][2].set_ylabel("Smoothness")
-axs[1][2].set_ylim(0, 0.1)
+axs[1][2].set_ylabel("Asymmetry")
 axs[1][2].set_xlim(-4, 4)
+axs[1][2].set_ylim(0, 0.5)
+
+density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
+axs[1][3].set_title("Smoothness")
+axs[1][3].set_xlabel("Feature 0")
+axs[1][3].set_ylabel("Smoothness")
+axs[1][3].set_xlim(-4, 4)
+axs[1][3].set_ylim(0, 0.1)
 
 
-plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_30_1_zoomed_4", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_30_1_zoomed_4_2", bbox_inches='tight')
 plt.show()
 
 
