@@ -421,8 +421,8 @@ num_varying_features = 13
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 print(len(med_pca_features))
 
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(11, 12))
-plt.subplots_adjust(wspace=0, hspace=0.025)
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(14, 13))
+plt.subplots_adjust(wspace=0, hspace=0.01)
 
 for i in range(len(extracted_features.T)):
 
@@ -451,7 +451,7 @@ for i in range(len(extracted_features.T)):
         for spine in axs[i][j].spines.values():
             spine.set_visible(False)
 
-    axs[i][0].set_ylabel(i, rotation=0, labelpad=5, va='center')
+    axs[i][0].set_ylabel(i, rotation=0, labelpad=7.5, va='center')
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
 
