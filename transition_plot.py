@@ -448,8 +448,8 @@ for i in range(len(extracted_features.T)):
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
         # remove the spines
-        for spine in axs[i][j].spines.values():
-            spine.set_visible(False)
+        # for spine in axs[i][j].spines.values():
+        #     spine.set_visible(False)
 
     axs[i][0].set_ylabel(i, rotation=0, labelpad=7.5, va='center')
 
