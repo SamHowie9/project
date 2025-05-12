@@ -421,7 +421,7 @@ num_varying_features = 13
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 print(len(med_pca_features))
 
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(12, 12))
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(11, 12))
 
 for i in range(len(extracted_features.T)):
 
@@ -447,7 +447,7 @@ for i in range(len(extracted_features.T)):
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
 
-plt.savefig("Variational Eagle/Plots/transition_plot_all_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/transition_plot_all_" + str(encoding_dim) + "_" + str(run) + "_2", bbox_inches='tight')
 plt.show()
 
 
