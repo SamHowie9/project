@@ -508,11 +508,18 @@ for encoding_dim in [45, 50]:
             # perform reparameterization trick
             z = z_mean + ops.exp(0.5 * z_log_var) * epsilon
 
+            print("Shape of z before flows:", z.shape)
+
             log_det_sum = 0.0
 
             for flow in self.flow_layers:
                 z, log_det = flow(z)
                 log_det_sum += log_det
+
+            print("Shape of z after flows:", z.shape)
+
+
+            print("Shape of z before flows")
 
             return z, log_det_sum
 
