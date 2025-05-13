@@ -71,7 +71,7 @@ all_properties = all_properties.reset_index(drop=True)
 
 print(all_properties)
 
-# print(all_properties[all_properties["smoothness"] <= 0].sort_values(by="smoothness"))
+print(all_properties.sort_values(by="MassType_Star"))
 
 
 
@@ -146,7 +146,6 @@ pca = PCA(n_components=12).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
 extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
-
 
 
 
@@ -396,14 +395,13 @@ def exponential(x, a, b, c):
 #     return axs
 
 
-def density_scatter(x ,y, axs, sort=True, bins=20, **kwargs):
+def density_scatter(x ,y, axs, **kwargs):
 
     xy = np.vstack([x, y])
     z = gaussian_kde(xy)(xy)
 
-    if sort:
-        idx = z.argsort()
-        x, y, z = x[idx], y[idx], z[idx]
+    idx = z.argsort()
+    x, y, z = x[idx], y[idx], z[idx]
 
     axs.scatter(x, y, c=z, **kwargs)
     return axs

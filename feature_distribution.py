@@ -25,64 +25,125 @@ from scipy.interpolate import interpn
 
 
 
-encoding_dim = 25
+encoding_dim = 30
 run = 1
-epochs = 200
+beta = 0.0001
+beta_name = "0001"
+epochs = 300
 batch_size = 32
 
 
+
+
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+# load the non parametric properties (restructure the dataframe to match the others)
+non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+non_parametric_properties = non_parametric_properties.reset_index()
+non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+
+# add the non parametric properties to the other properties dataframe
+all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
+
+
+# find all bad fit galaxies
+bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+                          (all_properties["flag_r"] == 4) |
+                          (all_properties["flag_r"] == 5) |
+                          (all_properties["flag_r"] == 6))].index.tolist()
+
+# remove those galaxies
+for galaxy in bad_fit:
+    all_properties = all_properties.drop(galaxy, axis=0)
+
+# reset the index values
+all_properties = all_properties.reset_index(drop=True)
+
+
+print(all_properties)
+
+
+
+
+
+
+
+# # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+#
+# print(extracted_features.shape)
+#
+# fig, axs = plt.subplots(6, 5, figsize=(20, 24))
+#
+# for i in range(0, 5):
+#
+#     sns.histplot(x=extracted_features.T[i],ax=axs[0][i], bins=50)
+#     sns.histplot(x=extracted_features.T[i+5],ax=axs[1][i], bins=50)
+#     sns.histplot(x=extracted_features.T[i+10],ax=axs[2][i], bins=50)
+#     sns.histplot(x=extracted_features.T[i+15],ax=axs[3][i], bins=50)
+#     sns.histplot(x=extracted_features.T[i+20],ax=axs[4][i], bins=50)
+#     sns.histplot(x=extracted_features.T[i+25],ax=axs[5][i], bins=50)
+#     # sns.histplot(x=extracted_features.T[i+30],ax=axs[6][i], bins=50)
+#
+#     axs[0][i].set_xlabel("Feature " + str(i))
+#     axs[1][i].set_xlabel("Feature " + str(i+5))
+#     axs[2][i].set_xlabel("Feature " + str(i+10))
+#     axs[3][i].set_xlabel("Feature " + str(i+15))
+#     axs[4][i].set_xlabel("Feature " + str(i+20))
+#     axs[5][i].set_xlabel("Feature " + str(i+25))
+#     # axs[6][i].set_xlabel("Feature " + str(i+30))
+#
+#     for j in range(0, 5):
+#         axs[j][i].set_ylabel("")
+#
+#
+# np.set_printoptions(precision=3)
+#
+# print(np.log10(extracted_features.T[3]))
+# print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
+# print(np.max(extracted_features.T[3]))
+#
+# plt.savefig("Variational Eagle/Plots/feature_distributions_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
+# plt.show()
+
+
+
+
+
+
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_35_beta_0001_epoch_300_1.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
+
+# perform pca on the extracted features
+pca = PCA(n_components=12).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
 
 print(extracted_features.shape)
 
-# standard normal distribution
-# standard_normal = np.random.normal(0, 1, size=10000)
+fig, axs = plt.subplots(3, 4, figsize=(20, 24))
 
-fig, axs = plt.subplots(5, 5, figsize=(20, 20))
-
-for i in range(0, 5):
+for i in range(0, 4):
 
     sns.histplot(x=extracted_features.T[i],ax=axs[0][i], bins=50)
-    sns.histplot(x=extracted_features.T[i+5],ax=axs[1][i], bins=50)
-    sns.histplot(x=extracted_features.T[i+10],ax=axs[2][i], bins=50)
-    sns.histplot(x=extracted_features.T[i+15],ax=axs[3][i], bins=50)
-    sns.histplot(x=extracted_features.T[i+20],ax=axs[4][i], bins=50)
-
-    # weights = np.ones_like(extracted_features.T[i]) * len(extracted_features.T[i])
-
-    # sns.kdeplot(x=standard_normal, ax=axs[i][0], color="black")
-    # sns.kdeplot(x=extracted_features.T[i], weights=weights, ax=axs[0][i], color="black")
-
+    sns.histplot(x=extracted_features.T[i+4],ax=axs[1][i], bins=50)
+    sns.histplot(x=extracted_features.T[i+8],ax=axs[2][i], bins=50)
 
     axs[0][i].set_xlabel("Feature " + str(i))
-    axs[1][i].set_xlabel("Feature " + str(i+5))
-    axs[2][i].set_xlabel("Feature " + str(i+10))
-    axs[3][i].set_xlabel("Feature " + str(i+15))
-    axs[4][i].set_xlabel("Feature " + str(i+20))
+    axs[1][i].set_xlabel("Feature " + str(i+4))
+    axs[2][i].set_xlabel("Feature " + str(i+8))
 
     for j in range(0, 5):
         axs[j][i].set_ylabel("")
 
-
-# fig, axs = plt.subplots(1, 1, figsize=(8, 5))
-#
-# # sns.histplot(x=np.log10(extracted_features.T[0]), ax=axs, bins=50)
-# sns.histplot(x=extracted_features.T[0], ax=axs, bins=50, kde=True, fill=False, color="black")
-
-# standard_normal = np.random.normal(0, 1, size=10000)
-# sns.histplot(x=standard_normal, ax=axs, bins=50, kde=True, fill=False, color="black")
-
-
-# std_norm_x = np.linspace(-4, 4, 1000)
-# std_norm_y = 1000 * (1 / np.sqrt(2 * np.pi)) * np.exp(-0.5 * (std_norm_x ** 2))
-#
-# plt.plot(std_norm_x, std_norm_y, color="black")
-
-
-# weights = np.ones_like(extracted_features.T[0]) * len(extracted_features.T[0])
-
-# sns.kdeplot(extracted_features.T[0], common_norm=False, ax=axs, color="black")
 
 np.set_printoptions(precision=3)
 
@@ -90,5 +151,5 @@ print(np.log10(extracted_features.T[3]))
 print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
 print(np.max(extracted_features.T[3]))
 
-plt.savefig("Variational Eagle/Plots/feature_distributions_0001", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/feature_distributions_" + str(encoding_dim) + "_" + str(run) + "_pca", bbox_inches='tight')
 plt.show()
