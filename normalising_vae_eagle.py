@@ -541,7 +541,7 @@ for encoding_dim in [encoding_dim]:
             # Flow transformation
             z_flow = z + activation[:, None] * self.u[None, :]
             # Log-determinant (for KL update)
-            psi = (1 - tf.square(tf.tanh(linear))) * self.w
+            psi = (1 - tf.square(tf.tanh(linear)))[:, None] * self.w[None, :]
             dot = tf.reduce_sum(psi * self.u, axis=-1)
             log_det_jacobian = tf.math.log(tf.abs(1 + dot) + 1e-6)
             return z_flow, log_det_jacobian
