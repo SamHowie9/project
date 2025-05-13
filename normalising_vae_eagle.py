@@ -34,7 +34,7 @@ batch_size = 32
 
 
 
-for encoding_dim in [45, 50]:
+for encoding_dim in [encoding_dim]:
 
 
 
