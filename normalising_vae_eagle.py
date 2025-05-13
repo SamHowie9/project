@@ -568,6 +568,8 @@ for encoding_dim in [45, 50]:
     z_mean = Dense(encoding_dim, name="z_mean")(x)
     z_log_var = Dense(encoding_dim, name="z_log_var")(x)
 
+    print("Encoding Dim", encoding_dim)
+
     flow_layers = [PlanarFlow(encoding_dim) for _ in range(4)]
 
     z, log_det_sum = Sampling(flow_layers=flow_layers)([z_mean, z_log_var])
