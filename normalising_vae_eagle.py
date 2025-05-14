@@ -495,7 +495,6 @@ for encoding_dim in [encoding_dim]:
 
         def __init__(self, latent_dim, n_flows=1, **kwargs):
             super().__init__(**kwargs)
-            self.seed_generator = Generator.from_seed(1337)
             self.latent_dim = latent_dim
             self.n_flows = n_flows
             self.flows = [RQSFlow(latent_dim) for _ in range(n_flows)]
@@ -510,7 +509,7 @@ for encoding_dim in [encoding_dim]:
             dim = ops.shape(z_mean)[1]
 
             # generate the random variables
-            epsilon = normal(shape=(batch, dim), seed=self.seed_generator.make_seeds(1)[0])
+            epsilon = tf.random.normal(shape=(batch, dim))
 
             # perform reparameterization trick
             z = z_mean + ops.exp(0.5 * z_log_var) * epsilon
