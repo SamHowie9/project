@@ -538,7 +538,7 @@ for encoding_dim in [encoding_dim]:
             self.nn = models.Sequential([
                 layers.Dense(256, activation='relu'),
                 layers.Dense(256, activation='relu'),
-                layers.Dense((3 * num_bins - 1) * (latent_dim // 2))  # weights for the spline
+                layers.Dense(3 * num_bins * (latent_dim // 2))  # weights for the spline
             ])
 
         def call(self, z):
