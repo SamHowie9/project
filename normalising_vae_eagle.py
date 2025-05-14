@@ -440,7 +440,7 @@ for encoding_dim in [encoding_dim]:
             with tf.GradientTape() as tape:
 
                 # get the latent representation (run image through the encoder)
-                z_mean, z_log_var, z, log_det_sum = self.encoder(data)
+                z_mean, z_log_var, z, sum_log_det_jacobians  = self.encoder(data)
 
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
@@ -488,10 +488,12 @@ for encoding_dim in [encoding_dim]:
     # define sampling layer
     class Sampling(Layer):
 
-        def __init__(self, flow_layers=None, **kwargs):
+        def __init__(self, latent_dim, n_flows=1, **kwargs):
             super().__init__(**kwargs)
-            self.flow_layers = flow_layers or []
             self.seed_generator = keras.random.SeedGenerator(1337)
+            self.latent_dim = latent_dim
+            self.n_flows = n_flows
+            self.flows = [PlanarFlow(latent_dim) for _ in range(n_flows)]
 
         def call(self, inputs):
 
@@ -508,43 +510,39 @@ for encoding_dim in [encoding_dim]:
             # perform reparameterization trick
             z = z_mean + ops.exp(0.5 * z_log_var) * epsilon
 
-            print("Shape of z before flows:", z.shape)
+            sum_log_det_jacobian = 0.0
 
-            log_det_sum = 0.0
-
-            for flow in self.flow_layers:
+            for flow in self.flows:
                 z, log_det = flow(z)
-                log_det_sum += log_det
-
-            print("Shape of z after flows:", z.shape)
+                sum_log_det_jacobian += log_det
 
 
-            print("Shape of z before flows")
+            return z, sum_log_det_jacobian
 
-            return z, log_det_sum
 
 
 
 
     class PlanarFlow(Layer):
+        def __init__(self, latent_dim, **kwargs):
+            super().__init__(**kwargs)
+            self.latent_dim = latent_dim
 
-        def __init__(self, latent_dim):
-            super().__init__()
-            self.u = self.add_weight(shape=(latent_dim,), initializer="random_normal", trainable=True)
-            self.w = self.add_weight(shape=(latent_dim,), initializer="random_normal", trainable=True)
-            self.b = self.add_weight(shape=(), initializer="zeros", trainable=True)
+        def build(self, input_shape):
+            self.u = self.add_weight(shape=(self.latent_dim, 1), initializer='random_normal', trainable=True, name='u')
+            self.w = self.add_weight(shape=(self.latent_dim, 1), initializer='random_normal', trainable=True, name='w')
+            self.b = self.add_weight(shape=(1,), initializer='zeros', trainable=True, name='b')
 
-        def call(self, z):
-            # Activation
-            linear = tf.tensordot(z, self.w, axes=1) + self.b
-            activation = tf.tanh(linear)
-            # Flow transformation
-            z_flow = z + activation[:, None] * self.u[None, :]
-            # Log-determinant (for KL update)
-            psi = (1 - tf.square(tf.tanh(linear)))[:, None] * self.w[None, :]
-            dot = tf.reduce_sum(psi * self.u, axis=-1)
-            log_det_jacobian = tf.math.log(tf.abs(1 + dot) + 1e-6)
-            return z_flow, log_det_jacobian
+        def call(self, z0):
+            wTz = tf.matmul(z0, self.w) + self.b  # shape (batch, 1)
+            activation = tf.tanh(wTz)  # shape (batch, 1)
+            z = z0 + tf.matmul(activation, tf.transpose(self.u))  # (batch, latent_dim)
+
+            # Compute log det Jacobian
+            psi = (1 - tf.square(tf.tanh(wTz))) * self.w  # (batch, latent_dim, 1)
+            dot = tf.matmul(tf.transpose(self.u), psi, transpose_a=True)  # shape (batch, 1)
+            log_det_jacobian = tf.math.log(tf.abs(1 + dot) + 1e-7)  # numerical stability
+            return z, tf.squeeze(log_det_jacobian, axis=-1)
 
 
 
@@ -568,14 +566,10 @@ for encoding_dim in [encoding_dim]:
     z_mean = Dense(encoding_dim, name="z_mean")(x)
     z_log_var = Dense(encoding_dim, name="z_log_var")(x)
 
-    print("Encoding Dim", encoding_dim)
-
-    flow_layers = [PlanarFlow(encoding_dim) for _ in range(4)]
-
-    z, log_det_sum = Sampling(flow_layers=flow_layers)([z_mean, z_log_var])
+    z, log_det_sum = Sampling(encoding_dim, n_flows=4)([z_mean, z_log_var])
 
     # build the encoder
-    encoder = keras.Model(input_image, [z_mean, z_log_var, z, log_det_sum], name="encoder")
+    encoder = keras.Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
     encoder.summary()
 
 
