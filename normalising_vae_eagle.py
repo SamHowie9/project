@@ -534,15 +534,19 @@ for encoding_dim in [encoding_dim]:
             self.b = self.add_weight(shape=(1,), initializer='zeros', trainable=True, name='b')
 
         def call(self, z0):
+
             wTz = tf.matmul(z0, self.w) + self.b  # shape (batch, 1)
             activation = tf.tanh(wTz)  # shape (batch, 1)
             z = z0 + tf.matmul(activation, tf.transpose(self.u))  # (batch, latent_dim)
 
-            # Compute log det Jacobian
-            psi = (1 - tf.square(tf.tanh(wTz))) * self.w  # (batch, latent_dim, 1)
-            dot = tf.matmul(tf.transpose(self.u), psi, transpose_a=True)  # shape (batch, 1)
-            log_det_jacobian = tf.math.log(tf.abs(1 + dot) + 1e-7)  # numerical stability
-            return z, tf.squeeze(log_det_jacobian, axis=-1)
+            # Compute psi: shape (batch, latent_dim)
+            tanh_derivative = 1 - tf.square(tf.tanh(wTz))  # shape (batch, 1)
+            psi = tanh_derivative * tf.transpose(self.w)  # shape (batch, latent_dim)
+
+            # Compute dot product for log-det Jacobian: uᵀ ψ, shape (batch,)
+            dot = tf.reduce_sum(psi * tf.transpose(self.u), axis=1)  # shape (batch,)
+            log_det_jacobian = tf.math.log(tf.abs(1 + dot) + 1e-7)  # shape (batch,)
+            return z, log_det_jacobian
 
 
 
@@ -566,7 +570,7 @@ for encoding_dim in [encoding_dim]:
     z_mean = Dense(encoding_dim, name="z_mean")(x)
     z_log_var = Dense(encoding_dim, name="z_log_var")(x)
 
-    z, log_det_sum = Sampling(encoding_dim, n_flows=4)([z_mean, z_log_var])
+    z, sum_log_det_jacobians = Sampling(encoding_dim, n_flows=4)([z_mean, z_log_var])
 
     # build the encoder
     encoder = keras.Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
