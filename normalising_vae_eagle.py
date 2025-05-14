@@ -533,30 +533,47 @@ for encoding_dim in [encoding_dim]:
             self.latent_dim = latent_dim
             self.num_bins = num_bins
             self.range_min = range_min
+            self.condition_dim = latent_dim // 2
 
-            # Split latent space for coupling layer (half will be transformed)
             self.nn = models.Sequential([
                 layers.Dense(256, activation='relu'),
                 layers.Dense(256, activation='relu'),
-                layers.Dense(3 * num_bins * (latent_dim // 2))  # weights for the spline
+                layers.Dense(3 * num_bins * self.condition_dim)  # weights for bin_widths, heights, slopes
             ])
 
         def call(self, z):
-            z1, z2 = tf.split(z, 2, axis=1)  # z1: conditioner, z2: transformed
+            z1, z2 = tf.split(z, 2, axis=1)  # Split latent dim in half
 
-            # Get parameters for the spline
+            # Predict spline parameters conditioned on z1
             params = self.nn(z1)
+
+            # Reshape to (batch, condition_dim, 3 * num_bins)
+            params = tf.reshape(params, [-1, self.condition_dim, 3 * self.num_bins])
+
+            # Unpack the spline parameters
+            bin_widths = params[..., :self.num_bins]
+            bin_heights = params[..., self.num_bins:2 * self.num_bins]
+            knot_slopes = params[..., 2 * self.num_bins:]
+
+            # Ensure positivity using softplus
+            bin_widths = tf.nn.softplus(bin_widths)
+            bin_heights = tf.nn.softplus(bin_heights)
+            knot_slopes = tf.nn.softplus(knot_slopes)
+
+            # Create bijector
             bijector = tfb.RationalQuadraticSpline(
-                bin_widths=params[..., :self.num_bins * (self.latent_dim // 2)],
-                bin_heights=params[..., self.num_bins * (self.latent_dim // 2):2 * self.num_bins * (self.latent_dim // 2)],
-                knot_slopes=params[..., 2 * self.num_bins * (self.latent_dim // 2):],
+                bin_widths=bin_widths,
+                bin_heights=bin_heights,
+                knot_slopes=knot_slopes,
                 range_min=self.range_min
             )
 
+            # Apply the bijector
             z2_transformed = bijector.forward(z2)
-            z_transformed = tf.concat([z1, z2_transformed], axis=1)
-
             log_det = tf.reduce_sum(bijector.forward_log_det_jacobian(z2, event_ndims=1), axis=1)
+
+            # Recombine transformed z
+            z_transformed = tf.concat([z1, z2_transformed], axis=1)
             return z_transformed, log_det
 
 
