@@ -4,7 +4,7 @@ os.environ["KERAS_BACKEND"] = "tensorflow"
 # from tensorflow.keras import backend as K
 # from tensorflow.keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
 import tensorflow as tf
-from tensorflow.keras import layers, models, backend as K, losses, optimizers, metrics, Input
+from tensorflow.keras import layers, models, backend as K, losses, optimizers, metrics, Input, ops
 from tensorflow.random import normal, Generator
 import tensorflow_probability as tfp
 import numpy as np
