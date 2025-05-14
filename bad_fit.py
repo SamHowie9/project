@@ -35,7 +35,7 @@ for i in range(0, 7):
             axs[i][j].imshow(image)
             axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
         except:
-            print(i, j)
+            print(i, j, i+(7*j))
 
 
 plt.savefig("Variational Eagle/Plots/bad_fit_images", bbox_inches='tight')
