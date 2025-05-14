@@ -73,6 +73,9 @@ print(all_properties)
 
 print(all_properties.sort_values(by="MassType_Star"))
 
+print(all_properties[all_properties["flag"] != 0])
+print(all_properties[all_properties["flag_sersic"] != 0])
+
 
 
 
