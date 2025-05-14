@@ -529,7 +529,7 @@ for encoding_dim in [encoding_dim]:
 
     class RQSFlow(layers.Layer):
 
-        def __init__(self, latent_dim, num_bins=7, range_min=-5.0, **kwargs):
+        def __init__(self, latent_dim, num_bins=14, range_min=-5.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
             self.num_bins = num_bins
