@@ -10,18 +10,22 @@ import pandas as pd
 import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
+import tensorflow_probability as tfp
 
 
 
+tfb = tfp.bijectors
+tfd = tfp.distributions
 
-encoding_dim = 40
-run = 3
+
+encoding_dim = 30
+run = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # number of epochs for run
 epochs = 300
@@ -493,7 +497,7 @@ for encoding_dim in [encoding_dim]:
             self.seed_generator = keras.random.SeedGenerator(1337)
             self.latent_dim = latent_dim
             self.n_flows = n_flows
-            self.flows = [PlanarFlow(latent_dim) for _ in range(n_flows)]
+            self.flows = [RQSFlow(latent_dim) for _ in range(n_flows)]
 
         def call(self, inputs):
 
@@ -523,30 +527,65 @@ for encoding_dim in [encoding_dim]:
 
 
 
-    class PlanarFlow(Layer):
-        def __init__(self, latent_dim, **kwargs):
+    class RQSFlow(Layer):
+        def __init__(self, latent_dim, num_bins=8, range_min=-5.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
+            self.num_bins = num_bins
+            self.range_min = range_min
 
-        def build(self, input_shape):
-            self.u = self.add_weight(shape=(self.latent_dim, 1), initializer='random_normal', trainable=True, name='u')
-            self.w = self.add_weight(shape=(self.latent_dim, 1), initializer='random_normal', trainable=True, name='w')
-            self.b = self.add_weight(shape=(1,), initializer='zeros', trainable=True, name='b')
+            # Split latent space for coupling layer (half will be transformed)
+            self.nn = keras.Sequential([
+                Dense(256, activation='relu'),
+                Dense(256, activation='relu'),
+                Dense((3 * num_bins - 1) * (latent_dim // 2))  # weights for the spline
+            ])
 
-        def call(self, z0):
+        def call(self, z):
+            z1, z2 = tf.split(z, 2, axis=1)  # z1: conditioner, z2: transformed
 
-            wTz = tf.matmul(z0, self.w) + self.b  # shape (batch, 1)
-            activation = tf.tanh(wTz)  # shape (batch, 1)
-            z = z0 + tf.matmul(activation, tf.transpose(self.u))  # (batch, latent_dim)
+            # Get parameters for the spline
+            params = self.nn(z1)
+            bijector = tfb.RationalQuadraticSpline(
+                bin_widths=params[..., :self.num_bins * (self.latent_dim // 2)],
+                bin_heights=params[..., self.num_bins * (self.latent_dim // 2):2 * self.num_bins * (self.latent_dim // 2)],
+                knot_slopes=params[..., 2 * self.num_bins * (self.latent_dim // 2):],
+                range_min=self.range_min
+            )
 
-            # Compute psi: shape (batch, latent_dim)
-            tanh_derivative = 1 - tf.square(tf.tanh(wTz))  # shape (batch, 1)
-            psi = tanh_derivative * tf.transpose(self.w)  # shape (batch, latent_dim)
+            z2_transformed = bijector.forward(z2)
+            z_transformed = tf.concat([z1, z2_transformed], axis=1)
 
-            # Compute dot product for log-det Jacobian: uᵀ ψ, shape (batch,)
-            dot = tf.reduce_sum(psi * tf.transpose(self.u), axis=1)  # shape (batch,)
-            log_det_jacobian = tf.math.log(tf.abs(1 + dot) + 1e-7)  # shape (batch,)
-            return z, log_det_jacobian
+            log_det = tf.reduce_sum(bijector.forward_log_det_jacobian(z2, event_ndims=1), axis=1)
+            return z_transformed, log_det
+
+
+
+
+    # class PlanarFlow(Layer):
+    #     def __init__(self, latent_dim, **kwargs):
+    #         super().__init__(**kwargs)
+    #         self.latent_dim = latent_dim
+    #
+    #     def build(self, input_shape):
+    #         self.u = self.add_weight(shape=(self.latent_dim, 1), initializer='random_normal', trainable=True, name='u')
+    #         self.w = self.add_weight(shape=(self.latent_dim, 1), initializer='random_normal', trainable=True, name='w')
+    #         self.b = self.add_weight(shape=(1,), initializer='zeros', trainable=True, name='b')
+    #
+    #     def call(self, z0):
+    #
+    #         wTz = tf.matmul(z0, self.w) + self.b  # shape (batch, 1)
+    #         activation = tf.tanh(wTz)  # shape (batch, 1)
+    #         z = z0 + tf.matmul(activation, tf.transpose(self.u))  # (batch, latent_dim)
+    #
+    #         # Compute psi: shape (batch, latent_dim)
+    #         tanh_derivative = 1 - tf.square(tf.tanh(wTz))  # shape (batch, 1)
+    #         psi = tanh_derivative * tf.transpose(self.w)  # shape (batch, latent_dim)
+    #
+    #         # Compute dot product for log-det Jacobian: uᵀ ψ, shape (batch,)
+    #         dot = tf.reduce_sum(psi * tf.transpose(self.u), axis=1)  # shape (batch,)
+    #         log_det_jacobian = tf.math.log(tf.abs(1 + dot) + 1e-7)  # shape (batch,)
+    #         return z, log_det_jacobian
 
 
 
