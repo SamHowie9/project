@@ -1,10 +1,8 @@
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
-import keras
-from keras import ops
-from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
 from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
 import numpy as np
 import pandas as pd
 import random
