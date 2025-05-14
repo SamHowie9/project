@@ -24,7 +24,7 @@ bad_fit = all_properties[((all_properties["flag_r"] == 1) |
 print(bad_fit)
 print(len(bad_fit))
 
-fig, axs = plt.subplots(7, 6, figsize=12, 12)
+fig, axs = plt.subplots(7, 6, figsize=(12, 12))
 
 for i in range(0, 7):
 
