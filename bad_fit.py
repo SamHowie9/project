@@ -104,4 +104,4 @@ print()
 print()
 
 for image in all_images:
-    print(np.min(image[0]), np.max(image[0]), "   ", np.min(image[1]), np.max(image[1]), "   ", np.min(image[2]), np.max(image[2]))
+    print(np.min(image.T[0]), np.max(image.T[0]), "   ", np.min(image.T[1]), np.max(image.T[1]), "   ", np.min(image.T[2]), np.max(image.T[2]))
