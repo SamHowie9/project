@@ -528,6 +528,7 @@ for encoding_dim in [encoding_dim]:
 
 
     class RQSFlow(layers.Layer):
+
         def __init__(self, latent_dim, num_bins=8, range_min=-5.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
@@ -542,25 +543,21 @@ for encoding_dim in [encoding_dim]:
             ])
 
         def call(self, z):
-            z1, z2 = tf.split(z, 2, axis=1)  # Split latent dim in half
+            z1, z2 = tf.split(z, 2, axis=1)  # z1: conditioner, z2: transformed
 
-            # Predict spline parameters conditioned on z1
-            params = self.nn(z1)
+            # Get raw spline parameters
+            params = self.nn(z1)  # shape: (batch, 3 * num_bins * (latent_dim // 2))
 
-            # Reshape to (batch, condition_dim, 3 * num_bins)
-            params = tf.reshape(params, [-1, self.condition_dim, 3 * self.num_bins])
+            num_features = self.latent_dim // 2
+            batch_size = tf.shape(z1)[0]
 
-            # Unpack the spline parameters
-            bin_widths = params[..., :self.num_bins]
-            bin_heights = params[..., self.num_bins:2 * self.num_bins]
-            knot_slopes = params[..., 2 * self.num_bins:]
+            # Reshape to match expected shape: (batch, num_bins, num_features)
+            params = tf.reshape(params, [batch_size, self.num_bins * 3, num_features])
+            bin_widths = params[:, :self.num_bins, :]
+            bin_heights = params[:, self.num_bins:2 * self.num_bins, :]
+            knot_slopes = params[:, 2 * self.num_bins:, :]
 
-            # Ensure positivity using softplus
-            bin_widths = tf.nn.softplus(bin_widths)
-            bin_heights = tf.nn.softplus(bin_heights)
-            knot_slopes = tf.nn.softplus(knot_slopes)
-
-            # Create bijector
+            # Create bijector with reshaped parameters
             bijector = tfb.RationalQuadraticSpline(
                 bin_widths=bin_widths,
                 bin_heights=bin_heights,
@@ -568,13 +565,13 @@ for encoding_dim in [encoding_dim]:
                 range_min=self.range_min
             )
 
-            # Apply the bijector
             z2_transformed = bijector.forward(z2)
-            log_det = tf.reduce_sum(bijector.forward_log_det_jacobian(z2, event_ndims=1), axis=1)
-
-            # Recombine transformed z
             z_transformed = tf.concat([z1, z2_transformed], axis=1)
+
+            log_det = tf.reduce_sum(bijector.forward_log_det_jacobian(z2, event_ndims=1), axis=1)
             return z_transformed, log_det
+
+
 
 
 
