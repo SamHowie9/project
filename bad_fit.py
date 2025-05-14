@@ -33,9 +33,10 @@ for i in range(0, 7):
         try:
             image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(bad_fit[i + (7 * j)]) + ".png")
             axs[i][j].imshow(image)
-            axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
         except:
             print(i, j, i+(7*j))
+
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
 plt.savefig("Variational Eagle/Plots/bad_fit_images", bbox_inches='tight')
