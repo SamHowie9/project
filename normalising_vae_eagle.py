@@ -543,6 +543,7 @@ for encoding_dim in [encoding_dim]:
             ])
 
         def call(self, z):
+
             z1, z2 = tf.split(z, 2, axis=1)  # z1: conditioner, z2: transformed
 
             # Get raw spline parameters
@@ -552,10 +553,10 @@ for encoding_dim in [encoding_dim]:
             batch_size = tf.shape(z1)[0]
 
             # Reshape to match expected shape: (batch, num_bins, num_features)
-            params = tf.reshape(params, [batch_size, self.num_bins * 3, num_features])
+            params = tf.reshape(params, [batch_size, 3 * self.num_bins, num_features])
             bin_widths = params[:, :self.num_bins, :]
             bin_heights = params[:, self.num_bins:2 * self.num_bins, :]
-            knot_slopes = params[:, 2 * self.num_bins:, :]
+            knot_slopes = params[:, 2 * self.num_bins:, :]  # This should be (batch, num_bins, num_features)
 
             # Create bijector with reshaped parameters
             bijector = tfb.RationalQuadraticSpline(
