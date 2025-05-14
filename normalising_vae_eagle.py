@@ -536,7 +536,7 @@ for encoding_dim in [encoding_dim]:
             self.range_min = range_min
 
             # Split latent space for coupling layer (half will be transformed)
-            self.nn = keras.Sequential([
+            self.nn = models.Sequential([
                 layers.Dense(256, activation='relu'),
                 layers.Dense(256, activation='relu'),
                 layers.Dense((3 * num_bins - 1) * (latent_dim // 2))  # weights for the spline
