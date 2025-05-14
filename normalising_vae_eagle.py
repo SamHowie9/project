@@ -454,8 +454,8 @@ for encoding_dim in [encoding_dim]:
                 kl_loss = ops.mean(kl_loss)
 
                 # total loss
-                # total_loss = reconstruction_loss + kl_loss
-                total_loss = reconstruction_loss + (beta * kl_loss)
+                total_loss = reconstruction_loss + kl_loss
+                # total_loss = reconstruction_loss + (beta * kl_loss)
 
                 print("Reconstruction Loss Shape:", reconstruction_loss.shape)
                 print("KL Loss Shape:", kl_loss.shape)
