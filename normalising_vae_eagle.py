@@ -450,7 +450,7 @@ for encoding_dim in [encoding_dim]:
 
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(kl_loss, axis=1) - log_det_sum
+                kl_loss = ops.mean(kl_loss, axis=1) - sum_log_det_jacobians
                 kl_loss = ops.mean(kl_loss)
 
                 # total loss
