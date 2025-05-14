@@ -529,7 +529,7 @@ for encoding_dim in [encoding_dim]:
 
     class RQSFlow(layers.Layer):
 
-        def __init__(self, latent_dim, num_bins=8, range_min=-5.0, **kwargs):
+        def __init__(self, latent_dim, num_bins=7, range_min=-5.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
             self.num_bins = num_bins
@@ -542,23 +542,30 @@ for encoding_dim in [encoding_dim]:
                 layers.Dense(3 * num_bins * self.condition_dim)  # weights for bin_widths, heights, slopes
             ])
 
+
         def call(self, z):
 
-            z1, z2 = tf.split(z, 2, axis=1)  # z1: conditioner, z2: transformed
+            z1, z2 = tf.split(z, 2, axis=1)  # Split the latent space
 
             # Get raw spline parameters
             params = self.nn(z1)  # shape: (batch, 3 * num_bins * (latent_dim // 2))
 
-            num_features = self.latent_dim // 2
+            num_features = self.latent_dim // 2  # This should be 15 in your case
             batch_size = tf.shape(z1)[0]
 
-            # Reshape to match expected shape: (batch, num_bins, num_features)
+            # Reshape params to match: (batch_size, num_bins, num_features)
             params = tf.reshape(params, [batch_size, 3 * self.num_bins, num_features])
             bin_widths = params[:, :self.num_bins, :]
             bin_heights = params[:, self.num_bins:2 * self.num_bins, :]
-            knot_slopes = params[:, 2 * self.num_bins:, :]  # This should be (batch, num_bins, num_features)
+            knot_slopes = params[:, 2 * self.num_bins:, :]  # shape: (batch, num_bins, num_features)
 
-            # Create bijector with reshaped parameters
+            print(f"z1 shape: {z1.shape}")
+            print(f"params shape: {params.shape}")
+            print(f"bin_widths shape: {bin_widths.shape}")
+            print(f"bin_heights shape: {bin_heights.shape}")
+            print(f"knot_slopes shape: {knot_slopes.shape}")
+
+            # Ensure knot_slopes have the correct shape to broadcast with the latent_dim
             bijector = tfb.RationalQuadraticSpline(
                 bin_widths=bin_widths,
                 bin_heights=bin_heights,
