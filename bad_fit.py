@@ -99,3 +99,9 @@ all_images = np.array(all_images)
 print(np.min(all_images.T[0]), np.max(all_images.T[0]))
 print(np.min(all_images.T[1]), np.max(all_images.T[1]))
 print(np.min(all_images.T[2]), np.max(all_images.T[2]))
+
+print()
+print()
+
+for image in all_images:
+    print(np.min(image[0]), np.max(image[0]), "   ", np.min(image[1]), np.max(image[1]), "   ", np.min(image[2]), np.max(image[2]))
