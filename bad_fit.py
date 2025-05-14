@@ -31,7 +31,7 @@ for i in range(0, 7):
     for j in range(0, 6):
 
         # try:
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + bad_fit[i + (7 * j)])
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(bad_fit[i + (7 * j)]) + ".png")
         axs[i][j].imshow(image)
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
         # except:
