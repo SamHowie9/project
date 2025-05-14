@@ -4,13 +4,15 @@ import tensorflow as tf
 # from tensorflow.keras import models
 # from tensorflow.keras import backend as K
 # from tensorflow.keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
-from tensorflow.keras import layers, models, backend as K
+import tensorflow as tf
+from tensorflow.keras import layers, models, backend as K, losses, optimizers, metrics, Input
+from tensorflow.random import normal, Generator
+import tensorflow_probability as tfp
 import numpy as np
 import pandas as pd
 import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
-import tensorflow_probability as tfp
 
 
 
@@ -418,15 +420,15 @@ for encoding_dim in [encoding_dim]:
 
 
     # Define VAE model with custom train step
-    class VAE(keras.Model):
+    class VAE(models.Model):
 
         def __init__(self, encoder, decoder, **kwargs):
             super().__init__(**kwargs)
             self.encoder = encoder
             self.decoder = decoder
-            self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
-            self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
-            self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+            self.total_loss_tracker = metrics.Mean(name="total_loss")
+            self.reconstruction_loss_tracker = metrics.Mean(name="reconstruction_loss")
+            self.kl_loss_tracker = metrics.Mean(name="kl_loss")
 
         @property
         def metrics(self):
@@ -450,7 +452,7 @@ for encoding_dim in [encoding_dim]:
                 reconstruction = self.decoder(z)
 
                 # reconstruction loss
-                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+                reconstruction_loss = ops.mean(losses.binary_crossentropy(data, reconstruction))
 
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
@@ -490,11 +492,11 @@ for encoding_dim in [encoding_dim]:
 
 
     # define sampling layer
-    class Sampling(Layer):
+    class Sampling(layers.Layer):
 
         def __init__(self, latent_dim, n_flows=1, **kwargs):
             super().__init__(**kwargs)
-            self.seed_generator = keras.random.SeedGenerator(1337)
+            self.seed_generator = Generator.from_seed(1337)
             self.latent_dim = latent_dim
             self.n_flows = n_flows
             self.flows = [RQSFlow(latent_dim) for _ in range(n_flows)]
@@ -509,7 +511,7 @@ for encoding_dim in [encoding_dim]:
             dim = ops.shape(z_mean)[1]
 
             # generate the random variables
-            epsilon = keras.random.normal(shape=(batch, dim), seed=self.seed_generator)
+            epsilon = normal(shape=(batch, dim), seed=self.seed_generator.make_seeds(1)[0])
 
             # perform reparameterization trick
             z = z_mean + ops.exp(0.5 * z_log_var) * epsilon
@@ -527,7 +529,7 @@ for encoding_dim in [encoding_dim]:
 
 
 
-    class RQSFlow(Layer):
+    class RQSFlow(layers.Layer):
         def __init__(self, latent_dim, num_bins=8, range_min=-5.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
@@ -536,9 +538,9 @@ for encoding_dim in [encoding_dim]:
 
             # Split latent space for coupling layer (half will be transformed)
             self.nn = keras.Sequential([
-                Dense(256, activation='relu'),
-                Dense(256, activation='relu'),
-                Dense((3 * num_bins - 1) * (latent_dim // 2))  # weights for the spline
+                layers.Dense(256, activation='relu'),
+                layers.Dense(256, activation='relu'),
+                layers.Dense((3 * num_bins - 1) * (latent_dim // 2))  # weights for the spline
             ])
 
         def call(self, z):
@@ -594,52 +596,52 @@ for encoding_dim in [encoding_dim]:
 
 
     # Define keras tensor for the encoder
-    input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
+    input_image = Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
 
     # layers for the encoder
-    x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
-    x = Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
-    x = Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
-    x = Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
-    x = Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
+    x = layers.Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
+    x = layers.Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
+    x = layers.Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
+    x = layers.Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
+    x = layers.Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
     # x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
-    x = GlobalAveragePooling2D()(x)                                                                                 # (512)
-    x = Dense(128, activation="relu")(x)                                                                            # (128)
+    x = layers.GlobalAveragePooling2D()(x)                                                                                 # (512)
+    x = layers.Dense(128, activation="relu")(x)                                                                            # (128)
 
-    z_mean = Dense(encoding_dim, name="z_mean")(x)
-    z_log_var = Dense(encoding_dim, name="z_log_var")(x)
+    z_mean = layers.Dense(encoding_dim, name="z_mean")(x)
+    z_log_var = layers.Dense(encoding_dim, name="z_log_var")(x)
 
     z, sum_log_det_jacobians = Sampling(encoding_dim, n_flows=4)([z_mean, z_log_var])
 
     # build the encoder
-    encoder = keras.Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
+    encoder = models.Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
     encoder.summary()
 
 
 
     # Define keras tensor for the decoder
-    latent_input = keras.Input(shape=(encoding_dim,))
+    latent_input = Input(shape=(encoding_dim,))
 
     # layers for the decoder
-    x = Dense(units=128, activation="relu")(latent_input)                                                           # (64)
-    x = Dense(units=512, activation="relu")(x)                                                                      # (256)
-    x = Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
-    x = Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
-    x = Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
-    x = Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
-    x = Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
-    x = Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
-    decoded = Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
+    x = layers.Dense(units=128, activation="relu")(latent_input)                                                           # (64)
+    x = layers.Dense(units=512, activation="relu")(x)                                                                      # (256)
+    x = layers.Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
+    x = layers.Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
+    x = layers.Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
+    x = layers.Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
+    x = layers.Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
+    x = layers.Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
+    decoded = layers.Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
 
     # build the decoder
-    decoder = keras.Model(latent_input, decoded, name="decoder")
+    decoder = models.Model(latent_input, decoded, name="decoder")
     decoder.summary()
 
 
 
     # build and compile the VAE
     vae = VAE(encoder, decoder)
-    vae.compile(optimizer=keras.optimizers.Adam())
+    vae.compile(optimizer=optimizers.Adam())
 
 
 
