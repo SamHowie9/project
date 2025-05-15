@@ -28,6 +28,8 @@ beta_name = "0001"
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
+print(tf.config.list_physical_devices('GPU'))
+
 # number of epochs for run
 epochs = 300
 
