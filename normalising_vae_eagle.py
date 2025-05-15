@@ -527,57 +527,64 @@ for encoding_dim in [encoding_dim]:
 
 
 
+
     class RQSFlow(layers.Layer):
 
-        def __init__(self, latent_dim, num_bins=14, range_min=-5.0, **kwargs):
+        def __init__(self, latent_dim, num_bins=8, bound=3.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
             self.num_bins = num_bins
-            self.range_min = range_min
-            self.condition_dim = latent_dim // 2
+            self.bound = bound
+            self.bijectors = []
 
-            self.nn = models.Sequential([
-                layers.Dense(256, activation='relu'),
-                layers.Dense(256, activation='relu'),
-                layers.Dense(3 * num_bins * self.condition_dim)  # weights for bin_widths, heights, slopes
+        def build(self, input_shape):
+            # Simple neural network to predict spline parameters per dimension
+            self.nn = tf.keras.Sequential([
+                layers.Dense(128, activation='relu'),
+                layers.Dense(self.latent_dim * (3 * self.num_bins - 1))
             ])
 
-
         def call(self, z):
+            batch_size = tf.shape(z)[0]
 
-            z1, z2 = tf.split(z, 2, axis=1)  # Split the latent space
+            # Predict parameters for the splines
+            params = self.nn(z)
+            params = tf.reshape(params, [batch_size, self.latent_dim, 3 * self.num_bins - 1])
 
-            # Get raw spline parameters
-            params = self.nn(z1)  # shape: (batch, 3 * num_bins * (latent_dim // 2))
+            # Unpack RQS parameters: widths, heights, slopes
+            unnormalized_widths = params[:, :, :self.num_bins]
+            unnormalized_heights = params[:, :, self.num_bins:2 * self.num_bins]
+            unnormalized_derivatives = params[:, :, 2 * self.num_bins:]
 
-            num_features = self.latent_dim // 2  # This should be 15 in your case
-            batch_size = tf.shape(z1)[0]
+            # Apply constraints for monotonicity
+            widths = tf.nn.softmax(unnormalized_widths, axis=-1)
+            heights = tf.nn.softmax(unnormalized_heights, axis=-1)
+            derivatives = tf.nn.softplus(unnormalized_derivatives) + 1e-3  # to ensure positivity
 
-            # Reshape params to match: (batch_size, num_bins, num_features)
-            params = tf.reshape(params, [batch_size, 3 * self.num_bins, num_features])
-            bin_widths = params[:, :self.num_bins, :]
-            bin_heights = params[:, self.num_bins:2 * self.num_bins, :]
-            knot_slopes = params[:, 2 * self.num_bins:, :]  # shape: (batch, num_bins, num_features)
+            # Create bijectors per dimension
+            z_out = []
+            log_dets = []
 
-            print(f"z1 shape: {z1.shape}")
-            print(f"params shape: {params.shape}")
-            print(f"bin_widths shape: {bin_widths.shape}")
-            print(f"bin_heights shape: {bin_heights.shape}")
-            print(f"knot_slopes shape: {knot_slopes.shape}")
+            for d in range(self.latent_dim):
+                rqs_bijector = tfb.RationalQuadraticSpline(
+                    bin_widths=widths[:, d, :],
+                    bin_heights=heights[:, d, :],
+                    knot_slopes=derivatives[:, d, :],
+                    range_min=-self.bound
+                )
 
-            # Ensure knot_slopes have the correct shape to broadcast with the latent_dim
-            bijector = tfb.RationalQuadraticSpline(
-                bin_widths=bin_widths,
-                bin_heights=bin_heights,
-                knot_slopes=knot_slopes,
-                range_min=self.range_min
-            )
+                z_d = z[:, d]
+                z_d_transformed = rqs_bijector.forward(z_d)
+                log_det = rqs_bijector.forward_log_det_jacobian(z_d, event_ndims=0)
 
-            z2_transformed = bijector.forward(z2)
-            z_transformed = tf.concat([z1, z2_transformed], axis=1)
+                z_out.append(z_d_transformed)
+                log_dets.append(log_det)
 
-            log_det = tf.reduce_sum(bijector.forward_log_det_jacobian(z2, event_ndims=1), axis=1)
-            return z_transformed, log_det
+            # Stack outputs and sum log-determinants
+            z_out = tf.stack(z_out, axis=-1)
+            sum_log_det = tf.add_n(log_dets)
+
+            return z_out, sum_log_det
 
 
 
