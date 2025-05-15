@@ -419,14 +419,14 @@ for encoding_dim in [45, 50]:
 
 
     # Define VAE model with custom train step
-    class VAE(keras.Model):
+    class VAE(Model):
 
         def __init__(self, encoder, decoder, **kwargs):
             super().__init__(**kwargs)
             self.encoder = encoder
             self.decoder = decoder
             self.total_loss_tracker = metrics.Mean(name="total_loss")
-            self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
+            self.reconstruction_loss_tracker = metrics.Mean(name="reconstruction_loss")
             self.kl_loss_tracker = metrics.Mean(name="kl_loss")
 
         @property
