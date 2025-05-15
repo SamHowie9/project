@@ -467,6 +467,7 @@ for encoding_dim in [encoding_dim]:
                 print("Total Loss Shape:", total_loss.shape)
 
 
+            print("...")
 
 
             # gradient decent based on total loss
