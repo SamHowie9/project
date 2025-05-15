@@ -4,8 +4,8 @@ import tensorflow as tf
 # from tensorflow import keras
 # from tensorflow.keras import backend as K
 # from tensorflow.keras import ops
-from tensorflow.keras import layers, Model, Input, metrics, losses, optimizers, ops
-from tensorflow.keras.layers import Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D, Layer
+from tensorflow.keras import layers, Model, metrics, losses, optimizers
+from tensorflow.keras.layers import Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D, Layer, Input
 from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
@@ -452,11 +452,11 @@ for encoding_dim in [45, 50]:
 
 
                 # reconstruction loss
-                reconstruction_loss = ops.mean(losses.binary_crossentropy(data, reconstruction))
+                reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(data, reconstruction))
 
                 # kl loss
-                kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.mean(kl_loss)
+                kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+                kl_loss = tf.reduce_mean(kl_loss)
 
                 # total loss
                 # total_loss = reconstruction_loss + kl_loss
@@ -502,14 +502,14 @@ for encoding_dim in [45, 50]:
             z_mean, z_log_var = inputs
 
             # find the batch size and number of latent features (dim)
-            batch = ops.shape(z_mean)[0]
-            dim = ops.shape(z_mean)[1]
+            batch = tf.shape(z_mean)[0]
+            dim = tf.shape(z_mean)[1]
 
             # generate the random variables
             epsilon = tf.random.normal(shape=(batch, dim))
 
             # perform reparameterization trick
-            return z_mean + ops.exp(0.5 * z_log_var) * epsilon
+            return z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
 
 
