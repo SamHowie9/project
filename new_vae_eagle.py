@@ -2,6 +2,7 @@ import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow import keras
+from tensorflow.keras import backend as K
 from tensorflow.keras import ops
 # from tensorflow.keras import layers, Model, Input, metrics, losses, optimizers
 from tensorflow.keras.layers import Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D, Layer
