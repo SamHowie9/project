@@ -471,12 +471,19 @@ for encoding_dim in [encoding_dim]:
 
             # gradient decent based on total loss
             grads = tape.gradient(total_loss, self.trainable_weights)
+            print("...")
             self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+
+            print("...")
 
             # update loss trackers
             self.total_loss_tracker.update_state(total_loss)
+            print("...")
             self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+            print("...")
             self.kl_loss_tracker.update_state(kl_loss)
+
+            print("...")
 
             # return total loss, reconstruction loss and kl divergence
             return {
