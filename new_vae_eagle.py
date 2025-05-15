@@ -1,12 +1,12 @@
 import os
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import backend as K
-from tensorflow.keras import ops
-# from tensorflow.keras import layers, Model, Input, metrics, losses, optimizers
-from tensorflow.keras.layers import Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D, Layer
+# from tensorflow import keras
 # from tensorflow.keras import backend as K
+# from tensorflow.keras import ops
+from tensorflow.keras import layers, Model, Input, metrics, losses, optimizers, ops
+from tensorflow.keras.layers import Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D, Layer
+from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
 import random
@@ -425,9 +425,9 @@ for encoding_dim in [45, 50]:
             super().__init__(**kwargs)
             self.encoder = encoder
             self.decoder = decoder
-            self.total_loss_tracker = keras.metrics.Mean(name="total_loss")
+            self.total_loss_tracker = metrics.Mean(name="total_loss")
             self.reconstruction_loss_tracker = keras.metrics.Mean(name="reconstruction_loss")
-            self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+            self.kl_loss_tracker = metrics.Mean(name="kl_loss")
 
         @property
         def metrics(self):
@@ -452,7 +452,7 @@ for encoding_dim in [45, 50]:
 
 
                 # reconstruction loss
-                reconstruction_loss = ops.mean(keras.losses.binary_crossentropy(data, reconstruction))
+                reconstruction_loss = ops.mean(losses.binary_crossentropy(data, reconstruction))
 
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
@@ -518,7 +518,7 @@ for encoding_dim in [45, 50]:
 
 
     # Define keras tensor for the encoder
-    input_image = keras.Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
+    input_image = Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
 
     # layers for the encoder
     x = Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
@@ -535,13 +535,13 @@ for encoding_dim in [45, 50]:
     z = Sampling()([z_mean, z_log_var])
 
     # build the encoder
-    encoder = keras.Model(input_image, [z_mean, z_log_var, z], name="encoder")
+    encoder = Model(input_image, [z_mean, z_log_var, z], name="encoder")
     encoder.summary()
 
 
 
     # Define keras tensor for the decoder
-    latent_input = keras.Input(shape=(encoding_dim,))
+    latent_input = Input(shape=(encoding_dim,))
 
     # layers for the decoder
     x = Dense(units=128, activation="relu")(latent_input)                                                           # (64)
@@ -555,14 +555,14 @@ for encoding_dim in [45, 50]:
     decoded = Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
 
     # build the decoder
-    decoder = keras.Model(latent_input, decoded, name="decoder")
+    decoder = Model(latent_input, decoded, name="decoder")
     decoder.summary()
 
 
 
     # build and compile the VAE
     vae = VAE(encoder, decoder)
-    vae.compile(optimizer=keras.optimizers.Adam())
+    vae.compile(optimizer=optimizers.Adam())
 
 
 
