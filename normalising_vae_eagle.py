@@ -35,7 +35,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 # number of epochs for run
-epochs = 10
+epochs = 100
 
 # batch size for run
 batch_size = 32
