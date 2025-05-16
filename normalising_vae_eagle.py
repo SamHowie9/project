@@ -22,13 +22,14 @@ tfd = tfp.distributions
 
 
 encoding_dim = 30
-run = 3
+run = 1
+n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 print(tf.config.list_physical_devices('GPU'))
 
@@ -466,29 +467,17 @@ for encoding_dim in [encoding_dim]:
                 # total_loss = reconstruction_loss + kl_loss
                 total_loss = reconstruction_loss + (beta * kl_loss)
 
-                print("Reconstruction Loss Shape:", reconstruction_loss.shape)
-                print("KL Loss Shape:", kl_loss.shape)
-                print("Total Loss Shape:", total_loss.shape)
-
-
-            print("...")
 
 
             # gradient decent based on total loss
             grads = tape.gradient(total_loss, self.trainable_weights)
-            print("...")
             self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
-
-            print("...")
 
             # update loss trackers
             self.total_loss_tracker.update_state(total_loss)
-            print("...")
             self.reconstruction_loss_tracker.update_state(reconstruction_loss)
-            print("...")
             self.kl_loss_tracker.update_state(kl_loss)
 
-            print("...")
 
             # return total loss, reconstruction loss and kl divergence
             return {
@@ -650,7 +639,7 @@ for encoding_dim in [encoding_dim]:
     z_mean = layers.Dense(encoding_dim, name="z_mean")(x)
     z_log_var = layers.Dense(encoding_dim, name="z_log_var")(x)
 
-    z, sum_log_det_jacobians = Sampling(encoding_dim, n_flows=4)([z_mean, z_log_var])
+    z, sum_log_det_jacobians = Sampling(encoding_dim, n_flows=n_flows)([z_mean, z_log_var])
 
     # build the encoder
     encoder = Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
@@ -685,7 +674,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # train the model
-    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
+    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size, verbose=1)
 
     # or load the weights from a previous run
     # vae.load_weights("Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
