@@ -16,6 +16,8 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 
 
+tf.keras.mixed_precision.set_global_policy('float32')
+
 
 tfb = tfp.bijectors
 tfd = tfp.distributions
@@ -517,6 +519,7 @@ for encoding_dim in [encoding_dim]:
             sum_log_det_jacobian = 0.0
 
             for flow in self.flows:
+                z = tf.clip_by_value(z, -bound + 1e-4, bound - 1e-4)
                 z, log_det = flow(z)
                 sum_log_det_jacobian += log_det
 
@@ -530,7 +533,7 @@ for encoding_dim in [encoding_dim]:
 
     class RQSFlow(Layer):
 
-        def __init__(self, latent_dim, num_bins=4, bound=3.0, **kwargs):
+        def __init__(self, latent_dim, num_bins=4, bound=4.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
             self.num_bins = num_bins
@@ -545,6 +548,10 @@ for encoding_dim in [encoding_dim]:
             ])
 
         def call(self, z):
+
+            # clip z to make sure it is within the allowed bounds
+            z = tf.clip_by_value(z, -self.bound + 1e-4, self.bound - 1e-4)
+
             batch_size = tf.shape(z)[0]
 
             # Predict parameters for the splines
@@ -570,7 +577,8 @@ for encoding_dim in [encoding_dim]:
                     bin_widths=widths[:, d, :],
                     bin_heights=heights[:, d, :],
                     knot_slopes=derivatives[:, d, :],
-                    range_min=-self.bound
+                    range_min=-self.bound,
+                    range_max=self.bound
                 )
 
                 z_d = z[:, d]
