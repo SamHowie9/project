@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 encoding_dim = 30
 run = 1
-n_flows = 4
+n_flows = 2
 beta = 0.0001
 beta_name = "0001"
 
@@ -35,7 +35,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 # number of epochs for run
-epochs = 300
+epochs = 10
 
 # batch size for run
 batch_size = 32
@@ -567,6 +567,7 @@ for encoding_dim in [encoding_dim]:
             widths = tf.nn.softmax(unnormalized_widths, axis=-1)
             heights = tf.nn.softmax(unnormalized_heights, axis=-1)
             derivatives = tf.nn.softplus(unnormalized_derivatives) + 1e-3  # to ensure positivity
+            derivatives = tf.clip_by_value(derivatives, 1e-2, 1e2)
 
             # Create bijectors per dimension
             z_out = []
