@@ -681,11 +681,12 @@ for encoding_dim in [encoding_dim]:
 
 
     # train the model
-    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size, verbose=1)
+    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
     # or load the weights from a previous run
     # vae.load_weights("Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 
+    vae.build(input_shape=(None, 256, 256, 3))
 
     # save the weights
     vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".weights.h5", overwrite=True)
