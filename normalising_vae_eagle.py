@@ -826,7 +826,7 @@ for encoding_dim in [encoding_dim]:
     images_to_reconstruct = train_images[n:]
 
     # reconstruct the images
-    test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
+    test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
     reconstructed_images = vae.decoder.predict(test_features)
 
     # create figure to hold subplots
@@ -867,7 +867,7 @@ for encoding_dim in [encoding_dim]:
     # images_to_reconstruct = train_images[n:]
 
     # reconstruct the images
-    test_features, _, _ = vae.encoder.predict(images_to_reconstruct)
+    test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
     reconstructed_images = vae.decoder.predict(test_features)
 
     # create figure to hold subplots
