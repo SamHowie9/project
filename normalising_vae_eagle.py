@@ -519,7 +519,6 @@ for encoding_dim in [encoding_dim]:
             sum_log_det_jacobian = 0.0
 
             for flow in self.flows:
-                z = tf.clip_by_value(z, -bound + 1e-4, bound - 1e-4)
                 z, log_det = flow(z)
                 sum_log_det_jacobian += log_det
 
@@ -552,6 +551,7 @@ for encoding_dim in [encoding_dim]:
             # clip z to make sure it is within the allowed bounds
             z = tf.clip_by_value(z, -self.bound + 1e-4, self.bound - 1e-4)
 
+            # get the batch size
             batch_size = tf.shape(z)[0]
 
             # Predict parameters for the splines
