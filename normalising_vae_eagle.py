@@ -23,7 +23,7 @@ tfb = tfp.bijectors
 tfd = tfp.distributions
 
 
-encoding_dim = 20
+encoding_dim = 40
 run = 2
 n_flows = 2
 beta = 0.0001
