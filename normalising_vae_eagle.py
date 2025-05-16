@@ -22,14 +22,14 @@ tfd = tfp.distributions
 
 
 encoding_dim = 30
-run = 2
-n_flows = 4
+run = 1
+n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 print(tf.config.list_physical_devices('GPU'))
 
@@ -531,7 +531,7 @@ for encoding_dim in [encoding_dim]:
 
     class RQSFlow(Layer):
 
-        def __init__(self, latent_dim, num_bins=8, bound=3.0, **kwargs):
+        def __init__(self, latent_dim, num_bins=4, bound=3.0, **kwargs):
             super().__init__(**kwargs)
             self.latent_dim = latent_dim
             self.num_bins = num_bins
