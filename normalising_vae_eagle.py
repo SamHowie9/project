@@ -23,13 +23,13 @@ tfd = tfp.distributions
 
 encoding_dim = 30
 run = 1
-n_flows = 1
+n_flows = 2
 beta = 0.001
 beta_name = "001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 print(tf.config.list_physical_devices('GPU'))
 
