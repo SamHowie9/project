@@ -423,7 +423,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # Define VAE model with custom train step
-    class VAE(models.Model):
+    class VAE(Model):
 
         def __init__(self, encoder, decoder, **kwargs):
             super().__init__(**kwargs)
@@ -455,12 +455,12 @@ for encoding_dim in [encoding_dim]:
                 reconstruction = self.decoder(z)
 
                 # reconstruction loss
-                reconstruction_loss = ops.mean(losses.binary_crossentropy(data, reconstruction))
+                reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(data, reconstruction))
 
                 # kl loss
-                kl_loss = -0.5 * (1 + z_log_var - ops.square(z_mean) - ops.exp(z_log_var))
-                kl_loss = ops.sum(kl_loss, axis=1) - sum_log_det_jacobians
-                kl_loss = ops.mean(kl_loss)
+                kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+                kl_loss = tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians
+                kl_loss = tf.reduce_mean(kl_loss)
 
                 # total loss
                 # total_loss = reconstruction_loss + kl_loss
@@ -503,7 +503,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # define sampling layer
-    class Sampling(layers.Layer):
+    class Sampling(Layer):
 
         def __init__(self, latent_dim, n_flows=1, **kwargs):
             super().__init__(**kwargs)
@@ -517,14 +517,14 @@ for encoding_dim in [encoding_dim]:
             z_mean, z_log_var = inputs
 
             # find the batch size and number of latent features (dim)
-            batch = ops.shape(z_mean)[0]
-            dim = ops.shape(z_mean)[1]
+            batch = tf.shape(z_mean)[0]
+            dim = tf.shape(z_mean)[1]
 
             # generate the random variables
             epsilon = tf.random.normal(shape=(batch, dim))
 
             # perform reparameterization trick
-            z = z_mean + ops.exp(0.5 * z_log_var) * epsilon
+            z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
             sum_log_det_jacobian = 0.0
 
@@ -540,7 +540,7 @@ for encoding_dim in [encoding_dim]:
 
 
 
-    class RQSFlow(layers.Layer):
+    class RQSFlow(Layer):
 
         def __init__(self, latent_dim, num_bins=8, bound=3.0, **kwargs):
             super().__init__(**kwargs)
@@ -653,7 +653,7 @@ for encoding_dim in [encoding_dim]:
     z, sum_log_det_jacobians = Sampling(encoding_dim, n_flows=4)([z_mean, z_log_var])
 
     # build the encoder
-    encoder = models.Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
+    encoder = Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
     encoder.summary()
 
 
@@ -673,7 +673,7 @@ for encoding_dim in [encoding_dim]:
     decoded = layers.Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
 
     # build the decoder
-    decoder = models.Model(latent_input, decoded, name="decoder")
+    decoder = Model(latent_input, decoded, name="decoder")
     decoder.summary()
 
 
