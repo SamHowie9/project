@@ -31,11 +31,11 @@ beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 # number of epochs for run
-epochs = 50
+epochs = 10
 
 # batch size for run
 batch_size = 32
