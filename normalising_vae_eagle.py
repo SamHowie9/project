@@ -578,7 +578,6 @@ for encoding_dim in [encoding_dim]:
                     bin_heights=heights[:, d, :],
                     knot_slopes=derivatives[:, d, :],
                     range_min=-self.bound,
-                    range_max=self.bound
                 )
 
                 z_d = z[:, d]
