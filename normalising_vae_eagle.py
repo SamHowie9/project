@@ -696,7 +696,7 @@ for encoding_dim in [encoding_dim]:
     extracted_features = vae.encoder.predict(train_images)
     np.save("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".npy", extracted_features[0:3])
 
-    print(np.array(extracted_features).shape)
+    # print(np.array(extracted_features).shape)
 
     # get loss, reconstruction loss and kl loss and save as numpy array
     loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
