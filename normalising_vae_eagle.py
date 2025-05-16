@@ -23,15 +23,14 @@ tfd = tfp.distributions
 
 encoding_dim = 30
 run = 1
-n_flows = 2
+n_flows = 1
 beta = 0.001
 beta_name = "001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="5"
 
-print(tf.config.list_physical_devices('GPU'))
 
 # number of epochs for run
 epochs = 300
@@ -464,8 +463,8 @@ for encoding_dim in [encoding_dim]:
                 kl_loss = tf.reduce_mean(kl_loss)
 
                 # total loss
-                # total_loss = reconstruction_loss + kl_loss
-                total_loss = reconstruction_loss + (beta * kl_loss)
+                total_loss = reconstruction_loss + kl_loss
+                # total_loss = reconstruction_loss + (beta * kl_loss)
 
 
 
