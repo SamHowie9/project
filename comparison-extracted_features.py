@@ -27,11 +27,13 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-encoding_dim = 30
+
+encoding_dim = 20
 run = 1
+n_flows = 2
 beta = 0.0001
 beta_name = "0001"
-epochs = 300
+epochs = 100
 batch_size = 32
 
 
@@ -134,7 +136,8 @@ all_properties = all_properties.iloc[:-200]
 # load the extracted features
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -145,7 +148,7 @@ extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-pca = PCA(n_components=12).fit(extracted_features)
+pca = PCA(n_components=0.999).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
 extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
@@ -302,7 +305,7 @@ wrap_labels(ax, 10)
 
 # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
+# plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
 plt.show()
 
 
@@ -414,6 +417,8 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
+
+
 # structure measurement comparison
 
 # fig, axs = plt.subplots(1, 5, figsize=(25, 5))
@@ -449,66 +454,66 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
-fig, axs = plt.subplots(2, 4, figsize=(25, 10))
-
-density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
-axs[0][0].set_title("Sersic Index")
-axs[0][0].set_xlabel("Feature 3")
-axs[0][0].set_ylabel("Sersic Index")
-axs[0][0].set_xlim(-4, 4)
-axs[0][0].set_ylim(0, 6)
-
-density_scatter(extracted_features_switch[1], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
-axs[0][1].set_title("Position Angle")
-axs[0][1].set_xlabel("Feature 1")
-axs[0][1].set_ylabel("Position Angle (°)")
-axs[0][1].set_yticks([0, 45, 90])
-axs[0][1].set_xlim(-3.5, 3.5)
-
-density_scatter(extracted_features_switch[2], all_properties["q_r"], axs=axs[0][2], s=10)
-axs[0][2].set_title("Axis Ratio")
-axs[0][2].set_xlabel("Feature 2")
-axs[0][2].set_ylabel("Axis Ratio")
-axs[0][2].set_xlim(-3, 3)
-
-density_scatter(extracted_features_switch[0], all_properties["m20"], axs=axs[0][3], s=10)
-axs[0][3].set_title("M20")
-axs[0][3].set_xlabel("Feature 0")
-axs[0][3].set_ylabel("M20")
-axs[0][3].set_xlim(-6, 4)
-axs[0][3].set_ylim(-2.5, -1.2)
-
-density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1][0], s=10)
-axs[1][0].set_title("Gini Coefficient")
-axs[1][0].set_xlabel("Feature 3")
-axs[1][0].set_ylabel("Gini Coefficient")
-axs[1][0].set_xlim(-4, 4)
-axs[1][0].set_ylim(0.4, 0.65)
-
-density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][1], s=10)
-axs[1][1].set_title("Concentration")
-axs[1][1].set_xlabel("Feature 3")
-axs[1][1].set_ylabel("Concentration")
-axs[1][1].set_xlim(-3, 3)
-axs[1][1].set_ylim(2, 5)
-
-density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
-axs[1][2].set_title("Asymmetry")
-axs[1][2].set_xlabel("Feature 0")
-axs[1][2].set_ylabel("Asymmetry")
-axs[1][2].set_xlim(-4, 4)
-axs[1][2].set_ylim(0, 0.5)
-
-density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
-axs[1][3].set_title("Smoothness")
-axs[1][3].set_xlabel("Feature 0")
-axs[1][3].set_ylabel("Smoothness")
-axs[1][3].set_xlim(-4, 4)
-axs[1][3].set_ylim(0, 0.1)
-
-
-plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_30_1_zoomed_4_2", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(2, 4, figsize=(25, 10))
+#
+# density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
+# axs[0][0].set_title("Sersic Index")
+# axs[0][0].set_xlabel("Feature 3")
+# axs[0][0].set_ylabel("Sersic Index")
+# axs[0][0].set_xlim(-4, 4)
+# axs[0][0].set_ylim(0, 6)
+#
+# density_scatter(extracted_features_switch[1], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
+# axs[0][1].set_title("Position Angle")
+# axs[0][1].set_xlabel("Feature 1")
+# axs[0][1].set_ylabel("Position Angle (°)")
+# axs[0][1].set_yticks([0, 45, 90])
+# axs[0][1].set_xlim(-3.5, 3.5)
+#
+# density_scatter(extracted_features_switch[2], all_properties["q_r"], axs=axs[0][2], s=10)
+# axs[0][2].set_title("Axis Ratio")
+# axs[0][2].set_xlabel("Feature 2")
+# axs[0][2].set_ylabel("Axis Ratio")
+# axs[0][2].set_xlim(-3, 3)
+#
+# density_scatter(extracted_features_switch[0], all_properties["m20"], axs=axs[0][3], s=10)
+# axs[0][3].set_title("M20")
+# axs[0][3].set_xlabel("Feature 0")
+# axs[0][3].set_ylabel("M20")
+# axs[0][3].set_xlim(-6, 4)
+# axs[0][3].set_ylim(-2.5, -1.2)
+#
+# density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1][0], s=10)
+# axs[1][0].set_title("Gini Coefficient")
+# axs[1][0].set_xlabel("Feature 3")
+# axs[1][0].set_ylabel("Gini Coefficient")
+# axs[1][0].set_xlim(-4, 4)
+# axs[1][0].set_ylim(0.4, 0.65)
+#
+# density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][1], s=10)
+# axs[1][1].set_title("Concentration")
+# axs[1][1].set_xlabel("Feature 3")
+# axs[1][1].set_ylabel("Concentration")
+# axs[1][1].set_xlim(-3, 3)
+# axs[1][1].set_ylim(2, 5)
+#
+# density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
+# axs[1][2].set_title("Asymmetry")
+# axs[1][2].set_xlabel("Feature 0")
+# axs[1][2].set_ylabel("Asymmetry")
+# axs[1][2].set_xlim(-4, 4)
+# axs[1][2].set_ylim(0, 0.5)
+#
+# density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
+# axs[1][3].set_title("Smoothness")
+# axs[1][3].set_xlabel("Feature 0")
+# axs[1][3].set_ylabel("Smoothness")
+# axs[1][3].set_xlim(-4, 4)
+# axs[1][3].set_ylim(0, 0.1)
+#
+#
+# plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_30_1_zoomed_4_2", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -518,20 +523,29 @@ plt.show()
 
 # physical property comparison
 
-fig, axs = plt.subplots(1, 4, figsize=(20, 5))
+# fig, axs = plt.subplots(1, 4, figsize=(20, 5))
+#
+# density_scatter(extracted_features_switch[0], all_properties["re_r"], axs=axs[0], s=2)
+#
+# density_scatter(extracted_features_switch[0], all_properties["mag_r"], axs=axs[1], s=2)
+#
+# density_scatter(extracted_features_switch[0], all_properties["MassType_Star"], axs=axs[2], s=2)
+#
+# density_scatter(extracted_features_switch[0], all_properties["StarFormationRate"], axs=axs[2], s=2)
+#
+#
+#
+# plt.savefig("Variational Eagle/Plots/physical_property_comparisons_30_1", bbox_inches='tight')
+# plt.show()
 
-density_scatter(extracted_features_switch[0], all_properties["re_r"], axs=axs[0], s=2)
-
-density_scatter(extracted_features_switch[0], all_properties["mag_r"], axs=axs[1], s=2)
-
-density_scatter(extracted_features_switch[0], all_properties["MassType_Star"], axs=axs[2], s=2)
-
-density_scatter(extracted_features_switch[0], all_properties["StarFormationRate"], axs=axs[2], s=2)
 
 
 
-plt.savefig("Variational Eagle/Plots/physical_property_comparisons_30_1", bbox_inches='tight')
-plt.show()
+
+
+
+
+
 
 
 # combinations of features

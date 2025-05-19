@@ -23,11 +23,11 @@ tfb = tfp.bijectors
 tfd = tfp.distributions
 
 
-encoding_dim = 40
+encoding_dim = 30
 run = 2
 n_flows = 2
-beta = 0.0001
-beta_name = "0001"
+beta = 0.001
+beta_name = "001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -35,7 +35,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="8"
 
 
 # number of epochs for run
-epochs = 100
+epochs = 300
 
 # batch size for run
 batch_size = 32
@@ -583,6 +583,7 @@ for encoding_dim in [encoding_dim]:
 
                 z_d = z[:, d]
                 z_d_transformed = rqs_bijector.forward(z_d)
+                z_d_transformed = tf.clip_by_value(z_d_transformed, -self.bound + 1e-4, self.bound - 1e-4)
                 log_det = rqs_bijector.forward_log_det_jacobian(z_d, event_ndims=0)
 
                 z_out.append(z_d_transformed)
