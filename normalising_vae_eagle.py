@@ -24,10 +24,10 @@ tfd = tfp.distributions
 
 
 encoding_dim = 30
-run = 2
+run = 1
 n_flows = 2
-beta = 0.01
-beta_name = "01"
+beta = 0.001
+beta_name = "001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
