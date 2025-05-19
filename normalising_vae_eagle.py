@@ -31,7 +31,7 @@ beta_name = "01"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 # number of epochs for run
@@ -585,6 +585,9 @@ for encoding_dim in [encoding_dim]:
                 z_d_transformed = rqs_bijector.forward(z_d)
                 z_d_transformed = tf.clip_by_value(z_d_transformed, -self.bound + 1e-4, self.bound - 1e-4)
                 log_det = rqs_bijector.forward_log_det_jacobian(z_d, event_ndims=0)
+
+                tf.debugging.check_numerics(log_det, message="NaN in log_det")
+                tf.debugging.check_numerics(z_d_transformed, message="NaN in z_d_transformed")
 
                 z_out.append(z_d_transformed)
                 log_dets.append(log_det)
