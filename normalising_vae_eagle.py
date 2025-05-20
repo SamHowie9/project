@@ -26,18 +26,18 @@ tfd = tfp.distributions
 
 
 encoding_dim = 30
-run = 6
+run = 1
 n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 
 # number of epochs for run
-epochs = 200
+epochs = 300
 
 # batch size for run
 batch_size = 32
@@ -518,6 +518,8 @@ for encoding_dim in [encoding_dim]:
             # perform reparameterization trick
             z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
+            z = tf.clip_by_value(z, -self.bound + 1e-4, self.bound - 1e-4)
+
             sum_log_det_jacobian = 0.0
 
             for flow in self.flows:
@@ -551,7 +553,7 @@ for encoding_dim in [encoding_dim]:
         def call(self, z):
 
             # clip z to make sure it is within the allowed bounds
-            z = tf.clip_by_value(z, -self.bound + 1e-4, self.bound - 1e-4)
+            # z = tf.clip_by_value(z, -self.bound + 1e-4, self.bound - 1e-4)
 
             # get the batch size
             batch_size = tf.shape(z)[0]
@@ -585,7 +587,7 @@ for encoding_dim in [encoding_dim]:
 
                 z_d = z[:, d]
                 z_d_transformed = rqs_bijector.forward(z_d)
-                z_d_transformed = tf.clip_by_value(z_d_transformed, -self.bound + 1e-4, self.bound - 1e-4)
+                # z_d_transformed = tf.clip_by_value(z_d_transformed, -self.bound + 1e-4, self.bound - 1e-4)
                 log_det = rqs_bijector.forward_log_det_jacobian(z_d, event_ndims=0)
 
                 tf.debugging.check_numerics(log_det, message="NaN in log_det")
