@@ -17,6 +17,7 @@ from matplotlib import image as mpimg
 
 
 
+
 tf.keras.mixed_precision.set_global_policy('float32')
 
 
