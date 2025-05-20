@@ -28,13 +28,14 @@ pd.set_option('display.width', None)
 
 
 
-encoding_dim = 20
-run = 1
-n_flows = 2
+encoding_dim = 30
 beta = 0.0001
 beta_name = "0001"
-epochs = 100
+epochs = 300
+n_flows = 1
+run = 2
 batch_size = 32
+
 
 
 
@@ -148,10 +149,10 @@ extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-pca = PCA(n_components=0.999).fit(extracted_features)
-extracted_features = pca.transform(extracted_features)
-extracted_features = extracted_features[:len(all_properties)]
-extracted_features_switch = extracted_features.T
+# pca = PCA(n_components=0.999).fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# extracted_features = extracted_features[:len(all_properties)]
+# extracted_features_switch = extracted_features.T
 
 
 
@@ -306,6 +307,7 @@ wrap_labels(ax, 10)
 # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
 plt.show()
 
 

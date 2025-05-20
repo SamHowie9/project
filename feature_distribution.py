@@ -26,11 +26,11 @@ from scipy.interpolate import interpn
 
 
 encoding_dim = 30
-run = 1
-n_flows = 2
 beta = 0.0001
 beta_name = "0001"
-epochs = 100
+epochs=200
+n_flows = 1
+run = 4
 batch_size = 32
 
 
@@ -133,7 +133,8 @@ extracted_features_switch = extracted_features.T
 print(extracted_features.shape)
 
 rows, cols = [2, 5]
-fig, axs = plt.subplots(rows, cols, figsize=(20, 24))
+# rows, cols = [6, 5]
+fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*4))
 
 for i in range(0, cols):
 
@@ -143,6 +144,7 @@ for i in range(0, cols):
             sns.histplot(x=extracted_features.T[i+j],ax=axs[j][i], bins=50)
             axs[j][i].set_xlabel("Feature " + str(i+j))
             axs[j][i].set_ylabel("")
+            axs[j][i].set_yticks([])
         except:
             print(i+j)
 
@@ -165,5 +167,5 @@ print(np.log10(extracted_features.T[3]))
 print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
 print(np.max(extracted_features.T[3]))
 
-# plt.savefig("Variational Eagle/Plots/feature_distributions_" + str(encoding_dim) + "_" + str(run) + "_pca", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/feature_distributions_variational_flows_pca", bbox_inches='tight')
 plt.show()
