@@ -25,14 +25,14 @@ tfd = tfp.distributions
 
 
 encoding_dim = 30
-run = 3
+run = 1
 n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 
 # number of epochs for run
@@ -681,7 +681,7 @@ for encoding_dim in [encoding_dim]:
 
     # build and compile the VAE
     vae = VAE(encoder, decoder)
-    vae.compile(optimizer=optimizers.Adam(clipnorm=1.0))
+    vae.compile(optimizer=optimizers.Adam(learning_rate=1e-4, clipnorm=1.0))
 
 
 
