@@ -24,6 +24,7 @@ tfb = tfp.bijectors
 tfd = tfp.distributions
 
 
+
 encoding_dim = 30
 run = 1
 n_flows = 1
