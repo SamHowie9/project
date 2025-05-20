@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-# from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import random
@@ -154,8 +154,8 @@ print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 # specify how the images are to be augmented (for both unknown and ellipticals)
-# datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
-#
+datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+
 # # augment the elliptical images
 #
 # # ellipticals = [15289521, 16351397, 18816265]

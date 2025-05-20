@@ -27,9 +27,10 @@ from scipy.interpolate import interpn
 
 encoding_dim = 30
 run = 1
+n_flows = 2
 beta = 0.0001
 beta_name = "0001"
-epochs = 300
+epochs = 100
 batch_size = 32
 
 
@@ -117,32 +118,45 @@ print(all_properties)
 
 
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".npy")[0]
+
 extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-pca = PCA(n_components=12).fit(extracted_features)
+pca = PCA(n_components=0.999).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
 extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 print(extracted_features.shape)
 
-fig, axs = plt.subplots(3, 4, figsize=(20, 24))
+rows, cols = [2, 5]
+fig, axs = plt.subplots(rows, cols, figsize=(20, 24))
 
-for i in range(0, 4):
+for i in range(0, cols):
 
-    sns.histplot(x=extracted_features.T[i],ax=axs[0][i], bins=50)
-    sns.histplot(x=extracted_features.T[i+4],ax=axs[1][i], bins=50)
-    sns.histplot(x=extracted_features.T[i+8],ax=axs[2][i], bins=50)
+    for j in range(0, rows):
 
-    axs[0][i].set_xlabel("Feature " + str(i))
-    axs[1][i].set_xlabel("Feature " + str(i+4))
-    axs[2][i].set_xlabel("Feature " + str(i+8))
+        try:
+            sns.histplot(x=extracted_features.T[i+j],ax=axs[j][i], bins=50)
+            axs[j][i].set_xlabel("Feature " + str(i+j))
+            axs[j][i].set_ylabel("")
+        except:
+            print(i+j)
 
-    for j in range(0, 5):
-        axs[j][i].set_ylabel("")
+
+    # sns.histplot(x=extracted_features.T[i],ax=axs[0][i], bins=50)
+    # sns.histplot(x=extracted_features.T[i+4],ax=axs[1][i], bins=50)
+    # sns.histplot(x=extracted_features.T[i+8],ax=axs[2][i], bins=50)
+    #
+    # axs[0][i].set_xlabel("Feature " + str(i))
+    # axs[1][i].set_xlabel("Feature " + str(i+4))
+    # axs[2][i].set_xlabel("Feature " + str(i+8))
+    #
+    # for j in range(0, 5):
+    #     axs[j][i].set_ylabel("")
 
 
 np.set_printoptions(precision=3)
@@ -151,5 +165,5 @@ print(np.log10(extracted_features.T[3]))
 print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
 print(np.max(extracted_features.T[3]))
 
-plt.savefig("Variational Eagle/Plots/feature_distributions_" + str(encoding_dim) + "_" + str(run) + "_pca", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/feature_distributions_" + str(encoding_dim) + "_" + str(run) + "_pca", bbox_inches='tight')
 plt.show()
