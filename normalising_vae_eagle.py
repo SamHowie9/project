@@ -26,14 +26,14 @@ tfd = tfp.distributions
 
 
 encoding_dim = 30
-run = 3
+run = 1
 n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 
 # number of epochs for run
@@ -518,7 +518,7 @@ for encoding_dim in [encoding_dim]:
             # perform reparameterization trick
             z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
-            z = tf.clip_by_value(z, -self.bound + 1e-4, self.bound - 1e-4)
+            z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
 
             sum_log_det_jacobian = 0.0
 
