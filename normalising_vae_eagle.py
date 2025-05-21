@@ -26,18 +26,18 @@ tfd = tfp.distributions
 
 
 encoding_dim = 30
-run = 3
+run = 1
 n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 # number of epochs for run
-epochs = 300
+epochs = 500
 
 # batch size for run
 batch_size = 32
@@ -720,7 +720,7 @@ for encoding_dim in [encoding_dim]:
 
     # loss plot for run
 
-    fig, axs = plt.subplots(3, 2, figsize=(20, 15))
+    fig, axs = plt.subplots(3, 3, figsize=(30, 15))
 
     axs[0][0].plot(model_loss.history["loss"], label="Total Loss", color="black")
     axs[0][0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
@@ -736,6 +736,14 @@ for encoding_dim in [encoding_dim]:
     axs[0][1].set_xlabel("Epoch")
     axs[0][1].set_ylabel("Loss")
 
+    axs[0][2].plot(model_loss.history["loss"][50:], label="Total Loss", color="black")
+    axs[0][2].plot(model_loss.history["reconstruction_loss"][50:], label="Reconstruction Loss", color="C0")
+    axs[0][2].plot(model_loss.history["kl_loss"][50:], label="KL Divergence", color="C1")
+    axs[0][2].legend()
+    axs[0][2].set_xlabel("Epoch")
+    axs[0][2].set_ylabel("Loss")
+
+
 
     axs[1][0].plot(np.log10(model_loss.history["loss"]), label="Total Loss", color="black")
     axs[1][0].plot(np.log10(model_loss.history["reconstruction_loss"]), label="Reconstruction Loss", color="C0")
@@ -750,6 +758,14 @@ for encoding_dim in [encoding_dim]:
     axs[1][1].legend()
     axs[1][1].set_xlabel("Epoch")
     axs[1][1].set_ylabel("Log(Loss)")
+
+    axs[1][2].plot(np.log10(model_loss.history["loss"][50:]), label="Total Loss", color="black")
+    axs[1][2].plot(np.log10(model_loss.history["reconstruction_loss"][50:]), label="Reconstruction Loss", color="C0")
+    axs[1][2].plot(np.log10(model_loss.history["kl_loss"][50:]), label="KL Divergence", color="C1")
+    axs[1][2].legend()
+    axs[1][2].set_xlabel("Epoch")
+    axs[1][2].set_ylabel("Log(Loss)")
+
 
 
     axs[2][0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
@@ -772,6 +788,17 @@ for encoding_dim in [encoding_dim]:
     # axs[2].legend()
     axs[2][1].set_xlabel("Epoch")
     axs[2][1].set_ylabel("Reconstruction Loss")
+    axs2.set_ylabel("KL Divergence")
+
+    axs[2][2].plot(model_loss.history["reconstruction_loss"][50:], label="Reconstruction Loss", color="C0")
+    axs2 = axs[2][2].twinx()
+    axs2.plot(model_loss.history["kl_loss"][50:], label="KL Divergence", color="C1")
+    lines = axs[2][2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    labels = axs[2][2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    axs[2][2].legend(lines, labels)
+    # axs[2].legend()
+    axs[2][2].set_xlabel("Epoch")
+    axs[2][2].set_ylabel("Reconstruction Loss")
     axs2.set_ylabel("KL Divergence")
 
 
