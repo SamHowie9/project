@@ -27,17 +27,17 @@ tfd = tfp.distributions
 
 encoding_dim = 30
 run = 1
-n_flows = 2
+n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="6"
+os.environ["CUDA_VISIBLE_DEVICES"]="7"
 
 
 # number of epochs for run
-epochs = 750
+epochs = 500
 
 # batch size for run
 batch_size = 32
@@ -685,7 +685,7 @@ for encoding_dim in [encoding_dim]:
     # build and compile the VAE
     vae = VAE(encoder, decoder)
     # vae.compile(optimizer=optimizers.Adam(learning_rate=1e-4, clipnorm=1.0))
-    vae.compile(optimizer=optimizers.Adam(clipnorm=1.0))
+    vae.compile(optimizer=optimizers.Adam())
     # vae.compile(optimizer=optimizers.Adam(clipvalue=1.0))
     # vae.compile(optimizer=optimizers.Adam())
 
@@ -700,12 +700,12 @@ for encoding_dim in [encoding_dim]:
     vae.build(input_shape=(None, 256, 256, 3))
 
     # save the weights
-    vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
 
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
-    np.save("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm.npy", extracted_features[0:3])
+    np.save("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", extracted_features[0:3])
 
     # print(np.array(extracted_features).shape)
 
@@ -713,7 +713,7 @@ for encoding_dim in [encoding_dim]:
     loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-    np.save("Variational Eagle/Loss/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm.npy", loss)
+    np.save("Variational Eagle/Loss/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
 
 
 
@@ -806,7 +806,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/Normalising Flows/normalising_flow_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm")
+    plt.savefig("Variational Eagle/Loss Plots/Normalising Flows/normalising_flow_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
 
 
@@ -886,7 +886,7 @@ for encoding_dim in [encoding_dim]:
         axs[1, i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm")
+    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
 
 
@@ -928,7 +928,7 @@ for encoding_dim in [encoding_dim]:
         axs[1,i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm")
+    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
 
 
