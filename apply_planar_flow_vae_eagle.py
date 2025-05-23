@@ -30,7 +30,7 @@ tfd = tfp.distributions
 
 run = 1
 encoding_dim = 30
-n_flows = 1
+n_flows = 2
 beta = 0.0001
 beta_name = "0001"
 epochs = 300

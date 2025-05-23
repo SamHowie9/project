@@ -138,7 +138,8 @@ all_properties = all_properties.iloc[:-200]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[2]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[2]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_30_beta_0001_epoch_300_flows_1_1_default_transformed.npy")
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -149,10 +150,10 @@ extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
-# pca = PCA(n_components=0.999).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features = extracted_features[:len(all_properties)]
-# extracted_features_switch = extracted_features.T
+pca = PCA(n_components=0.999).fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
+extracted_features = extracted_features[:len(all_properties)]
+extracted_features_switch = extracted_features.T
 
 
 
