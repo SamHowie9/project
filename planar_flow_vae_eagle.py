@@ -31,15 +31,15 @@ tfd = tfp.distributions
 run = 1
 encoding_dim = 30
 n_flows = 3
-beta = 0.0001
-beta_name = "0001"
+beta = 0.001
+beta_name = "001"
 epochs = 750
 batch_size = 32
 
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 
@@ -573,7 +573,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # Define keras tensor for the encoder
-    input_image = Input(shape=(256, 256, 3))                                                                  # (256, 256, 3)
+    input_image = Input(shape=(256, 256, 3))                                                                               # (256, 256, 3)
 
     # layers for the encoder
     x = layers.Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
@@ -581,7 +581,7 @@ for encoding_dim in [encoding_dim]:
     x = layers.Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
     x = layers.Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
     x = layers.Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
-    # x = Flatten()(x)                                                                                              # (8*8*512 = 32768)
+    # x = Flatten()(x)                                                                                                     # (8*8*512 = 32768)
     x = layers.GlobalAveragePooling2D()(x)                                                                                 # (512)
     x = layers.Dense(128, activation="relu")(x)                                                                            # (128)
 
@@ -608,7 +608,7 @@ for encoding_dim in [encoding_dim]:
     x = layers.Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
     x = layers.Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
     x = layers.Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
-    decoded = layers.Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)        # (256, 256, 3)
+    decoded = layers.Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)         # (256, 256, 3)
 
     # build the decoder
     decoder = Model(latent_input, decoded, name="decoder")
@@ -619,8 +619,8 @@ for encoding_dim in [encoding_dim]:
     # build and compile the VAE
     vae = VAE(encoder, decoder)
     # vae.compile(optimizer=optimizers.Adam(learning_rate=1e-4, clipnorm=1.0))
-    vae.compile(optimizer=optimizers.Adam(clipnorm=1.0))
-    # vae.compile(optimizer=optimizers.Adam())
+    # vae.compile(optimizer=optimizers.Adam(clipnorm=1.0))
+    vae.compile(optimizer=optimizers.Adam())
 
 
 
@@ -633,12 +633,12 @@ for encoding_dim in [encoding_dim]:
     vae.build(input_shape=(None, 256, 256, 3))
 
     # save the weights
-    vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
 
 
     # generate extracted features from trained encoder and save as numpy array
     extracted_features = vae.encoder.predict(train_images)
-    np.save("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm.npy", extracted_features[0:3])
+    np.save("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", extracted_features[0:3])
 
     # print(np.array(extracted_features).shape)
 
@@ -646,7 +646,7 @@ for encoding_dim in [encoding_dim]:
     loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
     print("\n \n" + str(encoding_dim))
     print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-    np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm.npy", loss)
+    np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
 
 
 
@@ -739,7 +739,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/Normalising Flows/planar_new_normalising_flow_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm")
+    plt.savefig("Variational Eagle/Loss Plots/Normalising Flows/planar_new_normalising_flow_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
 
 
@@ -819,7 +819,7 @@ for encoding_dim in [encoding_dim]:
         axs[1, i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm")
+    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
 
 
@@ -861,7 +861,7 @@ for encoding_dim in [encoding_dim]:
         axs[1,i].get_yaxis().set_visible(False)
 
     # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_norm")
+    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
 
 
