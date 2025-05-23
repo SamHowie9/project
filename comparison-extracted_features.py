@@ -28,12 +28,12 @@ pd.set_option('display.width', None)
 
 
 
+run = 1
 encoding_dim = 30
+n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 epochs = 300
-n_flows = 1
-run = 2
 batch_size = 32
 
 
@@ -138,7 +138,7 @@ all_properties = all_properties.iloc[:-200]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[2]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -307,7 +307,7 @@ wrap_labels(ax, 10)
 # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
 # plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
+# plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
 plt.show()
 
 

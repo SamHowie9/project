@@ -30,7 +30,7 @@ tfd = tfp.distributions
 
 run = 1
 encoding_dim = 30
-n_flows = 3
+n_flows = 1
 beta = 0.0001
 beta_name = "0001"
 epochs = 500
@@ -39,7 +39,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
 
 
@@ -548,22 +548,6 @@ for encoding_dim in [encoding_dim]:
             self.b = self.add_weight(shape=(), initializer='zeros', trainable=True)
 
         def call(self, z):
-
-            # w_dot_z = tf.reduce_sum(self.w * z, axis=1, keepdims=True)
-            # activation = tf.tanh(w_dot_z + self.b)
-            # z_transformed = z + (self.u * activation)
-            #
-            # # tanh_derivative = 1.0 - tf.square(activation)
-            # # psi = tanh_derivative * self.w
-            # psi = (1.0 - tf.square(activation)) * self.w
-            # u_hat = self.u + (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (tf.norm(self.w) ** 2 + 1e-8)
-            #
-            # det_jacobian = 1.0 + tf.reduce_sum(psi * u_hat, axis=1)  # shape: (batch_size,)
-            # log_det_jacobian = tf.math.log(tf.abs(det_jacobian) + 1e-8)  # add epsilon for numerical stability
-            #
-            # return z_transformed, log_det_jacobian
-
-
 
             # parameterization of u (ensure eTu > -1)
             u_hat = self.u + (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (tf.norm(self.w) ** 2 + 1e-8)
