@@ -28,18 +28,18 @@ tfd = tfp.distributions
 
 
 
-run = 1
 encoding_dim = 30
-n_flows = 2
 beta = 0.0001
 beta_name = "0001"
-epochs = 300
+epochs = 750
+n_flows = 2
+run = 1
 batch_size = 32
 
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 

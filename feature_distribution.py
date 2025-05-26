@@ -28,9 +28,9 @@ from scipy.interpolate import interpn
 encoding_dim = 30
 beta = 0.0001
 beta_name = "0001"
-epochs=200
-n_flows = 1
-run = 4
+epochs = 750
+n_flows = 2
+run = 1
 batch_size = 32
 
 
@@ -120,8 +120,8 @@ print(all_properties)
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".npy")[0]
-# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_30_beta_0001_epoch_300_flows_1_1_default.npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_30_beta_0001_epoch_300_flows_1_1_default_transformed.npy")
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
@@ -155,7 +155,7 @@ for i in range(rows):
 
 
 
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_30_beta_0001_epoch_300_flows_1_1_default.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
 
 extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
