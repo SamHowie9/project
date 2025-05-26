@@ -189,14 +189,14 @@ print(all_properties)
 
 # fig, axs = plt.subplots(1, 1, figsize=(25, encoding_dim/2))
 # fig, axs = plt.subplots(2, 1, figsize=(25, encoding_dim))
-fig, axs = plt.subplots(2, 1, figsize=(55, 15))
+fig, axs = plt.subplots(2, 1, figsize=(55, 30))
 
 
 
 correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"])
 
 # for feature in range(0, encoding_dim):
-for feature in range(0, 15):
+for feature in range(0, 30):
 
     correlation_list = []
 
@@ -213,10 +213,10 @@ for feature in range(0, 15):
         extracted_features_switch = extracted_features.T
 
         # perform pca on the extracted features
-        pca = PCA(n_components=15).fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
-        extracted_features = extracted_features[:len(all_properties)]
-        extracted_features_switch = extracted_features.T
+        # pca = PCA(n_components=15).fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        # extracted_features = extracted_features[:len(all_properties)]
+        # extracted_features_switch = extracted_features.T
 
 
 
@@ -297,7 +297,7 @@ wrap_labels(axs[0], 10)
 correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"])
 
 # for feature in range(0, encoding_dim):
-for feature in range(0, 15):
+for feature in range(0, 30):
 
     correlation_list = []
 
@@ -313,10 +313,10 @@ for feature in range(0, 15):
         extracted_features_switch = extracted_features.T
 
         # perform pca on the extracted features
-        pca = PCA(n_components=15).fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
-        extracted_features = extracted_features[:len(all_properties)]
-        extracted_features_switch = extracted_features.T
+        # pca = PCA(n_components=15).fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        # extracted_features = extracted_features[:len(all_properties)]
+        # extracted_features_switch = extracted_features.T
 
         # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
         correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties["re_r"])[0][1]
@@ -393,7 +393,7 @@ wrap_labels(axs[1], 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/PCA/flow_comparison_original", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/Normal/flow_comparison_original", bbox_inches='tight')
 plt.show()
 
 

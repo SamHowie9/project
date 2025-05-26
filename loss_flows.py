@@ -373,7 +373,7 @@ for encoding_dim in [30]:
 
 
         # generate extracted features from trained encoder and save as numpy array
-        z_mean, _, _, _ = vae.encoder.predict(train_images)
+        z_mean, z_log_var, _, _ = vae.encoder.predict(train_images)
 
         # get the sampling layer
         sampling_layer = None
