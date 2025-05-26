@@ -442,6 +442,6 @@ for encoding_dim in [30]:
     np.save("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim), reconstruction_loss_all)
     np.save("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim), kl_loss_all)
 
-    np.save("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim), total_loss_transformed_all)
-    np.save("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim), reconstruction_loss_transformed_all)
-    np.save("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim), kl_loss_transformed_all)
+    np.save("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_transformed", total_loss_transformed_all)
+    np.save("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_transformed", reconstruction_loss_transformed_all)
+    np.save("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_transformed", kl_loss_transformed_all)
