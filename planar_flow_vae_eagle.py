@@ -30,7 +30,7 @@ tfd = tfp.distributions
 
 run = 1
 encoding_dim = 30
-n_flows = 3
+n_flows = 1
 beta = 0.01
 beta_name = "01"
 epochs = 750
@@ -465,7 +465,7 @@ for encoding_dim in [encoding_dim]:
 
                 # kl loss
                 kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
-                kl_loss = tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians
+                kl_loss = (tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians) / z.shape[1]
                 kl_loss = tf.reduce_mean(kl_loss)
 
                 # total loss
