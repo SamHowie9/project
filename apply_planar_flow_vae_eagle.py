@@ -46,7 +46,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
-for encoding_dim in [encoding_dim]:
+for n_flows in [1, 2]:
 
 
 
