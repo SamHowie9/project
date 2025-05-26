@@ -455,6 +455,8 @@ for encoding_dim in [encoding_dim]:
                 # get the latent representation (run image through the encoder)
                 z_mean, z_log_var, z, sum_log_det_jacobians  = self.encoder(data)
 
+                print("Latent Shape", z_mean.shape, z_log_var.shape, z.shape, sum_log_det_jacobians.shape)
+
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
 
@@ -549,6 +551,8 @@ for encoding_dim in [encoding_dim]:
 
         def call(self, z):
 
+            print("z shape (flows)", z.shape)
+
             # parameterization of u (ensure eTu > -1)
             u_hat = self.u + (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (tf.norm(self.w) ** 2 + 1e-8)
 
@@ -563,6 +567,8 @@ for encoding_dim in [encoding_dim]:
             # find the log det jacobian
             det_jacobian = 1.0 + tf.reduce_sum(psi * u_hat, axis=1)  # shape: (batch_size,)
             log_det_jacobian = tf.math.log(tf.abs(det_jacobian) + 1e-8)  # add epsilon for numerical stability
+
+            print("log det jacobian shape", log_det_jacobian.shape)
 
             return z_transformed, log_det_jacobian
 
