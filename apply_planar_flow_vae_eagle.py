@@ -46,7 +46,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
-for n_flows in [1, 2]:
+for n_flows in [1, 2, 3, 4, 5]:
 
 
 
