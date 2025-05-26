@@ -156,6 +156,8 @@ for encoding_dim in [30]:
 
     for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
 
+
+
         # Define VAE model with custom train step
         class VAE(Model):
 
@@ -215,6 +217,8 @@ for encoding_dim in [30]:
                 }
 
 
+
+
         # define sampling layer
         class Sampling(Layer):
 
@@ -249,6 +253,9 @@ for encoding_dim in [30]:
                 return z, sum_log_det_jacobian
 
 
+
+
+
         class PlanarFlow(Layer):
 
             def __init__(self, latent_dim, **kwargs):
@@ -281,6 +288,11 @@ for encoding_dim in [30]:
                 return z_transformed, log_det_jacobian
 
 
+
+
+
+
+
         # apply the flows to the latent vectors after training
         def apply_flows(z_mean, flows):
 
@@ -292,11 +304,17 @@ for encoding_dim in [30]:
             sum_log_det_jacobian = 0.0
 
             # apply the flows
-            for flow in self.flows:
+            for flow in flows:
                 z, log_det = flow(z)
                 sum_log_det_jacobian += log_det
 
             return z, sum_log_det_jacobian
+
+
+
+
+
+
 
 
         # Define keras tensor for the encoder

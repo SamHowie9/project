@@ -200,7 +200,7 @@ for feature in range(0, 15):
 
     correlation_list = []
 
-    for n_flows in [1, 2, 3, 4, 5]:
+    for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
 
         extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
@@ -277,7 +277,7 @@ def wrap_labels(ax, width, break_long_words=False):
     # for label in ax.get_xticklabels():
         # text = label.get_text()
 
-    label_names = ["1", "2", "3", "4", "5"]
+    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -294,14 +294,14 @@ wrap_labels(axs[0], 10)
 
 
 
-correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5"])
+correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"])
 
 # for feature in range(0, encoding_dim):
 for feature in range(0, 15):
 
     correlation_list = []
 
-    for n_flows in [1, 2, 3, 4, 5]:
+    for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
 
         extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
@@ -379,7 +379,7 @@ def wrap_labels(ax, width, break_long_words=False):
     # for label in ax.get_xticklabels():
         # text = label.get_text()
 
-    label_names = ["1", "2", "3", "4", "5"]
+    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
