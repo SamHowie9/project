@@ -50,6 +50,7 @@ for n_flows in [6, 7, 8, 9, 10, 11, 12]:
 
 
 
+
     print()
     print("Encoding Dim", encoding_dim)
     print("Run", run)
