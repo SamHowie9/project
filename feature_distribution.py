@@ -29,7 +29,7 @@ encoding_dim = 30
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
-n_flows = 2
+n_flows = 5
 run = 1
 batch_size = 32
 
@@ -145,6 +145,7 @@ for i in range(rows):
     for j in range(cols):
 
         try:
+            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
             sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Transformed")
             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
             axs[i][j].set_ylabel("")
@@ -175,6 +176,7 @@ for i in range(rows):
     for j in range(cols):
 
         try:
+            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Original")
             sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Original")
             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
             axs[i][j].set_ylabel("")
@@ -198,5 +200,5 @@ print(extracted_features.T[0])
 
 
 
-plt.savefig("Variational Eagle/Plots/feature_distributions_planar_flows_comparison", bbox_inches='tight')
+plt.savefig("Variational Eagle/Distribution Plots/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
 plt.show()
