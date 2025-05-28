@@ -835,8 +835,8 @@ for n_flows in [6, 7, 8, 9, 10, 11, 12]:
 
     # reconstruct the images
     test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
-    test_features = apply_flows(test_features, flows)
-    reconstructed_images = vae.decoder.predict(test_features)
+    transformed_features = apply_flows(test_features, flows)
+    reconstructed_images = vae.decoder.predict(transformed_features)
 
     # create figure to hold subplots
     fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
@@ -846,7 +846,7 @@ for n_flows in [6, 7, 8, 9, 10, 11, 12]:
 
         # normalise the images
         original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently(reconstructed_images[i])
+        reconstructed_image = normalise_independently([i])
 
         # show the original image (remove axes)
         axs[0, i].imshow(original_image)
@@ -879,8 +879,8 @@ for n_flows in [6, 7, 8, 9, 10, 11, 12]:
 
     # reconstruct the images
     test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
-    test_features = apply_flows(test_features, flows)
-    reconstructed_images = vae.decoder.predict(test_features)
+    transformed_features = apply_flows(test_features, flows)
+    reconstructed_images = vae.decoder.predict(transformed_features)
 
     # create figure to hold subplots
     fig, axs = plt.subplots(2, n-1, figsize=(18,5))

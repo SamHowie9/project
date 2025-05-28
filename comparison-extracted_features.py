@@ -30,7 +30,7 @@ pd.set_option('display.width', None)
 
 run = 1
 encoding_dim = 30
-n_flows = 1
+n_flows = 2
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
@@ -132,7 +132,7 @@ print(all_properties[all_properties["flag_sersic"] != 0])
 all_properties = all_properties.iloc[:-200]
 
 
-for n_flows in [1, 2, 3, 4, 5]:
+for n_flows in [n_flows]:
 
     # load the extracted features
     # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
@@ -160,29 +160,27 @@ for n_flows in [1, 2, 3, 4, 5]:
 
 
 
-        # spirals only
+    # spirals only
 
-        # # take only the sprial galaxies
-        # all_properties = all_properties[all_properties["n_r"] <= 2.5]
-        #
-        # # account for the training data in the dataframe
-        # all_properties = all_properties.iloc[:-200]
-        #
-        # for encoding_dim in range(5, 20):
-        #     for run in [1, 2, 3]:
-        #
-        #         # load the extracted features
-        #         # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
-        #         extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-        #         encoding_dim = extracted_features.shape[1]
-        #         extracted_features_switch = extracted_features.T
-        #
-        #         # perform pca on the extracted features
-        #         pca = PCA(n_components=5).fit(extracted_features)
-        #         extracted_features = pca.transform(extracted_features)
-        #         extracted_features_switch = extracted_features.T
-
-
+    # # take only the sprial galaxies
+    # all_properties = all_properties[all_properties["n_r"] <= 2.5]
+    #
+    # # account for the training data in the dataframe
+    # all_properties = all_properties.iloc[:-200]
+    #
+    # for encoding_dim in range(5, 20):
+    #     for run in [1, 2, 3]:
+    #
+    #         # load the extracted features
+    #         # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
+    #         extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+    #         encoding_dim = extracted_features.shape[1]
+    #         extracted_features_switch = extracted_features.T
+    #
+    #         # perform pca on the extracted features
+    #         pca = PCA(n_components=5).fit(extracted_features)
+    #         extracted_features = pca.transform(extracted_features)
+    #         extracted_features_switch = extracted_features.T
 
 
 
@@ -190,8 +188,9 @@ for n_flows in [1, 2, 3, 4, 5]:
 
 
 
-        # elliptical only
 
+
+    # ellipticals only
 
     # # for encoding_dim in range(5, 21):
     # for encoding_dim in [10]:
@@ -264,11 +263,11 @@ for n_flows in [1, 2, 3, 4, 5]:
 
     print(correlation_df)
 
-
+    # correlation_df = correlation_df.iloc[[12, 21, 27]]
 
     # set the figure size
     # plt.figure(figsize=(20, extracted_features_switch.shape[0]))
-    plt.figure(figsize=(32, extracted_features_switch.shape[0]))
+    plt.figure(figsize=(32, correlation_df.shape[0]))
 
 
     # properties to plot
@@ -308,7 +307,7 @@ for n_flows in [1, 2, 3, 4, 5]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_pca", bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_subset_transformed", bbox_inches='tight')
     plt.show()
 
 
@@ -457,66 +456,66 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
-# fig, axs = plt.subplots(2, 4, figsize=(25, 10))
-#
-# density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
-# axs[0][0].set_title("Sersic Index")
-# axs[0][0].set_xlabel("Feature 3")
-# axs[0][0].set_ylabel("Sersic Index")
+fig, axs = plt.subplots(2, 4, figsize=(25, 10))
+
+density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
+axs[0][0].set_title("Sersic Index")
+axs[0][0].set_xlabel("Feature 3")
+axs[0][0].set_ylabel("Sersic Index")
 # axs[0][0].set_xlim(-4, 4)
 # axs[0][0].set_ylim(0, 6)
-#
-# density_scatter(extracted_features_switch[1], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
-# axs[0][1].set_title("Position Angle")
-# axs[0][1].set_xlabel("Feature 1")
-# axs[0][1].set_ylabel("Position Angle (°)")
+
+density_scatter(extracted_features_switch[2], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
+axs[0][1].set_title("Position Angle")
+axs[0][1].set_xlabel("Feature 1")
+axs[0][1].set_ylabel("Position Angle (°)")
 # axs[0][1].set_yticks([0, 45, 90])
 # axs[0][1].set_xlim(-3.5, 3.5)
-#
-# density_scatter(extracted_features_switch[2], all_properties["q_r"], axs=axs[0][2], s=10)
-# axs[0][2].set_title("Axis Ratio")
-# axs[0][2].set_xlabel("Feature 2")
-# axs[0][2].set_ylabel("Axis Ratio")
+
+density_scatter(extracted_features_switch[1], all_properties["q_r"], axs=axs[0][2], s=10)
+axs[0][2].set_title("Axis Ratio")
+axs[0][2].set_xlabel("Feature 2")
+axs[0][2].set_ylabel("Axis Ratio")
 # axs[0][2].set_xlim(-3, 3)
-#
-# density_scatter(extracted_features_switch[0], all_properties["m20"], axs=axs[0][3], s=10)
-# axs[0][3].set_title("M20")
-# axs[0][3].set_xlabel("Feature 0")
-# axs[0][3].set_ylabel("M20")
+
+density_scatter(extracted_features_switch[3], all_properties["m20"], axs=axs[0][3], s=10)
+axs[0][3].set_title("M20")
+axs[0][3].set_xlabel("Feature 0")
+axs[0][3].set_ylabel("M20")
 # axs[0][3].set_xlim(-6, 4)
 # axs[0][3].set_ylim(-2.5, -1.2)
-#
-# density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1][0], s=10)
-# axs[1][0].set_title("Gini Coefficient")
-# axs[1][0].set_xlabel("Feature 3")
-# axs[1][0].set_ylabel("Gini Coefficient")
+
+density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1][0], s=10)
+axs[1][0].set_title("Gini Coefficient")
+axs[1][0].set_xlabel("Feature 3")
+axs[1][0].set_ylabel("Gini Coefficient")
 # axs[1][0].set_xlim(-4, 4)
 # axs[1][0].set_ylim(0.4, 0.65)
-#
-# density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][1], s=10)
-# axs[1][1].set_title("Concentration")
-# axs[1][1].set_xlabel("Feature 3")
-# axs[1][1].set_ylabel("Concentration")
+
+density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][1], s=10)
+axs[1][1].set_title("Concentration")
+axs[1][1].set_xlabel("Feature 3")
+axs[1][1].set_ylabel("Concentration")
 # axs[1][1].set_xlim(-3, 3)
 # axs[1][1].set_ylim(2, 5)
-#
-# density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
-# axs[1][2].set_title("Asymmetry")
-# axs[1][2].set_xlabel("Feature 0")
-# axs[1][2].set_ylabel("Asymmetry")
+
+density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
+axs[1][2].set_title("Asymmetry")
+axs[1][2].set_xlabel("Feature 0")
+axs[1][2].set_ylabel("Asymmetry")
 # axs[1][2].set_xlim(-4, 4)
 # axs[1][2].set_ylim(0, 0.5)
-#
-# density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
-# axs[1][3].set_title("Smoothness")
-# axs[1][3].set_xlabel("Feature 0")
-# axs[1][3].set_ylabel("Smoothness")
+
+density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
+axs[1][3].set_title("Smoothness")
+axs[1][3].set_xlabel("Feature 0")
+axs[1][3].set_ylabel("Smoothness")
 # axs[1][3].set_xlim(-4, 4)
 # axs[1][3].set_ylim(0, 0.1)
-#
-#
-# plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_30_1_zoomed_4_2", bbox_inches='tight')
-# plt.show()
+
+
+plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_" + str(encoding_dim) + "_" + str(n_flows) + "_" + str(run) + "_1", bbox_inches='tight')
+plt.show()
 
 
 

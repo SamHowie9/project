@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from PIL.GimpGradientFile import linear
 from matplotlib import pyplot as plt
+import matplotlib.lines as mlines
 import seaborn as sns
 import textwrap
 import random
@@ -29,7 +30,7 @@ encoding_dim = 30
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
-n_flows = 5
+n_flows = 3
 run = 1
 batch_size = 32
 
@@ -123,7 +124,7 @@ print(all_properties)
 # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
-extracted_features = extracted_features[:len(all_properties)]
+# extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
@@ -158,7 +159,7 @@ for i in range(rows):
 
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
 
-extracted_features = extracted_features[:len(all_properties)]
+# extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
@@ -167,22 +168,31 @@ extracted_features_switch = extracted_features.T
 # extracted_features = extracted_features[:len(all_properties)]
 # extracted_features_switch = extracted_features.T
 
-print(extracted_features.shape)
 
+standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
+print(len(standard_normal))
 
-print(rows, cols)
 
 for i in range(rows):
     for j in range(cols):
 
         try:
-            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Original")
-            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Original")
+            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], kde=True, color="C1", fill=False, alpha=0, bins=50)
+            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Original")
             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
             axs[i][j].set_ylabel("")
             axs[i][j].set_yticks([])
 
-            axs[i][j].legend()
+
+            sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, color="black", fill=False, alpha=0, bins=50)
+
+
+            orange_line = mlines.Line2D([], [], color="C1", linestyle='-', label="Original")
+            black_line = mlines.Line2D([], [], color="black", linestyle='-', label="Gaussian")
+            handles = axs[i][j].get_legend_handles_labels()[0] + [orange_line, black_line]
+            axs[i][j].legend(handles=handles)
+
+            # axs[i][j].legend()
 
         except:
             print(j + (i*cols))
@@ -200,5 +210,5 @@ print(extracted_features.T[0])
 
 
 
-plt.savefig("Variational Eagle/Distribution Plots/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Distribution Plots/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_all_gaussian", bbox_inches='tight')
 plt.show()
