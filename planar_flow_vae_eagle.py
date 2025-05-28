@@ -44,7 +44,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 # for encoding_dim in [encoding_dim]:
 # for n_flows in [1, 2, 3]:
-for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+2, 1], [encoding_dim+2, 2], [encoding_dim+2, 3]]
+for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+2, 1], [encoding_dim+2, 2], [encoding_dim+2, 3]]:
 
     print()
     print("Encoding Dim", encoding_dim)
