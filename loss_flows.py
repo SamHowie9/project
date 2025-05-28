@@ -158,6 +158,9 @@ for encoding_dim in [5, 10, 15, 20, 25, 35, 40]:
     for n_flows in [1, 2, 3]:
 
 
+        print("\n \n", str(encoding_dim) + "   " + str(n_flows) + "\n \n")
+
+
         # Define VAE model with custom train step
         class VAE(Model):
 
