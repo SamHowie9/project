@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 2
-encoding_dim = 34
+encoding_dim = 2
 n_flows = 1
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -695,7 +695,7 @@ for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_di
     for i in range(0, n - 1):
         # normalise the images
         original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently([i])
+        reconstructed_image = normalise_independently(reconstructed_images[i])
 
         # show the original image (remove axes)
         axs[0, i].imshow(original_image)
@@ -720,7 +720,7 @@ for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_di
     for i in range(0, n - 1):
         # normalise the images
         original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently([i])
+        reconstructed_image = normalise_independently(reconstructed_images[i])
 
         # show the original image (remove axes)
         axs[0, i].imshow(original_image)
@@ -770,7 +770,7 @@ for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_di
     for i in range(0, n - 1):
         # normalise the images
         original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently([i])
+        reconstructed_image = normalise_independently(reconstructed_images[i])
 
         # show the original image (remove axes)
         axs[0, i].imshow(original_image)
@@ -795,7 +795,7 @@ for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_di
     for i in range(0, n - 1):
         # normalise the images
         original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently([i])
+        reconstructed_image = normalise_independently(reconstructed_images[i])
 
         # show the original image (remove axes)
         axs[0, i].imshow(original_image)
