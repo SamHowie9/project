@@ -574,6 +574,25 @@ for n_flows in [1, 2, 3]:
 
 
 
+    # apply the flows to the latent vectors after training
+    def apply_flows(z_mean, flows):
+
+        # convert vectors to tensor and clip (as done in sampling layer)
+        z = tf.convert_to_tensor(z_mean, dtype=tf.float32)
+        z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
+
+        # apply the flows
+        for flow in flows:
+            z, _ = flow(z)
+
+        # return the transformed vector
+        return z
+
+
+
+
+
+
     # Define keras tensor for the encoder
     input_image = Input(shape=(256, 256, 3))                                                                               # (256, 256, 3)
 
@@ -620,7 +639,6 @@ for n_flows in [1, 2, 3]:
 
     # build and compile the VAE
     vae = VAE(encoder, decoder)
-    # vae.compile(optimizer=optimizers.Adam(learning_rate=1e-4, clipnorm=1.0))
     # vae.compile(optimizer=optimizers.Adam(clipnorm=1.0))
     vae.compile(optimizer=optimizers.Adam())
 
@@ -629,26 +647,186 @@ for n_flows in [1, 2, 3]:
     # train the model
     model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
-    # or load the weights from a previous run
-    # vae.load_weights("Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
+    # get loss, reconstruction loss and kl loss and save as numpy array
+    loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+    np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+
+    print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
+    print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+
+
 
     vae.build(input_shape=(None, 256, 256, 3))
+
+    # or load the weights from a previous run
+    # vae.load_weights("Variational Eagle/Weights/Normalised to r/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_weights_1.weights.h5")
 
     # save the weights
     vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
 
 
-    # generate extracted features from trained encoder and save as numpy array
-    extracted_features = vae.encoder.predict(train_images)
-    np.save("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", extracted_features[0:3])
 
-    # print(np.array(extracted_features).shape)
+    # get and save the extracted features (pre transformations)
+    z_mean, _, _, _ = vae.encoder.predict(train_images)
+    np.save("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
 
-    # get loss, reconstruction loss and kl loss and save as numpy array
-    loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-    print("\n \n" + str(encoding_dim))
-    print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-    np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+    # get the sampling layer
+    sampling_layer = None
+    for layer in encoder.layers:
+        if isinstance(layer, Sampling):
+            sampling_layer = layer
+            break
+
+    # get the flows from the sampling layer
+    flows = sampling_layer.flows
+
+    # transform and save the mean vectors
+    z_transformed = apply_flows(z_mean, flows)
+    np.save("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
+
+
+
+
+
+    # number of images to reconstruct
+    n = 12
+
+
+
+
+
+    # training reconstructions
+
+    # create a subset of the training data to reconstruct (first n images)
+    images_to_reconstruct = train_images[n:]
+
+    # reconstruct the original vectors
+    reconstructed_images = vae.decoder.predict(z_mean[n:])
+
+    # create figure to hold subplots
+    fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
+
+    # plot each subplot
+    for i in range(0, n - 1):
+        # normalise the images
+        original_image = normalise_independently(images_to_reconstruct[i])
+        reconstructed_image = normalise_independently([i])
+
+        # show the original image (remove axes)
+        axs[0, i].imshow(original_image)
+        axs[0, i].get_xaxis().set_visible(False)
+        axs[0, i].get_yaxis().set_visible(False)
+
+        # show the reconstructed image (remove axes)
+        axs[1, i].imshow(reconstructed_image)
+        axs[1, i].get_xaxis().set_visible(False)
+        axs[1, i].get_yaxis().set_visible(False)
+
+    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    plt.show()
+
+    # reconstruct the transformed vectors images
+    reconstructed_images = vae.decoder.predict(z_transformed[n:])
+
+    # create figure to hold subplots
+    fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
+
+    # plot each subplot
+    for i in range(0, n - 1):
+        # normalise the images
+        original_image = normalise_independently(images_to_reconstruct[i])
+        reconstructed_image = normalise_independently([i])
+
+        # show the original image (remove axes)
+        axs[0, i].imshow(original_image)
+        axs[0, i].get_xaxis().set_visible(False)
+        axs[0, i].get_yaxis().set_visible(False)
+
+        # show the reconstructed image (remove axes)
+        axs[1, i].imshow(reconstructed_image)
+        axs[1, i].get_xaxis().set_visible(False)
+        axs[1, i].get_yaxis().set_visible(False)
+
+    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/Edge On/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
+    plt.show()
+
+
+
+
+
+    # testing reconstructions
+
+    # create a subset of the testing data to reconstruct (first n images)
+    images_to_reconstruct = test_images[n:]
+
+    # generate the extracted features for these images
+    z_mean, _, _, _ = vae.encoder.predict(images_to_reconstruct)
+
+    # get the sampling layer
+    sampling_layer = None
+    for layer in encoder.layers:
+        if isinstance(layer, Sampling):
+            sampling_layer = layer
+            break
+
+    # get the flows from the sampling layer
+    flows = sampling_layer.flows
+
+    # transform the mean vectors
+    z_transformed = apply_flows(z_mean, flows)
+
+    # reconstruct the original vectors
+    reconstructed_images = vae.decoder.predict(z_mean)
+
+    # create figure to hold subplots
+    fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
+
+    # plot each subplot
+    for i in range(0, n - 1):
+        # normalise the images
+        original_image = normalise_independently(images_to_reconstruct[i])
+        reconstructed_image = normalise_independently([i])
+
+        # show the original image (remove axes)
+        axs[0, i].imshow(original_image)
+        axs[0, i].get_xaxis().set_visible(False)
+        axs[0, i].get_yaxis().set_visible(False)
+
+        # show the reconstructed image (remove axes)
+        axs[1, i].imshow(reconstructed_image)
+        axs[1, i].get_xaxis().set_visible(False)
+        axs[1, i].get_yaxis().set_visible(False)
+
+    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    plt.show()
+
+    # reconstruct the transformed vectors images
+    reconstructed_images = vae.decoder.predict(z_transformed)
+
+    # create figure to hold subplots
+    fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
+
+    # plot each subplot
+    for i in range(0, n - 1):
+        # normalise the images
+        original_image = normalise_independently(images_to_reconstruct[i])
+        reconstructed_image = normalise_independently([i])
+
+        # show the original image (remove axes)
+        axs[0, i].imshow(original_image)
+        axs[0, i].get_xaxis().set_visible(False)
+        axs[0, i].get_yaxis().set_visible(False)
+
+        # show the reconstructed image (remove axes)
+        axs[1, i].imshow(reconstructed_image)
+        axs[1, i].get_xaxis().set_visible(False)
+        axs[1, i].get_yaxis().set_visible(False)
+
+    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/Edge On/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
+    plt.show()
+
+
+
 
 
 
@@ -789,82 +967,82 @@ for n_flows in [1, 2, 3]:
 
 
 
-
-    # Training Reconstructions
-
-    # number of images to reconstruct
-    n = 12
-
-    # create a subset of the validation data to reconstruct (first 10 images)
-    images_to_reconstruct = train_images[n:]
-
-    # reconstruct the images
-    test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
-    reconstructed_images = vae.decoder.predict(test_features)
-
-    # create figure to hold subplots
-    fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
-
-    # plot each subplot
-    for i in range(0, n - 1):
-        original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently(reconstructed_images[i])
-
-        # show the original image (remove axes)
-        axs[0, i].imshow(original_image)
-        axs[0, i].get_xaxis().set_visible(False)
-        axs[0, i].get_yaxis().set_visible(False)
-
-        # show the reconstructed image (remove axes)
-        axs[1, i].imshow(reconstructed_image)
-        axs[1, i].get_xaxis().set_visible(False)
-        axs[1, i].get_yaxis().set_visible(False)
-
-    # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
-    plt.show()
-
-
-
-
-
-
-
-    # Testing Reconstructions
-
-    # number of images to reconstruct
-    n = 12
-
-    # create a subset of the validation data to reconstruct (first 10 images)
-    images_to_reconstruct = test_images[:n]
+    #
+    # # Training Reconstructions
+    #
+    # # number of images to reconstruct
+    # n = 12
+    #
+    # # create a subset of the validation data to reconstruct (first 10 images)
     # images_to_reconstruct = train_images[n:]
-
-    # reconstruct the images
-    test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
-    reconstructed_images = vae.decoder.predict(test_features)
-
-    # create figure to hold subplots
-    fig, axs = plt.subplots(2, n-1, figsize=(18,5))
-
-    # plot each subplot
-    for i in range(0, n-1):
-
-        original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently(reconstructed_images[i])
-
-        # show the original image (remove axes)
-        axs[0,i].imshow(original_image)
-        axs[0,i].get_xaxis().set_visible(False)
-        axs[0,i].get_yaxis().set_visible(False)
-
-        # show the reconstructed image (remove axes)
-        axs[1,i].imshow(reconstructed_image)
-        axs[1,i].get_xaxis().set_visible(False)
-        axs[1,i].get_yaxis().set_visible(False)
-
-    # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
-    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
-    plt.show()
+    #
+    # # reconstruct the images
+    # test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
+    # reconstructed_images = vae.decoder.predict(test_features)
+    #
+    # # create figure to hold subplots
+    # fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
+    #
+    # # plot each subplot
+    # for i in range(0, n - 1):
+    #     original_image = normalise_independently(images_to_reconstruct[i])
+    #     reconstructed_image = normalise_independently(reconstructed_images[i])
+    #
+    #     # show the original image (remove axes)
+    #     axs[0, i].imshow(original_image)
+    #     axs[0, i].get_xaxis().set_visible(False)
+    #     axs[0, i].get_yaxis().set_visible(False)
+    #
+    #     # show the reconstructed image (remove axes)
+    #     axs[1, i].imshow(reconstructed_image)
+    #     axs[1, i].get_xaxis().set_visible(False)
+    #     axs[1, i].get_yaxis().set_visible(False)
+    #
+    # # plt.savefig("Variational Eagle/Reconstructions/Training/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
+    # plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    # plt.show()
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    # # Testing Reconstructions
+    #
+    # # number of images to reconstruct
+    # n = 12
+    #
+    # # create a subset of the validation data to reconstruct (first 10 images)
+    # images_to_reconstruct = test_images[:n]
+    # # images_to_reconstruct = train_images[n:]
+    #
+    # # reconstruct the images
+    # test_features, _, _, _ = vae.encoder.predict(images_to_reconstruct)
+    # reconstructed_images = vae.decoder.predict(test_features)
+    #
+    # # create figure to hold subplots
+    # fig, axs = plt.subplots(2, n-1, figsize=(18,5))
+    #
+    # # plot each subplot
+    # for i in range(0, n-1):
+    #
+    #     original_image = normalise_independently(images_to_reconstruct[i])
+    #     reconstructed_image = normalise_independently(reconstructed_images[i])
+    #
+    #     # show the original image (remove axes)
+    #     axs[0,i].imshow(original_image)
+    #     axs[0,i].get_xaxis().set_visible(False)
+    #     axs[0,i].get_yaxis().set_visible(False)
+    #
+    #     # show the reconstructed image (remove axes)
+    #     axs[1,i].imshow(reconstructed_image)
+    #     axs[1,i].get_xaxis().set_visible(False)
+    #     axs[1,i].get_yaxis().set_visible(False)
+    #
+    # # plt.savefig("Variational Eagle/Reconstructions/Testing/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_reconstruction_" + str(run))
+    # plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    # plt.show()
 
 
 
