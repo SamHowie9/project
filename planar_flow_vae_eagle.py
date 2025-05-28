@@ -125,7 +125,7 @@ for n_flows in [1, 2, 3]:
 
 
 
-    # load the images as a fully balanced dataset
+    # load the images as a balanced dataset
 
     # load structural and physical properties into dataframes
     structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
@@ -409,10 +409,6 @@ for n_flows in [1, 2, 3]:
 
 
 
-    # print(train_images.shape)
-    # print(test_images.shape)
-
-
 
 
 
@@ -444,14 +440,10 @@ for n_flows in [1, 2, 3]:
         # custom train step
         def train_step(self, data):
 
-            print("Data Shape:", data.shape)
-
             with tf.GradientTape() as tape:
 
                 # get the latent representation (run image through the encoder)
                 z_mean, z_log_var, z, sum_log_det_jacobians  = self.encoder(data)
-
-                print("Latent Shape", z_mean.shape, z_log_var.shape, z.shape, sum_log_det_jacobians.shape)
 
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
@@ -491,7 +483,6 @@ for n_flows in [1, 2, 3]:
 
 
 
-
     # define sampling layer
     class Sampling(Layer):
 
@@ -518,12 +509,11 @@ for n_flows in [1, 2, 3]:
 
             z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
 
+            # apply flow transformations
             sum_log_det_jacobian = 0.0
-
             for flow in self.flows:
                 z, log_det = flow(z)
                 sum_log_det_jacobian += log_det
-
 
             return z, sum_log_det_jacobian
 
@@ -531,7 +521,7 @@ for n_flows in [1, 2, 3]:
 
 
 
-
+    # define planar flows
     class PlanarFlow(Layer):
 
         def __init__(self, latent_dim, **kwargs):
@@ -547,8 +537,6 @@ for n_flows in [1, 2, 3]:
 
         def call(self, z):
 
-            print("z shape (flows)", z.shape)
-
             # parameterization of u (ensure eTu > -1)
             u_hat = self.u + (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (tf.norm(self.w) ** 2 + 1e-8)
 
@@ -557,18 +545,14 @@ for n_flows in [1, 2, 3]:
             activation = tf.tanh(w_dot_z + self.b)
             z_transformed = z + (u_hat * activation)
 
-            # calculate derivative
+            # derivative of flow function
             psi = (1.0 - tf.square(activation)) * self.w
 
-            # find the log det jacobian
+            # compute the log det jacobian
             det_jacobian = 1.0 + tf.reduce_sum(psi * u_hat, axis=1)  # shape: (batch_size,)
             log_det_jacobian = tf.math.log(tf.abs(det_jacobian) + 1e-8)  # add epsilon for numerical stability
 
-            print("log det jacobian shape", log_det_jacobian.shape)
-
             return z_transformed, log_det_jacobian
-
-
 
 
 
@@ -587,7 +571,6 @@ for n_flows in [1, 2, 3]:
 
         # return the transformed vector
         return z
-
 
 
 
