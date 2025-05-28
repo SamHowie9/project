@@ -445,6 +445,8 @@ for n_flows in [1, 2, 3]:
                 # get the latent representation (run image through the encoder)
                 z_mean, z_log_var, z, sum_log_det_jacobians  = self.encoder(data)
 
+                print("Z Shape", z_mean.shape, z.shape)
+
                 # form the reconstruction (run latent representation through decoder)
                 reconstruction = self.decoder(z)
 

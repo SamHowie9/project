@@ -20,29 +20,47 @@ import random
 # reconstruction_loss = np.load("Variational Eagle/Loss/Test/reconstruction_loss_beta.npy")
 # kl_loss = np.load("Variational Eagle/Loss/Test/kl_loss_beta.npy")
 
-total_loss = np.load("Variational Eagle/Loss/Test/total_loss_beta_30.npy")
-reconstruction_loss = np.load("Variational Eagle/Loss/Test/reconstruction_loss_beta_30.npy")
-kl_loss = np.load("Variational Eagle/Loss/Test/kl_loss_beta_30.npy")
+total_loss_original = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_30.npy")
+reconstruction_loss_original = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_30.npy")
+kl_loss_original = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_30.npy")
+
+total_loss_transformed = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_30_transformed.npy")
+reconstruction_loss_transformed = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_30_transformed.npy")
+kl_loss_transformed = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_30_transformed.npy")
 
 fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
 # fig, axs = plt.subplots(1, 1, figsize=(12, 5))
 
+flow_numbers = range(1, total_loss_original.shape[0]+1)
 
 
-# axs.plot(y=reconstruction_loss, x=beta_words)
-axs[0].plot(beta_scale, total_loss)
-axs[0].scatter(beta_scale, total_loss)
+
+axs[0].plot(flow_numbers, total_loss_transformed, label="Transformed")
+axs[0].scatter(flow_numbers, total_loss_transformed)
 axs[0].set_title("Total Loss")
 
-axs[1].plot(beta_scale, reconstruction_loss)
-axs[1].scatter(beta_scale, reconstruction_loss)
+axs[1].plot(flow_numbers, reconstruction_loss_transformed, label="Transformed")
+axs[1].scatter(flow_numbers, reconstruction_loss_transformed)
+axs[1].set_title("Reconstruction Loss")
+
+axs[2].plot(flow_numbers, kl_loss_transformed, label="Transformed")
+axs[2].scatter(flow_numbers, kl_loss_transformed)
+axs[2].set_title("KL Divergence")
+
+
+
+axs[1].plot(flow_numbers, reconstruction_loss_original, label="Original")
+axs[1].scatter(flow_numbers, reconstruction_loss_original)
 axs[1].set_title("Reconstruction Loss")
 
 
-axs[2].plot(beta_scale, kl_loss)
-axs[2].scatter(beta_scale, kl_loss)
-axs[2].set_title("KL Divergence")
+
+
+
+
+
+plt.legend()
 
 
 # plt.legend()

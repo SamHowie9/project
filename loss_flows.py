@@ -427,7 +427,7 @@ for encoding_dim in [30]:
 
         # kl loss
         kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
-        kl_loss = tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians
+        kl_loss = (tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians) / z_transformed.shape[1]
         kl_loss = tf.reduce_mean(kl_loss).numpy().item()
 
         total_loss = reconstruction_loss + (beta * kl_loss)
