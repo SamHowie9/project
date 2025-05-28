@@ -24,8 +24,8 @@ tfd = tfp.distributions
 
 
 
-run = 1
-encoding_dim = 40
+run = 2
+encoding_dim = 2
 n_flows = 1
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -43,8 +43,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="9"
 
 
 # for encoding_dim in [encoding_dim]:
-for n_flows in [1, 2, 3]:
-
+# for n_flows in [1, 2, 3]:
+for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+2, 1], [encoding_dim+2, 2], [encoding_dim+2, 3]]
 
     print()
     print("Encoding Dim", encoding_dim)
@@ -509,7 +509,7 @@ for n_flows in [1, 2, 3]:
             # perform reparameterization trick
             z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
-            z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
+            # z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
 
             # apply flow transformations
             sum_log_det_jacobian = 0.0

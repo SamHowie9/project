@@ -28,6 +28,9 @@ total_loss_transformed = np.load("Variational Eagle/Loss/Normalising Flow/total_
 reconstruction_loss_transformed = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_30_transformed.npy")
 kl_loss_transformed = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_30_transformed.npy")
 
+kl_loss_transformed = kl_loss_transformed/30
+total_loss_transformed = reconstruction_loss_transformed + (0.0001 * kl_loss_transformed)
+
 fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
 # fig, axs = plt.subplots(1, 1, figsize=(12, 5))
@@ -61,10 +64,11 @@ axs[1].set_title("Reconstruction Loss")
 
 
 plt.legend()
+axs[1].ticklabel_format(style='plain', useOffset=False, axis='both')
 
 
 # plt.legend()
-plt.savefig("Variational Eagle/Plots/optimal_beta_30_feat", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/optimal_flows_30_feat", bbox_inches='tight')
 plt.show()
 
 
