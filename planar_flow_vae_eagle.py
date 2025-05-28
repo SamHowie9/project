@@ -46,14 +46,14 @@ os.environ["CUDA_VISIBLE_DEVICES"]="1"
 # for n_flows in [1, 2, 3]:
 for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+2, 1], [encoding_dim+2, 2], [encoding_dim+2, 3]]:
 
-    print()
+    print("\n \n")
     print("Encoding Dim", encoding_dim)
     print("Run", run)
     print("Flows", n_flows)
     print("Beta", beta, beta_name)
     print("Epochs", epochs)
     print("Batch Size", batch_size)
-    print()
+    print("\n \n")
 
 
 
