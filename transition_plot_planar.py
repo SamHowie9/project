@@ -378,7 +378,7 @@ num_varying_features = 13
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 print(len(med_pca_features))
 
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(10, 10))
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features, len(extracted_features.T)))
 plt.subplots_adjust(wspace=0, hspace=0.1)
 
 for i in range(len(extracted_features.T)):
