@@ -140,19 +140,19 @@ rows, cols = [6, 5]
 fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*4))
 
 
-print(rows, cols)
-
-for i in range(rows):
-    for j in range(cols):
-
-        try:
-            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
-            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Transformed")
-            axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
-            axs[i][j].set_ylabel("")
-            axs[i][j].set_yticks([])
-        except:
-            print(j + (i*cols))
+# print(rows, cols)
+#
+# for i in range(rows):
+#     for j in range(cols):
+#
+#         try:
+#             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
+#             sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Transformed")
+#             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
+#             axs[i][j].set_ylabel("")
+#             axs[i][j].set_yticks([])
+#         except:
+#             print(j + (i*cols))
 
 
 
@@ -184,7 +184,7 @@ for i in range(rows):
             axs[i][j].set_yticks([])
 
 
-            sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, color="black", fill=False, alpha=0, bins=50)
+            # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, color="black", fill=False, alpha=0, bins=50)
 
 
             orange_line = mlines.Line2D([], [], color="C1", linestyle='-', label="Original")

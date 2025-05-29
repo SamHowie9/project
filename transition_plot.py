@@ -14,12 +14,15 @@ import random
 
 
 
-encoding_dim = 30
 run = 1
+encoding_dim = 30
+n_flows = 3
 beta = 0.0001
 beta_name = "0001"
-epochs = 300
+epochs = 750
 batch_size = 32
+
+
 
 
 
@@ -30,6 +33,8 @@ def normalise_independently(image):
     for i in range(0, 3):
         image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
     return image.T
+
+
 
 
 
