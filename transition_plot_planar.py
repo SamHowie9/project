@@ -334,6 +334,7 @@ print(len(med_pca_features))
 chosen_features = [12, 21, 27]
 
 fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*5, len(chosen_features)*5))
+fig.subplots_adjust(wspace=0, hspace=0.5)
 
 for i, feature in enumerate(chosen_features):
 
@@ -387,7 +388,7 @@ med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extrac
 print(len(med_pca_features))
 
 fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
-plt.subplots_adjust(wspace=0, hspace=0.1)
+fig.subplots_adjust(wspace=0, hspace=0.5)
 
 for i in range(len(extracted_features.T)):
 
