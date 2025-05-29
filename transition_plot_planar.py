@@ -10,6 +10,7 @@ import pandas as pd
 import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
+from sklearn.decomposition import PCA
 
 
 
