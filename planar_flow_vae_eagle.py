@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 2
-encoding_dim = 38
+encoding_dim = 2
 n_flows = 1
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -732,7 +732,7 @@ for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_di
         axs[1, i].get_xaxis().set_visible(False)
         axs[1, i].get_yaxis().set_visible(False)
 
-    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/Edge On/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
+    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
     plt.show()
 
 
@@ -807,7 +807,7 @@ for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_di
         axs[1, i].get_xaxis().set_visible(False)
         axs[1, i].get_yaxis().set_visible(False)
 
-    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/Edge On/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
+    plt.savefig("Variational Eagle/Reconstructions/Testing/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
     plt.show()
 
 

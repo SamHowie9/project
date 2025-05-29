@@ -42,6 +42,12 @@ kl_loss_1 = np.load("Variational Eagle/Loss/Final/kl_loss_1.npy")
 kl_loss_2 = np.load("Variational Eagle/Loss/Final/kl_loss_2.npy")
 kl_loss_3 = np.load("Variational Eagle/Loss/Final/kl_loss_3.npy")
 
+total_loss_1 = reconstruction_loss_1 + (0.0001 * kl_loss_1)
+total_loss_2 = reconstruction_loss_2 + (0.0001 * kl_loss_2)
+total_loss_3 = reconstruction_loss_3 + (0.0001 * kl_loss_3)
+
+
+
 for i in range(len(total_loss_1)):
 
     # sort the total, reconstruction and kl loss for each run of that number of latent features
@@ -52,7 +58,7 @@ for i in range(len(total_loss_1)):
     # add the sorted values to the loss dataframe
     df_loss.loc[len(df_loss)] = [i+1] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
 
-# df_loss = df_loss.tail(23)
+df_loss = df_loss.tail(40)
 
 print(df_loss)
 
@@ -78,9 +84,9 @@ axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total
 axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="No Flows")
 axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="No Flows")
 
-axs[0].set_xticks(range(5, 51, 5))
-axs[1].set_xticks(range(5, 51, 5))
-axs[2].set_xticks(range(5, 51, 5))
+axs[0].set_xticks(range(10, 51, 5))
+axs[1].set_xticks(range(10, 51, 5))
+axs[2].set_xticks(range(10, 51, 5))
 
 # axs[0].set_xticks(range(14, 29))
 # axs[1].set_xticks(range(14, 29))
@@ -117,7 +123,7 @@ kl_loss_flow_1 = []
 kl_loss_flow_2 = []
 kl_loss_flow_3 = []
 
-for i in [5, 10, 15, 25, 30, 35, 40]:
+for i in [10, 15, 25, 30, 35, 40]:
 
     try:
         total_loss = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(i) + ".npy")
@@ -153,22 +159,23 @@ print(kl_loss_flow_2)
 print(kl_loss_flow_3)
 
 
-axs[0].plot([5, 10, 15, 25, 30, 35, 40], total_loss_flow_1, label="1 Flow Layer")
-axs[0].plot([5, 10, 15, 25, 30, 35, 40], total_loss_flow_2, label="2 Flow Layers")
-axs[0].plot([5, 10, 15, 25, 30, 35, 40], total_loss_flow_3, label="3 Flow Layers")
+axs[0].plot([10, 15, 25, 30, 35, 40], total_loss_flow_1, label="1 Flow Layer")
+axs[0].plot([10, 15, 25, 30, 35, 40], total_loss_flow_2, label="2 Flow Layers")
+axs[0].plot([10, 15, 25, 30, 35, 40], total_loss_flow_3, label="3 Flow Layers")
 
-axs[1].plot([5, 10, 15, 25, 30, 35, 40], reconstruction_loss_flow_1, label="1 Flow Layer")
-axs[1].plot([5, 10, 15, 25, 30, 35, 40], reconstruction_loss_flow_2, label="2 Flow Layers")
-axs[1].plot([5, 10, 15, 25, 30, 35, 40], reconstruction_loss_flow_3, label="3 Flow Layers")
+axs[1].plot([10, 15, 25, 30, 35, 40], reconstruction_loss_flow_1, label="1 Flow Layer")
+axs[1].plot([10, 15, 25, 30, 35, 40], reconstruction_loss_flow_2, label="2 Flow Layers")
+axs[1].plot([10, 15, 25, 30, 35, 40], reconstruction_loss_flow_3, label="3 Flow Layers")
 
-axs[2].plot([5, 10, 15, 25, 30, 35, 40], kl_loss_flow_1, label="1 Flow Layer")
-axs[2].plot([5, 10, 15, 25, 30, 35, 40], kl_loss_flow_2, label="2 Flow Layers")
-axs[2].plot([5, 10, 15, 25, 30, 35, 40], kl_loss_flow_3, label="3 Flow Layers")
+axs[2].plot([10, 15, 25, 30, 35, 40], kl_loss_flow_1, label="1 Flow Layer")
+axs[2].plot([10, 15, 25, 30, 35, 40], kl_loss_flow_2, label="2 Flow Layers")
+axs[2].plot([10, 15, 25, 30, 35, 40], kl_loss_flow_3, label="3 Flow Layers")
 
 axs[0].legend()
 axs[1].legend()
 axs[2].legend()
 
+plt.savefig("Variational Eagle/Plots/normal_vs_vae_zoomed", bbox_inches='tight')
 plt.show()
 
 
