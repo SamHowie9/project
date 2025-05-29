@@ -331,7 +331,7 @@ fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num
 
 for i, feature in enumerate(chosen_features):
 
-    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+    varying_feature_values = np.linspace(np.min(extracted_features.T[feature]), np.max(extracted_features.T[feature]), num_varying_features)
 
     for j in range(num_varying_features):
 
@@ -356,7 +356,7 @@ for i, feature in enumerate(chosen_features):
         # if j == (num_varying_features - 1)/2:
         #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-    axs[i][0].set_ylabel(i, rotation=0, labelpad=7.5, va='center')
+    axs[i][0].set_ylabel(feature, rotation=0, labelpad=7.5, va='center')
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
 
