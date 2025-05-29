@@ -1,7 +1,4 @@
 import os
-
-from conv_eagle_autoencoder import extracted_features
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow.keras import layers, Model, metrics, losses, optimizers
