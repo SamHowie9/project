@@ -150,10 +150,10 @@ for n_flows in [n_flows]:
     extracted_features_switch = extracted_features.T
 
     # perform pca on the extracted features
-    pca = PCA(n_components=0.999).fit(extracted_features)
-    extracted_features = pca.transform(extracted_features)
-    extracted_features = extracted_features[:len(all_properties)]
-    extracted_features_switch = extracted_features.T
+    # pca = PCA(n_components=0.999).fit(extracted_features)
+    # extracted_features = pca.transform(extracted_features)
+    # extracted_features = extracted_features[:len(all_properties)]
+    # extracted_features_switch = extracted_features.T
 
 
 
@@ -456,67 +456,131 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
+# fig, axs = plt.subplots(2, 4, figsize=(25, 10))
+#
+# density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
+# axs[0][0].set_title("Sersic Index")
+# axs[0][0].set_xlabel("Feature 3")
+# axs[0][0].set_ylabel("Sersic Index")
+# # axs[0][0].set_xlim(-4, 4)
+# # axs[0][0].set_ylim(0, 6)
+#
+# density_scatter(extracted_features_switch[2], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
+# axs[0][1].set_title("Position Angle")
+# axs[0][1].set_xlabel("Feature 1")
+# axs[0][1].set_ylabel("Position Angle (°)")
+# # axs[0][1].set_yticks([0, 45, 90])
+# # axs[0][1].set_xlim(-3.5, 3.5)
+#
+# density_scatter(extracted_features_switch[1], all_properties["q_r"], axs=axs[0][2], s=10)
+# axs[0][2].set_title("Axis Ratio")
+# axs[0][2].set_xlabel("Feature 2")
+# axs[0][2].set_ylabel("Axis Ratio")
+# # axs[0][2].set_xlim(-3, 3)
+#
+# density_scatter(extracted_features_switch[3], all_properties["m20"], axs=axs[0][3], s=10)
+# axs[0][3].set_title("M20")
+# axs[0][3].set_xlabel("Feature 0")
+# axs[0][3].set_ylabel("M20")
+# # axs[0][3].set_xlim(-6, 4)
+# # axs[0][3].set_ylim(-2.5, -1.2)
+#
+# density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1][0], s=10)
+# axs[1][0].set_title("Gini Coefficient")
+# axs[1][0].set_xlabel("Feature 3")
+# axs[1][0].set_ylabel("Gini Coefficient")
+# # axs[1][0].set_xlim(-4, 4)
+# # axs[1][0].set_ylim(0.4, 0.65)
+#
+# density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][1], s=10)
+# axs[1][1].set_title("Concentration")
+# axs[1][1].set_xlabel("Feature 3")
+# axs[1][1].set_ylabel("Concentration")
+# # axs[1][1].set_xlim(-3, 3)
+# # axs[1][1].set_ylim(2, 5)
+#
+# density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
+# axs[1][2].set_title("Asymmetry")
+# axs[1][2].set_xlabel("Feature 0")
+# axs[1][2].set_ylabel("Asymmetry")
+# # axs[1][2].set_xlim(-4, 4)
+# # axs[1][2].set_ylim(0, 0.5)
+#
+# density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
+# axs[1][3].set_title("Smoothness")
+# axs[1][3].set_xlabel("Feature 0")
+# axs[1][3].set_ylabel("Smoothness")
+# # axs[1][3].set_xlim(-4, 4)
+# # axs[1][3].set_ylim(0, 0.1)
+#
+#
+# plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_" + str(encoding_dim) + "_" + str(n_flows) + "_" + str(run) + "_1", bbox_inches='tight')
+# plt.show()
+
+
+
+
+
 fig, axs = plt.subplots(2, 4, figsize=(25, 10))
 
-density_scatter(extracted_features_switch[3], all_properties["n_r"], axs=axs[0][0], s=10)
+density_scatter(extracted_features_switch[21], all_properties["n_r"], axs=axs[0][0], s=10)
 axs[0][0].set_title("Sersic Index")
-axs[0][0].set_xlabel("Feature 3")
+axs[0][0].set_xlabel("Feature 21")
 axs[0][0].set_ylabel("Sersic Index")
 # axs[0][0].set_xlim(-4, 4)
 # axs[0][0].set_ylim(0, 6)
 
-density_scatter(extracted_features_switch[2], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
+density_scatter(extracted_features_switch[21], abs(all_properties["pa_r"]), axs=axs[0][1], s=10)
 axs[0][1].set_title("Position Angle")
-axs[0][1].set_xlabel("Feature 1")
+axs[0][1].set_xlabel("Feature 21")
 axs[0][1].set_ylabel("Position Angle (°)")
 # axs[0][1].set_yticks([0, 45, 90])
 # axs[0][1].set_xlim(-3.5, 3.5)
 
-density_scatter(extracted_features_switch[1], all_properties["q_r"], axs=axs[0][2], s=10)
+density_scatter(extracted_features_switch[21], all_properties["q_r"], axs=axs[0][2], s=10)
 axs[0][2].set_title("Axis Ratio")
-axs[0][2].set_xlabel("Feature 2")
+axs[0][2].set_xlabel("Feature 21")
 axs[0][2].set_ylabel("Axis Ratio")
 # axs[0][2].set_xlim(-3, 3)
 
-density_scatter(extracted_features_switch[3], all_properties["m20"], axs=axs[0][3], s=10)
+density_scatter(extracted_features_switch[21], all_properties["m20"], axs=axs[0][3], s=10)
 axs[0][3].set_title("M20")
-axs[0][3].set_xlabel("Feature 0")
+axs[0][3].set_xlabel("Feature 21")
 axs[0][3].set_ylabel("M20")
 # axs[0][3].set_xlim(-6, 4)
 # axs[0][3].set_ylim(-2.5, -1.2)
 
-density_scatter(extracted_features_switch[3], all_properties["gini"], axs=axs[1][0], s=10)
+density_scatter(extracted_features_switch[21], all_properties["gini"], axs=axs[1][0], s=10)
 axs[1][0].set_title("Gini Coefficient")
-axs[1][0].set_xlabel("Feature 3")
+axs[1][0].set_xlabel("Feature 21")
 axs[1][0].set_ylabel("Gini Coefficient")
 # axs[1][0].set_xlim(-4, 4)
 # axs[1][0].set_ylim(0.4, 0.65)
 
-density_scatter(extracted_features_switch[3], all_properties["concentration"], axs=axs[1][1], s=10)
+density_scatter(extracted_features_switch[21], all_properties["concentration"], axs=axs[1][1], s=10)
 axs[1][1].set_title("Concentration")
-axs[1][1].set_xlabel("Feature 3")
+axs[1][1].set_xlabel("Feature 21")
 axs[1][1].set_ylabel("Concentration")
 # axs[1][1].set_xlim(-3, 3)
 # axs[1][1].set_ylim(2, 5)
 
-density_scatter(extracted_features_switch[0], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
+density_scatter(extracted_features_switch[21], abs(all_properties["asymmetry"]), axs=axs[1][2], s=10)
 axs[1][2].set_title("Asymmetry")
-axs[1][2].set_xlabel("Feature 0")
+axs[1][2].set_xlabel("Feature 21")
 axs[1][2].set_ylabel("Asymmetry")
 # axs[1][2].set_xlim(-4, 4)
 # axs[1][2].set_ylim(0, 0.5)
 
-density_scatter(extracted_features_switch[0], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
+density_scatter(extracted_features_switch[21], abs(all_properties["smoothness"]), axs=axs[1][3], s=10)
 axs[1][3].set_title("Smoothness")
-axs[1][3].set_xlabel("Feature 0")
+axs[1][3].set_xlabel("Feature 21")
 axs[1][3].set_ylabel("Smoothness")
 # axs[1][3].set_xlim(-4, 4)
 # axs[1][3].set_ylim(0, 0.1)
 
 
-plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_" + str(encoding_dim) + "_" + str(n_flows) + "_" + str(run) + "_1", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/structure_measurement_comparisons_21_original", bbox_inches='tight')
 plt.show()
-
 
 
 
