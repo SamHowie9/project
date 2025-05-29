@@ -354,6 +354,8 @@ for i, feature in enumerate(chosen_features):
 
         axs[i][j].imshow(reconstruction)
 
+        axs[i][j].set_aspect("auto")
+
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
@@ -407,6 +409,8 @@ for i in range(len(extracted_features.T)):
 
 
         axs[i][j].imshow(reconstruction)
+
+        axs[i][j].set_aspect("auto")
 
         # remove the ticks
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
