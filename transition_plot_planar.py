@@ -339,6 +339,8 @@ for i, feature in enumerate(chosen_features):
 
     varying_feature_values = np.linspace(np.min(extracted_features.T[feature]), np.max(extracted_features.T[feature]), num_varying_features)
 
+    print(varying_feature_values)
+
     for j in range(num_varying_features):
 
         temp_pca_features = med_pca_features.copy()
@@ -362,9 +364,9 @@ for i, feature in enumerate(chosen_features):
         # if j == (num_varying_features - 1)/2:
         #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-    axs[i][0].set_ylabel(feature, rotation=0, labelpad=7.5, va='center')
+    axs[i][0].set_ylabel(feature, rotation=0, labelpad=10, va='center')
 
-fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
+fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 plt.savefig("Variational Eagle/Transition Plots/Normalising Flow/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_subset_mean", bbox_inches='tight')
 plt.show()
@@ -414,9 +416,9 @@ for i in range(len(extracted_features.T)):
         # for spine in axs[i][j].spines.values():
         #     spine.set_visible(False)
 
-    axs[i][0].set_ylabel(i, rotation=0, labelpad=7.5, va='center')
+    axs[i][0].set_ylabel(i, rotation=0, labelpad=10, va='center')
 
-fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
+fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 plt.savefig("Variational Eagle/Transition Plots/Normalising Flow/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_all_mean", bbox_inches='tight')
 plt.show()
