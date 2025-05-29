@@ -317,51 +317,57 @@ extracted_features = z_mean
 
 
 
+# scale font on plots
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 5})
+
+
+
 
 # transition plot for group of features
 
-# num_varying_features = 13
-#
-# med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-# print(len(med_pca_features))
-#
-# chosen_features = [12, 21, 27]
-#
-# fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features, len(chosen_features)))
-#
-# for i, feature in enumerate(chosen_features):
-#
-#     varying_feature_values = np.linspace(np.min(extracted_features.T[feature]), np.max(extracted_features.T[feature]), num_varying_features)
-#
-#     for j in range(num_varying_features):
-#
-#         temp_pca_features = med_pca_features.copy()
-#         temp_pca_features[feature] = varying_feature_values[j]
-#
-#         temp_features = temp_pca_features
-#         temp_features = np.expand_dims(temp_features, axis=0)
-#
-#         # temp_features = pca.inverse_transform(temp_pca_features)
-#         # temp_features = np.expand_dims(temp_features, axis=0)
-#
-#         reconstruction = vae.decoder.predict(temp_features)[0]
-#
-#         axs[i][j].imshow(reconstruction)
-#
-#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#
-#         # axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
-#         #
-#         # if j == (num_varying_features - 1)/2:
-#         #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
-#
-#     axs[i][0].set_ylabel(feature, rotation=0, labelpad=7.5, va='center')
-#
-# fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
-#
-# plt.savefig("Variational Eagle/Transition Plots/Normalising Flow/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_subset_mean", bbox_inches='tight')
-# plt.show()
+num_varying_features = 13
+
+med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+print(len(med_pca_features))
+
+chosen_features = [12, 21, 27]
+
+fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*5, len(chosen_features)*5))
+
+for i, feature in enumerate(chosen_features):
+
+    varying_feature_values = np.linspace(np.min(extracted_features.T[feature]), np.max(extracted_features.T[feature]), num_varying_features)
+
+    for j in range(num_varying_features):
+
+        temp_pca_features = med_pca_features.copy()
+        temp_pca_features[feature] = varying_feature_values[j]
+
+        temp_features = temp_pca_features
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        # temp_features = pca.inverse_transform(temp_pca_features)
+        # temp_features = np.expand_dims(temp_features, axis=0)
+
+        reconstruction = vae.decoder.predict(temp_features)[0]
+
+        axs[i][j].imshow(reconstruction)
+
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+
+        # axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
+        #
+        # if j == (num_varying_features - 1)/2:
+        #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
+
+    axs[i][0].set_ylabel(feature, rotation=0, labelpad=7.5, va='center')
+
+fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
+
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_subset_mean", bbox_inches='tight')
+plt.show()
 
 
 
@@ -378,7 +384,7 @@ num_varying_features = 13
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 print(len(med_pca_features))
 
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*3, len(extracted_features.T)*3))
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
 plt.subplots_adjust(wspace=0, hspace=0.1)
 
 for i in range(len(extracted_features.T)):
