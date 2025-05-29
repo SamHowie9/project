@@ -292,7 +292,7 @@ vae.load_weights("Variational Eagle/Weights/Normalising Flow/planar_new_latent_"
 
 
 # load the original and transformed features
-z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
 z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 # remove the augmented image features
@@ -311,49 +311,6 @@ print(z_mean.shape)
 
 
 
-
-
-
-
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-
-# find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 1) |
-                          (all_properties["flag_r"] == 4) |
-                          (all_properties["flag_r"] == 5) |
-                          (all_properties["flag_r"] == 6))].index.tolist()
-
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# account for the testing dataset
-all_properties = all_properties.iloc[:-200]
-
-# load the extracted features
-# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
-encoding_dim = extracted_features.shape[1]
-extracted_features_switch = extracted_features.T
-
-print(extracted_features.shape)
-
-# remove augmented images
-extracted_features = extracted_features[:len(all_properties)]
-extracted_features_switch = extracted_features.T
-
-# perform pca on the extracted features
-pca = PCA(n_components=12).fit(extracted_features)
-extracted_features = pca.transform(extracted_features)
-extracted_features = extracted_features[:len(all_properties)]
-extracted_features_switch = extracted_features.T
 
 
 
