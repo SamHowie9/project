@@ -420,7 +420,7 @@ for i in range(len(extracted_features.T)):
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 
-fig.subplots_adjust(wspace=0, hspace=0.5)
+fig.subplots_adjust(wspace=0, hspace=0.05)
 
 plt.savefig("Variational Eagle/Transition Plots/Normalising Flow/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_all_mean", bbox_inches='tight')
 plt.show()
