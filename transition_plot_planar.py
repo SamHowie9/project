@@ -364,7 +364,7 @@ for i, feature in enumerate(chosen_features):
         # if j == (num_varying_features - 1)/2:
         #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
 
-    axs[i][0].set_ylabel(feature, rotation=0, labelpad=10, va='center')
+    axs[i][0].set_ylabel(feature, rotation=0, labelpad=30, va='center')
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
@@ -416,7 +416,7 @@ for i in range(len(extracted_features.T)):
         # for spine in axs[i][j].spines.values():
         #     spine.set_visible(False)
 
-    axs[i][0].set_ylabel(i, rotation=0, labelpad=10, va='center')
+    axs[i][0].set_ylabel(i, rotation=0, labelpad=30, va='center')
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
