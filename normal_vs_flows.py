@@ -123,12 +123,12 @@ kl_loss_flow_1 = []
 kl_loss_flow_2 = []
 kl_loss_flow_3 = []
 
-for i in [10, 15, 25, 30, 35, 40]:
+for i in range(11, 35):
 
     try:
-        total_loss = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(i) + ".npy")
-        reconstruction_loss = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(i) + ".npy")
-        kl_loss = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(i) + ".npy")
+        total_loss = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(i) + "_" + str(2) + ".npy")
+        reconstruction_loss = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(i) + "_" + str(2) + ".npy")
+        kl_loss = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(i) + "_" + str(2) + ".npy")
 
         total_loss_flow_1.append(total_loss[0])
         total_loss_flow_2.append(total_loss[1])
@@ -159,23 +159,23 @@ print(kl_loss_flow_2)
 print(kl_loss_flow_3)
 
 
-axs[0].plot([10, 15, 25, 30, 35, 40], total_loss_flow_1, label="1 Flow Layer")
-axs[0].plot([10, 15, 25, 30, 35, 40], total_loss_flow_2, label="2 Flow Layers")
-axs[0].plot([10, 15, 25, 30, 35, 40], total_loss_flow_3, label="3 Flow Layers")
+axs[0].plot(range(11, 35), total_loss_flow_1, label="1 Flow Layer")
+axs[0].plot(range(11, 35), total_loss_flow_2, label="2 Flow Layers")
+axs[0].plot(range(11, 35), total_loss_flow_3, label="3 Flow Layers")
 
-axs[1].plot([10, 15, 25, 30, 35, 40], reconstruction_loss_flow_1, label="1 Flow Layer")
-axs[1].plot([10, 15, 25, 30, 35, 40], reconstruction_loss_flow_2, label="2 Flow Layers")
-axs[1].plot([10, 15, 25, 30, 35, 40], reconstruction_loss_flow_3, label="3 Flow Layers")
+axs[1].plot(range(11, 35), reconstruction_loss_flow_1, label="1 Flow Layer")
+axs[1].plot(range(11, 35), reconstruction_loss_flow_2, label="2 Flow Layers")
+axs[1].plot(range(11, 35), reconstruction_loss_flow_3, label="3 Flow Layers")
 
-axs[2].plot([10, 15, 25, 30, 35, 40], kl_loss_flow_1, label="1 Flow Layer")
-axs[2].plot([10, 15, 25, 30, 35, 40], kl_loss_flow_2, label="2 Flow Layers")
-axs[2].plot([10, 15, 25, 30, 35, 40], kl_loss_flow_3, label="3 Flow Layers")
+axs[2].plot(range(11, 35), kl_loss_flow_1, label="1 Flow Layer")
+axs[2].plot(range(11, 35), kl_loss_flow_2, label="2 Flow Layers")
+axs[2].plot(range(11, 35), kl_loss_flow_3, label="3 Flow Layers")
 
 axs[0].legend()
 axs[1].legend()
 axs[2].legend()
 
-plt.savefig("Variational Eagle/Plots/normal_vs_vae_zoomed", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/normal_vs_vae_zoomed_2", bbox_inches='tight')
 plt.show()
 
 
