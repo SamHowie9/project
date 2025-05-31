@@ -144,7 +144,7 @@ train_images = np.array(train_images)
 # for run_number, (beta, filename) in enumerate([[0.01, "01"], [0.001, "001"], [0.0009, "0009"], [0.0008, "0008"], [0.0007, "0007"], [0.0006, "0006"], [0.0005, "0005"],  [0.0004, "0004"],  [0.0003, "0003"],  [0.0002, "0002"], [0.0001, "0001"],[0.00005, "00005"], [0.00001, "00001"], [0.000005, "000005"], [0.000001, "000001"], [0.0000005, "0000005"], [0.0000001, "0000001"], [0.00000005, "00000005"], [0.00000001, "00000001"]]):
 # for run_number, (beta, filename) in enumerate([[0.05, "05"], [0.01, "01"], [0.005, "005"], [0.001, "001"], [0.0005, "0005"], [0.0001, "0001"],[0.00005, "00005"], [0.00001, "00001"], [0.000005, "000005"], [0.000001, "000001"], [0.0000005, "0000005"], [0.0000001, "0000001"], [0.00000005, "00000005"], [0.00000001, "00000001"]]):
 
-for encoding_dim in range(1, 37):
+for encoding_dim in range(35, 51):
 
     total_loss_all = []
     reconstruction_loss_all = []
@@ -153,6 +153,14 @@ for encoding_dim in range(1, 37):
     total_loss_transformed_all = []
     reconstruction_loss_transformed_all = []
     kl_loss_transformed_all = []
+
+    # total_loss_all = list(np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_" + str(run)))
+    # reconstruction_loss_all = list(np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_" + str(run)))
+    # kl_loss_all = list(np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_" + str(run), kl_loss_all))
+    #
+    # total_loss_transformed_all = list(np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed"))
+    # reconstruction_loss_transformed_all = list(np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed"))
+    # kl_loss_transformed_all = list(np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed"))
 
     # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
     for n_flows in [1, 2, 3]:
