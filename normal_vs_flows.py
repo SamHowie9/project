@@ -14,6 +14,20 @@ import random
 
 
 
+
+run = 2
+encoding_dim = 49
+n_flows = 1
+beta = 0.0001
+beta_name = "0001"
+epochs = 750
+batch_size = 32
+
+
+
+
+
+
 # original model with no flows
 
 # dataframe to store the losses
@@ -58,7 +72,7 @@ for i in range(len(total_loss_1)):
     # add the sorted values to the loss dataframe
     df_loss.loc[len(df_loss)] = [i+1] + list(total_sorted) + list(reconstruction_sorted) + list(kl_sorted)
 
-df_loss = df_loss.tail(40)
+# df_loss = df_loss.tail(36)
 
 print(df_loss)
 
@@ -80,13 +94,17 @@ kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
 
 fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
-axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="No Flows")
-axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="No Flows")
-axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="No Flows")
+# axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="No Flows")
+# axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="No Flows")
+# axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="No Flows")
 
-axs[0].set_xticks(range(10, 51, 5))
-axs[1].set_xticks(range(10, 51, 5))
-axs[2].set_xticks(range(10, 51, 5))
+# axs[0].set_xticks(range(15, 51, 5))
+# axs[1].set_xticks(range(15, 51, 5))
+# axs[2].set_xticks(range(15, 51, 5))
+
+axs[0].set_xticks([1] + list(range(5, 51, 5)))
+axs[1].set_xticks([1] + list(range(5, 51, 5)))
+axs[2].set_xticks([1] + list(range(5, 51, 5)))
 
 # axs[0].set_xticks(range(14, 29))
 # axs[1].set_xticks(range(14, 29))
@@ -123,12 +141,14 @@ kl_loss_flow_1 = []
 kl_loss_flow_2 = []
 kl_loss_flow_3 = []
 
-for i in range(11, 35):
+flow_range = range(15, 49)
+
+for i in flow_range:
 
     try:
-        total_loss = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(i) + "_" + str(2) + ".npy")
-        reconstruction_loss = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(i) + "_" + str(2) + ".npy")
-        kl_loss = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(i) + "_" + str(2) + ".npy")
+        total_loss = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(i) + "_" + str(run) + ".npy")
+        reconstruction_loss = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(i) + "_" + str(run) + ".npy")
+        kl_loss = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(i) + "_" + str(run) + ".npy")
 
         total_loss_flow_1.append(total_loss[0])
         total_loss_flow_2.append(total_loss[1])
@@ -146,36 +166,40 @@ for i in range(11, 35):
         print(i)
 
 
-print(total_loss_flow_1)
-print(total_loss_flow_2)
-print(total_loss_flow_3)
+print(len(total_loss_flow_1))
+print(len(total_loss_flow_2))
+print(len(total_loss_flow_3))
 print()
-print(reconstruction_loss_flow_1)
-print(reconstruction_loss_flow_2)
-print(reconstruction_loss_flow_3)
+print(len(reconstruction_loss_flow_1))
+print(len(reconstruction_loss_flow_2))
+print(len(reconstruction_loss_flow_3))
 print()
-print(kl_loss_flow_1)
-print(kl_loss_flow_2)
-print(kl_loss_flow_3)
+print(len(kl_loss_flow_1))
+print(len(kl_loss_flow_2))
+print(len(kl_loss_flow_3))
 
 
-axs[0].plot(range(11, 35), total_loss_flow_1, label="1 Flow Layer")
-axs[0].plot(range(11, 35), total_loss_flow_2, label="2 Flow Layers")
-axs[0].plot(range(11, 35), total_loss_flow_3, label="3 Flow Layers")
+axs[0].plot(flow_range, total_loss_flow_1, label="1 Flow Layer", c="C9")
+axs[0].plot(flow_range, total_loss_flow_2, label="2 Flow Layers", c="C1")
+axs[0].plot(flow_range, total_loss_flow_3, label="3 Flow Layers", c="yellow")
 
-axs[1].plot(range(11, 35), reconstruction_loss_flow_1, label="1 Flow Layer")
-axs[1].plot(range(11, 35), reconstruction_loss_flow_2, label="2 Flow Layers")
-axs[1].plot(range(11, 35), reconstruction_loss_flow_3, label="3 Flow Layers")
+axs[1].plot(flow_range, reconstruction_loss_flow_1, label="1 Flow Layer", c="C9")
+axs[1].plot(flow_range, reconstruction_loss_flow_2, label="2 Flow Layers", c="C1")
+axs[1].plot(flow_range, reconstruction_loss_flow_3, label="3 Flow Layers", c="yellow")
+axs[1].ticklabel_format(style='plain', axis='both')
+axs[1].get_yaxis().get_major_formatter().set_useOffset(False)
 
-axs[2].plot(range(11, 35), kl_loss_flow_1, label="1 Flow Layer")
-axs[2].plot(range(11, 35), kl_loss_flow_2, label="2 Flow Layers")
-axs[2].plot(range(11, 35), kl_loss_flow_3, label="3 Flow Layers")
+
+
+axs[2].plot(flow_range, kl_loss_flow_1, label="1 Flow Layer", c="C9")
+axs[2].plot(flow_range, kl_loss_flow_2, label="2 Flow Layers", c="C1")
+axs[2].plot(flow_range, kl_loss_flow_3, label="3 Flow Layers", c="yellow")
 
 axs[0].legend()
 axs[1].legend()
 axs[2].legend()
 
-plt.savefig("Variational Eagle/Plots/normal_vs_vae_zoomed_2", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/normal_vs_vae_2_zoomed_flows_only", bbox_inches='tight')
 plt.show()
 
 

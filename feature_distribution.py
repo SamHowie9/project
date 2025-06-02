@@ -31,7 +31,7 @@ beta = 0.0001
 beta_name = "0001"
 epochs = 750
 n_flows = 3
-run = 1
+run = 2
 batch_size = 32
 
 
@@ -140,24 +140,24 @@ rows, cols = [6, 5]
 fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*4))
 
 
-# print(rows, cols)
-#
-# for i in range(rows):
-#     for j in range(cols):
-#
-#         try:
-#             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
-#             sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Transformed")
-#             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
-#             axs[i][j].set_ylabel("")
-#             axs[i][j].set_yticks([])
-#         except:
-#             print(j + (i*cols))
+print(rows, cols)
+
+for i in range(rows):
+    for j in range(cols):
+
+        try:
+            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
+            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Transformed")
+            axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
+            axs[i][j].set_ylabel("")
+            axs[i][j].set_yticks([])
+        except:
+            print(j + (i*cols))
 
 
 
 
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
 
 # extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T

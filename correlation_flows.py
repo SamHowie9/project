@@ -11,8 +11,8 @@ encoding_dim = 30
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
-n_flows = 5
-run = 1
+n_flows = 3
+run = 2
 batch_size = 32
 
 
@@ -189,21 +189,23 @@ print(all_properties)
 
 # fig, axs = plt.subplots(1, 1, figsize=(25, encoding_dim/2))
 # fig, axs = plt.subplots(2, 1, figsize=(25, encoding_dim))
-fig, axs = plt.subplots(2, 1, figsize=(55, 30))
+# fig, axs = plt.subplots(2, 1, figsize=(55, 30))
+fig, axs = plt.subplots(2, 1, figsize=(25, 15))
 
 
 
-correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"])
+correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
 
 # for feature in range(0, encoding_dim):
-for feature in range(0, 30):
+for feature in range(0, 15):
 
     correlation_list = []
 
-    for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+    # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+    for encoding_dim in range(25, 41):
 
-        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-        # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
+        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
         encoding_dim = extracted_features.shape[1]
         extracted_features_switch = extracted_features.T
 
@@ -213,10 +215,10 @@ for feature in range(0, 30):
         extracted_features_switch = extracted_features.T
 
         # perform pca on the extracted features
-        # pca = PCA(n_components=15).fit(extracted_features)
-        # extracted_features = pca.transform(extracted_features)
-        # extracted_features = extracted_features[:len(all_properties)]
-        # extracted_features_switch = extracted_features.T
+        pca = PCA(n_components=15).fit(extracted_features)
+        extracted_features = pca.transform(extracted_features)
+        extracted_features = extracted_features[:len(all_properties)]
+        extracted_features_switch = extracted_features.T
 
 
 
@@ -260,7 +262,7 @@ print(correlation_text_df)
 
 
 
-sns.heatmap(abs(correlation_df), ax=axs[0], annot=correlation_text_df, fmt="", cmap="Blues", cbar_kws={'label': 'Correlation'})
+sns.heatmap(abs(correlation_df), ax=axs[0], annot=correlation_text_df, fmt="", cmap="Blues", vmax=0.7, cbar_kws={'label': 'Correlation'})
 
 axs[0].set_title("Sersic Index Correlation", fontsize=20, pad=20)
 axs[0].set_yticks([])
@@ -277,7 +279,7 @@ def wrap_labels(ax, width, break_long_words=False):
     # for label in ax.get_xticklabels():
         # text = label.get_text()
 
-    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+    label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -294,17 +296,18 @@ wrap_labels(axs[0], 10)
 
 
 
-correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"])
+correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
 
 # for feature in range(0, encoding_dim):
-for feature in range(0, 30):
+for feature in range(0, 15):
 
     correlation_list = []
 
-    for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+    # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+    for encoding_dim in range(25, 41):
 
-        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-        # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
+        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
         encoding_dim = extracted_features.shape[1]
         extracted_features_switch = extracted_features.T
 
@@ -313,10 +316,10 @@ for feature in range(0, 30):
         extracted_features_switch = extracted_features.T
 
         # perform pca on the extracted features
-        # pca = PCA(n_components=15).fit(extracted_features)
-        # extracted_features = pca.transform(extracted_features)
-        # extracted_features = extracted_features[:len(all_properties)]
-        # extracted_features_switch = extracted_features.T
+        pca = PCA(n_components=15).fit(extracted_features)
+        extracted_features = pca.transform(extracted_features)
+        extracted_features = extracted_features[:len(all_properties)]
+        extracted_features_switch = extracted_features.T
 
         # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
         correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties["re_r"])[0][1]
@@ -362,7 +365,7 @@ print(correlation_text_df)
 
 
 
-sns.heatmap(abs(correlation_df), ax=axs[1], annot=correlation_text_df, fmt="", cmap="Blues", cbar_kws={'label': 'Correlation'})
+sns.heatmap(abs(correlation_df), ax=axs[1], annot=correlation_text_df, fmt="", cmap="Blues", vmax=0.7, cbar_kws={'label': 'Correlation'})
 
 axs[1].set_title("Semi-Major Axis Correlation", fontsize=20, pad=20)
 axs[1].set_yticks([])
@@ -379,7 +382,7 @@ def wrap_labels(ax, width, break_long_words=False):
     # for label in ax.get_xticklabels():
         # text = label.get_text()
 
-    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+    label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -393,7 +396,7 @@ wrap_labels(axs[1], 10)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/Normal/flow_comparison_original", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows/PCA/" + str(n_flows) + "_flows_correlation", bbox_inches='tight')
 plt.show()
 
 
