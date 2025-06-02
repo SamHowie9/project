@@ -681,7 +681,7 @@ for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_di
 
 
 
-    activations = keract.get_activations(vae.encoder, test_images)
+    activations = keract.get_activations(ncoder, test_images)
 
     activation_plot = keract.display_activations(activations, save=True, directory="Variational Eagle/Heatmaps/Activations")
 
