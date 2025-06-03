@@ -74,54 +74,11 @@ print(all_properties)
 
 
 
-
-# # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-# extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
-#
-# print(extracted_features.shape)
-#
-# fig, axs = plt.subplots(6, 5, figsize=(20, 24))
-#
-# for i in range(0, 5):
-#
-#     sns.histplot(x=extracted_features.T[i],ax=axs[0][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+5],ax=axs[1][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+10],ax=axs[2][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+15],ax=axs[3][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+20],ax=axs[4][i], bins=50)
-#     sns.histplot(x=extracted_features.T[i+25],ax=axs[5][i], bins=50)
-#     # sns.histplot(x=extracted_features.T[i+30],ax=axs[6][i], bins=50)
-#
-#     axs[0][i].set_xlabel("Feature " + str(i))
-#     axs[1][i].set_xlabel("Feature " + str(i+5))
-#     axs[2][i].set_xlabel("Feature " + str(i+10))
-#     axs[3][i].set_xlabel("Feature " + str(i+15))
-#     axs[4][i].set_xlabel("Feature " + str(i+20))
-#     axs[5][i].set_xlabel("Feature " + str(i+25))
-#     # axs[6][i].set_xlabel("Feature " + str(i+30))
-#
-#     for j in range(0, 5):
-#         axs[j][i].set_ylabel("")
-#
-#
-# np.set_printoptions(precision=3)
-#
-# print(np.log10(extracted_features.T[3]))
-# print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
-# print(np.max(extracted_features.T[3]))
-#
-# plt.savefig("Variational Eagle/Plots/feature_distributions_" + str(encoding_dim) + "_" + str(run), bbox_inches='tight')
-# plt.show()
-
-
-
-
-
-
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".npy")[0]
 # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_300_" + str(run) + ".npy")[0]
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 # extracted_features = extracted_features[:len(all_properties)]
@@ -135,80 +92,196 @@ extracted_features_switch = extracted_features.T
 
 print(extracted_features.shape)
 
-# rows, cols = [2, 5]
-rows, cols = [6, 5]
+# # rows, cols = [3, 5]
+# rows, cols = [6, 5]
+# fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*4))
+#
+# # standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
+# standard_normal = np.random.normal(loc=0, scale=1, size=100000)
+#
+# print(rows, cols)
+#
+# for i in range(rows):
+#     for j in range(cols):
+#
+#         try:
+#             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
+#             sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, stat="density", label="Transformed")
+#             # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
+#
+#             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
+#             axs[i][j].set_ylabel("")
+#             axs[i][j].set_yticks([])
+#         except:
+#             print(j + (i*cols))
+#
+# np.set_printoptions(precision=3)
+#
+# print(np.log10(extracted_features.T[3]))
+# print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
+# print(np.max(extracted_features.T[3]))
+#
+# plt.savefig("Variational Eagle/Plots/feature_distributions_all_" + str(encoding_dim) + "_" + str(n_flows) + "_ " + str(run) + "_no_gaussian", bbox_inches='tight')
+# plt.show()
+
+
+
+
+
+
+
+rows, cols = [6, 10]
 fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*4))
 
+# standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
+standard_normal = np.random.normal(loc=0, scale=1, size=100000)
 
 print(rows, cols)
 
 for i in range(rows):
-    for j in range(cols):
+    for j in range(int(cols/2)):
+
+        index = j + int(i*cols/2)
 
         try:
             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
-            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Transformed")
-            axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
+            sns.histplot(x=extracted_features.T[index],ax=axs[i][j], bins=50, stat="density", label="Transformed")
+            # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
+
+            axs[i][j].set_xlabel("Feature " + str(index))
             axs[i][j].set_ylabel("")
             axs[i][j].set_yticks([])
         except:
-            print(j + (i*cols))
-
-
-
-
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
-
-# extracted_features = extracted_features[:len(all_properties)]
-extracted_features_switch = extracted_features.T
-
-# perform pca on the extracted features
-# pca = PCA(n_components=0.999).fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features = extracted_features[:len(all_properties)]
-# extracted_features_switch = extracted_features.T
-
-
-standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
-print(len(standard_normal))
-
+            print(index)
 
 for i in range(rows):
-    for j in range(cols):
+    for j in range(int(cols/2)):
+
+        index = j + int(i*cols/2)
 
         try:
-            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], kde=True, color="C1", fill=False, alpha=0, bins=50)
-            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Original")
-            axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
-            axs[i][j].set_ylabel("")
-            axs[i][j].set_yticks([])
+            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
+            sns.histplot(x=extracted_features.T[index],ax=axs[i][j+5], bins=50, stat="density", label="Transformed")
+            sns.histplot(x=standard_normal,ax=axs[i][j+5], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
 
-
-            # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, color="black", fill=False, alpha=0, bins=50)
-
-
-            orange_line = mlines.Line2D([], [], color="C1", linestyle='-', label="Original")
-            black_line = mlines.Line2D([], [], color="black", linestyle='-', label="Gaussian")
-            handles = axs[i][j].get_legend_handles_labels()[0] + [orange_line, black_line]
-            axs[i][j].legend(handles=handles)
-
-            # axs[i][j].legend()
-
+            axs[i][j+5].set_xlabel("Feature " + str(index))
+            axs[i][j+5].set_ylabel("")
+            axs[i][j+5].set_yticks([])
         except:
-            print(j + (i*cols))
-
-
+            print(index)
 
 
 np.set_printoptions(precision=3)
 
-# print(np.log10(extracted_features.T[3]))
-print(extracted_features.T[0])
-# print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
-# print(np.max(extracted_features.T[3]))
+print(np.log10(extracted_features.T[3]))
+print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
+print(np.max(extracted_features.T[3]))
 
-
-
-
-plt.savefig("Variational Eagle/Distribution Plots/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_all_gaussian", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/feature_distributions_all_" + str(encoding_dim) + "_" + str(n_flows) + "_ " + str(run) + "_both", bbox_inches='tight')
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+#
+# # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced Mean/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
+# # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+# # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + ".npy")[0]
+# # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+#
+# # extracted_features = extracted_features[:len(all_properties)]
+# extracted_features_switch = extracted_features.T
+#
+# # perform pca on the extracted features
+# # pca = PCA(n_components=0.999).fit(extracted_features)
+# # extracted_features = pca.transform(extracted_features)
+# # extracted_features = extracted_features[:len(all_properties)]
+# # extracted_features_switch = extracted_features.T
+#
+# print(extracted_features.shape)
+#
+# # rows, cols = [2, 5]
+# rows, cols = [6, 5]
+# fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*4))
+#
+#
+# print(rows, cols)
+#
+# for i in range(rows):
+#     for j in range(cols):
+#
+#         try:
+#             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
+#             sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Transformed")
+#             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
+#             axs[i][j].set_ylabel("")
+#             axs[i][j].set_yticks([])
+#         except:
+#             print(j + (i*cols))
+#
+#
+#
+#
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+#
+# # extracted_features = extracted_features[:len(all_properties)]
+# extracted_features_switch = extracted_features.T
+#
+# # perform pca on the extracted features
+# # pca = PCA(n_components=0.999).fit(extracted_features)
+# # extracted_features = pca.transform(extracted_features)
+# # extracted_features = extracted_features[:len(all_properties)]
+# # extracted_features_switch = extracted_features.T
+#
+#
+# standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
+# print(len(standard_normal))
+#
+#
+# for i in range(rows):
+#     for j in range(cols):
+#
+#         try:
+#             sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], kde=True, color="C1", fill=False, alpha=0, bins=50)
+#             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, label="Original")
+#             axs[i][j].set_xlabel("Feature " + str(j + (i*cols)))
+#             axs[i][j].set_ylabel("")
+#             axs[i][j].set_yticks([])
+#
+#
+#             # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, color="black", fill=False, alpha=0, bins=50)
+#
+#
+#             orange_line = mlines.Line2D([], [], color="C1", linestyle='-', label="Original")
+#             black_line = mlines.Line2D([], [], color="black", linestyle='-', label="Gaussian")
+#             handles = axs[i][j].get_legend_handles_labels()[0] + [orange_line, black_line]
+#             axs[i][j].legend(handles=handles)
+#
+#             # axs[i][j].legend()
+#
+#         except:
+#             print(j + (i*cols))
+#
+#
+#
+#
+# np.set_printoptions(precision=3)
+#
+# # print(np.log10(extracted_features.T[3]))
+# print(extracted_features.T[0])
+# # print(np.format_float_positional(np.min(extracted_features.T[3]), precision=20))
+# # print(np.max(extracted_features.T[3]))
+#
+#
+#
+#
+# plt.savefig("Variational Eagle/Distribution Plots/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_all_gaussian", bbox_inches='tight')
+# plt.show()

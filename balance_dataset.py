@@ -116,6 +116,70 @@ print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 
+spiral_sample = random.sample(spirals, 36)
+unknown_sample = random.sample(unknown, 36)
+elliptical_sample = random.sample(ellipticals, 36)
+
+
+fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+
+for i in range(0, 6):
+    for j in range(0, 6):
+
+        index = i + (6*j)
+        print(index)
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + spiral_sample[index] + ".png")
+
+
+        axs[i][j].imshow(image)
+        axs[i][j].set_title(spiral_sample[index])
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/sample_spiral", bbox_inches='tight')
+plt.show()
+
+
+
+fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+
+for i in range(0, 6):
+    for j in range(0, 6):
+
+        index = i + (6*j)
+        print(index)
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + unknown_sample[index] + ".png")
+
+
+        axs[i][j].imshow(image)
+        axs[i][j].set_title(unknown_sample[index])
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/sample_unknown", bbox_inches='tight')
+plt.show()
+
+
+
+fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+
+for i in range(0, 6):
+    for j in range(0, 6):
+
+        index = i + (6*j)
+        print(index)
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + elliptical_sample[index] + ".png")
+
+
+        axs[i][j].imshow(image)
+        axs[i][j].set_title(elliptical_sample[index])
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/sample_elliptical", bbox_inches='tight')
+plt.show()
+
+
 
 
 
