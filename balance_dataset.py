@@ -151,45 +151,45 @@ plt.show()
 
 
 
-fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+# fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         index = i + (6*j)
+#         print(index)
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == unknown_sample[index], "n_r"].values[0]
+#
+#         axs[i][j].imshow(image)
+#         axs[i][j].set_title(str(unknown_sample[index]) + ", n=" + str(sersic))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_unknown", bbox_inches='tight')
+# plt.show()
 
-for i in range(0, 6):
-    for j in range(0, 6):
-
-        index = i + (6*j)
-        print(index)
-
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown_sample[index]) + ".png")
-
-        sersic = all_properties.loc[all_properties["GalaxyID"] == unknown_sample[index], "n_r"].values[0]
-
-        axs[i][j].imshow(image)
-        axs[i][j].set_title(str(unknown_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/sample_unknown", bbox_inches='tight')
-plt.show()
 
 
-
-fig, axs = plt.subplots(6, 6, figsize=(15, 15))
-
-for i in range(0, 6):
-    for j in range(0, 6):
-
-        index = i + (6*j)
-        print(index)
-
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
-
-        sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
-
-        axs[i][j].imshow(image)
-        axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/sample_elliptical", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         index = i + (6*j)
+#         print(index)
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
+#
+#         axs[i][j].imshow(image)
+#         axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_elliptical", bbox_inches='tight')
+# plt.show()
 
 
 
