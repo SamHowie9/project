@@ -204,15 +204,18 @@ fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral) + ".png")
 axs[0].imshow(image)
-axs[0].set_title("Disk & Spiral")
+axs[0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+axs[0].set_title("Disk & Spiral", fontsize=20)
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical) + ".png")
 axs[1].imshow(image)
-axs[1].set_title("Bulge (Ellitpical)")
+axs[1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+axs[1].set_title("Bulge (Ellitpical)", fontsize=20)
 
 image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown) + ".png")
 axs[2].imshow(image)
-axs[2].set_title("Intermediate")
+axs[2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+axs[2].set_title("Intermediate", fontsize=20)
 
 plt.savefig("Variational Eagle/Plots/sample_three_types", bbox_inches='tight')
 plt.show()
