@@ -149,7 +149,7 @@ for i in range(0, 6):
         index = i + (6*j)
         print(index)
 
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown_sample[index]) + ".png")
 
 
         axs[i][j].imshow(image)
@@ -169,7 +169,7 @@ for i in range(0, 6):
         index = i + (6*j)
         print(index)
 
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
 
 
         axs[i][j].imshow(image)
