@@ -132,24 +132,24 @@ print(elliptical_sample)
 
 
 
-fig, axs = plt.subplots(6, 6, figsize=(20, 20))
-
-for i in range(0, 6):
-    for j in range(0, 6):
-
-        index = i + (6*j)
-        print(index)
-
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
-
-        sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
-
-        axs[i][j].imshow(image)
-        axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/sample_spiral", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(6, 6, figsize=(20, 20))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         index = i + (6*j)
+#         print(index)
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
+#
+#         axs[i][j].imshow(image)
+#         axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_spiral", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -192,6 +192,36 @@ plt.show()
 #
 # plt.savefig("Variational Eagle/Plots/sample_elliptical", bbox_inches='tight')
 # plt.show()
+
+
+
+
+spiral = 17917747
+unknown = 17752121
+elliptical = 9526568
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral) + ".png")
+axs[0].imshow(image)
+axs[0].set_title("Disk & Spiral")
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical) + ".png")
+axs[1].imshow(image)
+axs[1].set_title("Bulge (Ellitpical)")
+
+image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown) + ".png")
+axs[2].imshow(image)
+axs[2].set_title("Intermediate")
+
+plt.savefig("Variational Eagle/Plots/sample_three_types", bbox_inches='tight')
+plt.show()
+
+
+
+
+
+
 
 
 
