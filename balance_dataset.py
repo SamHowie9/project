@@ -120,6 +120,8 @@ spiral_sample = random.sample(spirals, 36)
 unknown_sample = random.sample(unknown, 36)
 elliptical_sample = random.sample(ellipticals, 36)
 
+spiral_sample[0] = 14510387
+
 print(spiral_sample)
 print()
 print(unknown_sample)
