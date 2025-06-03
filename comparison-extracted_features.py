@@ -318,7 +318,7 @@ for n_flows in [n_flows]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Variational Flows/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_transformed_unknown", bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_transformed_unknown", bbox_inches='tight')
     plt.show()
 
 
@@ -429,9 +429,11 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(10, 10))
+fig, axs = plt.subplots(1, 1, figsize=(8, 7))
 
-sns.histplot(x=all_properties["n_r"], axs=axs, bins=50)
+sns.histplot(x=all_properties["n_r"], ax=axs, bins=50)
+axs.set_xlabel("Sersic Index")
+
 plt.savefig("Variational Eagle/Plots/sersic_distribution")
 plt.show()
 
