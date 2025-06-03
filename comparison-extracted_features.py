@@ -429,6 +429,14 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
+fig, axs = plt.subplots(1, 1, figsize=(10, 10))
+
+sns.histplot(x=all_properties["n_r"], axs=axs, bins=50)
+plt.savefig("Variational Eagle/Plots/sersic_distribution")
+plt.show()
+
+
+
 
 
 
