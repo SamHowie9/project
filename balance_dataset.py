@@ -120,6 +120,15 @@ spiral_sample = random.sample(spirals, 36)
 unknown_sample = random.sample(unknown, 36)
 elliptical_sample = random.sample(ellipticals, 36)
 
+print(spiral_sample)
+print()
+print(unknown_sample)
+print()
+print(elliptical_sample)
+
+# 14510387
+
+
 
 fig, axs = plt.subplots(6, 6, figsize=(15, 15))
 
