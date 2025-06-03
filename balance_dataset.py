@@ -130,7 +130,7 @@ print(elliptical_sample)
 
 
 
-fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+fig, axs = plt.subplots(6, 6, figsize=(20, 20))
 
 for i in range(0, 6):
     for j in range(0, 6):
@@ -140,9 +140,10 @@ for i in range(0, 6):
 
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
 
+        sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample, "n_r"].values[0]
 
         axs[i][j].imshow(image)
-        axs[i][j].set_title(spiral_sample[index])
+        axs[i][j].set_title(spiral_sample[index] + str(", n=") + str(sersic))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_spiral", bbox_inches='tight')
