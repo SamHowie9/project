@@ -24,8 +24,8 @@ tfd = tfp.distributions
 
 
 
-run = 3
-encoding_dim = 35
+run = 1
+encoding_dim = 20
 n_flows = 3
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="8"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -675,7 +675,7 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
 
 
     # reconstruct the image
-    reconstructed_images = vae.decoder.predict(z_mean)
+    reconstructed_images = vae.decoder.predict(z_transformed)
 
     # use the CPU for this rather than GPU
     with tf.device('/CPU:0'):
@@ -787,7 +787,7 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
     flows = sampling_layer.flows
 
     # transform the mean vectors
-    z_transformed = apply_flows(z_mean, flows)
+    z_transformed, _ = apply_flows(z_mean, flows)
 
     # reconstruct the original vectors
     reconstructed_images = vae.decoder.predict(z_mean)
