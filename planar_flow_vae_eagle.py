@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 1
-encoding_dim = 1
+encoding_dim = 20
 n_flows = 3
 beta = 0.0001
 beta_name = "0001"
@@ -45,7 +45,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="8"
 # for encoding_dim in [encoding_dim]:
 # for n_flows in [1, 2, 3]:
 # for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+1, 1], [encoding_dim+1, 2], [encoding_dim+1, 3]]:
-for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3]:
+for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4]:
 
     print("\n \n")
     print("Encoding Dim", encoding_dim)
@@ -566,14 +566,16 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
 
         # convert vectors to tensor and clip (as done in sampling layer)
         z = tf.convert_to_tensor(z_mean, dtype=tf.float32)
-        z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
+        z = tf.clip_by_value(z, -4 + 1e-4, 4 - 1e-4)
+
+        sum_log_det_jacobian = 0.0
 
         # apply the flows
         for flow in flows:
-            z, _ = flow(z)
+            z, log_det = flow(z)
+            sum_log_det_jacobian += log_det
 
-        # return the transformed vector
-        return z
+        return z, sum_log_det_jacobian
 
 
 
@@ -633,12 +635,12 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
     # train the model
     model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
-    # get loss, reconstruction loss and kl loss and save as numpy array
-    loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-    np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
-
-    print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
-    print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+    # # get loss, reconstruction loss and kl loss and save as numpy array
+    # loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
+    # np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+    #
+    # print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
+    # print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
 
 
 
@@ -653,7 +655,7 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
 
 
     # get and save the extracted features (pre transformations)
-    z_mean, _, _, _ = vae.encoder.predict(train_images)
+    z_mean, z_log_var, _, _ = vae.encoder.predict(train_images)
     np.save("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
 
     # get the sampling layer
@@ -667,8 +669,31 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
     flows = sampling_layer.flows
 
     # transform and save the mean vectors
-    z_transformed = apply_flows(z_mean, flows)
+    z_transformed, sum_log_det_jacobians = apply_flows(z_mean, flows)
     np.save("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
+
+
+
+    # reconstruct the image
+    reconstructed_images = vae.decoder.predict(z_mean)
+
+    # get the reconstruction loss
+    reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
+
+    # kl loss
+    kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+    kl_loss = tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians
+    kl_loss = tf.reduce_mean(kl_loss)
+
+    # total loss
+    total_loss = reconstruction_loss + (beta * kl_loss)
+
+    loss = np.array([total_loss, reconstruction_loss, kl_loss])
+    np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+
+    print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
+    print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+
 
 
 
