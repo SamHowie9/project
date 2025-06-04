@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 3
-encoding_dim = 30
+encoding_dim = 35
 n_flows = 3
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="7"
+os.environ["CUDA_VISIBLE_DEVICES"]="8"
 
 
 
@@ -45,7 +45,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="7"
 # for encoding_dim in [encoding_dim]:
 # for n_flows in [1, 2, 3]:
 # for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+1, 1], [encoding_dim+1, 2], [encoding_dim+1, 3]]:
-for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4]:
+for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4, encoding_dim+5]:
 
     print("\n \n")
     print("Encoding Dim", encoding_dim)
