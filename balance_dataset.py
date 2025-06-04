@@ -157,7 +157,7 @@ for i in range(0, 6):
 
         axs[i][j].imshow(image)
         # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(spiral_sample[index]) + ", d/t=" + str(dt))
+        axs[i][j].set_title(str(spiral_sample[index]) + ", d/t=" + str(round(dt, 3)))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
@@ -201,7 +201,7 @@ for i in range(0, 6):
 
         axs[i][j].imshow(image)
         # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(elliptical_sample[index]) + ", d/t=" + str(dt))
+        axs[i][j].set_title(str(elliptical_sample[index]) + ", d/t=" + str(round(dt, 3)))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
