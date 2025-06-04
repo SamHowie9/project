@@ -65,8 +65,8 @@ all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 # unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
 # ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
 
-spirals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] > 0.2])
-ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] <= 0.2])
+spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] <= 0.2])
 
 
 print(len(all_properties))
@@ -114,8 +114,8 @@ all_properties = all_properties.reset_index(drop=True)
 # unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
 # ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
 
-spirals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] > 0.2])
-ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] <= 0.2])
+spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] <= 0.2])
 
 print(len(all_properties))
 
