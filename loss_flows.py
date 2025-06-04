@@ -145,15 +145,15 @@ train_images = np.array(train_images)
 # for run_number, (beta, filename) in enumerate([[0.05, "05"], [0.01, "01"], [0.005, "005"], [0.001, "001"], [0.0005, "0005"], [0.0001, "0001"],[0.00005, "00005"], [0.00001, "00001"], [0.000005, "000005"], [0.000001, "000001"], [0.0000005, "0000005"], [0.0000001, "0000001"], [0.00000005, "00000005"], [0.00000001, "00000001"]]):
 
 
-for encoding_dim in range(35, 51):
+for encoding_dim in range(20, 41):
 
-    total_loss_all = []
-    reconstruction_loss_all = []
-    kl_loss_all = []
-
-    total_loss_transformed_all = []
-    reconstruction_loss_transformed_all = []
-    kl_loss_transformed_all = []
+    # total_loss_all = []
+    # reconstruction_loss_all = []
+    # kl_loss_all = []
+    #
+    # total_loss_transformed_all = []
+    # reconstruction_loss_transformed_all = []
+    # kl_loss_transformed_all = []
 
     # total_loss_all = list(np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_" + str(run)))
     # reconstruction_loss_all = list(np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_" + str(run)))
@@ -164,7 +164,7 @@ for encoding_dim in range(35, 51):
     # kl_loss_transformed_all = list(np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed"))
 
     # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
-    for n_flows in [1, 2, 3]:
+    for n_flows in [2]:
 
 
         print("\n \n", str(encoding_dim) + "   " + str(n_flows) + "\n \n")
@@ -400,39 +400,11 @@ for encoding_dim in range(35, 51):
         # transform the mean vectors
         z_transformed, sum_log_det_jacobians = apply_flows(z_mean, flows)
 
-
-
-
-
-
-
-        # reconstruct the image
-        reconstructed_images = vae.decoder.predict(z_mean)
-
-        # get the reconstruction loss
-        reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
-
-        # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
-        kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
-        kl_loss = tf.reduce_mean(kl_loss).numpy().item()
-
-        # total loss
-        total_loss = reconstruction_loss + (beta * kl_loss)
-
-
-        total_loss_all.append(total_loss)
-        reconstruction_loss_all.append(reconstruction_loss)
-        kl_loss_all.append(kl_loss)
-
-
-
-
-
-
-
-
         # reconstruct the image
         reconstructed_images = vae.decoder.predict(z_transformed)
+
+
+
 
         # get the reconstruction loss
         reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
@@ -444,16 +416,52 @@ for encoding_dim in range(35, 51):
 
         total_loss = reconstruction_loss + (beta * kl_loss)
 
-        total_loss_transformed_all.append(total_loss)
-        reconstruction_loss_transformed_all.append(reconstruction_loss)
-        kl_loss_transformed_all.append(kl_loss)
+        loss = np.array([total_loss, reconstruction_loss, kl_loss])
+        np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+
+        print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
+        print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
+
+
+
+
+
+
+
+
+        # # reconstruct the image
+        # reconstructed_images = vae.decoder.predict(z_mean)
+        #
+        # # get the reconstruction loss
+        # reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
+        #
+        # # calculate the kl divergence (sum over each latent feature and average (mean) across the batch)
+        # kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+        # kl_loss = tf.reduce_mean(kl_loss).numpy().item()
+        #
+        # # total loss
+        # total_loss = reconstruction_loss + (beta * kl_loss)
+        #
+        #
+        # total_loss_all.append(total_loss)
+        # reconstruction_loss_all.append(reconstruction_loss)
+        # kl_loss_all.append(kl_loss)
+
+
+
+
+
+
+        # total_loss_transformed_all.append(total_loss)
+        # reconstruction_loss_transformed_all.append(reconstruction_loss)
+        # kl_loss_transformed_all.append(kl_loss)
 
  
 
-    np.save("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_" + str(run), total_loss_all)
-    np.save("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_" + str(run), reconstruction_loss_all)
-    np.save("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_" + str(run), kl_loss_all)
-
-    np.save("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_" + str(run) +  "_transformed", total_loss_transformed_all)
-    np.save("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed", reconstruction_loss_transformed_all)
-    np.save("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed", kl_loss_transformed_all)
+    # np.save("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_" + str(run), total_loss_all)
+    # np.save("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_" + str(run), reconstruction_loss_all)
+    # np.save("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_" + str(run), kl_loss_all)
+    #
+    # np.save("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(encoding_dim) + "_" + str(run) +  "_transformed", total_loss_transformed_all)
+    # np.save("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed", reconstruction_loss_transformed_all)
+    # np.save("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(encoding_dim) + "_" + str(run) + "_transformed", kl_loss_transformed_all)
