@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 import random
+
+from matplotlib.pyplot import figure
 from sklearn.decomposition import PCA
 # from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
@@ -54,8 +56,14 @@ non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref1
 non_parametric_properties = non_parametric_properties.reset_index()
 non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
 
-# add the non parametric properties to the other properties dataframe
+# load the disk-total ratios
+disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
+
+print(disk_total)
+
+# add the non parametric properties, and the disk-total to the other properties dataframe
 all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
+all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 
 # find all bad fit galaxies
@@ -161,12 +169,16 @@ for n_flows in [n_flows]:
 
     # selected_indices = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index.tolist()
     # all_properties = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")]
-    #
-    # print(all_properties)
-    # extracted_features = np.array([extracted_features[i] for i in selected_indices])
-    # all_properties = all_properties.reset_index(drop=True)
-    # print(extracted_features.shape)
-    # print(selected_indices)
+
+    selected_indices = all_properties[all_properties["DiscToTotal"] >= 0.5].index.tolist()
+    all_properties = all_properties[all_properties["DiscToTotal"] >= 0.5]
+
+
+    print(all_properties)
+    extracted_features = np.array([extracted_features[i] for i in selected_indices])
+    all_properties = all_properties.reset_index(drop=True)
+    print(extracted_features.shape)
+    print(selected_indices)
 
 
 
@@ -278,12 +290,12 @@ for n_flows in [n_flows]:
 
     # set the figure size
     # plt.figure(figsize=(20, extracted_features.T.shape[0]))
-    plt.figure(figsize=(32, correlation_df.shape[0]))
+    plt.figure(figsize=(35, correlation_df.shape[0]))
 
 
     # properties to plot
     # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-    selected_properties = ["n_r", "pa_r", "q_r", "re_r", "rhalf_ellip", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "concentration", "asymmetry", "smoothness"]
+    selected_properties = ["n_r", "DiscToTotal", "pa_r", "q_r", "re_r", "rhalf_ellip", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
 
     # plot a heatmap for the dataframe (with annotations)
     ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
@@ -305,7 +317,7 @@ for n_flows in [n_flows]:
         # for label in ax.get_xticklabels():
             # text = label.get_text()
 
-        label_names = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Half Light Radius", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "Concentration", "Asymmetry", "Smoothness"]
+        label_names = ["Sersic Index", "Disk-Total Ratio", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Half Light Radius", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
 
         for text in label_names:
             labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -427,15 +439,41 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
+fig, axs = plt.subplots(1, 1, figsize=(12, 10))
 
-
-fig, axs = plt.subplots(1, 1, figsize=(8, 7))
-
-sns.histplot(x=all_properties["n_r"], ax=axs, bins=50)
+density_scatter(all_properties["n_r"], all_properties["DiscToTotal"], axs=axs, s=5)
 axs.set_xlabel("Sersic Index")
+axs.set_ylabel("Disk-Total Ratio")
 
-plt.savefig("Variational Eagle/Plots/sersic_distribution")
 plt.show()
+
+
+fig, axs = plt.subplots(1, 3, figsize=(20, 5))
+
+density_scatter(extracted_features.T[1], all_properties["DiscToTotal"], axs=axs[0], s=5)
+axs[0].set_xlabel("Feature 1")
+axs[0].set_ylabel("Disk-Total Ratio")
+
+density_scatter(extracted_features.T[3], all_properties["DiscToTotal"], axs=axs[1], s=5)
+axs[1].set_xlabel("Feature 3")
+axs[1].set_ylabel("Disk-Total Ratio")
+
+density_scatter(extracted_features.T[6], all_properties["DiscToTotal"], axs=axs[2], s=5)
+axs[2].set_xlabel("Feature 6")
+axs[2].set_ylabel("Disk-Total Ratio")
+
+
+plt.show()
+
+
+
+# fig, axs = plt.subplots(1, 1, figsize=(8, 7))
+#
+# sns.histplot(x=all_properties["n_r"], ax=axs, bins=50)
+# axs.set_xlabel("Sersic Index")
+#
+# plt.savefig("Variational Eagle/Plots/sersic_distribution")
+# plt.show()
 
 
 
