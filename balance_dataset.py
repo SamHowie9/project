@@ -153,9 +153,11 @@ for i in range(0, 6):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
 
         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
+        dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
 
         axs[i][j].imshow(image)
-        axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
+        # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
+        axs[i][j].set_title(str(spiral_sample[index]) + ", d/t=" + str(dt))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
@@ -195,9 +197,11 @@ for i in range(0, 6):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
 
         sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
+        dt = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "DiscToTotal"].values[0]
 
         axs[i][j].imshow(image)
-        axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
+        # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
+        axs[i][j].set_title(str(elliptical_sample[index]) + ", d/t=" + str(dt))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
