@@ -30,6 +30,13 @@ physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_p
 # dataframe for all properties
 all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
+# load the disk-total ratios
+disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
+
+# add the disk-total ratios to the other properties
+all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
+
+
 # # load the non-parametric properties (restructure the dataframe to match the others)
 # non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
 # non_parametric_properties = non_parametric_properties.reset_index()
@@ -54,16 +61,18 @@ all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyI
 
 
 
-spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
-unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
-ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
+# spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
+# unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
+# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
 
+spirals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] > 0.2])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] <= 0.2])
 
 
 print(len(all_properties))
 
 print(len(spirals), "-", len(spirals)/len(all_properties))
-print(len(unknown), "-", len(unknown)/len(all_properties))
+# print(len(unknown), "-", len(unknown)/len(all_properties))
 print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 print()
 
@@ -101,30 +110,31 @@ all_properties = all_properties.reset_index(drop=True)
 
 
 
-spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
-unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
-ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
+# spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
+# unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
+# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
 
-
+spirals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] > 0.2])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiskToTotal"] <= 0.2])
 
 print(len(all_properties))
 
 print(len(spirals), "-", len(spirals)/len(all_properties))
-print(len(unknown), "-", len(unknown)/len(all_properties))
+# print(len(unknown), "-", len(unknown)/len(all_properties))
 print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 
 
 
 
 spiral_sample = random.sample(spirals, 36)
-unknown_sample = random.sample(unknown, 36)
+# unknown_sample = random.sample(unknown, 36)
 elliptical_sample = random.sample(ellipticals, 36)
 
-spiral_sample[0] = 14510387
+# spiral_sample[0] = 14510387
 
 print(spiral_sample)
 print()
-print(unknown_sample)
+# print(unknown_sample)
 print()
 print(elliptical_sample)
 
@@ -132,24 +142,24 @@ print(elliptical_sample)
 
 
 
-# fig, axs = plt.subplots(6, 6, figsize=(20, 20))
-#
-# for i in range(0, 6):
-#     for j in range(0, 6):
-#
-#         index = i + (6*j)
-#         print(index)
-#
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
-#
-#         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
-#
-#         axs[i][j].imshow(image)
-#         axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
-#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-# plt.savefig("Variational Eagle/Plots/sample_spiral", bbox_inches='tight')
-# plt.show()
+fig, axs = plt.subplots(6, 6, figsize=(20, 20))
+
+for i in range(0, 6):
+    for j in range(0, 6):
+
+        index = i + (6*j)
+        print(index)
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
+
+        sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
+
+        axs[i][j].imshow(image)
+        axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
+plt.show()
 
 
 
@@ -174,51 +184,51 @@ print(elliptical_sample)
 
 
 
-# fig, axs = plt.subplots(6, 6, figsize=(15, 15))
-#
-# for i in range(0, 6):
-#     for j in range(0, 6):
-#
-#         index = i + (6*j)
-#         print(index)
-#
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
-#
-#         sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
-#
-#         axs[i][j].imshow(image)
-#         axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
-#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-# plt.savefig("Variational Eagle/Plots/sample_elliptical", bbox_inches='tight')
-# plt.show()
+fig, axs = plt.subplots(6, 6, figsize=(15, 15))
 
+for i in range(0, 6):
+    for j in range(0, 6):
 
+        index = i + (6*j)
+        print(index)
 
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
 
-spiral = 17917747
-unknown = 17752121
-elliptical = 9526568
+        sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
 
-fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+        axs[i][j].imshow(image)
+        axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral) + ".png")
-axs[0].imshow(image)
-axs[0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-axs[0].set_title("Disk & Spiral", fontsize=20)
-
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical) + ".png")
-axs[1].imshow(image)
-axs[1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-axs[1].set_title("Bulge (Ellitpical)", fontsize=20)
-
-image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown) + ".png")
-axs[2].imshow(image)
-axs[2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-axs[2].set_title("Intermediate", fontsize=20)
-
-plt.savefig("Variational Eagle/Plots/sample_three_types", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
 plt.show()
+
+
+
+
+# spiral = 17917747
+# unknown = 17752121
+# elliptical = 9526568
+#
+# fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+#
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral) + ".png")
+# axs[0].imshow(image)
+# axs[0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+# axs[0].set_title("Disk & Spiral", fontsize=20)
+#
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical) + ".png")
+# axs[1].imshow(image)
+# axs[1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+# axs[1].set_title("Bulge (Ellitpical)", fontsize=20)
+#
+# image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown) + ".png")
+# axs[2].imshow(image)
+# axs[2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+# axs[2].set_title("Intermediate", fontsize=20)
+#
+# plt.savefig("Variational Eagle/Plots/sample_three_types", bbox_inches='tight')
+# plt.show()
 
 
 

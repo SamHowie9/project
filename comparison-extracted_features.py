@@ -170,15 +170,15 @@ for n_flows in [n_flows]:
     # selected_indices = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")].index.tolist()
     # all_properties = all_properties[all_properties["n_r"].between(2.5, 4, inclusive="neither")]
 
-    selected_indices = all_properties[all_properties["DiscToTotal"] >= 0.5].index.tolist()
-    all_properties = all_properties[all_properties["DiscToTotal"] >= 0.5]
-
-
-    print(all_properties)
-    extracted_features = np.array([extracted_features[i] for i in selected_indices])
-    all_properties = all_properties.reset_index(drop=True)
-    print(extracted_features.shape)
-    print(selected_indices)
+    # selected_indices = all_properties[all_properties["DiscToTotal"] >= 0.5].index.tolist()
+    # all_properties = all_properties[all_properties["DiscToTotal"] >= 0.5]
+    #
+    #
+    # print(all_properties)
+    # extracted_features = np.array([extracted_features[i] for i in selected_indices])
+    # all_properties = all_properties.reset_index(drop=True)
+    # print(extracted_features.shape)
+    # print(selected_indices)
 
 
 
@@ -439,41 +439,41 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(12, 10))
-
-density_scatter(all_properties["n_r"], all_properties["DiscToTotal"], axs=axs, s=5)
-axs.set_xlabel("Sersic Index")
-axs.set_ylabel("Disk-Total Ratio")
-
-plt.show()
-
-
-fig, axs = plt.subplots(1, 3, figsize=(20, 5))
-
-density_scatter(extracted_features.T[1], all_properties["DiscToTotal"], axs=axs[0], s=5)
-axs[0].set_xlabel("Feature 1")
-axs[0].set_ylabel("Disk-Total Ratio")
-
-density_scatter(extracted_features.T[3], all_properties["DiscToTotal"], axs=axs[1], s=5)
-axs[1].set_xlabel("Feature 3")
-axs[1].set_ylabel("Disk-Total Ratio")
-
-density_scatter(extracted_features.T[6], all_properties["DiscToTotal"], axs=axs[2], s=5)
-axs[2].set_xlabel("Feature 6")
-axs[2].set_ylabel("Disk-Total Ratio")
-
-
-plt.show()
-
-
-
-# fig, axs = plt.subplots(1, 1, figsize=(8, 7))
+# fig, axs = plt.subplots(1, 1, figsize=(12, 10))
 #
-# sns.histplot(x=all_properties["n_r"], ax=axs, bins=50)
+# density_scatter(all_properties["n_r"], all_properties["DiscToTotal"], axs=axs, s=5)
 # axs.set_xlabel("Sersic Index")
+# axs.set_ylabel("Disk-Total Ratio")
 #
-# plt.savefig("Variational Eagle/Plots/sersic_distribution")
 # plt.show()
+#
+#
+# fig, axs = plt.subplots(1, 3, figsize=(20, 5))
+#
+# density_scatter(extracted_features.T[1], all_properties["DiscToTotal"], axs=axs[0], s=5)
+# axs[0].set_xlabel("Feature 1")
+# axs[0].set_ylabel("Disk-Total Ratio")
+#
+# density_scatter(extracted_features.T[3], all_properties["DiscToTotal"], axs=axs[1], s=5)
+# axs[1].set_xlabel("Feature 3")
+# axs[1].set_ylabel("Disk-Total Ratio")
+#
+# density_scatter(extracted_features.T[6], all_properties["DiscToTotal"], axs=axs[2], s=5)
+# axs[2].set_xlabel("Feature 6")
+# axs[2].set_ylabel("Disk-Total Ratio")
+#
+#
+# plt.show()
+
+
+
+fig, axs = plt.subplots(1, 1, figsize=(8, 7))
+
+sns.histplot(x=all_properties["DiscToTotal"], ax=axs, bins=50)
+axs.set_xlabel("Disk-Total Ratio")
+
+plt.savefig("Variational Eagle/Plots/disk_total_distribution")
+plt.show()
 
 
 
