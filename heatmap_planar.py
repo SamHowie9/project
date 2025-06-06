@@ -62,7 +62,7 @@ class VAE(Model):
 
     @property
     def metrics(self):
-        retur n[
+        return[
             self.total_loss_tracker,
             self.reconstruction_loss_tracker,
             self.kl_loss_tracker,
