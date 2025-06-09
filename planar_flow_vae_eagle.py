@@ -216,13 +216,15 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
 
     fig, axs = plt.subplots(12, n, figsize=(20, 20))
 
-    random.seed(0)
-    images_to_reconstruct = random.sample(train_images, n)
+    # random.seed(0)
+    # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+    # images_to_reconstruct = train_images[reconstruction_indices]
 
     for i in range(0, 12):
 
         random.seed(i)
-        images_to_reconstruct = random.sample(train_images, n)
+        reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+        images_to_reconstruct = train_images[reconstruction_indices]
 
         for j in range(0, n):
 
