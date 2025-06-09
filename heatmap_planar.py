@@ -407,13 +407,13 @@ fig, axs = plt.subplots(encoding_dim, 10, figsize=(30, 90))
 
 for img_index in range(0, 10):
 
-    axs[img_index][0].imshow(test_images[img_index])
+    axs[0][img_index].imshow(test_images[img_index])
 
     for feature in range(0, encoding_dim):
 
         heatmap = latent_saliency(vae.encoder, test_images[img_index], feature)
 
-        axs[img_index][feature+1].imshow(heatmap, cmap="jet")
+        axs[feature+1][img_index].imshow(heatmap, cmap="jet")
 
 plt.savefig("Variational Eagle/Plots/heatmap_individual", bbox_inches="tight")
 plt.show()
