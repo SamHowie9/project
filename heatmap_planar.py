@@ -385,9 +385,28 @@ def latent_saliency(encoder, image, feature, use_flow_output=True, smoothing_sig
     image = tf.Variable(image)  # allows in-place grads if you want FGSM later
 
     with tf.GradientTape() as tape:
+
         tape.watch(image)
         z_mean, z_log_var, z, _ = encoder(image)
-        target = z[:, feature] if use_flow_output else z_mean[:, feature]
+
+        # get the sampling layer
+        sampling_layer = None
+        for layer in encoder.layers:
+            if isinstance(layer, Sampling):
+                sampling_layer = layer
+                break
+
+        # get the flows from the sampling layer
+        flows = sampling_layer.flows
+
+        # transform the mean vectors
+        z_transformed, _ = apply_flows(z_mean, flows)
+
+        target = z_transformed[:, feature]
+
+        # target = z[:, feature] if use_flow_output else z_mean[:, feature]
+
+
 
     # ∂ z_i / ∂ x
     grads = tape.gradient(target, image)                    # (1,H,W,3)
@@ -401,6 +420,8 @@ def latent_saliency(encoder, image, feature, use_flow_output=True, smoothing_sig
             [saliency], tf.float32)
 
     return saliency.numpy()
+
+
 
 
 fig, axs = plt.subplots(encoding_dim+1, 10, figsize=(30, 90))
