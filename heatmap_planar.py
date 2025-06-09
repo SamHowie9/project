@@ -379,7 +379,7 @@ def normalise_map(x):
 
 
 
-def latent_saliency(encoder, image, feature, smoothing_sigma=None):
+def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
 
     image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)  # add batch dim
     image = tf.Variable(image)  # allows in-place grads if you want FGSM later
@@ -402,7 +402,10 @@ def latent_saliency(encoder, image, feature, smoothing_sigma=None):
         # transform the mean vectors
         z_transformed, _ = apply_flows(z_mean, flows)
 
-        target = z_transformed[:, feature]
+        if feature is not None:
+            target = z_transformed[:, feature]
+        else:
+            target = z_transformed
 
         # target = z[:, feature] if use_flow_output else z_mean[:, feature]
 
@@ -445,5 +448,15 @@ plt.show()
 
 
 
-print(heatmap.shape)
-print(heatmap)
+fig, axs = plt.subplots(2, 10, figsize=(30, 6))
+
+for img_index in range(0, 10):
+
+    axs[0][img_index].imshow(test_images[img_index])
+
+    heatmap = latent_saliency(vae.encoder, test_images[img_index], smoothing_sigma=2.0)
+
+    axs[1][img_index].imshow(heatmap, cmap="jet")
+
+plt.savefig("Variational Eagle/Plots/heatmap_all_smooth", bbox_inches="tight")
+plt.show()
