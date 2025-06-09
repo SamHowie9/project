@@ -379,7 +379,7 @@ def normalise_map(x):
 
 
 
-def latent_saliency(encoder, image, feature, use_flow_output=True, smoothing_sigma=None):
+def latent_saliency(encoder, image, feature, smoothing_sigma=None):
 
     image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)  # add batch dim
     image = tf.Variable(image)  # allows in-place grads if you want FGSM later
@@ -411,6 +411,8 @@ def latent_saliency(encoder, image, feature, use_flow_output=True, smoothing_sig
     # ∂ z_i / ∂ x
     grads = tape.gradient(target, image)                    # (1,H,W,3)
     saliency = tf.reduce_sum(grads**2, axis=-1)[0]        # (H,W)   L2 over RGB
+
+
     saliency = normalise_map(saliency)
 
     if smoothing_sigma is not None:
@@ -418,6 +420,8 @@ def latent_saliency(encoder, image, feature, use_flow_output=True, smoothing_sig
             lambda m: tf.squeeze(
                 tf.image.gaussian_filter2d(m[None, ..., None], sigma=smoothing_sigma)),
             [saliency], tf.float32)
+
+    saliency = normalise_map(saliency)
 
     return saliency.numpy()
 
@@ -432,11 +436,11 @@ for img_index in range(0, 10):
 
     for feature in range(0, encoding_dim):
 
-        heatmap = latent_saliency(vae.encoder, test_images[img_index], feature)
+        heatmap = latent_saliency(vae.encoder, test_images[img_index], feature, smoothing_sigma=2.0)
 
         axs[feature+1][img_index].imshow(heatmap, cmap="jet")
 
-plt.savefig("Variational Eagle/Plots/heatmap_individual", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
 plt.show()
 
 
