@@ -403,7 +403,7 @@ def latent_saliency(encoder, image, feature, use_flow_output=True, smoothing_sig
     return saliency.numpy()
 
 
-fig, axs = plt.subplots(encoding_dim, 10, figsize=(30, 90))
+fig, axs = plt.subplots(encoding_dim+1, 10, figsize=(30, 90))
 
 for img_index in range(0, 10):
 
