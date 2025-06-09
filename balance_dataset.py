@@ -133,33 +133,32 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 # augment the elliptical images
 
-for galaxy in ellipticals:
+# for galaxy in ellipticals:
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     image = image.reshape(1, 256, 256, 3)
+#
+#     i = 0
+#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/", save_prefix=galaxy, save_format="png"):
+#         i += 1
+#         if i >= 6:
+#             break
+# print("...")
 
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 256, 256, 3)
-
-    i = 0
-    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/", save_prefix=galaxy, save_format="png"):
-        i += 1
-        if i >= 6:
-            break
-
-
-print("...")
 
 
 # augment the transitional images
 
-for galaxy in unknown:
-
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    image = image.reshape(1, 256, 256, 3)
-
-    i = 0
-    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/", save_prefix=galaxy, save_format="png"):
-        i += 1
-        if i >= 8:
-            break
+# for galaxy in unknown:
+#
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#     image = image.reshape(1, 256, 256, 3)
+#
+#     i = 0
+#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/", save_prefix=galaxy, save_format="png"):
+#         i += 1
+#         if i >= 8:
+#             break
 
 
 
@@ -180,7 +179,7 @@ for galaxy in ellipticals:
     for file in augmented_ellipticals:
         if file.startswith(str(galaxy)):
             count += 1
-    if count < 6:
+    if count < 10:
         print(galaxy, count)
 
 print()
@@ -190,7 +189,7 @@ for galaxy in unknown:
     for file in augmented_transitional:
         if file.startswith(str(galaxy)):
             count += 1
-    if count < 8:
+    if count < 10:
         print(galaxy, count)
 
 print()
