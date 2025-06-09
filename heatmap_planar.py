@@ -10,6 +10,7 @@ import pandas as pd
 import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
+from scipy.ndimage import gaussian_filter
 
 
 
@@ -421,7 +422,7 @@ def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
     if smoothing_sigma is not None:
         saliency = tf.numpy_function(
             lambda m: tf.squeeze(
-                tf.image.gaussian_filter2d(m[None, ..., None], sigma=smoothing_sigma)),
+                gaussian_filter(m[None, ..., None], sigma=smoothing_sigma)),
             [saliency], tf.float32)
 
     saliency = normalise_map(saliency)
