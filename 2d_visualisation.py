@@ -75,9 +75,9 @@ extracted_features_real = extracted_features_all[:len(all_properties)]
 print(extracted_features_all.shape)
 print(extracted_features_real.shape)
 
-# pca = PCA(n_components=0.999).fit(extracted_features_all)
-# extracted_features_all = pca.transform(extracted_features_all)
-# extracted_features_real = pca.transform(extracted_features_real)
+pca = PCA(n_components=0.999).fit(extracted_features_all)
+extracted_features_all = pca.transform(extracted_features_all)
+extracted_features_real = pca.transform(extracted_features_real)
 
 
 print(extracted_features_all.shape)
@@ -134,11 +134,14 @@ print(tsne.shape)
 
 fig, axs = plt.subplots(1, 1, figsize=(10, 10))
 
-sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, linewidth=0, s=20)
+palette = ["C0", "#D3D3D3", "C1"]
+
+# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, linewidth=0, s=20)
 # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette="colorblind", linewidth=0, s=20)
+sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, s=20)
 
 axs.set_xlim(-90, 90)
 axs.set_ylim(-90, 90)
 
-plt.savefig("Variational Eagle/Plots/tsne", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/tsne_pca_morphology", bbox_inches="tight")
 plt.show()
