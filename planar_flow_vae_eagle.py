@@ -191,7 +191,7 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
     for galaxy in augmented_galaxies:
 
         # load each augmented image
-        image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/" + galaxy)
+        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
 
         # normalise the image
         image = normalise_independently(image)
