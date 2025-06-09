@@ -61,18 +61,15 @@ all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 
 
-# spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
-# unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
-# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
-
 spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
-ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] <= 0.2])
+unknown = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")])
+ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] < 0.1])
 
 
 print(len(all_properties))
 
 print(len(spirals), "-", len(spirals)/len(all_properties))
-# print(len(unknown), "-", len(unknown)/len(all_properties))
+print(len(unknown), "-", len(unknown)/len(all_properties))
 print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 print()
 
@@ -81,87 +78,151 @@ print()
 
 
 
-# find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 1) |
-                          (all_properties["flag_r"] == 4) |
-                          (all_properties["flag_r"] == 5) |
-                          (all_properties["flag_r"] == 6))].index.tolist()
-
-print(bad_fit)
-print(len(bad_fit))
-
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# reset the index values
-all_properties = all_properties.reset_index(drop=True)
-
-
-# print(all_properties["flag"].unique())
-# print(all_properties["flag_sersic"].unique())
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+#                           (all_properties["flag_r"] == 4) |
+#                           (all_properties["flag_r"] == 5) |
+#                           (all_properties["flag_r"] == 6))].index.tolist()
 #
-# print(len(all_properties[all_properties["flag"] == 1]))
-# print(len(all_properties[all_properties["flag_sersic"] == 1]))
-
-
-
-
-
-
-
-# spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
-# unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
-# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
-
-spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
-ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] <= 0.2])
-
-print(len(all_properties))
-
-print(len(spirals), "-", len(spirals)/len(all_properties))
+# print(bad_fit)
+# print(len(bad_fit))
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+# # reset the index values
+# all_properties = all_properties.reset_index(drop=True)
+#
+#
+#
+# # spirals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] <= 2.5])
+# # unknown = list(all_properties["GalaxyID"].loc[all_properties["n_r"].between(2.5, 4, inclusive="neither")])
+# # ellipticals = list(all_properties["GalaxyID"].loc[all_properties["n_r"] >= 4])
+#
+# spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
+# unknown = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")])
+# ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] < 0.1])
+#
+#
+# print(len(all_properties))
+#
+# print(len(spirals), "-", len(spirals)/len(all_properties))
 # print(len(unknown), "-", len(unknown)/len(all_properties))
-print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
+# print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
+# print()
 
 
 
 
-spiral_sample = random.sample(spirals, 36)
-# unknown_sample = random.sample(unknown, 36)
-elliptical_sample = random.sample(ellipticals, 36)
 
-# spiral_sample[0] = 14510387
 
-print(spiral_sample)
+
+
+
+
+
+
+
+
+# specify how the images are to be augmented
+# datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
+datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
+
+
+
+# augment the elliptical images
+
+for galaxy in ellipticals:
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i >= 6:
+            break
+
+
+print("...")
+
+
+# augment the transitional images
+
+for galaxy in unknown:
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i >= 8:
+            break
+
+
+
+
+
+# check the number of augmented images
+
+augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
+augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
+
 print()
-# print(unknown_sample)
+print(len(augmented_ellipticals))
+print(len(augmented_transitional))
 print()
-print(elliptical_sample)
 
-# 14510387
+for galaxy in ellipticals:
+    count = 0
+    for file in augmented_ellipticals:
+        if file.startswith(str(galaxy)):
+            count += 1
+    if count < 6:
+        print(galaxy, count)
+
+print()
+
+for galaxy in unknown:
+    count = 0
+    for file in augmented_transitional:
+        if file.startswith(str(galaxy)):
+            count += 1
+    if count < 8:
+        print(galaxy, count)
+
+print()
 
 
 
-fig, axs = plt.subplots(6, 6, figsize=(20, 20))
 
-for i in range(0, 6):
-    for j in range(0, 6):
 
-        index = i + (6*j)
-        print(index)
 
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
 
-        sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
-        dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
 
-        axs[i][j].imshow(image)
-        # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(spiral_sample[index]) + ", d/t=" + str(round(dt, 3)))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(6, 6, figsize=(20, 20))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         index = i + (6*j)
+#         print(index)
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
+#         dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
+#
+#         axs[i][j].imshow(image)
+#         # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
+#         axs[i][j].set_title(str(spiral_sample[index]) + ", d/t=" + str(round(dt, 3)))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -186,26 +247,26 @@ plt.show()
 
 
 
-fig, axs = plt.subplots(6, 6, figsize=(15, 15))
-
-for i in range(0, 6):
-    for j in range(0, 6):
-
-        index = i + (6*j)
-        print(index)
-
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
-
-        sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
-        dt = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "DiscToTotal"].values[0]
-
-        axs[i][j].imshow(image)
-        # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(elliptical_sample[index]) + ", d/t=" + str(round(dt, 3)))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         index = i + (6*j)
+#         print(index)
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
+#         dt = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "DiscToTotal"].values[0]
+#
+#         axs[i][j].imshow(image)
+#         # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
+#         axs[i][j].set_title(str(elliptical_sample[index]) + ", d/t=" + str(round(dt, 3)))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
+# plt.show()
 
 
 
@@ -244,78 +305,3 @@ plt.show()
 
 
 
-# augment the elliptical images
-
-
-# augmented_ellipticals =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
-# augmented_unknown = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
-#
-# print()
-# print(len(augmented_ellipticals))
-# print(len(augmented_unknown))
-# print()
-#
-# for galaxy in ellipticals:
-#     count = 0
-#     for file in augmented_ellipticals:
-#         if file.startswith(str(galaxy)):
-#             count += 1
-#     if count < 25:
-#         print(galaxy, count)
-#
-# print()
-#
-# for galaxy in unknown:
-#     count = 0
-#     for file in augmented_unknown:
-#         if file.startswith(str(galaxy)):
-#             count += 1
-#     if count < 6:
-#         print(galaxy, count)
-#
-# print()
-
-
-
-
-# specify how the images are to be augmented (for both unknown and ellipticals)
-datagen = ImageDataGenerator(rotation_range=360, horizontal_flip=True, vertical_flip=True, fill_mode="nearest")
-
-# # augment the elliptical images
-#
-# # ellipticals = [15289521, 16351397, 18816265]
-#
-# for galaxy in ellipticals:
-#
-#     # print(".")
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
-#
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i >= 25:
-#             break
-#
-#
-# print("...")
-#
-#
-# # augment the 'unknown' images
-#
-# # unknown = [15125933]
-#
-# for galaxy in unknown:
-#
-#     # print(".")
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i >= 6:
-#             break

@@ -106,6 +106,7 @@ def classify_morphology(n):
 
 # morphology = all_properties["DiscToTotal"].apply(classify_morphology).tolist()
 morphology = all_properties["n_r"].apply(classify_morphology).tolist()
+
 print(morphology)
 
 
@@ -125,7 +126,6 @@ print(len(morphology))
 
 
 
-
 tsne = TSNE(n_components=2, random_state=0).fit_transform(extracted_features_all)
 
 # umap = UMAP().fit_transform(extracted_features)
@@ -136,9 +136,22 @@ fig, axs = plt.subplots(1, 1, figsize=(10, 10))
 
 palette = ["C0", "#D3D3D3", "C1"]
 
+size_map = {"Spiral": 20, "Elliptical": 20, "Transitional": 10}
+sizes = [size_map[m] for m in morphology]
+
+alpha_map = {"Spiral": 1.0, "Transitional": 0.3, "Elliptical": 1.0}
+alpha = [alpha_map[m] for m in morphology]
+
 # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, linewidth=0, s=20)
 # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette="colorblind", linewidth=0, s=20)
-sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, s=20)
+# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, s=20)
+sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, size=sizes, sizes=(10, 20), legend="brief")
+
+handles, labels = axs.get_legend_handles_labels()
+filtered = [(h, l) for h, l in zip(handles, labels) if not l.isdigit()]
+handles_filtered, labels_filtered = zip(*filtered)
+axs.legend(handles_filtered, labels_filtered)
+
 
 axs.set_xlim(-90, 90)
 axs.set_ylim(-90, 90)
