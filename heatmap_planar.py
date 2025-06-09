@@ -403,7 +403,22 @@ def latent_saliency(encoder, image, feature, use_flow_output=True, smoothing_sig
     return saliency.numpy()
 
 
+fig, axs = plt.subplots(encoding_dim, 10, figsize=(30, 90))
 
-heatmap = latent_saliency(vae.encoder, test_images[0], 0)
+for img_index in range(0, 10):
+
+    axs[img_index][0].imshow(test_images[img_index])
+
+    for feature in range(0, encoding_dim):
+
+        heatmap = latent_saliency(vae.encoder, test_images[img_index], feature)
+
+        axs[img_index][feature+1].imshow(heatmap, cmap="jet")
+
+plt.savefig("Variational Eagle/Plots/heatmap_individual", bbox_inches="tight")
+plt.show()
+
+
+
 print(heatmap.shape)
 print(heatmap)
