@@ -437,12 +437,16 @@ fig, axs = plt.subplots(encoding_dim+1, 10, figsize=(30, 90))
 for img_index in range(0, 10):
 
     axs[0][img_index].imshow(test_images[img_index])
+    axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     for feature in range(0, encoding_dim):
 
         heatmap = latent_saliency(vae.encoder, test_images[img_index], feature, smoothing_sigma=2.0)
 
-        axs[feature+1][img_index].imshow(heatmap, cmap="jet")
+        axs[feature+1][img_index].imshow(test_images[img_index])
+        axs[feature+1][img_index].imshow(heatmap, cmap="jet", alpha=0.5)
+        axs[feature+1][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
 
 plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
 plt.show()
@@ -454,10 +458,13 @@ fig, axs = plt.subplots(2, 10, figsize=(30, 6))
 for img_index in range(0, 10):
 
     axs[0][img_index].imshow(test_images[img_index])
+    axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     heatmap = latent_saliency(vae.encoder, test_images[img_index], smoothing_sigma=2.0)
 
-    axs[1][img_index].imshow(heatmap, cmap="jet")
+    axs[1][img_index].imshow(test_images[img_index])
+    axs[1][img_index].imshow(heatmap, cmap="jet", alpha=0.5)
+    axs[1][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/heatmap_all_smooth", bbox_inches="tight")
 plt.show()
