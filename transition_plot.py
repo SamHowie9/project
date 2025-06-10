@@ -19,10 +19,12 @@ encoding_dim = 30
 n_flows = 3
 beta = 0.0001
 beta_name = "0001"
-epochs = 750
+epochs = 300
 batch_size = 32
 
 
+
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 
