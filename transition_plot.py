@@ -14,7 +14,7 @@ import random
 
 
 
-run = 2
+run = 1
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 
@@ -189,6 +189,7 @@ decoder.summary()
 vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 
+vae.build(input_shape=(None, 256, 256, 3))
 
 
 
