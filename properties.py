@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 
 
 # load structural and physical properties into dataframes
@@ -34,4 +35,8 @@ pie chart
 
 
 
-# add augmented properties
+
+
+augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
+galaxy_names = [galaxy.split("_")[0] for galaxy in augmented_galaxies]
+print(galaxy_names)

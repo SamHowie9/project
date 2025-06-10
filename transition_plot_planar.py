@@ -24,7 +24,7 @@ epochs = 750
 batch_size = 32
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -32,25 +32,25 @@ os.environ["CUDA_VISIBLE_DEVICES"]="9"
 
 
 
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-# find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 1) |
-                          (all_properties["flag_r"] == 4) |
-                          (all_properties["flag_r"] == 5) |
-                          (all_properties["flag_r"] == 6))].index.tolist()
-
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# account for the testing dataset
-all_properties = all_properties.iloc[:-200]
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+#                           (all_properties["flag_r"] == 4) |
+#                           (all_properties["flag_r"] == 5) |
+#                           (all_properties["flag_r"] == 6))].index.tolist()
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+# # account for the testing dataset
+# all_properties = all_properties.iloc[:-200]
 
 
 
@@ -287,25 +287,25 @@ vae.compile(optimizer=optimizers.Adam())
 vae.build(input_shape=(None, 256, 256, 3))
 
 # or load the weights from a previous run
-vae.load_weights("Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
 
 
 # load the original and transformed features
-z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
+z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 # remove the augmented image features
-z_mean = z_mean[:len(all_properties)]
-z_transformed = z_transformed[:len(all_properties)]
+# z_mean = z_mean[:len(all_properties)]
+# z_transformed = z_transformed[:len(all_properties)]
 
 
 
 # perform PCA on both sets of features
-# pca_mean = PCA(n_components=0.999).fit(z_mean)
-# z_mean = pca_mean.transform(z_mean)
-# pca_transformed = PCA(n_components=0.999).fit(z_transformed)
-# z_transformed = pca_transformed.transform(z_transformed)
+pca_mean = PCA(n_components=0.999).fit(z_mean)
+z_mean = pca_mean.transform(z_mean)
+pca_transformed = PCA(n_components=0.999).fit(z_transformed)
+z_transformed = pca_transformed.transform(z_transformed)
 
 
 
@@ -331,7 +331,7 @@ num_varying_features = 13
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 print(len(med_pca_features))
 
-chosen_features = [12, 21, 27]
+chosen_features = [0, 1, 2, 3]
 
 fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*5, len(chosen_features)*5))
 
@@ -347,8 +347,8 @@ for i, feature in enumerate(chosen_features):
         temp_features = temp_pca_features
         temp_features = np.expand_dims(temp_features, axis=0)
 
-        # temp_features = pca.inverse_transform(temp_pca_features)
-        # temp_features = np.expand_dims(temp_features, axis=0)
+        temp_features = pca.inverse_transform(temp_pca_features)
+        temp_features = np.expand_dims(temp_features, axis=0)
 
         reconstruction = vae.decoder.predict(temp_features)[0]
 
@@ -370,7 +370,7 @@ fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_subset_transformed", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/top_4_pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_subset_transformed", bbox_inches='tight')
 plt.show()
 
 

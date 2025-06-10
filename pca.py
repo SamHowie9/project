@@ -5,48 +5,51 @@ from matplotlib import pyplot as plt
 import random
 
 
+run = 3
+encoding_dim = 30
+n_flows = 3
+beta = 0.0001
+beta_name = "0001"
+epochs = 300
+batch_size = 32
+
+
+
+
 np.set_printoptions(linewidth=np.inf)
 
-encoding_dim = 30
-run = 1
-
-# 0.2113601416349411
-# 0.21139435470104218
-# 0.2113913595676422
-
-# 0.21140490472316742
-# 0.21135973930358887
-# 0.21136081218719482
-
-# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_750_epoch_32_bs_features_1.npy")[0]
-# pca = PCA(n_components=encoding_dim).fit(extracted_features)
-# # plt.plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
-#
-# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_750_epoch_32_bs_features_2.npy")[0]
-# pca = PCA(n_components=encoding_dim).fit(extracted_features)
-# # plt.plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
-
-
-# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_750_epoch_32_bs_features_3.npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_latent_30_beta_0001.npy")[0]
-pca = PCA(n_components=encoding_dim).fit(extracted_features)
-plt.plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
 
 
 
 
-# extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_750_epoch_32_bs_features_" + str(run) + ".npy")[0]
-# pca = PCA(n_components=encoding_dim).fit(extracted_features)
-# plt.plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
 
+
+
+
+fig, axs = plt.subplots(1, 2, figsize=(20, 8))
+
+
+for run in [1, 2, 3]:
+
+    extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_300_" + str(run) + ".npy")[0]
+    # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+
+
+    print(len(extracted_features))
+
+    pca = PCA(n_components=encoding_dim).fit(extracted_features)
+    axs[0].plot(range(1, encoding_dim+1), pca.explained_variance_ratio_)
+    axs[1].plot(range(5, encoding_dim+1), pca.explained_variance_ratio_[4:])
+    print(pca.explained_variance_ratio_)
 
 
 plt.ylabel("Variance Explained")
 plt.xlabel("Principal Components")
-plt.xticks(range(1, encoding_dim+1))
+axs[0].set_xticks(range(1, encoding_dim+1))
+axs[1].set_xticks(range(5, encoding_dim+1))
 
 print(pca.explained_variance_ratio_)
 
 
-# plt.savefig("Variational Eagle/Plots/pca_scree_normalised_individually_" + str(encoding_dim) + "_features")
+plt.savefig("Variational Eagle/Plots/pca_scree", bbox_inches="tight")
 plt.show()

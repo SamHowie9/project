@@ -80,12 +80,14 @@ for galaxy in bad_fit:
 all_properties = all_properties.reset_index(drop=True)
 
 
-print(all_properties)
 
-print(all_properties.sort_values(by="MassType_Star"))
 
-print(all_properties[all_properties["flag"] != 0])
-print(all_properties[all_properties["flag_sersic"] != 0])
+# print(all_properties)
+#
+# print(all_properties.sort_values(by="MassType_Star"))
+#
+# print(all_properties[all_properties["flag"] != 0])
+# print(all_properties[all_properties["flag_sersic"] != 0])
 
 
 
@@ -140,14 +142,15 @@ print(all_properties[all_properties["flag_sersic"] != 0])
 all_properties = all_properties.iloc[:-200]
 
 
-for n_flows in [n_flows]:
+# for n_flows in [n_flows]:
+for run in [1, 2, 3]:
 
     # load the extracted features
     # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
     # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
-    # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+    extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_300_" + str(run) + ".npy")[0]
     # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-    extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
     encoding_dim = extracted_features.shape[1]
     extracted_features_switch = extracted_features.T
 
@@ -158,7 +161,7 @@ for n_flows in [n_flows]:
     extracted_features_switch = extracted_features.T
 
     # perform pca on the extracted features
-    pca = PCA(n_components=0.999).fit(extracted_features)
+    pca = PCA(n_components=4).fit(extracted_features)
     extracted_features = pca.transform(extracted_features)
     extracted_features = extracted_features[:len(all_properties)]
     extracted_features_switch = extracted_features.T
@@ -295,10 +298,11 @@ for n_flows in [n_flows]:
 
     # properties to plot
     # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-    selected_properties = ["n_r", "DiscToTotal", "pa_r", "q_r", "re_r", "rhalf_ellip", "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
+    selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
 
     # plot a heatmap for the dataframe (with annotations)
-    ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+    # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+    ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={'label': 'Correlation'})
 
 
 
@@ -317,7 +321,7 @@ for n_flows in [n_flows]:
         # for label in ax.get_xticklabels():
             # text = label.get_text()
 
-        label_names = ["Sersic Index", "Disk-Total Ratio", "Position Angle", "Axis Ratio", "Semi - Major Axis", "Half Light Radius", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
+        label_names = ["Sersic Index", "Disk-Total Ratio", "Semi - Major Axis", "Half Light Radius", "Position Angle", "Axis Ratio", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
 
         for text in label_names:
             labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -329,8 +333,8 @@ for n_flows in [n_flows]:
 
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Correlation Plots/Final/pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_transformed_unknown", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/top_4_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
     plt.show()
 
 
