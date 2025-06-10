@@ -14,7 +14,7 @@ import random
 
 
 
-run = 2
+run = 1
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 
@@ -236,8 +236,8 @@ extracted_features_switch = extracted_features.T
 print(extracted_features.shape)
 
 # remove augmented images
-extracted_features = extracted_features[:len(all_properties)]
-extracted_features_switch = extracted_features.T
+# extracted_features = extracted_features[:len(all_properties)]
+# extracted_features_switch = extracted_features.T
 
 # perform pca on the extracted features
 pca = PCA(n_components=0.999).fit(extracted_features)
