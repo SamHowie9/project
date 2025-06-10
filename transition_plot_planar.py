@@ -15,7 +15,7 @@ from sklearn.decomposition import PCA
 
 
 
-run = 3
+run = 1
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -24,7 +24,7 @@ epochs = 750
 batch_size = 32
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -405,8 +405,8 @@ for i in range(len(extracted_features.T)):
         temp_features = temp_pca_features
         temp_features = np.expand_dims(temp_features, axis=0)
 
-        # temp_features = pca.inverse_transform(temp_pca_features)
-        # temp_features = np.expand_dims(temp_features, axis=0)
+        temp_features = pca.inverse_transform(temp_pca_features)
+        temp_features = np.expand_dims(temp_features, axis=0)
 
         reconstruction = vae.decoder.predict(temp_features)[0]
 
