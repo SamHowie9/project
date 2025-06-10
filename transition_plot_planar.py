@@ -15,7 +15,7 @@ from sklearn.decomposition import PCA
 
 
 
-run = 2
+run = 1
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
