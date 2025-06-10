@@ -14,7 +14,7 @@ import random
 
 
 
-run = 2
+run = 3
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="6"
 
 
 
