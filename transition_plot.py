@@ -14,7 +14,7 @@ import random
 
 
 
-run = 3
+run = 1
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="6"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 
@@ -242,7 +242,7 @@ print(extracted_features.shape)
 # perform pca on the extracted features
 pca = PCA(n_components=0.999).fit(extracted_features)
 extracted_features = pca.transform(extracted_features)
-extracted_features = extracted_features[:len(all_properties)]
+# extracted_features = extracted_features[:len(all_properties)]
 extracted_features_switch = extracted_features.T
 
 
