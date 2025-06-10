@@ -314,6 +314,7 @@ z_transformed = pca_transformed.transform(z_transformed)
 # select transformed or mean
 # extracted_features = z_mean
 extracted_features = z_transformed
+pca = pca_transformed
 
 
 
@@ -347,7 +348,9 @@ for i, feature in enumerate(chosen_features):
         temp_features = temp_pca_features
         temp_features = np.expand_dims(temp_features, axis=0)
 
-        temp_features = pca.inverse_transform(temp_pca_features)
+
+
+        temp_features = pca_transformed.inverse_transform(temp_pca_features)
         temp_features = np.expand_dims(temp_features, axis=0)
 
         reconstruction = vae.decoder.predict(temp_features)[0]
