@@ -10,7 +10,7 @@ import seaborn as sns
 
 
 
-run = 1
+run = 3
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -43,29 +43,30 @@ all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyI
 all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 # find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 1) |
-                          (all_properties["flag_r"] == 4) |
-                          (all_properties["flag_r"] == 5) |
-                          (all_properties["flag_r"] == 6))].index.tolist()
-
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# reset the index values
-all_properties = all_properties.reset_index(drop=True)
-
-# account for the training data
-all_properties = all_properties.iloc[:-200]
-
-
+# bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+#                           (all_properties["flag_r"] == 4) |
+#                           (all_properties["flag_r"] == 5) |
+#                           (all_properties["flag_r"] == 6))].index.tolist()
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+# # reset the index values
+# all_properties = all_properties.reset_index(drop=True)
+#
+# # account for the training data
+# all_properties = all_properties.iloc[:-200]
 
 
 
 
 
 
-extracted_features_all = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+
+
+# extracted_features_all = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+extracted_features_all = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 extracted_features_real = extracted_features_all[:len(all_properties)]
 
@@ -86,26 +87,26 @@ print(extracted_features_real.shape)
 
 
 
-# def classify_morphology(dt):
-#
-#     if dt > 0.2:
-#         return "Spiral"
-#     elif dt < 0.1:
-#         return "Elliptical"
-#     else:
-#         return "Transitional"
+def classify_morphology(dt):
 
-def classify_morphology(n):
-
-    if n <= 2.5:
+    if dt > 0.2:
         return "Spiral"
-    elif n >= 4:
+    elif dt < 0.1:
         return "Elliptical"
     else:
         return "Transitional"
 
-# morphology = all_properties["DiscToTotal"].apply(classify_morphology).tolist()
-morphology = all_properties["n_r"].apply(classify_morphology).tolist()
+# def classify_morphology(n):
+#
+#     if n <= 2.5:
+#         return "Spiral"
+#     elif n >= 4:
+#         return "Elliptical"
+#     else:
+#         return "Transitional"
+
+morphology = all_properties["DiscToTotal"].apply(classify_morphology).tolist()
+# morphology = all_properties["n_r"].apply(classify_morphology).tolist()
 
 print(morphology)
 
@@ -114,9 +115,9 @@ print(morphology)
 #     morphology.append("Augmented")
 
 
-for i in range(2900):
+for i in range(2394):
     morphology.append("Elliptical")
-for i in range(2580):
+for i in range(2552):
     morphology.append("Transitional")
 
 
@@ -134,7 +135,7 @@ print(tsne.shape)
 
 fig, axs = plt.subplots(1, 1, figsize=(10, 10))
 
-palette = ["C0", "#D3D3D3", "C1"]
+palette = ["C0", "C1", "#D3D3D3"]
 
 size_map = {"Spiral": 20, "Elliptical": 20, "Transitional": 10}
 sizes = [size_map[m] for m in morphology]
@@ -156,5 +157,5 @@ axs.legend(handles_filtered, labels_filtered)
 axs.set_xlim(-90, 90)
 axs.set_ylim(-90, 90)
 
-plt.savefig("Variational Eagle/Plots/tsne_pca_morphology", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/tsne_pca_morphology_new_3", bbox_inches="tight")
 plt.show()
