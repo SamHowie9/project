@@ -14,7 +14,7 @@ import random
 
 
 
-run = 1
+run = 2
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
