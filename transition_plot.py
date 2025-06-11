@@ -14,7 +14,7 @@ import random
 
 
 
-run = 3
+run = 1
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -468,7 +468,9 @@ for i in range(len(extracted_features.T)):
 
     axs[i][0].set_ylabel(i, rotation=0, labelpad=7.5, va='center')
 
-fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
+fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
+
+fig.subplots_adjust(wspace=0, hspace=0.05)
 
 plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/pca_latent_" + str(encoding_dim) + "_flows_0_" + str(run), bbox_inches='tight')
 plt.show()
