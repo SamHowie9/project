@@ -788,10 +788,15 @@ for encoding_dim in [encoding_dim]:
         # get the reconstruction loss
         reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images)).numpy().item()
 
+        # # kl loss
+        # kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+        # kl_loss = (tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians) / z_mean.shape[1]
+        # kl_loss = tf.reduce_mean(kl_loss)
+
         # kl loss
-        kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
-        kl_loss = (tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians) / z_mean.shape[1]
-        kl_loss = tf.reduce_mean(kl_loss)
+        kl_loss = -0.5 * (1 + z_log_var - np.square(z_mean) - np.exp(z_log_var))
+        kl_loss = (np.sum(kl_loss, axis=1) - sum_log_det_jacobians) / z_mean.shape[1]
+        kl_loss = kl_loss.mean()
 
         # total loss
         total_loss = reconstruction_loss + (beta * kl_loss)
