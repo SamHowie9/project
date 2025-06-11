@@ -46,7 +46,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="5"
 # for n_flows in [1, 2, 3]:
 # for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+1, 1], [encoding_dim+1, 2], [encoding_dim+1, 3]]:
 # for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4, encoding_dim+5]:
-for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4]:
+for encoding_dim in range(encoding_dim, encoding_dim+5):
 # for encoding_dim in [encoding_dim]:
 
     print("\n \n")
@@ -994,89 +994,67 @@ for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+
 
     fig, axs = plt.subplots(3, 3, figsize=(30, 15))
 
-    axs[0][0].plot(model_loss.history["loss"], label="Total Loss", color="black")
-    axs[0][0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
-    axs[0][0].plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    axs[0][0].plot(range(1, epochs), model_loss.history["loss"], label="Total Loss", color="black")
+    axs[0][0].plot(range(1, epochs), model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    axs[0][0].plot(range(1, epochs), model_loss.history["kl_loss"], label="KL Divergence", color="C1")
     axs[0][0].legend()
     axs[0][0].set_xlabel("Epoch")
     axs[0][0].set_ylabel("Loss")
 
-    axs[0][1].plot(model_loss.history["loss"][:10], label="Total Loss", color="black")
-    axs[0][1].plot(model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
-    axs[0][1].plot(model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
+    axs[0][1].plot(range(1, epochs), model_loss.history["loss"][:10], label="Total Loss", color="black")
+    axs[0][1].plot(range(1, epochs), model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
+    axs[0][1].plot(range(1, epochs), model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
     axs[0][1].legend()
     axs[0][1].set_xlabel("Epoch")
     axs[0][1].set_ylabel("Loss")
 
-    axs[0][2].plot(model_loss.history["loss"][50:], label="Total Loss", color="black")
-    axs[0][2].plot(model_loss.history["reconstruction_loss"][50:], label="Reconstruction Loss", color="C0")
-    axs[0][2].plot(model_loss.history["kl_loss"][50:], label="KL Divergence", color="C1")
+    axs[0][2].plot(range(100, epochs), model_loss.history["loss"][100:], label="Total Loss", color="black")
+    axs[0][2].plot(range(100, epochs), model_loss.history["reconstruction_loss"][100:], label="Reconstruction Loss", color="C0")
+    axs[0][2].plot(range(100, epochs), model_loss.history["kl_loss"][100:], label="KL Divergence", color="C1")
     axs[0][2].legend()
     axs[0][2].set_xlabel("Epoch")
     axs[0][2].set_ylabel("Loss")
 
 
 
-    axs[1][0].plot(np.log10(model_loss.history["loss"]), label="Total Loss", color="black")
-    axs[1][0].plot(np.log10(model_loss.history["reconstruction_loss"]), label="Reconstruction Loss", color="C0")
-    axs[1][0].plot(np.log10(model_loss.history["kl_loss"]), label="KL Divergence", color="C1")
-    axs[1][0].legend()
+
+    axs[1][0].plot(range(1, epochs), model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    axs2 = axs[1][0].twinx()
+    axs2.plot(range(1, epochs), model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    lines = axs[1][0].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    labels = axs[1][0].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    axs[1][0].legend(lines, labels)
+    # axs[1].legend()
     axs[1][0].set_xlabel("Epoch")
-    axs[1][0].set_ylabel("Log(Loss)")
+    axs[1][0].set_ylabel("Reconstruction Loss")
+    axs2.set_ylabel("KL Divergence")
 
-    axs[1][1].plot(np.log10(model_loss.history["loss"][:10]), label="Total Loss", color="black")
-    axs[1][1].plot(np.log10(model_loss.history["reconstruction_loss"][:10]), label="Reconstruction Loss", color="C0")
-    axs[1][1].plot(np.log10(model_loss.history["kl_loss"][:10]), label="KL Divergence", color="C1")
-    axs[1][1].legend()
+    axs[1][1].plot(range(1, epochs), model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
+    axs2 = axs[1][1].twinx()
+    axs2.plot(range(1, epochs), model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
+    lines = axs[1][1].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    labels = axs[1][1].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    axs[1][1].legend(lines, labels)
+    # axs[1].legend()
     axs[1][1].set_xlabel("Epoch")
-    axs[1][1].set_ylabel("Log(Loss)")
+    axs[1][1].set_ylabel("Reconstruction Loss")
+    axs2.set_ylabel("KL Divergence")
 
-    axs[1][2].plot(np.log10(model_loss.history["loss"][50:]), label="Total Loss", color="black")
-    axs[1][2].plot(np.log10(model_loss.history["reconstruction_loss"][50:]), label="Reconstruction Loss", color="C0")
-    axs[1][2].plot(np.log10(model_loss.history["kl_loss"][50:]), label="KL Divergence", color="C1")
-    axs[1][2].legend()
+    axs[1][2].plot(range(100, epochs), model_loss.history["reconstruction_loss"][100:], label="Reconstruction Loss", color="C0")
+    axs2 = axs[1][2].twinx()
+    axs2.plot(range(100, epochs), model_loss.history["kl_loss"][100:], label="KL Divergence", color="C1")
+    lines = axs[1][2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    labels = axs[1][2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    axs[1][2].legend(lines, labels)
+    # axs[1].legend()
     axs[1][2].set_xlabel("Epoch")
-    axs[1][2].set_ylabel("Log(Loss)")
-
-
-
-    axs[2][0].plot(model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
-    axs2 = axs[2][0].twinx()
-    axs2.plot(model_loss.history["kl_loss"], label="KL Divergence", color="C1")
-    lines = axs[2][0].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
-    labels = axs[2][0].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
-    axs[2][0].legend(lines, labels)
-    # axs[2].legend()
-    axs[2][0].set_xlabel("Epoch")
-    axs[2][0].set_ylabel("Reconstruction Loss")
-    axs2.set_ylabel("KL Divergence")
-
-    axs[2][1].plot(model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
-    axs2 = axs[2][1].twinx()
-    axs2.plot(model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
-    lines = axs[2][1].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
-    labels = axs[2][1].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
-    axs[2][1].legend(lines, labels)
-    # axs[2].legend()
-    axs[2][1].set_xlabel("Epoch")
-    axs[2][1].set_ylabel("Reconstruction Loss")
-    axs2.set_ylabel("KL Divergence")
-
-    axs[2][2].plot(model_loss.history["reconstruction_loss"][50:], label="Reconstruction Loss", color="C0")
-    axs2 = axs[2][2].twinx()
-    axs2.plot(model_loss.history["kl_loss"][50:], label="KL Divergence", color="C1")
-    lines = axs[2][2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
-    labels = axs[2][2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
-    axs[2][2].legend(lines, labels)
-    # axs[2].legend()
-    axs[2][2].set_xlabel("Epoch")
-    axs[2][2].set_ylabel("Reconstruction Loss")
+    axs[1][2].set_ylabel("Reconstruction Loss")
     axs2.set_ylabel("KL Divergence")
 
 
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/Normalising Flow Balanced/planar_new_normalising_flow_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    plt.savefig("Variational Eagle/Loss Plots/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run))
     plt.show()
 
 
