@@ -10,6 +10,7 @@ import pandas as pd
 import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
+from sklearn.decomposition import PCA
 
 
 
@@ -348,43 +349,36 @@ vae.compile(optimizer=optimizers.Adam())
 
 
 
-# train the model
-# model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
-
-# # get loss, reconstruction loss and kl loss and save as numpy array
-# loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-# np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
-#
-# print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
-# print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-
-
 
 vae.build(input_shape=(None, 256, 256, 3))
 
-# or load the weights from a previous run
+
+
+# latent features vs pca
+
+# load the weights
 vae.load_weights("Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
-# save the weights
-# vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
+# get the extracted features
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+
+print("...")
+pca = PCA(n_components=0.999).fit(extracted_features)
+print("...")
+pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+
+print("...")
+pca_top = PCA(n_components=4).fit(extracted_features)
+
+# number of images to reconstruct
+n = 12
+
+# get the images to reconstruct
+random.seed(5)
+reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+extracted_features = extracted_features[reconstruction_indices]
 
 
 
-# get and save the extracted features (pre transformations)
-z_mean, z_log_var, _, _ = vae.encoder.predict(train_images)
-np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
 
-# get the sampling layer
-sampling_layer = None
-for layer in encoder.layers:
-    if isinstance(layer, Sampling):
-        sampling_layer = layer
-        break
-
-# get the flows from the sampling layer
-flows = sampling_layer.flows
-
-# transform and save the mean vectors
-z_transformed, sum_log_det_jacobians = apply_flows(z_mean, flows)
-np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
 
