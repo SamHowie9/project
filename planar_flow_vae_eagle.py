@@ -24,7 +24,7 @@ tfd = tfp.distributions
 
 
 
-run = 3
+run = 1
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -602,13 +602,13 @@ for encoding_dim in [encoding_dim]:
             # generate the random variables
             epsilon = tf.random.normal(shape=(batch, dim))
 
-            # perform reparameterization trick
+            # perform reparameterisation trick
             z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
-            # z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
+            # initialise as a tensor of batch size shape (same shape as first latent feature)
+            sum_log_det_jacobian = tf.zeros_like(z_mean[:, 0])
 
             # apply flow transformations
-            sum_log_det_jacobian = 0.0
             for flow in self.flows:
                 z, log_det = flow(z)
                 sum_log_det_jacobian += log_det
