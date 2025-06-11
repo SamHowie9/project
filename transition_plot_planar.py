@@ -348,8 +348,6 @@ for i, feature in enumerate(chosen_features):
         temp_features = temp_pca_features
         temp_features = np.expand_dims(temp_features, axis=0)
 
-
-
         temp_features = pca_transformed.inverse_transform(temp_pca_features)
         temp_features = np.expand_dims(temp_features, axis=0)
 
@@ -410,12 +408,8 @@ for i in range(len(extracted_features.T)):
 
         reconstruction = vae.decoder.predict(temp_features)[0]
 
-
         axs[i][j].imshow(reconstruction)
-
         axs[i][j].set_aspect("auto")
-
-        # remove the ticks
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
         # remove the spines

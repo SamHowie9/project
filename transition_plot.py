@@ -14,9 +14,9 @@ import random
 
 
 
-run = 3
+run = 1
 encoding_dim = 30
-n_flows = 3
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 300
@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="6"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -366,7 +366,9 @@ extracted_features_switch = extracted_features.T
 
 
 
-
+# scale font on plots
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 5})
 
 
 
@@ -381,7 +383,7 @@ print(len(med_pca_features))
 
 chosen_features = [0, 1, 2, 3, 4]
 
-fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features, 8))
+fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*5, len(chosen_features)*5))
 
 for i, feature in enumerate(chosen_features):
 
@@ -401,13 +403,21 @@ for i, feature in enumerate(chosen_features):
         reconstruction = vae.decoder.predict(temp_features)[0]
 
         axs[i][j].imshow(reconstruction)
+        axs[i][j].set_aspect("auto")
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-        axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
 
-        if j == (num_varying_features - 1)/2:
-            axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
+        # axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
 
-plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/top_4_" + str(encoding_dim) + "_features_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_" + str(run), bbox_inches='tight')
+        # if j == (num_varying_features - 1)/2:
+        #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
+
+    axs[i][0].set_ylabel(feature, rotation=0, labelpad=40, va='center')
+
+fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
+
+fig.subplots_adjust(wspace=0, hspace=0.05)
+
+plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/pca_top_4_latent_" + str(encoding_dim) + "_flows_0_" + str(run), bbox_inches='tight')
 plt.show()
 
 
@@ -429,8 +439,7 @@ num_varying_features = 13
 med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 print(len(med_pca_features))
 
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(10, 10))
-plt.subplots_adjust(wspace=0, hspace=0.1)
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
 
 for i in range(len(extracted_features.T)):
 
@@ -449,10 +458,8 @@ for i in range(len(extracted_features.T)):
 
         reconstruction = vae.decoder.predict(temp_features)[0]
 
-
         axs[i][j].imshow(reconstruction)
-
-        # remove the ticks
+        axs[i][j].set_aspect("auto")
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
         # remove the spines
@@ -463,7 +470,7 @@ for i in range(len(extracted_features.T)):
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical', fontsize=12)
 
-plt.savefig("Variational Eagle/Plots/transition_plot_all_" + str(encoding_dim) + "_" + str(run) + "_2", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/pca_latent_" + str(encoding_dim) + "_flows_0_" + str(run), bbox_inches='tight')
 plt.show()
 
 
