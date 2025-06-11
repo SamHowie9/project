@@ -29,13 +29,13 @@ encoding_dim = 30
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
-epochs = 5
+epochs = 750
 batch_size = 32
 
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="7"
 
 
 
@@ -835,7 +835,7 @@ for encoding_dim in [encoding_dim]:
     images_to_reconstruct = train_images[reconstruction_indices]
 
     # reconstruct the original vectors
-    reconstructed_images = vae.decoder.predict(z_mean[n:])
+    reconstructed_images = vae.decoder.predict(z_mean[reconstruction_indices])
 
     # create figure to hold subplots
     fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
@@ -860,7 +860,7 @@ for encoding_dim in [encoding_dim]:
     plt.show()
 
     # reconstruct the transformed vectors images
-    reconstructed_images = vae.decoder.predict(z_transformed[n:])
+    reconstructed_images = vae.decoder.predict(z_transformed[reconstruction_indices])
 
     # create figure to hold subplots
     fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
