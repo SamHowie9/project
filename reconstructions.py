@@ -11,7 +11,7 @@ import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 from sklearn.decomposition import PCA
-
+import time
 
 
 tf.keras.mixed_precision.set_global_policy('float32')
@@ -363,12 +363,17 @@ vae.load_weights("Variational Eagle/Weights/Normalising Flow/planar_new_latent_"
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 print("...")
+start = time.process_time()
 pca = PCA(n_components=0.999).fit(extracted_features)
+print(time.process_time() - start)
 print("...")
+start = time.process_time()
 pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-
+print(time.process_time() - start)
 print("...")
+start = time.process_time()
 pca_top = PCA(n_components=4).fit(extracted_features)
+print(time.process_time() - start)
 
 # number of images to reconstruct
 n = 12
