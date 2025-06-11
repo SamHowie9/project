@@ -24,12 +24,12 @@ tfd = tfp.distributions
 
 
 
-run = 2
+run = 1
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
-epochs = 750
+epochs = 5
 batch_size = 32
 
 
@@ -753,19 +753,29 @@ for encoding_dim in [encoding_dim]:
     z_mean, z_log_var, _, _ = vae.encoder.predict(train_images)
     np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
 
-    # get the sampling layer
-    sampling_layer = None
-    for layer in encoder.layers:
-        if isinstance(layer, Sampling):
-            sampling_layer = layer
-            break
 
-    # get the flows from the sampling layer
-    flows = sampling_layer.flows
+    # initialised transformed vector and log det
+    z_transformed = z_mean
+    sum_log_det_jacobian = tf.zeros_like(z_mean[:, 0])
 
-    # transform and save the mean vectors
-    z_transformed, sum_log_det_jacobians = apply_flows(z_mean, flows)
-    np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
+    # if we have flows
+    if n_flows > 0:
+
+        # get the sampling layer
+        sampling_layer = None
+        for layer in encoder.layers:
+            if isinstance(layer, Sampling):
+                sampling_layer = layer
+                break
+
+        # get the flows from the sampling layer
+        flows = sampling_layer.flows
+
+        # transform and save the mean vectors
+        z_transformed, sum_log_det_jacobians = apply_flows(z_mean, flows)
+
+
+        np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
 
 
 
@@ -859,30 +869,33 @@ for encoding_dim in [encoding_dim]:
     plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
 
-    # reconstruct the transformed vectors images
-    reconstructed_images = vae.decoder.predict(z_transformed[reconstruction_indices])
 
-    # create figure to hold subplots
-    fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
+    if n_flows > 0:
 
-    # plot each subplot
-    for i in range(0, n - 1):
-        # normalise the images
-        original_image = normalise_independently(images_to_reconstruct[i])
-        reconstructed_image = normalise_independently(reconstructed_images[i])
+        # reconstruct the transformed vectors images
+        reconstructed_images = vae.decoder.predict(z_transformed[reconstruction_indices])
 
-        # show the original image (remove axes)
-        axs[0, i].imshow(original_image)
-        axs[0, i].get_xaxis().set_visible(False)
-        axs[0, i].get_yaxis().set_visible(False)
+        # create figure to hold subplots
+        fig, axs = plt.subplots(2, n - 1, figsize=(18, 5))
 
-        # show the reconstructed image (remove axes)
-        axs[1, i].imshow(reconstructed_image)
-        axs[1, i].get_xaxis().set_visible(False)
-        axs[1, i].get_yaxis().set_visible(False)
+        # plot each subplot
+        for i in range(0, n - 1):
+            # normalise the images
+            original_image = normalise_independently(images_to_reconstruct[i])
+            reconstructed_image = normalise_independently(reconstructed_images[i])
 
-    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
-    plt.show()
+            # show the original image (remove axes)
+            axs[0, i].imshow(original_image)
+            axs[0, i].get_xaxis().set_visible(False)
+            axs[0, i].get_yaxis().set_visible(False)
+
+            # show the reconstructed image (remove axes)
+            axs[1, i].imshow(reconstructed_image)
+            axs[1, i].get_xaxis().set_visible(False)
+            axs[1, i].get_yaxis().set_visible(False)
+
+        plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
+        plt.show()
 
 
 
