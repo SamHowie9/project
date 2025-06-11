@@ -756,7 +756,7 @@ for encoding_dim in [encoding_dim]:
 
     # initialised transformed vector and log det
     z_transformed = z_mean
-    sum_log_det_jacobian = tf.zeros_like(z_mean[:, 0])
+    sum_log_det_jacobian = np.zeros(z_mean.shape[0], dtype=np.float32)
 
     # if we have flows
     if n_flows > 0:
