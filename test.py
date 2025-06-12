@@ -13,7 +13,10 @@ import random
 
 
 
+A = list(range(1, 751))
+print(A)
+print(len(A))
 
-A = [1, 2, 3, 4, 5]
-
-print(A[2:])
+A = A[:10]
+print(A)
+print(len(A))

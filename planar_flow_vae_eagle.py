@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 1
-encoding_dim = 26
+encoding_dim = 1
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -1008,9 +1008,9 @@ for encoding_dim in range(encoding_dim, encoding_dim+5):
     axs[0][1].set_xlabel("Epoch")
     axs[0][1].set_ylabel("Loss")
 
-    axs[0][2].plot(range(100, epochs+1), model_loss.history["loss"][100:], label="Total Loss", color="black")
-    axs[0][2].plot(range(100, epochs+1), model_loss.history["reconstruction_loss"][100:], label="Reconstruction Loss", color="C0")
-    axs[0][2].plot(range(100, epochs+1), model_loss.history["kl_loss"][100:], label="KL Divergence", color="C1")
+    axs[0][2].plot(range(100, epochs+1), model_loss.history["loss"][99:], label="Total Loss", color="black")
+    axs[0][2].plot(range(100, epochs+1), model_loss.history["reconstruction_loss"][99:], label="Reconstruction Loss", color="C0")
+    axs[0][2].plot(range(100, epochs+1), model_loss.history["kl_loss"][99:], label="KL Divergence", color="C1")
     axs[0][2].legend()
     axs[0][2].set_xlabel("Epoch")
     axs[0][2].set_ylabel("Loss")
@@ -1040,9 +1040,9 @@ for encoding_dim in range(encoding_dim, encoding_dim+5):
     axs[1][1].set_ylabel("Reconstruction Loss")
     axs2.set_ylabel("KL Divergence")
 
-    axs[1][2].plot(range(100, epochs+1), model_loss.history["reconstruction_loss"][100:], label="Reconstruction Loss", color="C0")
+    axs[1][2].plot(range(100, epochs+1), model_loss.history["reconstruction_loss"][99:], label="Reconstruction Loss", color="C0")
     axs2 = axs[1][2].twinx()
-    axs2.plot(range(100, epochs+1), model_loss.history["kl_loss"][100:], label="KL Divergence", color="C1")
+    axs2.plot(range(100, epochs+1), model_loss.history["kl_loss"][99:], label="KL Divergence", color="C1")
     lines = axs[1][2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
     labels = axs[1][2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
     axs[1][2].legend(lines, labels)
