@@ -31,7 +31,9 @@ galaxies = all_properties["GalaxyID"].values
 all_properties.to_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv", index=False)
 
 
-pie chart
+
+
+# pie chart
 
 
 
