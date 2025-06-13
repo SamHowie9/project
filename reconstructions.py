@@ -389,7 +389,7 @@ pca_features = pca.transform(extracted_features)
 pca_features = pca.inverse_transform(pca_features)
 
 pca_features_top = pca_top.transform(extracted_features)
-pca_features_top = pca.inverse_transform(pca_features_top)
+pca_features_top = pca_top.inverse_transform(pca_features_top)
 
 reconstructions = vae.decoder.predict(extracted_features)
 pca_reconstructions = vae.decoder.predict(pca_features)
