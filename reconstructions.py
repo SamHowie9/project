@@ -428,7 +428,7 @@ plt.show()
 
 
 
-flows vs normal reconstruction
+# flows vs normal reconstruction
 
 # get the images to reconstruct
 random.seed(5)
