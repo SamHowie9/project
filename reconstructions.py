@@ -27,7 +27,7 @@ tfd = tfp.distributions
 
 run = 2
 encoding_dim = 30
-n_flows = 3
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
@@ -417,7 +417,7 @@ for i in range(0, n):
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-plt.savefig("Variational Eagle/Training/Normalising Flow Balanced/pca_vs_normal", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/latent_vs_pca_vs_top", bbox_inches="tight")
 plt.show()
 
 
@@ -428,7 +428,7 @@ plt.show()
 
 
 
-# flows vs normal reconstruction
+flows vs normal reconstruction
 
 # get the images to reconstruct
 random.seed(5)
@@ -458,7 +458,7 @@ reconstructions_normal = vae.decoder.predict(extracted_features)
 flows = 3
 
 # load the weights
-vae.load_weights("Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
 # get the extracted features
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")

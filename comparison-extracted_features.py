@@ -30,9 +30,9 @@ pd.set_option('display.width', None)
 
 
 
-run = 2
+run = 1
 encoding_dim = 30
-n_flows = 3
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
@@ -67,18 +67,18 @@ all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyI
 all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 
-# find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 1) |
-                          (all_properties["flag_r"] == 4) |
-                          (all_properties["flag_r"] == 5) |
-                          (all_properties["flag_r"] == 6))].index.tolist()
-
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# reset the index values
-all_properties = all_properties.reset_index(drop=True)
+# # find all bad fit galaxies
+# bad_fit = all_properties[((all_properties["flag_r"] == 1) |
+#                           (all_properties["flag_r"] == 4) |
+#                           (all_properties["flag_r"] == 5) |
+#                           (all_properties["flag_r"] == 6))].index.tolist()
+#
+# # remove those galaxies
+# for galaxy in bad_fit:
+#     all_properties = all_properties.drop(galaxy, axis=0)
+#
+# # reset the index values
+# all_properties = all_properties.reset_index(drop=True)
 
 
 
@@ -140,18 +140,20 @@ all_properties = all_properties.reset_index(drop=True)
 # for encoding_dim in range(5, 21):
 
 # account for the testing dataset
-all_properties = all_properties.iloc[:-200]
+# all_properties = all_properties.iloc[:-200]
 
 
 # for n_flows in [n_flows]:
 for run in [1, 2, 3]:
 
+    print(n_flows, run)
+
     # load the extracted features
     # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
     # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
-    extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_300_" + str(run) + ".npy")[0]
+    # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_300_" + str(run) + ".npy")[0]
     # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-    # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
     encoding_dim = extracted_features.shape[1]
     extracted_features_switch = extracted_features.T
 
@@ -334,8 +336,8 @@ for run in [1, 2, 3]:
 
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/top_4_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/top_4_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
     plt.show()
 
 

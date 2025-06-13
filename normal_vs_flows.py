@@ -94,9 +94,9 @@ kl_err_lower = np.array(df_loss["Med KL"] - df_loss["Min KL"])
 
 fig, axs = plt.subplots(3, 1, figsize=(12, 15))
 
-# axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="No Flows")
-# axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="No Flows")
-# axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="No Flows")
+axs[0].errorbar(df_loss["Extracted Features"], df_loss["Med Total"], yerr=[total_err_lower, total_err_upper], fmt="o", label="Original VAE")
+axs[1].errorbar(df_loss["Extracted Features"], df_loss["Med Reconstruction"], yerr=[reconstruction_err_lower, reconstruction_err_upper], fmt="o", label="Original VAE")
+axs[2].errorbar(df_loss["Extracted Features"], df_loss["Med KL"], yerr=[kl_err_lower, kl_err_upper], fmt="o", label="Original VAE")
 
 # axs[0].set_xticks(range(15, 51, 5))
 # axs[1].set_xticks(range(15, 51, 5))
@@ -129,6 +129,37 @@ axs[2].set_xlabel("Latent Features")
 
 
 
+
+
+for n_flows in [0]:
+
+    for run in [1]:
+
+        total_loss_all = []
+        reconstruction_loss_all = []
+        kl_loss_all = []
+
+        loss_all = pd.DataFrame(columns=["feature", "total_loss", "reconstruction_loss", "kl_loss"])
+
+        for encoding_dim in range(1, 51):
+
+            try:
+                losses = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+                loss_all.loc[len(loss_all)] = [encoding_dim] + list(losses)
+            except:
+                print(encoding_dim, n_flows, run)
+
+        axs[0].plot(loss_all["feature"], loss_all["total_loss"], label="No Flows (New)", c="black")
+        axs[1].plot(loss_all["feature"], loss_all["reconstruction_loss"], label="No Flows (New)", c="black")
+        axs[2].plot(loss_all["feature"], loss_all["kl_loss"], label="No Flows (New)", c="black")
+
+        print(loss_all)
+
+
+
+
+
+
 total_loss_flow_1 = []
 total_loss_flow_2 = []
 total_loss_flow_3 = []
@@ -141,29 +172,30 @@ kl_loss_flow_1 = []
 kl_loss_flow_2 = []
 kl_loss_flow_3 = []
 
-flow_range = range(15, 49)
+flow_range = range(5, 49)
+run=2
 
 for i in flow_range:
 
-    try:
-        total_loss = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(i) + "_" + str(run) + ".npy")
-        reconstruction_loss = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(i) + "_" + str(run) + ".npy")
-        kl_loss = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(i) + "_" + str(run) + ".npy")
+    # try:
+    total_loss = np.load("Variational Eagle/Loss/Normalising Flow/total_loss_beta_" + str(i) + "_" + str(run) + ".npy")
+    reconstruction_loss = np.load("Variational Eagle/Loss/Normalising Flow/reconstruction_loss_beta_" + str(i) + "_" + str(run) + ".npy")
+    kl_loss = np.load("Variational Eagle/Loss/Normalising Flow/kl_loss_beta_" + str(i) + "_" + str(run) + ".npy")
 
-        total_loss_flow_1.append(total_loss[0])
-        total_loss_flow_2.append(total_loss[1])
-        total_loss_flow_3.append(total_loss[2])
+    total_loss_flow_1.append(total_loss[0])
+    total_loss_flow_2.append(total_loss[1])
+    total_loss_flow_3.append(total_loss[2])
 
-        reconstruction_loss_flow_1.append(reconstruction_loss[0])
-        reconstruction_loss_flow_2.append(reconstruction_loss[1])
-        reconstruction_loss_flow_3.append(reconstruction_loss[2])
+    reconstruction_loss_flow_1.append(reconstruction_loss[0])
+    reconstruction_loss_flow_2.append(reconstruction_loss[1])
+    reconstruction_loss_flow_3.append(reconstruction_loss[2])
 
-        kl_loss_flow_1.append(kl_loss[0])
-        kl_loss_flow_2.append(kl_loss[1])
-        kl_loss_flow_3.append(kl_loss[2])
+    kl_loss_flow_1.append(kl_loss[0])
+    kl_loss_flow_2.append(kl_loss[1])
+    kl_loss_flow_3.append(kl_loss[2])
 
-    except:
-        print(i)
+    # except:
+    #     print(i)
 
 
 print(len(total_loss_flow_1))
@@ -179,27 +211,33 @@ print(len(kl_loss_flow_2))
 print(len(kl_loss_flow_3))
 
 
-axs[0].plot(flow_range, total_loss_flow_1, label="1 Flow Layer", c="C9")
-axs[0].plot(flow_range, total_loss_flow_2, label="2 Flow Layers", c="C1")
-axs[0].plot(flow_range, total_loss_flow_3, label="3 Flow Layers", c="yellow")
+# axs[0].plot(flow_range, total_loss_flow_1, label="1 Flow Layer", c="C9")
+# axs[0].plot(flow_range, total_loss_flow_2, label="2 Flow Layers", c="C1")
+axs[0].plot(flow_range, total_loss_flow_3, label="3 Flow Layers", c="C1")
 
-axs[1].plot(flow_range, reconstruction_loss_flow_1, label="1 Flow Layer", c="C9")
-axs[1].plot(flow_range, reconstruction_loss_flow_2, label="2 Flow Layers", c="C1")
-axs[1].plot(flow_range, reconstruction_loss_flow_3, label="3 Flow Layers", c="yellow")
+# axs[1].plot(flow_range, reconstruction_loss_flow_1, label="1 Flow Layer", c="C9")
+# axs[1].plot(flow_range, reconstruction_loss_flow_2, label="2 Flow Layers", c="C1")
+axs[1].plot(flow_range, reconstruction_loss_flow_3, label="3 Flow Layers", c="C1")
 axs[1].ticklabel_format(style='plain', axis='both')
 axs[1].get_yaxis().get_major_formatter().set_useOffset(False)
 
-
-
-axs[2].plot(flow_range, kl_loss_flow_1, label="1 Flow Layer", c="C9")
-axs[2].plot(flow_range, kl_loss_flow_2, label="2 Flow Layers", c="C1")
-axs[2].plot(flow_range, kl_loss_flow_3, label="3 Flow Layers", c="yellow")
+# axs[2].plot(flow_range, kl_loss_flow_1, label="1 Flow Layer", c="C9")
+# axs[2].plot(flow_range, kl_loss_flow_2, label="2 Flow Layers", c="C1")
+axs[2].plot(flow_range, kl_loss_flow_3, label="3 Flow Layers", c="C1")
 
 axs[0].legend()
 axs[1].legend()
 axs[2].legend()
 
-plt.savefig("Variational Eagle/Plots/normal_vs_vae_2_zoomed_flows_only", bbox_inches='tight')
+# axs[0].set_xlim(9.5, 50.5)
+# axs[1].set_xlim(9.5, 50.5)
+# axs[2].set_xlim(9.5, 50.5)
+#
+# axs[0].set_ylim(0.209, 0.2125)
+# axs[1].set_ylim(0.209, 0.2125)
+# axs[2].set_ylim(0.55, 2.5)
+
+plt.savefig("Variational Eagle/Plots/normal_vs_vae", bbox_inches='tight')
 plt.show()
 
 
