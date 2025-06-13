@@ -2,11 +2,18 @@ import pandas as pd
 import numpy as np
 import os
 
-
+pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
+pd.set_option('display.width', None)
 
 
 
 augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
+
+print(augmented_galaxies[0])
+print(augmented_galaxies[0].split("_"))
+print(augmented_galaxies[0].split("_")[0])
+
 galaxy_names = [galaxy.split("_")[0] for galaxy in augmented_galaxies]
 print(galaxy_names)
 np.save("Galaxy Properties/Eagle Properties/augmented_elliptical_all", galaxy_names)
@@ -46,10 +53,34 @@ np.save("Galaxy Properties/Eagle Properties/augmented_transitional_all", galaxy_
 # galaxies = all_properties["GalaxyID"].values
 # # np.save("Galaxy Properties/Eagle Properties/galaxy_names.npy", galaxies)
 #
-# all_properties.to_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv", index=False)
+# # all_properties.to_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv", index=False)
 #
 #
+# # for i in range(2000, len(galaxies)):
+# #     print(galaxies[i])
 #
+# elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_all.npy")
+# transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_transitional_all.npy")
+#
+# print(len(elliptical_names))
+#
+# # print(elliptical_names)
+#
+#
+# all_properties_all = all_properties.copy()
+#
+# print(all_properties_all)
+#
+# for galaxy in elliptical_names[0]:
+#
+#     if int(galaxy) not in galaxies:
+#         print(galaxy)
+#
+#     # properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+#     # print(properties)
+#     # all_properties_all.loc[len(all_properties_all)] = properties
+#
+# print(all_properties_all)
 #
 # # pie chart
 
