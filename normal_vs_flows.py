@@ -137,7 +137,7 @@ axs[2].set_xlabel("Latent Features")
 
 for n_flows in [0, 3]:
 
-    for run in [1, 2, 3]:
+    for run in [1]:
 
         total_loss_all = []
         reconstruction_loss_all = []
@@ -145,7 +145,7 @@ for n_flows in [0, 3]:
 
         loss_all = pd.DataFrame(columns=["feature", "total_loss", "reconstruction_loss", "kl_loss"])
 
-        for encoding_dim in range(1, 51):
+        for encoding_dim in range(10, 51):
         # for encoding_dim in [30]:
 
             try:
