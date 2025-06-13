@@ -10,7 +10,7 @@ import seaborn as sns
 
 
 
-run = 3
+run = 1
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -76,7 +76,7 @@ extracted_features_real = extracted_features_all[:len(all_properties)]
 print(extracted_features_all.shape)
 print(extracted_features_real.shape)
 
-pca = PCA(n_components=0.999).fit(extracted_features_all)
+pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features_all)
 extracted_features_all = pca.transform(extracted_features_all)
 extracted_features_real = pca.transform(extracted_features_real)
 
@@ -157,5 +157,5 @@ axs.legend(handles_filtered, labels_filtered)
 axs.set_xlim(-90, 90)
 axs.set_ylim(-90, 90)
 
-plt.savefig("Variational Eagle/Plots/tsne_pca_morphology_new_3", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows), bbox_inches="tight")
 plt.show()
