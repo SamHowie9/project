@@ -397,7 +397,7 @@ pca_reconstructions_top = vae.decoder.predict(pca_features_top)
 
 original_images = train_images[reconstruction_indices]
 
-fig, axs = plt.subplots(4, n, figsize=(n*5, 20))
+fig, axs = plt.subplots(4, n, figsize=(n*10, 40))
 
 for i in range(0, n):
 
@@ -405,17 +405,17 @@ for i in range(0, n):
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[0][i].imshow(reconstructions[i])
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[1][i].imshow(reconstructions[i])
+    axs[1][i].set_aspect("auto")
+    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[0][i].imshow(pca_reconstructions[i])
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[2][i].imshow(pca_reconstructions[i])
+    axs[2][i].set_aspect("auto")
+    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[0][i].imshow(pca_reconstructions_top[i])
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[3][i].imshow(pca_reconstructions_top[i])
+    axs[3][i].set_aspect("auto")
+    axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/latent_vs_pca_vs_top", bbox_inches="tight")
 plt.show()
@@ -471,7 +471,7 @@ reconstructions_flows = vae.decoder.predict(extracted_features)
 # number of images to reconstruct
 n = 12
 
-fig, axs = plt.subplots(3, n, figsize=(n*5, 15))
+fig, axs = plt.subplots(3, n, figsize=(n*10, 30))
 
 for i in range(0, n):
 
@@ -479,13 +479,13 @@ for i in range(0, n):
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[0][i].imshow(reconstructions_normal[i])
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[1][i].imshow(reconstructions_normal[i])
+    axs[1][i].set_aspect("auto")
+    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[0][i].imshow(reconstructions_flows[i])
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[2][i].imshow(reconstructions_flows[i])
+    axs[2][i].set_aspect("auto")
+    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/flows_vs_normal", bbox_inches="tight")
 plt.show()
