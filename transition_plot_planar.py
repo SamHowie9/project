@@ -162,10 +162,10 @@ class Sampling(Layer):
         # perform reparameterization trick
         z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
-        # z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
+        # initialise as a tensor of batch size shape (same shape as first latent feature)
+        sum_log_det_jacobian = tf.zeros_like(z_mean[:, 0])
 
         # apply flow transformations
-        sum_log_det_jacobian = 0.0
         for flow in self.flows:
             z, log_det = flow(z)
             sum_log_det_jacobian += log_det
@@ -302,9 +302,9 @@ z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow B
 
 
 # perform PCA on both sets of features
-pca_mean = PCA(n_components=0.999).fit(z_mean)
+pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
 z_mean = pca_mean.transform(z_mean)
-pca_transformed = PCA(n_components=0.999).fit(z_transformed)
+pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
 z_transformed = pca_transformed.transform(z_transformed)
 
 

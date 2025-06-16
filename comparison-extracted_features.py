@@ -167,7 +167,7 @@ for run in [1, 2, 3]:
     # extracted_features = extracted_features[:len(all_properties)]
 
     # perform pca on the extracted features
-    pca = PCA(n_components=0.999).fit(extracted_features)
+    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
     extracted_features = pca.transform(extracted_features)
     # extracted_features = extracted_features[:len(all_properties)]
 
