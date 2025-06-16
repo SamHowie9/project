@@ -15,16 +15,16 @@ from sklearn.decomposition import PCA
 
 
 
-run = 3
+run = 2
 encoding_dim = 30
-n_flows = 3
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
 batch_size = 32
 
 
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="9"
 
 
 

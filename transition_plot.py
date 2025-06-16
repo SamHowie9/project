@@ -229,7 +229,7 @@ vae.load_weights("Variational Eagle/Weights/Final/bce_latent_" + str(encoding_di
 
 # load the extracted features
 # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
-extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
+# extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_" + str(run) + ".npy")[0]
 encoding_dim = extracted_features.shape[1]
 extracted_features_switch = extracted_features.T
 
@@ -417,7 +417,7 @@ fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/pca_top_4_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_top_4_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
 plt.show()
 
 
@@ -472,7 +472,7 @@ fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/pca_latent_" + str(encoding_dim) + "_flows_0_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_0_" + str(run), bbox_inches='tight')
 plt.show()
 
 
