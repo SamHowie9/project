@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 1
-encoding_dim = 31
+encoding_dim = 20
 n_flows = 3
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -46,8 +46,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="9"
 # for n_flows in [1, 2, 3]:
 # for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+1, 1], [encoding_dim+1, 2], [encoding_dim+1, 3]]:
 # for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4, encoding_dim+5]:
-# for encoding_dim in range(encoding_dim, encoding_dim+6):
-for encoding_dim in range(encoding_dim, encoding_dim+5):
+for encoding_dim in range(encoding_dim, encoding_dim+6):
+# for encoding_dim in range(encoding_dim, encoding_dim+5):
 # for encoding_dim in [encoding_dim]:
 
     print("\n \n")
@@ -879,6 +879,7 @@ for encoding_dim in range(encoding_dim, encoding_dim+5):
 
     plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
+    plt.close()
 
 
     if n_flows > 0:
@@ -907,6 +908,7 @@ for encoding_dim in range(encoding_dim, encoding_dim+5):
 
         plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
         plt.show()
+        plt.close()
 
 
 
@@ -1057,7 +1059,7 @@ for encoding_dim in range(encoding_dim, encoding_dim+5):
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
     plt.savefig("Variational Eagle/Loss Plots/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run))
     plt.show()
-
+    plt.close()
 
 
 
