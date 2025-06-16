@@ -14,7 +14,7 @@ import random
 
 
 
-run = 3
+run = 2
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -417,7 +417,7 @@ fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/pca_top_4_latent_" + str(encoding_dim) + "_flows_0_" + str(run), bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Fully Balanced/pca_top_4_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
 plt.show()
 
 

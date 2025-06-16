@@ -135,9 +135,9 @@ axs[2].set_xlabel("Latent Features")
 
 
 
-for n_flows in [0, 3]:
+for n_flows in [0]:
 
-    for run in [1]:
+    for run in [1, 2, 3]:
 
         total_loss_all = []
         reconstruction_loss_all = []

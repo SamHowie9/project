@@ -17,10 +17,6 @@ from matplotlib import cm
 from matplotlib.colors import Normalize
 from scipy.interpolate import interpn
 from scipy.stats import gaussian_kde
-
-
-
-
 plt.style.use("default")
 
 
@@ -30,7 +26,7 @@ pd.set_option('display.width', None)
 
 
 
-run = 1
+run = 2
 encoding_dim = 30
 n_flows = 3
 beta = 0.0001
@@ -42,29 +38,39 @@ batch_size = 32
 
 
 
+all_properties_real = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+all_properties_balanced = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+
+# print(all_properties)
+# print(all_properties_balanced)
+
+all_properties = all_properties_balanced
 
 
 
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
-# load the non parametric properties (restructure the dataframe to match the others)
-non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
-non_parametric_properties = non_parametric_properties.reset_index()
-non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
 
-# load the disk-total ratios
-disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
-
-print(disk_total)
-
-# add the non parametric properties, and the disk-total to the other properties dataframe
-all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
-all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+# # load the non parametric properties (restructure the dataframe to match the others)
+# non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+# non_parametric_properties = non_parametric_properties.reset_index()
+# non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+#
+# # load the disk-total ratios
+# disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
+#
+# print(disk_total)
+#
+# # add the non parametric properties, and the disk-total to the other properties dataframe
+# all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
+# all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 
 # # find all bad fit galaxies
@@ -105,13 +111,11 @@ all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 # extracted_features = np.load("Variational Eagle/Extracted Features/Original/" + str(encoding_dim) + "_feature_300_epoch_features_" + str(run) + ".npy")[0]
 # # extracted_features = np.load("Variational Eagle/Extracted Features/PCA/pca_features_" + str(encoding_dim) + "_features.npy")
 # encoding_dim = extracted_features.shape[1]
-# extracted_features_switch = extracted_features.T
 #
 #
 # # perform pca on the extracted features
 # pca = PCA(n_components=13).fit(extracted_features)
 # extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
 #
 #
 # # account for the training data in the dataframe
@@ -145,6 +149,7 @@ all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 # for n_flows in [n_flows]:
 for run in [1, 2, 3]:
+# for run in [run]:
 
     print(n_flows, run)
 
@@ -155,19 +160,16 @@ for run in [1, 2, 3]:
     # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
     extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
     encoding_dim = extracted_features.shape[1]
-    extracted_features_switch = extracted_features.T
 
     print(extracted_features.shape)
 
     # remove augmented images
-    extracted_features = extracted_features[:len(all_properties)]
-    extracted_features_switch = extracted_features.T
+    # extracted_features = extracted_features[:len(all_properties)]
 
     # perform pca on the extracted features
-    pca = PCA(n_components=4).fit(extracted_features)
+    pca = PCA(n_components=0.999).fit(extracted_features)
     extracted_features = pca.transform(extracted_features)
-    extracted_features = extracted_features[:len(all_properties)]
-    extracted_features_switch = extracted_features.T
+    # extracted_features = extracted_features[:len(all_properties)]
 
 
 
@@ -189,70 +191,38 @@ for run in [1, 2, 3]:
 
 
 
+
     # spirals only
-
-    # # take only the sprial galaxies
-    # all_properties = all_properties[all_properties["n_r"] <= 2.5]
-    #
-    # # account for the training data in the dataframe
-    # all_properties = all_properties.iloc[:-200]
-    #
-    # for encoding_dim in range(5, 20):
-    #     for run in [1, 2, 3]:
-    #
-    #         # load the extracted features
-    #         # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
-    #         extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-    #         encoding_dim = extracted_features.shape[1]
-    #         extracted_features_switch = extracted_features.T
-    #
-    #         # perform pca on the extracted features
-    #         pca = PCA(n_components=5).fit(extracted_features)
-    #         extracted_features = pca.transform(extracted_features)
-    #         extracted_features_switch = extracted_features.T
-
-
-
-
-
-
+    # spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
+    # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
 
 
 
     # ellipticals only
+    # spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+    # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
 
-    # # for encoding_dim in range(5, 21):
-    # for encoding_dim in [10]:
-    #
-    #     # take only the sprial galaxies
-    #     all_properties = all_properties[all_properties["n_r"] >= 4]
-    #
-    #     # account for the training data in the dataframe
-    #     all_properties = all_properties.iloc[:-12]
-    #
-    #     # for encoding_dim in range(5, 25):
-    #     #     for run in [1, 2, 3]:
-    #
-    #     # load the extracted features
-    #     # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_features_" + str(run) + ".npy")[0]
-    #     extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-    #     encoding_dim = extracted_features.shape[1]
-    #     extracted_features_switch = extracted_features.T
-    #
-    #     # perform pca on the extracted features
-    #     pca = PCA(n_components=5).fit(extracted_features)
-    #     extracted_features = pca.transform(extracted_features)
-    #     extracted_features_switch = extracted_features.T
-    #
-    #
-    #     print(extracted_features.shape)
+
+    # transitional
+    # spiral_indices = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")].index.tolist()
+    # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
+
+
+    # original images
+    # all_properties = all_properties_real
+    # extracted_features = extracted_features[:len(all_properties)]
 
 
 
+    print(extracted_features.shape)
 
-
-
-
+    print(all_properties)
 
 
     # correlation plot
@@ -337,7 +307,7 @@ for run in [1, 2, 3]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/top_4_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
     plt.show()
 
 
