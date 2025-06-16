@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 
-run = 1
+run = 2
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -440,7 +440,7 @@ original_images = train_images[reconstruction_indices]
 
 
 # normal model reconstructions
-flows = 0
+n_flows = 0
 
 # load the weights
 vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
@@ -455,7 +455,7 @@ reconstructions_normal = vae.decoder.predict(extracted_features)
 
 
 # flow model reconstructions
-flows = 3
+n_flows = 3
 
 # load the weights
 vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")

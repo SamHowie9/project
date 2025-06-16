@@ -28,7 +28,7 @@ pd.set_option('display.width', None)
 
 run = 2
 encoding_dim = 30
-n_flows = 3
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
@@ -148,8 +148,8 @@ all_properties = all_properties_balanced
 
 
 # for n_flows in [n_flows]:
-for run in [1, 2, 3]:
-# for run in [run]:
+# for run in [1, 2, 3]:
+for run in [run]:
 
     print(n_flows, run)
 
