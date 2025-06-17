@@ -24,7 +24,7 @@ tfd = tfp.distributions
 
 
 
-run = 4
+run = 1
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="7"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -48,8 +48,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="7"
 # for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4, encoding_dim+5]:
 # for encoding_dim in range(encoding_dim, encoding_dim+6):
 # for encoding_dim in range(encoding_dim, encoding_dim+5):
-for encoding_dim in [24, 25, 28, 29]:
-# for encoding_dim in [encoding_dim]:
+# for encoding_dim in [24, 25, 28, 29]:
+for encoding_dim in [encoding_dim]:
 
     print("\n \n")
     print("Encoding Dim", encoding_dim)
@@ -130,16 +130,17 @@ for encoding_dim in [24, 25, 28, 29]:
 
     # load the images as a balanced dataset (D/T)
 
-    # load structural and physical properties into dataframes
-    structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-    physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+    # # load structural and physical properties into dataframes
+    # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+    # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+    #
+    # # dataframe for all properties
+    # all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+    #
+    # # get a list of all the ids of the galaxies
+    # chosen_galaxies = list(all_properties["GalaxyID"])
 
-    # dataframe for all properties
-    all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-    # get a list of all the ids of the galaxies
-    chosen_galaxies = list(all_properties["GalaxyID"])
-
+    chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies.npy")
 
     # list to contain all galaxy images
     all_images = []
