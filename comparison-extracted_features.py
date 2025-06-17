@@ -46,6 +46,9 @@ all_properties_balanced = pd.read_csv("Galaxy Properties/Eagle Properties/all_pr
 
 all_properties = all_properties_balanced
 
+print(all_properties_real[all_properties_real["DiscToTotal"] < 0].shape)
+print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
+
 
 
 

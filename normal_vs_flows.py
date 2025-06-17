@@ -135,9 +135,9 @@ axs[2].set_xlabel("Latent Features")
 
 
 
-for n_flows in [0]:
+for n_flows in [0, 3]:
 
-    for run in [1, 2, 3]:
+    for run in [1]:
 
         total_loss_all = []
         reconstruction_loss_all = []
@@ -145,7 +145,7 @@ for n_flows in [0]:
 
         loss_all = pd.DataFrame(columns=["feature", "total_loss", "reconstruction_loss", "kl_loss"])
 
-        for encoding_dim in range(10, 51):
+        for encoding_dim in range(1, 51):
         # for encoding_dim in [30]:
 
             try:
@@ -158,9 +158,13 @@ for n_flows in [0]:
         # axs[1].plot(loss_all["feature"], loss_all["reconstruction_loss"], label="No Flows (New)", c="black")
         # axs[2].plot(loss_all["feature"], loss_all["kl_loss"], label="No Flows (New)", c="black")
 
-        axs[0].scatter(loss_all["feature"], loss_all["total_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
-        axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
-        axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
+        # axs[0].scatter(loss_all["feature"], loss_all["total_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
+        # axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
+        # axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
+
+        axs[0].scatter(loss_all["feature"], loss_all["total_loss"], label=str(n_flows)+" Flows")
+        axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], label=str(n_flows)+" Flows")
+        axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], label=str(n_flows)+" Flows")
 
         print(loss_all)
 
@@ -169,7 +173,8 @@ axs[1].legend()
 axs[2].legend()
 
 
-
+plt.savefig("Variational Eagle/Plots/normal_vs_flows_loss", bbox_inches='tight')
+plt.show()
 
 
 # total_loss_flow_1 = []
@@ -249,7 +254,7 @@ axs[2].legend()
 # axs[1].set_ylim(0.209, 0.2125)
 # axs[2].set_ylim(0.55, 2.5)
 
-plt.savefig("Variational Eagle/Plots/feature_loss", bbox_inches='tight')
-plt.show()
+# plt.savefig("Variational Eagle/Plots/feature_loss", bbox_inches='tight')
+# plt.show()
 
 

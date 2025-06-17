@@ -1,3 +1,5 @@
+from xml.sax.handler import all_properties
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -6,13 +8,11 @@ from sklearn.manifold import TSNE
 # from umap import UMAP
 import seaborn as sns
 
-
-
-
+from properties import all_properties_balanced
 
 run = 2
 encoding_dim = 30
-n_flows = 3
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
@@ -23,24 +23,24 @@ batch_size = 32
 
 
 # load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-# load the non parametric properties (restructure the dataframe to match the others)
-non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
-non_parametric_properties = non_parametric_properties.reset_index()
-non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
-
-# load the disk-total ratios
-disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
-
-
-# add the non parametric properties, and the disk-total to the other properties dataframe
-all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
-all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+# # load the non parametric properties (restructure the dataframe to match the others)
+# non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+# non_parametric_properties = non_parametric_properties.reset_index()
+# non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+#
+# # load the disk-total ratios
+# disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
+#
+#
+# # add the non parametric properties, and the disk-total to the other properties dataframe
+# all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
+# all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 # find all bad fit galaxies
 # bad_fit = all_properties[((all_properties["flag_r"] == 1) |
@@ -60,6 +60,10 @@ all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 
 
+all_properties_real = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+all_properties_balanced = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+
+all_properties = all_properties_balanced
 
 
 
@@ -115,10 +119,10 @@ print(morphology)
 #     morphology.append("Augmented")
 
 
-for i in range(2394):
-    morphology.append("Elliptical")
-for i in range(2552):
-    morphology.append("Transitional")
+# for i in range(2394):
+#     morphology.append("Elliptical")
+# for i in range(2552):
+#     morphology.append("Transitional")
 
 
 print(len(morphology))
@@ -135,27 +139,33 @@ print(tsne.shape)
 
 fig, axs = plt.subplots(1, 1, figsize=(10, 10))
 
-palette = ["C0", "C1", "#D3D3D3"]
 
-size_map = {"Spiral": 20, "Elliptical": 20, "Transitional": 10}
-sizes = [size_map[m] for m in morphology]
+# palette = ["C0", "C1", "#D3D3D3"]
+#
+# size_map = {"Spiral": 20, "Elliptical": 20, "Transitional": 10}
+# sizes = [size_map[m] for m in morphology]
+#
+# alpha_map = {"Spiral": 1.0, "Transitional": 0.3, "Elliptical": 1.0}
+# alpha = [alpha_map[m] for m in morphology]
+#
+# # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, linewidth=0, s=20)
+# # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette="colorblind", linewidth=0, s=20)
+# # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, s=20)
+# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, size=sizes, sizes=(10, 20), legend="brief")
+#
+# handles, labels = axs.get_legend_handles_labels()
+# filtered = [(h, l) for h, l in zip(handles, labels) if not l.isdigit()]
+# handles_filtered, labels_filtered = zip(*filtered)
+# axs.legend(handles_filtered, labels_filtered)
 
-alpha_map = {"Spiral": 1.0, "Transitional": 0.3, "Elliptical": 1.0}
-alpha = [alpha_map[m] for m in morphology]
+sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=all_properties["DiscToTotal"], linewidth=0, size=20)
 
-# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, linewidth=0, s=20)
-# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette="colorblind", linewidth=0, s=20)
-# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, s=20)
-sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, size=sizes, sizes=(10, 20), legend="brief")
+# plt.colorbar()
 
-handles, labels = axs.get_legend_handles_labels()
-filtered = [(h, l) for h, l in zip(handles, labels) if not l.isdigit()]
-handles_filtered, labels_filtered = zip(*filtered)
-axs.legend(handles_filtered, labels_filtered)
 
 
 axs.set_xlim(-90, 90)
 axs.set_ylim(-90, 90)
 
-plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows), bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run) + "_colourbar", bbox_inches="tight")
 plt.show()

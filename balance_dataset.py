@@ -1,3 +1,5 @@
+from xml.sax.handler import all_properties
+
 import pandas as pd
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -23,18 +25,18 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-# load the disk-total ratios
-disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
-
-# add the disk-total ratios to the other properties
-all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
+# # load structural and physical properties into dataframes
+# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+#
+# # dataframe for all properties
+# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+#
+# # load the disk-total ratios
+# disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
+#
+# # add the disk-total ratios to the other properties
+# all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 
 # # load the non-parametric properties (restructure the dataframe to match the others)
@@ -49,27 +51,21 @@ all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
 
 
 
-# print(all_properties[all_properties["flag_r"] == 5])
-# print()
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 
-# print(all_properties)
-#
-# print(len(all_properties[all_properties["flag"] == 1]))
-# print(len(all_properties[all_properties["flag_sersic"] == 1]))
-#
-# print(len(all_properties[(all_properties["flag"] == 1) & (all_properties["flag_sersic"] == 1)]))
+
 
 
 
 spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
-unknown = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")])
+transitional = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")])
 ellipticals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] < 0.1])
 
 
 print(len(all_properties))
 
 print(len(spirals), "-", len(spirals)/len(all_properties))
-print(len(unknown), "-", len(unknown)/len(all_properties))
+print(len(transitional), "-", len(transitional)/len(all_properties))
 print(len(ellipticals), "-", len(ellipticals)/len(all_properties))
 print()
 
@@ -149,7 +145,7 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 # augment the transitional images
 
-# for galaxy in unknown:
+# for galaxy in transitional:
 #
 #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
 #     image = image.reshape(1, 256, 256, 3)
@@ -165,16 +161,16 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 # augment the elliptical images
 
-# for galaxy in ellipticals:
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i >= 20:
-#             break
+for galaxy in ellipticals:
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i >= 8:
+            break
 
 
 
@@ -185,9 +181,9 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 
 # check the number of augmented images
-augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Only/")
-augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
-augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/")
+augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals All/")
+augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
+augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
 
 print()
 print(len(augmented_spirals)+len(spirals))
@@ -203,7 +199,7 @@ for galaxy in spirals:
     if count < 2:
         print(galaxy, count)
 
-for galaxy in unknown:
+for galaxy in transitional:
     count = 0
     for file in augmented_transitional:
         if file.startswith(str(galaxy)):
