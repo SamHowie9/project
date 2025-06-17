@@ -191,21 +191,21 @@ print(len(augmented_transitional)+len(unknown))
 print(len(augmented_ellipticals)+len(ellipticals))
 print()
 
-for galaxy in spirals:
-    count = 0
-    for file in augmented_spirals:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count < 2:
-        print(galaxy, count)
+# for galaxy in spirals:
+#     count = 0
+#     for file in augmented_spirals:
+#         if file.startswith(str(galaxy)):
+#             count += 1
+#     if count < 2:
+#         print(galaxy, count)
 
-for galaxy in transitional:
-    count = 0
-    for file in augmented_transitional:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count < 26:
-        print(galaxy, count)
+# for galaxy in transitional:
+#     count = 0
+#     for file in augmented_transitional:
+#         if file.startswith(str(galaxy)):
+#             count += 1
+#     if count < 8:
+#         print(galaxy, count)
 
 
 for galaxy in ellipticals:
@@ -213,7 +213,7 @@ for galaxy in ellipticals:
     for file in augmented_ellipticals:
         if file.startswith(str(galaxy)):
             count += 1
-    if count < 20:
+    if count < 8:
         print(galaxy, count)
 
 
