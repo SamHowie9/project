@@ -181,7 +181,7 @@ for galaxy in ellipticals:
 
 
 # check the number of augmented images
-augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals All/")
+# augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Only/")
 augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
 augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
 
@@ -199,13 +199,13 @@ print()
 #     if count < 2:
 #         print(galaxy, count)
 
-# for galaxy in transitional:
-#     count = 0
-#     for file in augmented_transitional:
-#         if file.startswith(str(galaxy)):
-#             count += 1
-#     if count < 8:
-#         print(galaxy, count)
+for galaxy in transitional:
+    count = 0
+    for file in augmented_transitional:
+        if file.startswith(str(galaxy)):
+            count += 1
+    if count < 8:
+        print(galaxy, count)
 
 
 for galaxy in ellipticals:
