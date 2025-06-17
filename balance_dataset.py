@@ -145,32 +145,32 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 # augment the transitional images
 
-# for galaxy in transitional:
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i >= 8:
-#             break
-# print("...")
-#
-#
-#
-# # augment the elliptical images
-#
-# for galaxy in ellipticals:
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i >= 8:
-#             break
+for galaxy in transitional:
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i >= 8:
+            break
+print("...")
+
+
+
+# augment the elliptical images
+
+for galaxy in ellipticals:
+
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i >= 8:
+            break
 
 
 
@@ -187,7 +187,7 @@ augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle 
 
 print()
 # print(len(augmented_spirals)+len(spirals))
-print(len(augmented_transitional)+len(augmented_transitional))
+print(len(augmented_transitional)+len(transitional))
 print(len(augmented_ellipticals)+len(ellipticals))
 print()
 
