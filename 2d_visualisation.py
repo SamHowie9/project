@@ -1,6 +1,5 @@
-from xml.sax.handler import all_properties
-
 import matplotlib.pyplot as plt
+from matplotlib.colors import TwoSlopeNorm
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
@@ -8,7 +7,6 @@ from sklearn.manifold import TSNE
 # from umap import UMAP
 import seaborn as sns
 
-from properties import all_properties_balanced
 
 run = 2
 encoding_dim = 30
@@ -137,9 +135,9 @@ tsne = TSNE(n_components=2, random_state=0).fit_transform(extracted_features_all
 
 print(tsne.shape)
 
-fig, axs = plt.subplots(1, 1, figsize=(10, 10))
-
-
+# fig, axs = plt.subplots(1, 1, figsize=(10, 10))
+#
+#
 # palette = ["C0", "C1", "#D3D3D3"]
 #
 # size_map = {"Spiral": 20, "Elliptical": 20, "Transitional": 10}
@@ -157,15 +155,33 @@ fig, axs = plt.subplots(1, 1, figsize=(10, 10))
 # filtered = [(h, l) for h, l in zip(handles, labels) if not l.isdigit()]
 # handles_filtered, labels_filtered = zip(*filtered)
 # axs.legend(handles_filtered, labels_filtered)
+#
+# axs.set_xlim(-95, 95)
+# axs.set_ylim(-95, 95)
+#
+# plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run), bbox_inches="tight")
+# plt.show()
 
-sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=all_properties["DiscToTotal"], linewidth=0, size=20)
-
-# plt.colorbar()
 
 
 
-axs.set_xlim(-90, 90)
-axs.set_ylim(-90, 90)
+fig, axs = plt.subplots(1, 1, figsize=(12, 10))
 
-plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run) + "_colourbar", bbox_inches="tight")
+
+# norm = TwoSlopeNorm(vmin=all_properties["DiscToTotal"].min(), vcenter=0.15, vmax=all_properties["DiscToTotal"].max())
+norm = TwoSlopeNorm(vmin=0, vcenter=0.15, vmax=1)
+
+# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, c=all_properties["DiscToTotal"], cmap="jet", linewidth=0, size=20)
+# tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="Blues", s=10)
+tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="bwr", norm=norm, s=10)
+
+cbar = plt.colorbar(tsne_scatter, ax=axs, label="Disk-Total Ratio")
+cbar.ax.yaxis.set_label_position('left')
+
+
+
+axs.set_xlim(-95, 95)
+axs.set_ylim(-95, 95)
+
+plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run) + "_colourbar_6", bbox_inches="tight")
 plt.show()
