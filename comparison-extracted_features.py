@@ -152,7 +152,7 @@ print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
 
 # for n_flows in [n_flows]:
 # for run in [1, 2, 3]:
-for run in [run]:
+for run in [1, 2, 3]:
 
     print(n_flows, run)
 
