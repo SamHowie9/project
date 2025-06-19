@@ -54,16 +54,7 @@ def normalise_independently(image):
 
 # load the images as a balanced dataset (D/T)
 
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-# get a list of all the ids of the galaxies
-chosen_galaxies = list(all_properties["GalaxyID"])
-
+chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies.npy")
 
 # list to contain all galaxy images
 all_images = []
@@ -455,7 +446,7 @@ for i in range(0, len(reconstruction_indices)):
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    for j in range(10, 0, -1):
+    for j, feat in enumerate(range(10, 0, -1)):
 
         pca = PCA(n_components=j, svd_solver="full").fit(extracted_features)
 
@@ -468,7 +459,7 @@ for i in range(0, len(reconstruction_indices)):
         axs[j][i].set_aspect("auto")
         axs[j][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features")
+plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features", bbox_inches="tight")
 plt.show()
 plt.close()
 
