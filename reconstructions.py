@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 
-run = 2
+run = 3
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -371,33 +371,78 @@ vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 
-pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-pca_top = PCA(n_components=4, svd_solver="full").fit(extracted_features)
+
+
+
+# pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+# pca_top = PCA(n_components=4, svd_solver="full").fit(extracted_features)
+#
+#
+# # number of images to reconstruct
+# n = 12
+#
+#
+# # get the images to reconstruct
+# random.seed(5)
+# reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+# extracted_features = extracted_features[reconstruction_indices]
+#
+#
+# pca_features = pca.transform(extracted_features)
+# pca_features = pca.inverse_transform(pca_features)
+#
+# pca_features_top = pca_top.transform(extracted_features)
+# pca_features_top = pca_top.inverse_transform(pca_features_top)
+#
+# reconstructions = vae.decoder.predict(extracted_features)
+# pca_reconstructions = vae.decoder.predict(pca_features)
+# pca_reconstructions_top = vae.decoder.predict(pca_features_top)
+#
+# original_images = train_images[reconstruction_indices]
+#
+# fig, axs = plt.subplots(4, n, figsize=(n*10, 40))
+#
+# for i in range(0, n):
+#
+#     axs[0][i].imshow(original_images[i])
+#     axs[0][i].set_aspect("auto")
+#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     axs[1][i].imshow(reconstructions[i])
+#     axs[1][i].set_aspect("auto")
+#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     axs[2][i].imshow(pca_reconstructions[i])
+#     axs[2][i].set_aspect("auto")
+#     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     axs[3][i].imshow(pca_reconstructions_top[i])
+#     axs[3][i].set_aspect("auto")
+#     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/latent_vs_pca_vs_top", bbox_inches="tight")
+# plt.show()
+
+
+
+
+
+
+
 
 
 # number of images to reconstruct
 n = 12
 
-
 # get the images to reconstruct
 random.seed(5)
 reconstruction_indices = random.sample(range(train_images.shape[0]), n)
-extracted_features = extracted_features[reconstruction_indices]
-
-
-pca_features = pca.transform(extracted_features)
-pca_features = pca.inverse_transform(pca_features)
-
-pca_features_top = pca_top.transform(extracted_features)
-pca_features_top = pca_top.inverse_transform(pca_features_top)
-
-reconstructions = vae.decoder.predict(extracted_features)
-pca_reconstructions = vae.decoder.predict(pca_features)
-pca_reconstructions_top = vae.decoder.predict(pca_features_top)
+extracted_features_reconstruct = extracted_features[reconstruction_indices]
 
 original_images = train_images[reconstruction_indices]
 
-fig, axs = plt.subplots(4, n, figsize=(n*10, 40))
+
+fig, axs = plt.subplots(11, n)
 
 for i in range(0, n):
 
@@ -405,22 +450,22 @@ for i in range(0, n):
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[1][i].imshow(reconstructions[i])
-    axs[1][i].set_aspect("auto")
-    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    for j in range(10, 1, -1):
 
-    axs[2][i].imshow(pca_reconstructions[i])
-    axs[2][i].set_aspect("auto")
-    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        pca = PCA(n_components=4, svd_solver="full").fit(extracted_features)
 
-    axs[3][i].imshow(pca_reconstructions_top[i])
-    axs[3][i].set_aspect("auto")
-    axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        pca_features = pca.transform(extracted_features_reconstruct[j])
+        pca_features = pca.inverse_transform(pca_features)
 
-plt.savefig("Variational Eagle/Plots/latent_vs_pca_vs_top", bbox_inches="tight")
+        pca_reconstruction = vae.decoder.predict(pca_features)
+
+        axs[j+1][i].imshow(pca_reconstruction)
+        axs[j+1][i].set_aspect("auto")
+        axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features")
 plt.show()
-
-
+plt.close()
 
 
 
@@ -430,65 +475,65 @@ plt.show()
 
 # flows vs normal reconstruction
 
-# get the images to reconstruct
-random.seed(5)
-reconstruction_indices = random.sample(range(train_images.shape[0]), n)
-
-# original images
-original_images = train_images[reconstruction_indices]
-
-
-
-# normal model reconstructions
-n_flows = 0
-
-# load the weights
-vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
-
-# get the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-extracted_features = extracted_features[reconstruction_indices]
-
-# reconstruct the images
-reconstructions_normal = vae.decoder.predict(extracted_features)
-
-
-
-# flow model reconstructions
-n_flows = 3
-
-# load the weights
-vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
-
-# get the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-extracted_features = extracted_features[reconstruction_indices]
-
-# reconstruct the images
-reconstructions_flows = vae.decoder.predict(extracted_features)
-
-
-# number of images to reconstruct
-n = 12
-
-fig, axs = plt.subplots(3, n, figsize=(n*10, 30))
-
-for i in range(0, n):
-
-    axs[0][i].imshow(original_images[i])
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-    axs[1][i].imshow(reconstructions_normal[i])
-    axs[1][i].set_aspect("auto")
-    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-    axs[2][i].imshow(reconstructions_flows[i])
-    axs[2][i].set_aspect("auto")
-    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/flows_vs_normal", bbox_inches="tight")
-plt.show()
+# # get the images to reconstruct
+# random.seed(5)
+# reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+#
+# # original images
+# original_images = train_images[reconstruction_indices]
+#
+#
+#
+# # normal model reconstructions
+# n_flows = 0
+#
+# # load the weights
+# vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+#
+# # get the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+# extracted_features = extracted_features[reconstruction_indices]
+#
+# # reconstruct the images
+# reconstructions_normal = vae.decoder.predict(extracted_features)
+#
+#
+#
+# # flow model reconstructions
+# n_flows = 3
+#
+# # load the weights
+# vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+#
+# # get the extracted features
+# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+# extracted_features = extracted_features[reconstruction_indices]
+#
+# # reconstruct the images
+# reconstructions_flows = vae.decoder.predict(extracted_features)
+#
+#
+# # number of images to reconstruct
+# n = 12
+#
+# fig, axs = plt.subplots(3, n, figsize=(n*10, 30))
+#
+# for i in range(0, n):
+#
+#     axs[0][i].imshow(original_images[i])
+#     axs[0][i].set_aspect("auto")
+#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     axs[1][i].imshow(reconstructions_normal[i])
+#     axs[1][i].set_aspect("auto")
+#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     axs[2][i].imshow(reconstructions_flows[i])
+#     axs[2][i].set_aspect("auto")
+#     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/flows_vs_normal", bbox_inches="tight")
+# plt.show()
 
 
 

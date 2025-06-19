@@ -13,10 +13,5 @@ import random
 
 
 
-A = list(range(1, 751))
-print(A)
-print(len(A))
-
-A = A[:10]
-print(A)
-print(len(A))
+for i in range(10, 0, -1):
+    print(i)

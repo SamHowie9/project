@@ -38,15 +38,19 @@ for run in [1, 2, 3, 4, 5]:
     print(len(extracted_features))
 
     pca = PCA(n_components=encoding_dim, svd_solver="full").fit(extracted_features)
-    axs[0].plot(range(1, encoding_dim+1), pca.explained_variance_ratio_, label="Run "+str(run))
-    axs[1].plot(range(1, 16), pca.explained_variance_ratio_[:15], label="Run "+str(run))
+    axs[0].plot(range(1, encoding_dim+1), (pca.explained_variance_ratio_)*100, label="Run "+str(run))
+    axs[1].plot(range(1, 16), (pca.explained_variance_ratio_[:15])*100, label="Run "+str(run))
     print(pca.explained_variance_ratio_)
     print(pca.explained_variance_ratio_.shape)
 
 
-plt.ylabel("Variance Explained")
-plt.xlabel("Principal Components")
-axs[0].set_xticks(range(1, encoding_dim+1))
+axs[0].set_ylabel("Variance Explained (%)")
+axs[0].set_xlabel("Principal Components")
+
+axs[1].set_ylabel("Variance Explained (%)")
+axs[1].set_xlabel("Principal Components")
+
+# axs[0].set_xticks(range(1, encoding_dim+1))
 axs[1].set_xticks(range(1, 16))
 
 axs[0].legend()
