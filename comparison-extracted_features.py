@@ -25,6 +25,9 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
+np.set_printoptions(linewidth=np.inf)
+
+
 
 run = 2
 encoding_dim = 30
@@ -152,7 +155,7 @@ print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
 
 # for n_flows in [n_flows]:
 # for run in [1, 2, 3]:
-for run in [1, 2, 3]:
+for run in [1, 2, 3, 4, 5]:
 
     print(n_flows, run)
 
@@ -164,7 +167,7 @@ for run in [1, 2, 3]:
     extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
     encoding_dim = extracted_features.shape[1]
 
-    print(extracted_features.shape)
+    # print(extracted_features.shape)
 
     # remove augmented images
     # extracted_features = extracted_features[:len(all_properties)]
@@ -173,6 +176,8 @@ for run in [1, 2, 3]:
     pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
     extracted_features = pca.transform(extracted_features)
     # extracted_features = extracted_features[:len(all_properties)]
+
+    print(pca.explained_variance_ratio_)
 
 
 
@@ -223,9 +228,9 @@ for run in [1, 2, 3]:
 
 
 
-    print(extracted_features.shape)
-
-    print(all_properties)
+    # print(extracted_features.shape)
+    #
+    # print(all_properties)
 
 
     # correlation plot
@@ -263,7 +268,7 @@ for run in [1, 2, 3]:
 
 
 
-    print(correlation_df)
+    # print(correlation_df)
 
     # correlation_df = correlation_df.iloc[[12, 21, 27]]
 

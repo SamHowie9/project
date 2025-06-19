@@ -8,7 +8,7 @@ from sklearn.manifold import TSNE
 import seaborn as sns
 
 
-run = 2
+run = 3
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -135,32 +135,32 @@ tsne = TSNE(n_components=2, random_state=0).fit_transform(extracted_features_all
 
 print(tsne.shape)
 
-# fig, axs = plt.subplots(1, 1, figsize=(10, 10))
-#
-#
-# palette = ["C0", "C1", "#D3D3D3"]
-#
-# size_map = {"Spiral": 20, "Elliptical": 20, "Transitional": 10}
-# sizes = [size_map[m] for m in morphology]
-#
-# alpha_map = {"Spiral": 1.0, "Transitional": 0.3, "Elliptical": 1.0}
-# alpha = [alpha_map[m] for m in morphology]
-#
-# # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, linewidth=0, s=20)
-# # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette="colorblind", linewidth=0, s=20)
-# # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, s=20)
-# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, size=sizes, sizes=(10, 20), legend="brief")
-#
-# handles, labels = axs.get_legend_handles_labels()
-# filtered = [(h, l) for h, l in zip(handles, labels) if not l.isdigit()]
-# handles_filtered, labels_filtered = zip(*filtered)
-# axs.legend(handles_filtered, labels_filtered)
-#
+fig, axs = plt.subplots(1, 1, figsize=(10, 10))
+
+
+palette = ["C0", "C1", "#D3D3D3"]
+
+size_map = {"Spiral": 20, "Elliptical": 20, "Transitional": 10}
+sizes = [size_map[m] for m in morphology]
+
+alpha_map = {"Spiral": 1.0, "Transitional": 0.3, "Elliptical": 1.0}
+alpha = [alpha_map[m] for m in morphology]
+
+# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, linewidth=0, s=20)
+# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette="colorblind", linewidth=0, s=20)
+# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, s=20)
+sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, hue=morphology, palette=palette, linewidth=0, size=sizes, sizes=(10, 20), legend="brief")
+
+handles, labels = axs.get_legend_handles_labels()
+filtered = [(h, l) for h, l in zip(handles, labels) if not l.isdigit()]
+handles_filtered, labels_filtered = zip(*filtered)
+axs.legend(handles_filtered, labels_filtered)
+
 # axs.set_xlim(-95, 95)
 # axs.set_ylim(-95, 95)
-#
-# plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run), bbox_inches="tight")
-# plt.show()
+
+plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run), bbox_inches="tight")
+plt.show()
 
 
 
@@ -169,19 +169,19 @@ fig, axs = plt.subplots(1, 1, figsize=(12, 10))
 
 
 # norm = TwoSlopeNorm(vmin=all_properties["DiscToTotal"].min(), vcenter=0.15, vmax=all_properties["DiscToTotal"].max())
-norm = TwoSlopeNorm(vmin=0, vcenter=0.15, vmax=1)
+norm = TwoSlopeNorm(vmin=0, vcenter=0.2, vmax=1)
 
 # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, c=all_properties["DiscToTotal"], cmap="jet", linewidth=0, size=20)
 # tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="Blues", s=10)
-tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="bwr", norm=norm, s=10)
+tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="bwr_r", norm=norm, s=10)
 
 cbar = plt.colorbar(tsne_scatter, ax=axs, label="Disk-Total Ratio")
 cbar.ax.yaxis.set_label_position('left')
 
 
 
-axs.set_xlim(-95, 95)
-axs.set_ylim(-95, 95)
+# axs.set_xlim(-95, 95)
+# axs.set_ylim(-95, 95)
 
-plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run) + "_colourbar_6", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_morphology_" + str(n_flows) + "_" + str(run) + "_4", bbox_inches="tight")
 plt.show()
