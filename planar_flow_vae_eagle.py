@@ -48,7 +48,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="3"
 # for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4, encoding_dim+5]:
 # for encoding_dim in range(encoding_dim, encoding_dim+6):
 # for encoding_dim in range(encoding_dim+1, encoding_dim+5):
-for encoding_dim in [4, 5, 9, 10, 14]:
+for encoding_dim in [15, 19, 20, 24, 25]:
 # for encoding_dim in [encoding_dim]:
 
 
