@@ -435,12 +435,12 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalising F
 
 
 # number of images to reconstruct
-n = 12
+# n = 12
 
 # get the images to reconstruct
 random.seed(5)
 # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
-reconstruction_indices = [3165, 3108, 1172]
+reconstruction_indices = [3165, 3108, 2161]
 print(reconstruction_indices)
 print(extracted_features.shape)
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
@@ -450,9 +450,9 @@ extracted_features_reconstruct = extracted_features[reconstruction_indices]
 original_images = train_images[reconstruction_indices]
 
 
-fig, axs = plt.subplots(11, n)
+fig, axs = plt.subplots(11, len(reconstruction_indices))
 
-for i in range(0, n):
+for i in range(0, len(reconstruction_indices)):
 
     axs[0][i].imshow(original_images[i])
     axs[0][i].set_aspect("auto")

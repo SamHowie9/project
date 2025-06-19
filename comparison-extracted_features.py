@@ -55,8 +55,8 @@ print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
 
 print(all_properties[all_properties["GalaxyID"] == 17917747])
 print(all_properties[all_properties["GalaxyID"] == 17752121])
-print(all_properties[all_properties["GalaxyID"] == 9526568])
-print(all_properties.iloc[475])
+print(all_properties[all_properties["GalaxyID"] == 13164340])
+# print(all_properties.iloc[475])
 
 
 
