@@ -447,7 +447,7 @@ extracted_features_reconstruct = extracted_features[reconstruction_indices]
 original_images = train_images[reconstruction_indices]
 
 
-fig, axs = plt.subplots(11, len(reconstruction_indices))
+fig, axs = plt.subplots(11, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 11*5))
 
 for i in range(0, len(reconstruction_indices)):
 
