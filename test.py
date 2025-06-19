@@ -12,6 +12,5 @@ import random
 # import tensorflow as tf
 
 
-
-for i in range(10, 0, -1):
-    print(i)
+for j, feat in enumerate(range(10, 0, -1)):
+    print(j, feat)

@@ -448,16 +448,16 @@ for i in range(0, len(reconstruction_indices)):
 
     for j, feat in enumerate(range(10, 0, -1)):
 
-        pca = PCA(n_components=j, svd_solver="full").fit(extracted_features)
+        pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
 
         pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
         pca_features = pca.inverse_transform(pca_features)
 
         pca_reconstruction = vae.decoder.predict(pca_features)[0]
 
-        axs[j][i].imshow(pca_reconstruction)
-        axs[j][i].set_aspect("auto")
-        axs[j][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        axs[j+1][i].imshow(pca_reconstruction)
+        axs[j+1][i].set_aspect("auto")
+        axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features", bbox_inches="tight")
 plt.show()
