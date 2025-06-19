@@ -437,10 +437,11 @@ n = 12
 # get the images to reconstruct
 random.seed(5)
 reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+print(reconstruction_indices)
+print(extracted_features.shape)
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
 
-print(reconstruction_indices)
-print(train_images.shape)
+
 
 original_images = train_images[reconstruction_indices]
 
