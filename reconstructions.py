@@ -455,7 +455,7 @@ for i in range(0, len(reconstruction_indices)):
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    for j in range(10, 1, -1):
+    for j in range(10, 0, -1):
 
         pca = PCA(n_components=j, svd_solver="full").fit(extracted_features)
 
@@ -464,9 +464,9 @@ for i in range(0, len(reconstruction_indices)):
 
         pca_reconstruction = vae.decoder.predict(pca_features)
 
-        axs[j+1][i].imshow(pca_reconstruction)
-        axs[j+1][i].set_aspect("auto")
-        axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        axs[j][i].imshow(pca_reconstruction)
+        axs[j][i].set_aspect("auto")
+        axs[j][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features")
 plt.show()
