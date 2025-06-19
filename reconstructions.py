@@ -1,4 +1,7 @@
 import os
+
+from planar_flow_vae_eagle import reconstruction_indices
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow.keras import layers, Model, metrics, losses, optimizers
@@ -436,7 +439,8 @@ n = 12
 
 # get the images to reconstruct
 random.seed(5)
-reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+# reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+reconstruction_indices = [3165, 3108, 1172]
 print(reconstruction_indices)
 print(extracted_features.shape)
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
