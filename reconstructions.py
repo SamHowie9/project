@@ -1,7 +1,4 @@
 import os
-
-from planar_flow_vae_eagle import reconstruction_indices
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow.keras import layers, Model, metrics, losses, optimizers
