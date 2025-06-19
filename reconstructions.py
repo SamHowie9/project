@@ -462,7 +462,7 @@ for i in range(0, len(reconstruction_indices)):
         pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
         pca_features = pca.inverse_transform(pca_features)
 
-        pca_reconstruction = vae.decoder.predict(pca_features)
+        pca_reconstruction = vae.decoder.predict(pca_features)[0]
 
         axs[j][i].imshow(pca_reconstruction)
         axs[j][i].set_aspect("auto")
