@@ -459,7 +459,7 @@ for i in range(0, len(reconstruction_indices)):
 
         pca = PCA(n_components=j, svd_solver="full").fit(extracted_features)
 
-        pca_features = pca.transform(extracted_features_reconstruct[j])
+        pca_features = pca.transform(extracted_features_reconstruct[i])
         pca_features = pca.inverse_transform(pca_features)
 
         pca_reconstruction = vae.decoder.predict(pca_features)
