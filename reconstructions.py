@@ -439,6 +439,9 @@ random.seed(5)
 reconstruction_indices = random.sample(range(train_images.shape[0]), n)
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
 
+print(reconstruction_indices)
+print(train_images.shape)
+
 original_images = train_images[reconstruction_indices]
 
 
