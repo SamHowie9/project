@@ -250,7 +250,7 @@ print()
 
 transitional_sample = random.sample(transitional, 36)
 
-fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+fig, axs = plt.subplots(6, 6, figsize=(20, 20))
 
 for i in range(0, 6):
     for j in range(0, 6):
@@ -273,7 +273,7 @@ plt.show()
 
 elliptical_sample = random.sample(ellipticals, 36)
 
-fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+fig, axs = plt.subplots(6, 6, figsize=(20, 20))
 
 for i in range(0, 6):
     for j in range(0, 6):
