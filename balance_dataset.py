@@ -221,6 +221,12 @@ print()
 
 
 
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
 
 
 
@@ -239,9 +245,9 @@ for i in range(0, 6):
         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
         dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
 
-        axs[i][j].imshow(image)
+        axs[i][j].imshow(normalise_independently(image))
         # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(spiral_sample[index]) + "\n, d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+        axs[i][j].set_title(str(spiral_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
@@ -265,12 +271,13 @@ for i in range(0, 6):
         sersic = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "n_r"].values[0]
         dt = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "DiscToTotal"].values[0]
 
-        axs[i][j].imshow(image)
-        axs[i][j].set_title(str(transitional_sample[index]) + "\n, d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+        axs[i][j].imshow(normalise_independently(image))
+        axs[i][j].set_title(str(transitional_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_transitional", bbox_inches='tight')
 plt.show()
+
 
 
 elliptical_sample = random.sample(ellipticals, 36)
@@ -288,9 +295,9 @@ for i in range(0, 6):
         sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
         dt = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "DiscToTotal"].values[0]
 
-        axs[i][j].imshow(image)
+        axs[i][j].imshow(normalise_independently(image))
         # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(elliptical_sample[index]) + "\n, d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+        axs[i][j].set_title(str(elliptical_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
