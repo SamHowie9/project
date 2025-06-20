@@ -1,5 +1,3 @@
-from xml.sax.handler import all_properties
-
 import pandas as pd
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
