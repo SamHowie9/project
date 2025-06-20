@@ -135,9 +135,9 @@ axs[2].set_xlabel("Latent Features")
 
 
 
-for n_flows in [0, 3]:
+for n_flows in [0]:
 
-    for run in [1]:
+    for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
 
         total_loss_all = []
         reconstruction_loss_all = []
@@ -145,8 +145,8 @@ for n_flows in [0, 3]:
 
         loss_all = pd.DataFrame(columns=["feature", "total_loss", "reconstruction_loss", "kl_loss"])
 
-        for encoding_dim in range(1, 51):
-        # for encoding_dim in [30]:
+        # for encoding_dim in range(10, 51):
+        for encoding_dim in [30]:
 
             try:
                 losses = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
@@ -173,7 +173,7 @@ axs[1].legend()
 axs[2].legend()
 
 
-plt.savefig("Variational Eagle/Plots/normal_vs_flows_loss", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/normal_vs_flows_loss_zoomed", bbox_inches='tight')
 plt.show()
 
 

@@ -199,23 +199,23 @@ print()
 #             count += 1
 #     if count < 2:
 #         print(galaxy, count)
-
-for galaxy in transitional:
-    count = 0
-    for file in augmented_transitional:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count != 8:
-        print(galaxy, count)
-
-
-for galaxy in ellipticals:
-    count = 0
-    for file in augmented_ellipticals:
-        if file.startswith(str(galaxy)):
-            count += 1
-    if count != 8:
-        print(galaxy, count)
+#
+# for galaxy in transitional:
+#     count = 0
+#     for file in augmented_transitional:
+#         if file.startswith(str(galaxy)):
+#             count += 1
+#     if count != 8:
+#         print(galaxy, count)
+#
+#
+# for galaxy in ellipticals:
+#     count = 0
+#     for file in augmented_ellipticals:
+#         if file.startswith(str(galaxy)):
+#             count += 1
+#     if count != 8:
+#         print(galaxy, count)
 
 
 
@@ -248,25 +248,27 @@ for galaxy in ellipticals:
 # plt.show()
 
 
+transitional_sample = random.sample(transitional, 36)
 
-# fig, axs = plt.subplots(6, 6, figsize=(15, 15))
-#
-# for i in range(0, 6):
-#     for j in range(0, 6):
-#
-#         index = i + (6*j)
-#         print(index)
-#
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(unknown_sample[index]) + ".png")
-#
-#         sersic = all_properties.loc[all_properties["GalaxyID"] == unknown_sample[index], "n_r"].values[0]
-#
-#         axs[i][j].imshow(image)
-#         axs[i][j].set_title(str(unknown_sample[index]) + ", n=" + str(sersic))
-#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-# plt.savefig("Variational Eagle/Plots/sample_unknown", bbox_inches='tight')
-# plt.show()
+fig, axs = plt.subplots(6, 6, figsize=(15, 15))
+
+for i in range(0, 6):
+    for j in range(0, 6):
+
+        index = i + (6*j)
+        print(index)
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(transitional_sample[index]) + ".png")
+
+        sersic = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "n_r"].values[0]
+        dt = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "DiscToTotal"].values[0]
+
+        axs[i][j].imshow(image)
+        axs[i][j].set_title(str(transitional_sample[index]) + "\n, d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/sample_dt_transitional", bbox_inches='tight')
+plt.show()
 
 
 elliptical_sample = random.sample(ellipticals, 36)
@@ -286,7 +288,7 @@ for i in range(0, 6):
 
         axs[i][j].imshow(image)
         # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(elliptical_sample[index]) + ", d/t=" + str(round(dt, 3)))
+        axs[i][j].set_title(str(elliptical_sample[index]) + "\n, d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
