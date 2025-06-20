@@ -49,13 +49,13 @@ all_properties_balanced = pd.read_csv("Galaxy Properties/Eagle Properties/all_pr
 
 all_properties = all_properties_balanced
 
-print(all_properties_real[all_properties_real["DiscToTotal"] < 0].shape)
-print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
+# print(all_properties_real[all_properties_real["DiscToTotal"] < 0].shape)
+# print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
 
 
-print(all_properties[all_properties["GalaxyID"] == 17917747])
-print(all_properties[all_properties["GalaxyID"] == 17752121])
-print(all_properties[all_properties["GalaxyID"] == 13164340])
+# print(all_properties[all_properties["GalaxyID"] == 17917747])
+# print(all_properties[all_properties["GalaxyID"] == 17752121])
+# print(all_properties[all_properties["GalaxyID"] == 13164340])
 # print(all_properties.iloc[475])
 
 
@@ -159,7 +159,7 @@ print(all_properties[all_properties["GalaxyID"] == 13164340])
 
 # for n_flows in [n_flows]:
 # for run in [1, 2, 3]:
-for run in [1, 2, 3, 4, 5]:
+for run in range(1, 11):
 
     print(n_flows, run)
 
@@ -177,8 +177,8 @@ for run in [1, 2, 3, 4, 5]:
     # extracted_features = extracted_features[:len(all_properties)]
 
     # perform pca on the extracted features
-    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-    # extracted_features = pca.transform(extracted_features)
+    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    extracted_features = pca.transform(extracted_features)
     # extracted_features = extracted_features[:len(all_properties)]
 
     # print(pca.explained_variance_ratio_)
@@ -270,6 +270,10 @@ for run in [1, 2, 3, 4, 5]:
         # add all the correlations for that feature to the dataframe
         correlation_df.loc[len(correlation_df)] = correlation_list
 
+    # set index so feature label starts at 1 rather than 0
+    correlation_df.index = correlation_df.index + 1
+
+
 
 
     # print(correlation_df)
@@ -278,12 +282,15 @@ for run in [1, 2, 3, 4, 5]:
 
     # set the figure size
     # plt.figure(figsize=(20, extracted_features.T.shape[0]))
-    plt.figure(figsize=(35, correlation_df.shape[0]))
+    plt.figure(figsize=(20, correlation_df.shape[0]))
 
 
     # properties to plot
     # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
-    selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
+    # selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
+    selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
+
+    # print(correlation_df[selected_properties])
 
     # plot a heatmap for the dataframe (with annotations)
     # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
@@ -306,7 +313,8 @@ for run in [1, 2, 3, 4, 5]:
         # for label in ax.get_xticklabels():
             # text = label.get_text()
 
-        label_names = ["Sersic Index", "Disk-Total Ratio", "Semi - Major Axis", "Half Light Radius", "Position Angle", "Axis Ratio", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
+        # label_names = ["Sersic Index", "Disk-Total Ratio", "Semi - Major Axis", "Half Light Radius", "Position Angle", "Axis Ratio", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
+        label_names = ["Disk-Total Ratio", "Position Angle", "Half Light Radois", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
 
         for text in label_names:
             labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -319,8 +327,9 @@ for run in [1, 2, 3, 4, 5]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
-    plt.show()
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
+    plt.show(block=False)
+    plt.close()
 
 
 
@@ -456,13 +465,13 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(8, 7))
-
-sns.histplot(x=all_properties["DiscToTotal"], ax=axs, bins=50)
-axs.set_xlabel("Disk-Total Ratio")
-
-plt.savefig("Variational Eagle/Plots/disk_total_distribution")
-plt.show()
+# fig, axs = plt.subplots(1, 1, figsize=(8, 7))
+#
+# sns.histplot(x=all_properties["DiscToTotal"], ax=axs, bins=50)
+# axs.set_xlabel("Disk-Total Ratio")
+#
+# plt.savefig("Variational Eagle/Plots/disk_total_distribution")
+# plt.show()
 
 
 

@@ -8,6 +8,8 @@ import numpy as np
 from sklearn.decomposition import PCA
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 from matplotlib import image as mpimg
 import random
 
@@ -134,43 +136,95 @@ axs[2].set_xlabel("Latent Features")
 
 
 
+# no flows
 
-for n_flows in [0]:
+n_flows = 0
 
-    for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
+# for run in [1]:
+for run in range(1, 11):
 
-        total_loss_all = []
-        reconstruction_loss_all = []
-        kl_loss_all = []
+    total_loss_all = []
+    reconstruction_loss_all = []
+    kl_loss_all = []
 
-        loss_all = pd.DataFrame(columns=["feature", "total_loss", "reconstruction_loss", "kl_loss"])
+    loss_all = pd.DataFrame(columns=["feature", "total_loss", "reconstruction_loss", "kl_loss"])
 
-        # for encoding_dim in range(10, 51):
-        for encoding_dim in [30]:
+    for encoding_dim in range(10, 51):
+    # for encoding_dim in [30]:
 
-            try:
-                losses = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
-                loss_all.loc[len(loss_all)] = [encoding_dim] + list(losses)
-            except:
-                print(encoding_dim, n_flows, run)
+        try:
+            losses = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+            loss_all.loc[len(loss_all)] = [encoding_dim] + list(losses)
+        except:
+            print(encoding_dim, n_flows, run)
 
-        # axs[0].plot(loss_all["feature"], loss_all["total_loss"], label="No Flows (New)", c="black")
-        # axs[1].plot(loss_all["feature"], loss_all["reconstruction_loss"], label="No Flows (New)", c="black")
-        # axs[2].plot(loss_all["feature"], loss_all["kl_loss"], label="No Flows (New)", c="black")
+    axs[0].scatter(loss_all["feature"], loss_all["total_loss"], c="C0")
+    axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], c="C0")
+    axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], c="C0")
 
-        # axs[0].scatter(loss_all["feature"], loss_all["total_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
-        # axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
-        # axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], label="Run "+str(run)+", Flows "+str(n_flows))
+    # axs[0].scatter(loss_all["feature"], loss_all["total_loss"], label=str(n_flows) + " Flows")
+    # axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], label=str(n_flows) + " Flows")
+    # axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], label=str(n_flows) + " Flows")
 
-        axs[0].scatter(loss_all["feature"], loss_all["total_loss"], label=str(n_flows)+" Flows")
-        axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], label=str(n_flows)+" Flows")
-        axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], label=str(n_flows)+" Flows")
+    # axs[0].plot(loss_all["feature"], loss_all["total_loss"], label=str(n_flows) + " Flows")
+    # axs[1].plot(loss_all["feature"], loss_all["reconstruction_loss"], label=str(n_flows) + " Flows")
+    # axs[2].plot(loss_all["feature"], loss_all["kl_loss"], label=str(n_flows) + " Flows")
 
-        print(loss_all)
 
-axs[0].legend()
-axs[1].legend()
-axs[2].legend()
+
+
+# 3 flows
+
+n_flows = 3
+
+# for run in [1]:
+for run in range(1, 11):
+
+    total_loss_all = []
+    reconstruction_loss_all = []
+    kl_loss_all = []
+
+    loss_all = pd.DataFrame(columns=["feature", "total_loss", "reconstruction_loss", "kl_loss"])
+
+    for encoding_dim in range(10, 51):
+    # for encoding_dim in [30]:
+
+        try:
+            losses = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+            loss_all.loc[len(loss_all)] = [encoding_dim] + list(losses)
+        except:
+            print(encoding_dim, n_flows, run)
+
+    axs[0].scatter(loss_all["feature"], loss_all["total_loss"], c="C1")
+    axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], c="C1")
+    axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], c="C1")
+
+    # axs[0].scatter(loss_all["feature"], loss_all["total_loss"], label=str(n_flows) + " Flows")
+    # axs[1].scatter(loss_all["feature"], loss_all["reconstruction_loss"], label=str(n_flows) + " Flows")
+    # axs[2].scatter(loss_all["feature"], loss_all["kl_loss"], label=str(n_flows) + " Flows")
+
+    # axs[0].plot(loss_all["feature"], loss_all["total_loss"], label=str(n_flows) + " Flows")
+    # axs[1].plot(loss_all["feature"], loss_all["reconstruction_loss"], label=str(n_flows) + " Flows")
+    # axs[2].plot(loss_all["feature"], loss_all["kl_loss"], label=str(n_flows) + " Flows")
+
+
+# labels = ["No Flows", "3 Flows"]
+# colours = ["C0", "C1"]
+# custom_legend = [Patch(color=color, label=label) for color, label in zip(colours, labels)]
+
+custom_legend = [
+    Line2D([0], [0], marker="o", color="C0", label="No Flows", linestyle='None'),
+    Line2D([0], [0], marker="o", color="C1", label="3 Flows", linestyle='None')
+]
+
+
+axs[0].legend(handles=custom_legend)
+axs[1].legend(handles=custom_legend)
+axs[2].legend(handles=custom_legend)
+
+# axs[0].legend()
+# axs[1].legend()
+# axs[2].legend()
 
 
 plt.savefig("Variational Eagle/Plots/normal_vs_flows_loss_zoomed", bbox_inches='tight')

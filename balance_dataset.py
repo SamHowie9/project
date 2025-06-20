@@ -235,9 +235,6 @@ fig, axs = plt.subplots(6, 6, figsize=(20, 20))
 for i in range(0, 6):
     for j in range(0, 6):
 
-        index = i + (6*j)
-        print(index)
-
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
 
         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
@@ -250,6 +247,8 @@ for i in range(0, 6):
 
 plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
 plt.show()
+plt.close()
+print(".")
 
 
 
@@ -260,9 +259,6 @@ fig, axs = plt.subplots(6, 6, figsize=(20, 20))
 
 for i in range(0, 6):
     for j in range(0, 6):
-
-        index = i + (6*j)
-        print(index)
 
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(transitional_sample[index]) + ".png")
 
@@ -275,7 +271,8 @@ for i in range(0, 6):
 
 plt.savefig("Variational Eagle/Plots/sample_dt_transitional", bbox_inches='tight')
 plt.show()
-
+plt.close()
+print(".")
 
 
 elliptical_sample = random.sample(ellipticals, 36)
@@ -284,9 +281,6 @@ fig, axs = plt.subplots(6, 6, figsize=(20, 20))
 
 for i in range(0, 6):
     for j in range(0, 6):
-
-        index = i + (6*j)
-        print(index)
 
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
 
@@ -300,7 +294,8 @@ for i in range(0, 6):
 
 plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
 plt.show()
-
+plt.close()
+print(".")
 
 
 
