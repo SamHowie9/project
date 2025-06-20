@@ -224,28 +224,30 @@ print()
 
 
 
+spiral_sample = random.sample(spirals, 36)
+
+fig, axs = plt.subplots(6, 6, figsize=(20, 20))
+
+for i in range(0, 6):
+    for j in range(0, 6):
+
+        index = i + (6*j)
+        print(index)
+
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
+
+        sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
+        dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
+
+        axs[i][j].imshow(image)
+        # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
+        axs[i][j].set_title(str(spiral_sample[index]) + "\n, d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
+plt.show()
 
 
-# fig, axs = plt.subplots(6, 6, figsize=(20, 20))
-#
-# for i in range(0, 6):
-#     for j in range(0, 6):
-#
-#         index = i + (6*j)
-#         print(index)
-#
-#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
-#
-#         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
-#         dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
-#
-#         axs[i][j].imshow(image)
-#         # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
-#         axs[i][j].set_title(str(spiral_sample[index]) + ", d/t=" + str(round(dt, 3)))
-#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-# plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
-# plt.show()
 
 
 transitional_sample = random.sample(transitional, 36)
