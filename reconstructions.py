@@ -448,14 +448,17 @@ original_images = train_images[reconstruction_indices]
 # reconstructions with residual:
 fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
 
+reconstructions = vae.decoder.predict(extracted_features_reconstruct)
+
 for i in range(0, len(reconstruction_indices)):
 
-    axs[0][i].imshow(original_images[i])
+    original_image = normalise_independently(original_images[i])
+    axs[0][i].imshow(original_image)
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
-    reconstruction = vae.decoder.predict(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+    # reconstruction = vae.decoder.predict(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
 
     # pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
     # pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
@@ -463,14 +466,14 @@ for i in range(0, len(reconstruction_indices)):
     # reconstruction = vae.decoder.predict(pca_features)
 
 
-    axs[1][i].imshow(reconstruction)
+    axs[1][i].imshow(reconstructions[i])
     axs[1][i].set_aspect("auto")
     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
-    residual = abs(original_images[i] - reconstruction)
+    residual = abs(original_images[i] - reconstructions[i])
 
-    axs[2][i].imshow(reconstruction)
+    axs[2][i].imshow(residual)
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
