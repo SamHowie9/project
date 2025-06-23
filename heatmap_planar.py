@@ -514,9 +514,9 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalising F
 
 print(extracted_features.shape)
 
-pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-extracted_features = pca.transform(extracted_features)
-pca_components = pca.components_
+# pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+# extracted_features = pca.transform(extracted_features)
+# pca_components = pca.components_
 
 
 
