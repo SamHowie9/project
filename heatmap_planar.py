@@ -361,10 +361,10 @@ def normalise_map(x):
 
 
 
-def latent_saliency(encoder, image, flows=False, feature=None, smoothing_sigma=None):
+def latent_flows_saliency(encoder, image, flows=False, feature=None, smoothing_sigma=None):
 
-    image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)  # add batch dim
-    image = tf.Variable(image)  # allows in-place grads if you want FGSM later
+    image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)
+    image = tf.Variable(image)
 
     with tf.GradientTape() as tape:
 
@@ -417,6 +417,38 @@ def latent_saliency(encoder, image, flows=False, feature=None, smoothing_sigma=N
 
 
 
+
+
+
+
+def latent_saliency()
+
+
+
+
+
+def pca_saliency(encoder, image, pca_components, pca_component_index, smoothing_sigma=None):
+
+    image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)
+    image = tf.Variable(image)
+
+    with tf.GradientTape() as tape:
+
+        tape.watch(image)
+        z_mean, _, _, _ = encoder(image)
+        z_mean = z_mean[0]
+
+        pca_direction = tf.convert_to_tensor(pca_components[pca_component_index], dtype=tf.float32)
+        pca_feature = tf.tensordot(z_mean, pca_direction, axes=1)
+
+    grads = tape.gradient(pca_feature, image)
+    saliency = tf.reduce_max(tf.abs(grads), axis=-1).numpy()[0]
+
+    # normalise saliency
+    saliency -= saliency.min()
+    saliency /= saliency.max() + 1e-8
+
+    return saliency
 
 
 
