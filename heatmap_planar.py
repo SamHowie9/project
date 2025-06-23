@@ -429,7 +429,7 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 fig, axs = plt.subplots(encoding_dim+1, len(img_indices), figsize=(30, 90))
 
-for img_index in img_indices:
+for i, img_index in enumerate(img_indices):
 
     axs[0][img_index].imshow(train_images[img_index])
     axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
@@ -438,9 +438,11 @@ for img_index in img_indices:
 
         heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, feature=feature, smoothing_sigma=2.0)
 
-        axs[feature+1][img_index].imshow(train_images[img_index])
-        axs[feature+1][img_index].imshow(heatmap, cmap="jet", alpha=0.5)
-        axs[feature+1][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        axs[feature+1][i].imshow(train_images[img_index])
+        axs[feature+1][i].imshow(heatmap, cmap="jet", alpha=0.5)
+        axs[feature+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+        axs[feature+1][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
 
 
 plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
@@ -453,16 +455,16 @@ plt.show()
 
 fig, axs = plt.subplots(2, len(img_indices), figsize=(30, 6))
 
-for img_index in img_indices:
+for i, img_index in enumerate(img_indices):
 
-    axs[0][img_index].imshow(train_images[img_index])
-    axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[0][i].imshow(train_images[img_index])
+    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, smoothing_sigma=2.0)
 
-    axs[1][img_index].imshow(train_images[img_index])
-    axs[1][img_index].imshow(heatmap, cmap="jet", alpha=0.5)
-    axs[1][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[1][i].imshow(train_images[img_index])
+    axs[1][i].imshow(heatmap, cmap="jet", alpha=0.5)
+    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 plt.savefig("Variational Eagle/Plots/heatmap_all_smooth", bbox_inches="tight")
 plt.show()
