@@ -446,6 +446,15 @@ def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
     saliency -= saliency.min()
     saliency /= saliency.max() + 1e-8
 
+    if smoothing_sigma is not None:
+
+        # apply gaussian filter
+        saliency = gaussian_filter(saliency, sigma=smoothing_sigma)
+
+        # normalise saliency again
+        saliency -= saliency.min()
+        saliency /= saliency.max() + 1e-8
+
     return saliency
 
 
@@ -477,6 +486,15 @@ def pca_saliency(encoder, image, pca_components, pca_component_index, smoothing_
     # normalise saliency
     saliency -= saliency.min()
     saliency /= saliency.max() + 1e-8
+
+    if smoothing_sigma is not None:
+
+        # apply gaussian filter
+        saliency = gaussian_filter(saliency, sigma=smoothing_sigma)
+
+        # normalise saliency again
+        saliency -= saliency.min()
+        saliency /= saliency.max() + 1e-8
 
     return saliency
 
@@ -525,7 +543,7 @@ for i, img_index in enumerate(img_indices):
         axs[feature+1][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
 
 
-plt.savefig("Variational Eagle/Plots/heatmap_pca_individual", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/heatmap_pca_individual_smooth", bbox_inches="tight")
 plt.show()
 
 
