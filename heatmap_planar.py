@@ -453,7 +453,7 @@ plt.show()
 
 fig, axs = plt.subplots(2, 10, figsize=(30, 6))
 
-for img_index in range(0, 10):
+for img_index in range(0, len(img_indices)):
 
     axs[0][img_index].imshow(train_images[img_index])
     axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
