@@ -531,7 +531,7 @@ for i, img_index in enumerate(img_indices):
     axs[0][i].imshow(train_images[img_index])
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    for feature in range(0, pca_components.shape[0]):
+    for feature in range(0, extracted_features.shape[1]):
 
         heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], feature=feature)
         # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
