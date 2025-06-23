@@ -533,7 +533,7 @@ for i, img_index in enumerate(img_indices):
 
     for feature in range(0, extracted_features.shape[1]):
 
-        heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], feature=feature)
+        heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], feature=feature, smoothing_sigma=2.0)
         # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
         axs[feature+1][i].imshow(train_images[img_index])
@@ -543,7 +543,7 @@ for i, img_index in enumerate(img_indices):
         axs[feature+1][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
 
 
-plt.savefig("Variational Eagle/Plots/heatmap_individual", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
 plt.show()
 
 
@@ -558,12 +558,12 @@ for i, img_index in enumerate(img_indices):
     axs[0][i].imshow(train_images[img_index])
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index])
+    heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], smoothing_sigma=2.0)
     # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
     axs[1][i].imshow(train_images[img_index])
     axs[1][i].imshow(heatmap, cmap="jet", alpha=0.5)
     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-plt.savefig("Variational Eagle/Plots/heatmap_all", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/heatmap_all_smooth", bbox_inches="tight")
 plt.show()
