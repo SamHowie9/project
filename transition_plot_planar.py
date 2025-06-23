@@ -380,8 +380,8 @@ for i in range(len(extracted_features.T)):
         temp_features = temp_pca_features
         temp_features = np.expand_dims(temp_features, axis=0)
 
-        temp_features = pca.inverse_transform(temp_pca_features)
-        temp_features = np.expand_dims(temp_features, axis=0)
+        # temp_features = pca.inverse_transform(temp_pca_features)
+        # temp_features = np.expand_dims(temp_features, axis=0)
 
         reconstruction = vae.decoder.predict(temp_features)[0]
 
