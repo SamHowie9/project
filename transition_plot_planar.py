@@ -295,10 +295,6 @@ vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new
 z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
 z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
-# remove the augmented image features
-# z_mean = z_mean[:len(all_properties)]
-# z_transformed = z_transformed[:len(all_properties)]
-
 
 
 # perform PCA on both sets of features
@@ -309,8 +305,6 @@ z_transformed = pca_transformed.transform(z_transformed)
 
 
 
-
-
 # select transformed or mean
 # extracted_features = z_mean
 extracted_features = z_transformed
@@ -318,9 +312,99 @@ pca = pca_transformed
 
 
 
+
+
+
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+
+# spirals only
+spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
+print(spiral_indices)
+extracted_features = extracted_features[spiral_indices]
+all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
+
+# ellipticals only
+# spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+# print(spiral_indices)
+# extracted_features = extracted_features[spiral_indices]
+# all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+
+
+# transitional
+# spiral_indices = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")].index.tolist()
+# print(spiral_indices)
+# extracted_features = extracted_features[spiral_indices]
+# all_properties = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
+
+
+# original images
+# all_properties = all_properties_real
+# extracted_features = extracted_features[:len(all_properties)]
+
+
+
+
+
+
+
+
+
 # scale font on plots
 default_size = plt.rcParams['font.size']
 plt.rcParams.update({'font.size': default_size * 5})
+
+
+
+
+
+
+# transition plot for all extracted features
+
+num_varying_features = 13
+
+med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+print(len(med_pca_features))
+
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
+
+for i in range(len(extracted_features.T)):
+
+    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+
+    for j in range(num_varying_features):
+
+        temp_pca_features = med_pca_features.copy()
+        temp_pca_features[i] = varying_feature_values[j]
+
+        temp_features = temp_pca_features
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        temp_features = pca.inverse_transform(temp_pca_features)
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        reconstruction = vae.decoder.predict(temp_features)[0]
+
+        axs[i][j].imshow(reconstruction)
+        axs[i][j].set_aspect("auto")
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+        # remove the spines
+        # for spine in axs[i][j].spines.values():
+        #     spine.set_visible(False)
+
+    axs[i][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
+
+fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
+
+
+fig.subplots_adjust(wspace=0, hspace=0.05)
+
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_spirals", bbox_inches='tight')
+plt.show()
+plt.close()
+
+
 
 
 
@@ -381,51 +465,6 @@ plt.rcParams.update({'font.size': default_size * 5})
 
 
 
-
-# transition plot for all extracted features
-
-num_varying_features = 13
-
-med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-print(len(med_pca_features))
-
-fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
-
-for i in range(len(extracted_features.T)):
-
-    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
-
-    for j in range(num_varying_features):
-
-        temp_pca_features = med_pca_features.copy()
-        temp_pca_features[i] = varying_feature_values[j]
-
-        temp_features = temp_pca_features
-        temp_features = np.expand_dims(temp_features, axis=0)
-
-        temp_features = pca.inverse_transform(temp_pca_features)
-        temp_features = np.expand_dims(temp_features, axis=0)
-
-        reconstruction = vae.decoder.predict(temp_features)[0]
-
-        axs[i][j].imshow(reconstruction)
-        axs[i][j].set_aspect("auto")
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-        # remove the spines
-        # for spine in axs[i][j].spines.values():
-        #     spine.set_visible(False)
-
-    axs[i][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
-
-fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
-
-
-fig.subplots_adjust(wspace=0, hspace=0.05)
-
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
-plt.show()
-plt.close()
 
 
 
