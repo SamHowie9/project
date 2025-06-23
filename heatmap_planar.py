@@ -11,6 +11,8 @@ import random
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 from scipy.ndimage import gaussian_filter
+from sklearn.decomposition import PCA
+
 
 
 
@@ -421,7 +423,7 @@ def latent_flows_saliency(encoder, image, flows=False, feature=None, smoothing_s
 
 
 
-def latent_saliency()
+
 
 
 
@@ -455,6 +457,16 @@ def pca_saliency(encoder, image, pca_components, pca_component_index, smoothing_
 
 
 
+
+
+
+
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+pca_components = pca.components_
+
+
+
 img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 
@@ -466,9 +478,10 @@ for i, img_index in enumerate(img_indices):
     axs[0][i].imshow(train_images[img_index])
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    for feature in range(0, encoding_dim):
+    for feature in range(0, pca_components.shape[0]):
 
-        heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, feature=feature, smoothing_sigma=2.0)
+        # heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, feature=feature, smoothing_sigma=2.0)
+        heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
         axs[feature+1][i].imshow(train_images[img_index])
         axs[feature+1][i].imshow(heatmap, cmap="jet", alpha=0.5)
@@ -477,7 +490,7 @@ for i, img_index in enumerate(img_indices):
         axs[feature+1][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
 
 
-plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/heatmap_pca_individual_smooth", bbox_inches="tight")
 plt.show()
 
 
@@ -485,18 +498,19 @@ plt.show()
 
 
 
-fig, axs = plt.subplots(2, len(img_indices), figsize=(30, 6))
-
-for i, img_index in enumerate(img_indices):
-
-    axs[0][i].imshow(train_images[img_index])
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-    heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, smoothing_sigma=2.0)
-
-    axs[1][i].imshow(train_images[img_index])
-    axs[1][i].imshow(heatmap, cmap="jet", alpha=0.5)
-    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/heatmap_all_smooth", bbox_inches="tight")
-plt.show()
+# fig, axs = plt.subplots(2, len(img_indices), figsize=(30, 6))
+#
+# for i, img_index in enumerate(img_indices):
+#
+#     axs[0][i].imshow(train_images[img_index])
+#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     # heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, smoothing_sigma=2.0)
+#     heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
+#
+#     axs[1][i].imshow(train_images[img_index])
+#     axs[1][i].imshow(heatmap, cmap="jet", alpha=0.5)
+#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/heatmap_pca_all_smooth", bbox_inches="tight")
+# plt.show()
