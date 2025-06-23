@@ -198,6 +198,7 @@ class VAE(Model):
 
 
 
+
 # define sampling layer
 class Sampling(Layer):
 
@@ -219,13 +220,13 @@ class Sampling(Layer):
         # generate the random variables
         epsilon = tf.random.normal(shape=(batch, dim))
 
-        # perform reparameterization trick
+        # perform reparameterisation trick
         z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
-        # z = tf.clip_by_value(z, -4+1e-4, 4-1e-4)
+        # initialise as a tensor of batch size shape (same shape as first latent feature)
+        sum_log_det_jacobian = tf.zeros_like(z_mean[:, 0])
 
         # apply flow transformations
-        sum_log_det_jacobian = 0.0
         for flow in self.flows:
             z, log_det = flow(z)
             sum_log_det_jacobian += log_det
@@ -253,9 +254,7 @@ class PlanarFlow(Layer):
     def call(self, z):
 
         # parameterization of u (ensure eTu > -1)
-        u_hat = self.u + \
-                    (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (
-                            tf.norm(self.w) ** 2 + 1e-8)
+        u_hat = self.u + (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (tf.norm(self.w) ** 2 + 1e-8)
 
         # transformation
         w_dot_z = tf.reduce_sum(self.w * z, axis=1, keepdims=True)
@@ -277,6 +276,7 @@ class PlanarFlow(Layer):
 
 # apply the flows to the latent vectors after training
 def apply_flows(z_mean, flows):
+
     # convert vectors to tensor and clip (as done in sampling layer)
     z = tf.convert_to_tensor(z_mean, dtype=tf.float32)
     z = tf.clip_by_value(z, -4 + 1e-4, 4 - 1e-4)
