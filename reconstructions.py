@@ -457,8 +457,8 @@ reconstructions = vae.decoder.predict(pca_features)
 
 residuals = abs(original_images - reconstructions)
 
-# residuals -= residuals.min()
-# residuals /= residuals.max() + 1e-8
+residuals -= residuals.min()
+residuals /= residuals.max() + 1e-8
 
 for i in range(0, len(reconstruction_indices)):
 
@@ -482,15 +482,16 @@ for i in range(0, len(reconstruction_indices)):
 
 
     # residual = abs(original_images[i] - reconstructions[i])
-    residual = residuals[i]
-    residual -= residual.min()
-    residual /= residual.max() + 1e-8
+    # residual = residuals[i]
+    # residual -= residual.min()
+    # residual /= residual.max() + 1e-8
 
-    axs[2][i].imshow(residual)
+    # axs[2][i].imshow(residual)
+    axs[2][i].imshow(residuals[i])
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual_normalised_individually", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual_normalised", bbox_inches="tight")
 plt.show()
 plt.close()
 
