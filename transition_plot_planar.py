@@ -298,10 +298,10 @@ z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow B
 
 
 # perform PCA on both sets of features
-pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
-z_mean = pca_mean.transform(z_mean)
-pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
-z_transformed = pca_transformed.transform(z_transformed)
+# pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
+# z_mean = pca_mean.transform(z_mean)
+# pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
+# z_transformed = pca_transformed.transform(z_transformed)
 
 
 
@@ -319,16 +319,16 @@ pca = pca_transformed
 all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 # spirals only
-# spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
-# print(spiral_indices)
-# extracted_features = extracted_features[spiral_indices]
-# all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
-
-# ellipticals only
-spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
 print(spiral_indices)
 extracted_features = extracted_features[spiral_indices]
-all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
+
+# ellipticals only
+# spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+# print(spiral_indices)
+# extracted_features = extracted_features[spiral_indices]
+# all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
 
 
 # transitional
@@ -400,7 +400,7 @@ fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals", bbox_inches='tight')
 plt.show()
 plt.close()
 
