@@ -423,7 +423,7 @@ def latent_flows_saliency(encoder, image, flows=False, feature=None, smoothing_s
 
 
 
-def latent_saliency(encoder, image, feature, smoothing_sigma=None):
+def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
 
     image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)
     image = tf.Variable(image)
@@ -433,10 +433,13 @@ def latent_saliency(encoder, image, feature, smoothing_sigma=None):
         z_mean, _, _, _ = encoder(image)
         z_mean = z_mean[0]
 
-        pca_direction = tf.convert_to_tensor(pca_components[pca_component_index], dtype=tf.float32)
-        pca_feature = tf.tensordot(z_mean, pca_direction, axes=1)
 
-    grads = tape.gradient(pca_feature, image)
+        if feature is not None:
+            latent_feature = z_mean[feature]
+        else:
+            latent_feature = z_mean
+
+    grads = tape.gradient(latent_feature, image)
     saliency = tf.reduce_max(tf.abs(grads), axis=-1).numpy()[0]
 
     # normalise saliency
@@ -505,7 +508,7 @@ for i, img_index in enumerate(img_indices):
 
     for feature in range(0, pca_components.shape[0]):
 
-        # heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, feature=feature, smoothing_sigma=2.0)
+        # heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], feature=feature, smoothing_sigma=2.0)
         heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
         axs[feature+1][i].imshow(train_images[img_index])
@@ -515,7 +518,7 @@ for i, img_index in enumerate(img_indices):
         axs[feature+1][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
 
 
-plt.savefig("Variational Eagle/Plots/heatmap_pca_individual_smooth", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/heatmap_pca_individual", bbox_inches="tight")
 plt.show()
 
 
@@ -530,7 +533,7 @@ plt.show()
 #     axs[0][i].imshow(train_images[img_index])
 #     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 #
-#     # heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, smoothing_sigma=2.0)
+#     # heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], smoothing_sigma=2.0)
 #     heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 #
 #     axs[1][i].imshow(train_images[img_index])
