@@ -487,10 +487,17 @@ def pca_saliency(encoder, image, pca_components, pca_component_index, smoothing_
 
 
 
+# scale font on plots
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 5})
 
 
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+
+print(extracted_features.shape)
+
 pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
 pca_components = pca.components_
 
 
@@ -499,7 +506,7 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 
 
-fig, axs = plt.subplots(encoding_dim+1, len(img_indices), figsize=(30, 90))
+fig, axs = plt.subplots(extracted_features.shape[1], len(img_indices), figsize=(len(img_indices)*5, extracted_features.shape[1]*5))
 
 for i, img_index in enumerate(img_indices):
 
