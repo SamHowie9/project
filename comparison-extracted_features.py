@@ -52,11 +52,24 @@ all_properties = all_properties_balanced
 # print(all_properties_real[all_properties_real["DiscToTotal"] < 0].shape)
 # print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
 
+print(all_properties[all_properties["GalaxyID"] == 8407169])
+print(all_properties[all_properties["GalaxyID"] == 8756517])
+print(all_properties[all_properties["GalaxyID"] == 8937440])
+print(all_properties[all_properties["GalaxyID"] == 8827412])
 
-# print(all_properties[all_properties["GalaxyID"] == 17917747])
-# print(all_properties[all_properties["GalaxyID"] == 17752121])
-# print(all_properties[all_properties["GalaxyID"] == 13164340])
-# print(all_properties.iloc[475])
+print()
+
+print(all_properties[all_properties["GalaxyID"] == 16618997])
+print(all_properties[all_properties["GalaxyID"] == 17171464])
+print(all_properties[all_properties["GalaxyID"] == 13632283])
+print(all_properties[all_properties["GalaxyID"] == 18481115])
+
+
+print()
+
+print(all_properties[all_properties["GalaxyID"] == 8274107])
+print(all_properties[all_properties["GalaxyID"] == 8101596])
+print(all_properties[all_properties["GalaxyID"] == 15583095])
 
 
 

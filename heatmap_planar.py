@@ -25,9 +25,9 @@ tfd = tfp.distributions
 
 
 
-run = 1
+run = 3
 encoding_dim = 30
-n_flows = 3
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
@@ -48,42 +48,20 @@ def normalise_independently(image):
 
 
 
-# load the images as a balanced dataset
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
 
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
 
-# find all bad fit galaxies
-bad_fit = all_properties[((all_properties["flag_r"] == 1) |
-                          (all_properties["flag_r"] == 4) |
-                          (all_properties["flag_r"] == 5) |
-                          (all_properties["flag_r"] == 6))].index.tolist()
 
-print("Bad Fit Indices:", bad_fit)
-print()
 
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# get a list of all the ids of the galaxies
-chosen_galaxies = list(all_properties["GalaxyID"])
-
+chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies.npy")
 
 # list to contain all galaxy images
 all_images = []
 
-# # loop through each galaxy
+# loop through each galaxy
 for i, galaxy in enumerate(chosen_galaxies):
 
-    # get the filename of each galaxy in the supplemental file
-    filename = "galrand_" + str(galaxy) + ".png"
-
     # open the image and append it to the main list
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
 
     # normalise the image (each band independently)
     image = normalise_independently(image)
@@ -94,23 +72,25 @@ for i, galaxy in enumerate(chosen_galaxies):
 print("Original Dataset", len(all_images))
 
 # split the data into training and testing data (200 images used for testing)
-train_images = all_images[:-200]
-test_images = np.array(all_images[-200:])
+train_images = all_images
+# train_images = all_images[:-200]
+# test_images = np.array(all_images[-200:])
 
-print("Training Set", len(train_images))
-print("Testing Set", len(test_images))
-print()
+# print("Training Set", len(train_images))
+# print("Testing Set", len(test_images))
+# print()
+
 
 
 # load the filenames of the augmented elliptical images
-augmented_galaxies =  os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/")
+augmented_galaxies =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
 
 print("Augmented Ellipticals", len(augmented_galaxies))
 
 for galaxy in augmented_galaxies:
 
     # load each augmented image
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals/" + galaxy)
+    image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/" + galaxy)
 
     # normalise the image
     image = normalise_independently(image)
@@ -118,20 +98,17 @@ for galaxy in augmented_galaxies:
     # add the image to the training set (not the testing set)
     train_images.append(image)
 
-print("Training Set", len(train_images))
-print()
 
 
-# load the filenames of the augmented unknown images
-augmented_galaxies = os.listdir("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/")
+# load the filenames of the augmented transitional images
+augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
 
-print("Augmented Unknown", len(augmented_galaxies))
-
+print("Augmented Transitional", len(augmented_galaxies))
 
 for galaxy in augmented_galaxies:
 
     # load each augmented image
-    image = mpimg.imread("/cosma7/data/durham/dc-howi1/project/Eagle Augmented/Unknown/" + galaxy)
+    image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
 
     # normalise the image
     image = normalise_independently(image)
@@ -144,8 +121,12 @@ train_images = np.array(train_images)
 
 
 print("Training Set", train_images.shape)
-print("Testing Set", test_images.shape)
+# print("Testing Set", test_images.shape)
 print()
+
+
+
+
 
 
 
@@ -380,7 +361,7 @@ def normalise_map(x):
 
 
 
-def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
+def latent_saliency(encoder, image, flows=False, feature=None, smoothing_sigma=None):
 
     image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)  # add batch dim
     image = tf.Variable(image)  # allows in-place grads if you want FGSM later
@@ -390,18 +371,23 @@ def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
         tape.watch(image)
         z_mean, z_log_var, z, _ = encoder(image)
 
-        # get the sampling layer
-        sampling_layer = None
-        for layer in encoder.layers:
-            if isinstance(layer, Sampling):
-                sampling_layer = layer
-                break
+        if flows=True:
+            # get the sampling layer
+            sampling_layer = None
+            for layer in encoder.layers:
+                if isinstance(layer, Sampling):
+                    sampling_layer = layer
+                    break
 
-        # get the flows from the sampling layer
-        flows = sampling_layer.flows
+            # get the flows from the sampling layer
+            flows = sampling_layer.flows
 
-        # transform the mean vectors
-        z_transformed, _ = apply_flows(z_mean, flows)
+            # transform the mean vectors
+            z_transformed, _ = apply_flows(z_mean, flows)
+        else:
+            z_transformed = z_mean
+
+
 
         if feature is not None:
             target = z_transformed[:, feature]
@@ -412,9 +398,9 @@ def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
 
 
 
-    # ∂ z_i / ∂ x
-    grads = tape.gradient(target, image)                    # (1,H,W,3)
-    saliency = tf.reduce_sum(grads**2, axis=-1)[0]        # (H,W)   L2 over RGB
+    # gradient of feature wrt image
+    grads = tape.gradient(target, image)
+    saliency = tf.reduce_sum(grads**2, axis=-1)[0]
 
 
     saliency = normalise_map(saliency)
@@ -432,18 +418,27 @@ def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
 
 
 
+
+
+
+
+
+img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
+
+
+
 fig, axs = plt.subplots(encoding_dim+1, 10, figsize=(30, 90))
 
-for img_index in range(0, 10):
+for img_index in range(0, len(img_indices)):
 
-    axs[0][img_index].imshow(test_images[img_index])
+    axs[0][img_index].imshow(train_images[img_index])
     axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     for feature in range(0, encoding_dim):
 
-        heatmap = latent_saliency(vae.encoder, test_images[img_index], feature, smoothing_sigma=2.0)
+        heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, feature=feature, smoothing_sigma=2.0)
 
-        axs[feature+1][img_index].imshow(test_images[img_index])
+        axs[feature+1][img_index].imshow(train_images[img_index])
         axs[feature+1][img_index].imshow(heatmap, cmap="jet", alpha=0.5)
         axs[feature+1][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -453,16 +448,19 @@ plt.show()
 
 
 
+
+
+
 fig, axs = plt.subplots(2, 10, figsize=(30, 6))
 
 for img_index in range(0, 10):
 
-    axs[0][img_index].imshow(test_images[img_index])
+    axs[0][img_index].imshow(train_images[img_index])
     axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    heatmap = latent_saliency(vae.encoder, test_images[img_index], smoothing_sigma=2.0)
+    heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], flows=False, smoothing_sigma=2.0)
 
-    axs[1][img_index].imshow(test_images[img_index])
+    axs[1][img_index].imshow(train_images[img_index])
     axs[1][img_index].imshow(heatmap, cmap="jet", alpha=0.5)
     axs[1][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
