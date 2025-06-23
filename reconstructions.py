@@ -1,4 +1,7 @@
 import os
+
+from keras.src.backend.jax.random import normal
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow.keras import layers, Model, metrics, losses, optimizers
@@ -428,15 +431,53 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalising F
 # get the images to reconstruct
 random.seed(5)
 # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
-reconstruction_indices = [3165, 3108, 2161]
+# reconstruction_indices = [3165, 3108, 2161]
+reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 print(reconstruction_indices)
 print(extracted_features.shape)
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
 
 
-
 original_images = train_images[reconstruction_indices]
 
+
+
+
+
+
+# reconstructions with residual:
+fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
+
+for i in range(0, len(reconstruction_indices)):
+
+    axs[0][i].imshow(original_images[i])
+    axs[0][i].set_aspect("auto")
+    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+
+    reconstruction = vae.decoder.predict(extracted_features_reconstruct[i])
+
+    axs[1][i].imshow(reconstruction)
+    axs[1][i].set_aspect("auto")
+    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+
+    residual = abs(original_images[i] - reconstruction)
+
+    axs[2][i].imshow(reconstruction)
+    axs[2][i].set_aspect("auto")
+    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
+plt.show()
+plt.close()
+
+
+
+
+
+
+# pca reconstructions by feature
 
 fig, axs = plt.subplots(11, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 11*5))
 
@@ -462,6 +503,8 @@ for i in range(0, len(reconstruction_indices)):
 plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features", bbox_inches="tight")
 plt.show()
 plt.close()
+
+
 
 
 
