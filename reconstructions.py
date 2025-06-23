@@ -455,7 +455,13 @@ for i in range(0, len(reconstruction_indices)):
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
-    reconstruction = vae.decoder.predict(extracted_features_reconstruct[i])
+    reconstruction = vae.decoder.predict(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+
+    # pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
+    # pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+    # pca_features = pca.inverse_transform(pca_features)
+    # reconstruction = vae.decoder.predict(pca_features)
+
 
     axs[1][i].imshow(reconstruction)
     axs[1][i].set_aspect("auto")
