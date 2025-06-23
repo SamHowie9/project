@@ -431,8 +431,8 @@ fig, axs = plt.subplots(encoding_dim+1, len(img_indices), figsize=(30, 90))
 
 for i, img_index in enumerate(img_indices):
 
-    axs[0][img_index].imshow(train_images[img_index])
-    axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[0][i].imshow(train_images[img_index])
+    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     for feature in range(0, encoding_dim):
 
