@@ -12,6 +12,7 @@ import random
 # import tensorflow as tf
 
 
-A = [1, 2, 3]
+A = np.array([5, 5, 5])
+B = np.array([1, 2, 3])
 
-print(A[-1])
+print(A - B)

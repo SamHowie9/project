@@ -450,6 +450,11 @@ fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruct
 
 reconstructions = vae.decoder.predict(extracted_features_reconstruct)
 
+residuals = abs(original_images - reconstructions)
+
+residuals -= residuals.min()
+residuals /= residuals.max() + 1e-8
+
 for i in range(0, len(reconstruction_indices)):
 
     original_image = normalise_independently(original_images[i])
@@ -471,13 +476,13 @@ for i in range(0, len(reconstruction_indices)):
     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
-    residual = abs(original_images[i] - reconstructions[i])
+    # residual = abs(original_images[i] - reconstructions[i])
 
-    axs[2][i].imshow(residual)
+    axs[2][i].imshow(residuals[i])
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual_normalised", bbox_inches="tight")
 plt.show()
 plt.close()
 
