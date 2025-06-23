@@ -371,7 +371,7 @@ def latent_saliency(encoder, image, flows=False, feature=None, smoothing_sigma=N
         tape.watch(image)
         z_mean, z_log_var, z, _ = encoder(image)
 
-        if flows=True:
+        if flows:
             # get the sampling layer
             sampling_layer = None
             for layer in encoder.layers:
