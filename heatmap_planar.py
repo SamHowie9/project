@@ -427,9 +427,9 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 
 
-fig, axs = plt.subplots(encoding_dim+1, 10, figsize=(30, 90))
+fig, axs = plt.subplots(encoding_dim+1, len(img_indices), figsize=(30, 90))
 
-for img_index in range(0, len(img_indices)):
+for img_index in img_indices:
 
     axs[0][img_index].imshow(train_images[img_index])
     axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
@@ -451,9 +451,9 @@ plt.show()
 
 
 
-fig, axs = plt.subplots(2, 10, figsize=(30, 6))
+fig, axs = plt.subplots(2, len(img_indices), figsize=(30, 6))
 
-for img_index in range(0, len(img_indices)):
+for img_index in img_indices:
 
     axs[0][img_index].imshow(train_images[img_index])
     axs[0][img_index].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
