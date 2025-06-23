@@ -506,7 +506,7 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 
 
-fig, axs = plt.subplots(extracted_features.shape[1], len(img_indices), figsize=(len(img_indices)*5, extracted_features.shape[1]*5))
+fig, axs = plt.subplots(extracted_features.shape[1]+1, len(img_indices), figsize=(len(img_indices)*5, extracted_features.shape[1]*5))
 
 for i, img_index in enumerate(img_indices):
 
