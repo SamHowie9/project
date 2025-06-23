@@ -442,7 +442,7 @@ for i, img_index in enumerate(img_indices):
         axs[feature+1][i].imshow(heatmap, cmap="jet", alpha=0.5)
         axs[feature+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-        axs[feature+1][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
+        axs[feature+1][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
 
 
 plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
