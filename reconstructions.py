@@ -422,6 +422,12 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalising F
 
 
 
+# scale font on plots
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 5})
+
+
+
 
 
 
@@ -491,9 +497,15 @@ for i in range(0, len(reconstruction_indices)):
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
+axs[0][0].set_ylabel("Original Image")
+axs[1][0].set_ylabel("Reconstruction")
+axs[2][0].set_ylabel("Residual")
+
 plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
 plt.show()
 plt.close()
+
+
 
 
 
@@ -522,6 +534,15 @@ for i in range(0, len(reconstruction_indices)):
         axs[j+1][i].imshow(pca_reconstruction)
         axs[j+1][i].set_aspect("auto")
         axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+        axs[j+1][0].set_ylabel(feat, rotation=0, labelpad=40, va='center')
+
+axs[0][0].set_ylabel("Original Image")
+
+
+fig.text(0.09, 0.5, 'Number of Principal Components', va='center', rotation='vertical')
+
+fig.subplots_adjust(wspace=0.05, hspace=0)
 
 plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features", bbox_inches="tight")
 plt.show()
