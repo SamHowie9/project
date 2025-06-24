@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 import random
-
+import dcor
 from matplotlib.pyplot import figure
 from sklearn.decomposition import PCA
 # from yellowbrick.cluster import KElbowVisualizer
@@ -52,24 +52,24 @@ all_properties = all_properties_balanced
 # print(all_properties_real[all_properties_real["DiscToTotal"] < 0].shape)
 # print(all_properties_real[all_properties_real["DiscToTotal"] > 1].shape)
 
-print(all_properties[all_properties["GalaxyID"] == 8407169])
-print(all_properties[all_properties["GalaxyID"] == 8756517])
-print(all_properties[all_properties["GalaxyID"] == 8937440])
-print(all_properties[all_properties["GalaxyID"] == 8827412])
-
-print()
-
-print(all_properties[all_properties["GalaxyID"] == 16618997])
-print(all_properties[all_properties["GalaxyID"] == 17171464])
-print(all_properties[all_properties["GalaxyID"] == 13632283])
-print(all_properties[all_properties["GalaxyID"] == 18481115])
-
-
-print()
-
-print(all_properties[all_properties["GalaxyID"] == 8274107])
-print(all_properties[all_properties["GalaxyID"] == 8101596])
-print(all_properties[all_properties["GalaxyID"] == 15583095])
+# print(all_properties[all_properties["GalaxyID"] == 8407169])
+# print(all_properties[all_properties["GalaxyID"] == 8756517])
+# print(all_properties[all_properties["GalaxyID"] == 8937440])
+# print(all_properties[all_properties["GalaxyID"] == 8827412])
+#
+# print()
+#
+# print(all_properties[all_properties["GalaxyID"] == 16618997])
+# print(all_properties[all_properties["GalaxyID"] == 17171464])
+# print(all_properties[all_properties["GalaxyID"] == 13632283])
+# print(all_properties[all_properties["GalaxyID"] == 18481115])
+#
+#
+# print()
+#
+# print(all_properties[all_properties["GalaxyID"] == 8274107])
+# print(all_properties[all_properties["GalaxyID"] == 8101596])
+# print(all_properties[all_properties["GalaxyID"] == 15583095])
 
 
 
@@ -219,10 +219,10 @@ for run in [run]:
 
 
     # spirals only
-    spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
-    print(spiral_indices)
-    extracted_features = extracted_features[spiral_indices]
-    all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
+    # spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
+    # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
 
 
 
@@ -246,15 +246,11 @@ for run in [run]:
 
 
 
-    # print(extracted_features.shape)
-    #
-    # print(all_properties)
 
 
     # correlation plot
 
     # dataframe to contain correlations between each feature and each property
-    # correlation_df = pd.DataFrame(columns=["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Gas Mass", "Dark Matter Mass", "Black Hole Mass", "Black Hole Subgrid Mass", "Stellar Age", "Star Formation Rate"])
     correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
 
 
@@ -267,19 +263,18 @@ for run in [run]:
         # loop through each property
         for gal_property in range(1, len(all_properties.columns)):
 
-            # skip the flag property
-            # if gal_property == 6:
-            #     continue
+            # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+            # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties.iloc[:, gal_property])[0][1]
+            # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+            # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties.iloc[:, gal_property])[0][1]
+            # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+            #
+            # # add the strongest type of correlation
+            # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
 
-            # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-            correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties.iloc[:, gal_property])[0][1]
-            correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-            correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties.iloc[:, gal_property])[0][1]
-            correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+            correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties.iloc[:, gal_property])
 
-
-            # add the strongest type of correlation
-            correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+            correlation_list.append(correlation)
 
         # add all the correlations for that feature to the dataframe
         correlation_df.loc[len(correlation_df)] = correlation_list
@@ -289,13 +284,7 @@ for run in [run]:
 
 
 
-
-    # print(correlation_df)
-
-    # correlation_df = correlation_df.iloc[[12, 21, 27]]
-
     # set the figure size
-    # plt.figure(figsize=(20, extracted_features.T.shape[0]))
     plt.figure(figsize=(20, correlation_df.shape[0]))
 
 
@@ -304,7 +293,6 @@ for run in [run]:
     # selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
     selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
 
-    # print(correlation_df[selected_properties])
 
     # plot a heatmap for the dataframe (with annotations)
     # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
@@ -341,7 +329,7 @@ for run in [run]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_spirals", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_2", bbox_inches='tight')
     plt.show(block=False)
     plt.close()
 
