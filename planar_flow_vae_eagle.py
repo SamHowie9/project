@@ -24,7 +24,7 @@ tfd = tfp.distributions
 
 
 
-run = 11
+run = 12
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -51,7 +51,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 # for encoding_dim in [49, 50]:
 # for encoding_dim in [encoding_dim]:
 # for run in [9, 10]:
-for run in range(encoding_dim, encoding_dim+15):
+for run in range(encoding_dim, encoding_dim+14):
 
 
 
