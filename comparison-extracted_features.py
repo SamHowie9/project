@@ -191,9 +191,9 @@ for run in [run]:
     # extracted_features = extracted_features[:len(all_properties)]
 
     # perform pca on the extracted features
-    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-    extracted_features = pca.transform(extracted_features)
-    extracted_features = extracted_features[:len(all_properties)]
+    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    # extracted_features = pca.transform(extracted_features)
+    # extracted_features = extracted_features[:len(all_properties)]
 
     # print(pca.explained_variance_ratio_)
 
@@ -227,10 +227,10 @@ for run in [run]:
 
 
     # ellipticals only
-    spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
-    print(spiral_indices)
-    extracted_features = extracted_features[spiral_indices]
-    all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+    # spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+    # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
 
 
     # transitional
@@ -329,7 +329,7 @@ for run in [run]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals_2", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     plt.close()
 
@@ -440,13 +440,15 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(12, 10))
+# fig, axs = plt.subplots(1, 1, figsize=(12, 10))
+#
+# density_scatter(extracted_features.T[3], all_properties["q_r"], axs=axs, s=5)
+# # axs.set_xlabel("")
+# # axs.set_ylabel("Disk-Total Ratio")
+#
+# plt.show()
 
-density_scatter(extracted_features.T[3], all_properties["q_r"], axs=axs, s=5)
-# axs.set_xlabel("")
-# axs.set_ylabel("Disk-Total Ratio")
 
-plt.show()
 
 # fig, axs = plt.subplots(1, 1, figsize=(12, 10))
 #
@@ -457,22 +459,24 @@ plt.show()
 # plt.show()
 
 
-# fig, axs = plt.subplots(1, 3, figsize=(20, 5))
-#
-# density_scatter(extracted_features.T[1], all_properties["DiscToTotal"], axs=axs[0], s=5)
-# axs[0].set_xlabel("Feature 1")
-# axs[0].set_ylabel("Disk-Total Ratio")
-#
-# density_scatter(extracted_features.T[3], all_properties["DiscToTotal"], axs=axs[1], s=5)
-# axs[1].set_xlabel("Feature 3")
-# axs[1].set_ylabel("Disk-Total Ratio")
-#
-# density_scatter(extracted_features.T[6], all_properties["DiscToTotal"], axs=axs[2], s=5)
-# axs[2].set_xlabel("Feature 6")
-# axs[2].set_ylabel("Disk-Total Ratio")
-#
-#
-# plt.show()
+
+
+fig, axs = plt.subplots(1, 3, figsize=(20, 5))
+
+density_scatter(extracted_features.T[0], all_properties["n_r"], axs=axs[0], s=5)
+axs[0].set_xlabel("Feature 1")
+axs[0].set_ylabel("Disk-Total Ratio")
+
+density_scatter(extracted_features.T[0], all_properties["DiscToTotal"], axs=axs[1], s=5)
+axs[1].set_xlabel("Feature 3")
+axs[1].set_ylabel("Disk-Total Ratio")
+
+density_scatter(extracted_features.T[9], all_properties["n_r"], axs=axs[2], s=5)
+axs[2].set_xlabel("Feature 6")
+axs[2].set_ylabel("Disk-Total Ratio")
+
+
+plt.show()
 
 
 
