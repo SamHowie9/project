@@ -424,7 +424,7 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalising F
 
 # scale font on plots
 default_size = plt.rcParams['font.size']
-plt.rcParams.update({'font.size': default_size * 2})
+plt.rcParams.update({'font.size': default_size * 3})
 
 
 
@@ -513,7 +513,7 @@ plt.close()
 
 
 # scale font on plots
-default_size = plt.rcParams['font.size']
+# default_size = plt.rcParams['font.size']
 plt.rcParams.update({'font.size': default_size * 5})
 
 # pca reconstructions by feature
