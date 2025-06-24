@@ -537,12 +537,12 @@ for i in range(0, len(reconstruction_indices)):
 
         axs[j+1][0].set_ylabel(feat, rotation=0, labelpad=40, va='center')
 
-axs[0][0].set_ylabel("Original Image")
+axs[0][0].set_ylabel("Original")
 
 
 fig.text(0.09, 0.5, 'Number of Principal Components', va='center', rotation='vertical')
 
-fig.subplots_adjust(wspace=0.05, hspace=0)
+fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
 plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features", bbox_inches="tight")
 plt.show()
