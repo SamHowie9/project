@@ -424,7 +424,7 @@ extracted_features = np.load("Variational Eagle/Extracted Features/Normalising F
 
 # scale font on plots
 default_size = plt.rcParams['font.size']
-plt.rcParams.update({'font.size': default_size * 5})
+plt.rcParams.update({'font.size': default_size * 2})
 
 
 
@@ -497,9 +497,11 @@ for i in range(0, len(reconstruction_indices)):
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-axs[0][0].set_ylabel("Original Image")
+axs[0][0].set_ylabel("Original")
 axs[1][0].set_ylabel("Reconstruction")
 axs[2][0].set_ylabel("Residual")
+
+fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
 plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
 plt.show()
@@ -510,7 +512,9 @@ plt.close()
 
 
 
-
+# scale font on plots
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 5})
 
 # pca reconstructions by feature
 
