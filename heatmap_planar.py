@@ -593,12 +593,12 @@ original_images = train_images[reconstruction_indices]
 fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
 
 
-pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-pca_features = pca.transform(extracted_features_reconstruct)
-pca_features = pca.inverse_transform(pca_features)
-reconstructions = vae.decoder.predict(pca_features)
+# pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+# pca_features = pca.transform(extracted_features_reconstruct)
+# pca_features = pca.inverse_transform(pca_features)
+# reconstructions = vae.decoder.predict(pca_features)
 
-# reconstructions = vae.decoder.predict(extracted_features_reconstruct)
+reconstructions = vae.decoder.predict(extracted_features_reconstruct)
 
 residuals = abs(original_images - reconstructions)
 
