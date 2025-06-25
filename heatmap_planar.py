@@ -621,7 +621,7 @@ for i in range(0, len(reconstruction_indices)):
 
 
     # axs[2][i].imshow(residual)
-    axs[2][i].imshow(residuals[i], cmap="gray-r")
+    axs[2][i].imshow(residuals[i], cmap="gray_r")
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -634,7 +634,7 @@ for i in range(0, len(reconstruction_indices)):
     # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
     axs[3][i].imshow(original_image, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="coolwarm-r", alpha=0.5)
+    axs[3][i].imshow(heatmap, cmap="coolwarm_r", alpha=0.5)
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
