@@ -180,9 +180,9 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 
 # check the number of augmented images
-# augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Only/")
-augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
-augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
+augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Only/")
+augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
+augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/")
 
 print()
 # print(len(augmented_spirals)+len(spirals))
@@ -219,83 +219,88 @@ print()
 
 
 
-def normalise_independently(image):
-    image = image.T
-    for i in range(0, 3):
-        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
-    return image.T
 
 
 
 
-spiral_sample = random.sample(spirals, 36)
 
-fig, axs = plt.subplots(6, 6, figsize=(20, 20))
-
-for i in range(0, 6):
-    for j in range(0, 6):
-
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
-
-        sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
-        dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
-
-        axs[i][j].imshow(normalise_independently(image))
-        # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(spiral_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
-plt.show()
-plt.close()
-print(".")
-
-
-
-
-transitional_sample = random.sample(transitional, 36)
-
-fig, axs = plt.subplots(6, 6, figsize=(20, 20))
-
-for i in range(0, 6):
-    for j in range(0, 6):
-
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(transitional_sample[index]) + ".png")
-
-        sersic = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "n_r"].values[0]
-        dt = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "DiscToTotal"].values[0]
-
-        axs[i][j].imshow(normalise_independently(image))
-        axs[i][j].set_title(str(transitional_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/sample_dt_transitional", bbox_inches='tight')
-plt.show()
-plt.close()
-print(".")
-
-
-elliptical_sample = random.sample(ellipticals, 36)
-
-fig, axs = plt.subplots(6, 6, figsize=(20, 20))
-
-for i in range(0, 6):
-    for j in range(0, 6):
-
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
-
-        sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
-        dt = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "DiscToTotal"].values[0]
-
-        axs[i][j].imshow(normalise_independently(image))
-        # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
-        axs[i][j].set_title(str(elliptical_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
-        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
-plt.show()
-plt.close()
-print(".")
+# def normalise_independently(image):
+#     image = image.T
+#     for i in range(0, 3):
+#         image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+#     return image.T
+#
+#
+#
+#
+# spiral_sample = random.sample(spirals, 36)
+#
+# fig, axs = plt.subplots(6, 6, figsize=(20, 20))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(spiral_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "n_r"].values[0]
+#         dt = all_properties.loc[all_properties["GalaxyID"] == spiral_sample[index], "DiscToTotal"].values[0]
+#
+#         axs[i][j].imshow(normalise_independently(image))
+#         # axs[i][j].set_title(str(spiral_sample[index]) + ", n=" + str(sersic))
+#         axs[i][j].set_title(str(spiral_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_dt_spiral", bbox_inches='tight')
+# plt.show()
+# plt.close()
+# print(".")
+#
+#
+#
+#
+# transitional_sample = random.sample(transitional, 36)
+#
+# fig, axs = plt.subplots(6, 6, figsize=(20, 20))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(transitional_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "n_r"].values[0]
+#         dt = all_properties.loc[all_properties["GalaxyID"] == transitional_sample[index], "DiscToTotal"].values[0]
+#
+#         axs[i][j].imshow(normalise_independently(image))
+#         axs[i][j].set_title(str(transitional_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_dt_transitional", bbox_inches='tight')
+# plt.show()
+# plt.close()
+# print(".")
+#
+#
+# elliptical_sample = random.sample(ellipticals, 36)
+#
+# fig, axs = plt.subplots(6, 6, figsize=(20, 20))
+#
+# for i in range(0, 6):
+#     for j in range(0, 6):
+#
+#         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(elliptical_sample[index]) + ".png")
+#
+#         sersic = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "n_r"].values[0]
+#         dt = all_properties.loc[all_properties["GalaxyID"] == elliptical_sample[index], "DiscToTotal"].values[0]
+#
+#         axs[i][j].imshow(normalise_independently(image))
+#         # axs[i][j].set_title(str(elliptical_sample[index]) + ", n=" + str(sersic))
+#         axs[i][j].set_title(str(elliptical_sample[index]) + "\n d/t=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 1)))
+#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/sample_dt_elliptical", bbox_inches='tight')
+# plt.show()
+# plt.close()
+# print(".")
 
 
 
