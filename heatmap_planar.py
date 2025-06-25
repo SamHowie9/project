@@ -638,7 +638,7 @@ for i in range(0, len(reconstruction_indices)):
 
     original_gray = color.rgb2gray(original_image)
     axs[3][i].imshow(original_gray, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
+    axs[3][i].imshow(heatmap, cmap="jet", alpha=1)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -651,6 +651,6 @@ axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_2", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_3", bbox_inches="tight")
 plt.show()
 plt.close()
