@@ -624,7 +624,7 @@ for i in range(0, len(reconstruction_indices)):
 
     # axs[2][i].imshow(residual)
     residual = color.rgb2gray(residuals[i])
-    axs[2][i].imshow(residuals[i], cmap="gray_r")
+    axs[2][i].imshow(residual, cmap="gray_r")
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -638,7 +638,7 @@ for i in range(0, len(reconstruction_indices)):
 
     original_gray = color.rgb2gray(original_image)
     axs[3][i].imshow(original_gray)
-    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.75)
+    # axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.6)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
