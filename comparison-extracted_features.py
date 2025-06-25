@@ -296,7 +296,7 @@ for run in [run]:
 
     # plot a heatmap for the dataframe (with annotations)
     # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-    ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={'label': 'Correlation'})
+    ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={'label': 'Correlation'})
 
 
 
@@ -304,7 +304,7 @@ for run in [run]:
     plt.ylabel("Extracted Features", fontsize=15)
     ax.xaxis.tick_top() # x axis on top
     ax.xaxis.set_label_position('top')
-    ax.tick_params(length=0)
+    ax.tick_params(length=0, labelsize=15)
     ax.figure.axes[-1].yaxis.label.set_size(15)
 
 
@@ -329,7 +329,7 @@ for run in [run]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     plt.close()
 
