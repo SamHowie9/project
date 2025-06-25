@@ -12,6 +12,8 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 from scipy.ndimage import gaussian_filter
 from sklearn.decomposition import PCA
+from skimage import io, color
+
 
 
 
@@ -621,7 +623,8 @@ for i in range(0, len(reconstruction_indices)):
 
 
     # axs[2][i].imshow(residual)
-    axs[2][i].imshow(residuals[i], cmap="gray")
+    residual = color.rgb2gray(residuals[i])
+    axs[2][i].imshow(residuals[i], cmap="gray_r")
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -633,8 +636,9 @@ for i in range(0, len(reconstruction_indices)):
     heatmap = latent_saliency(encoder=vae.encoder, image=original_images[i], smoothing_sigma=2.0)
     # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
-    axs[3][i].imshow(original_image, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.5)
+    original_gray = color.rgb2gray(original_image)
+    axs[3][i].imshow(original_gray)
+    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.75)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
