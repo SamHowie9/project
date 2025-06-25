@@ -15,6 +15,8 @@ from sklearn.linear_model import LinearRegression
 from matplotlib import cm
 from matplotlib.colors import Normalize
 from scipy.interpolate import interpn
+from scipy.stats import norm
+
 
 
 
@@ -26,7 +28,7 @@ from scipy.interpolate import interpn
 
 
 
-run = 9
+run = 3
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -51,8 +53,9 @@ extracted_features_switch = extracted_features.T
 print(extracted_features.shape)
 
 # rows, cols = [2, 5]
-rows, cols = [6, 5]
-fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*4))
+# rows, cols = [6, 5]
+rows, cols = [4, 8]
+fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*5))
 
 # standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
 standard_normal = np.random.normal(loc=0, scale=1, size=100000)
@@ -64,23 +67,45 @@ for i in range(rows):
 
         try:
             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
-            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, stat="density", edgecolor=None)
+            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, stat="density", edgecolor=None, color="grey")
 
             # if (j + (i*cols) + 1) in [6, 8, 10, 11, 12, 13, 15, 19, 27, 30]:
             #     sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
 
-            sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
+            # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
 
-            axs[i][j].set_xlabel("Feature " + str(j + (i*cols) + 1))
+            mean = np.mean(extracted_features.T[j + (i*cols)])
+            std = np.std(extracted_features.T[j + (i*cols)])
+
+            approx_dist_x = np.linspace(mean-(4*std), mean+(4*std), 1000)
+            approx_dist_y = norm.pdf(approx_dist_x, mean, std)
+            axs[i][j].plot(approx_dist_x, approx_dist_y, color="black")
+
+            # approx_dist = np.random.normal(loc=mean, scale=std, size=1000000)
+            # sns.histplot(x=approx_dist,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
+
+
+            axs[i][j].set_title("(" + str(round(mean, 3)) + ", " + str(round(std, 3)) + ")", fontsize=25)
+            axs[i][j].set_xlabel("Feature " + str(j + (i*cols) + 1), fontsize=25)
+
+            # title = "Feature " + str(j + (i*cols) + 1) + "\nμ=" + str(round(mean, 3)) + ", σ=" + str(round(std, 3))
+            # axs[i][j].set_xlabel(title, fontsize=20)
+
             axs[i][j].set_ylabel("")
             axs[i][j].set_yticks([])
+            axs[i][j].xaxis.set_tick_params(labelsize=20)
+
+            axs[i][j].set_xlim(mean-(4*std), mean+(4*std))
+
         except:
             print(j + (i*cols))
 
-np.set_printoptions(precision=3)
+axs[3][6].set_axis_off()
+axs[3][7].set_axis_off()
 
+fig.subplots_adjust(wspace=0.1, hspace=0.6)
 
-# plt.savefig("Variational Eagle/Plots/feature_distributions_gaussian_partial", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/feature_distributions_latent", bbox_inches='tight')
 plt.show()
 
 

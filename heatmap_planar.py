@@ -519,51 +519,132 @@ print(extracted_features.shape)
 # pca_components = pca.components_
 
 
-
 img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 
 
-fig, axs = plt.subplots(extracted_features.shape[1]+1, len(img_indices), figsize=(len(img_indices)*5, extracted_features.shape[1]*5))
 
-for i, img_index in enumerate(img_indices):
+# heatmap for all features
 
-    axs[0][i].imshow(train_images[img_index])
+# fig, axs = plt.subplots(extracted_features.shape[1]+1, len(img_indices), figsize=(len(img_indices)*5, extracted_features.shape[1]*5))
+#
+# for i, img_index in enumerate(img_indices):
+#
+#     axs[0][i].imshow(train_images[img_index])
+#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     for feature in range(0, extracted_features.shape[1]):
+#
+#         heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], feature=feature, smoothing_sigma=2.0)
+#         # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
+#
+#         axs[feature+1][i].imshow(train_images[img_index])
+#         axs[feature+1][i].imshow(heatmap, cmap="jet", alpha=0.5)
+#         axs[feature+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#         axs[feature+1][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
+#
+#
+# plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
+# plt.show()
+
+
+
+
+
+
+# heatmap for all features
+
+# fig, axs = plt.subplots(2, len(img_indices), figsize=(30, 6))
+#
+# for i, img_index in enumerate(img_indices):
+#
+#     axs[0][i].imshow(train_images[img_index])
+#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], smoothing_sigma=2.0)
+#     # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
+#
+#     axs[1][i].imshow(train_images[img_index])
+#     axs[1][i].imshow(heatmap, cmap="jet", alpha=0.5)
+#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# plt.savefig("Variational Eagle/Plots/heatmap_all_smooth", bbox_inches="tight")
+# plt.show()
+
+
+
+
+
+
+
+
+# reconstructions and heatmaps
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+
+reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
+
+extracted_features_reconstruct = extracted_features[reconstruction_indices]
+original_images = train_images[reconstruction_indices]
+
+
+# reconstructions with residual:
+fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
+
+
+pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+pca_features = pca.transform(extracted_features_reconstruct)
+pca_features = pca.inverse_transform(pca_features)
+reconstructions = vae.decoder.predict(pca_features)
+
+# reconstructions = vae.decoder.predict(extracted_features_reconstruct)
+
+residuals = abs(original_images - reconstructions)
+
+# residuals -= residuals.min()
+# residuals /= residuals.max() + 1e-8
+
+for i in range(0, len(reconstruction_indices)):
+
+    original_image = normalise_independently(original_images[i])
+    axs[0][i].imshow(original_image)
+    axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    for feature in range(0, extracted_features.shape[1]):
+    dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
+    axs[0][i].set_title("D/T=" + str(round(dt, 3)))
 
-        heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], feature=feature, smoothing_sigma=2.0)
-        # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
-
-        axs[feature+1][i].imshow(train_images[img_index])
-        axs[feature+1][i].imshow(heatmap, cmap="jet", alpha=0.5)
-        axs[feature+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-        axs[feature+1][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
-
-
-plt.savefig("Variational Eagle/Plots/heatmap_individual_smooth", bbox_inches="tight")
-plt.show()
-
-
-
-
-
-
-fig, axs = plt.subplots(2, len(img_indices), figsize=(30, 6))
-
-for i, img_index in enumerate(img_indices):
-
-    axs[0][i].imshow(train_images[img_index])
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-    heatmap = latent_saliency(encoder=vae.encoder, image=train_images[img_index], smoothing_sigma=2.0)
-    # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
-
-    axs[1][i].imshow(train_images[img_index])
-    axs[1][i].imshow(heatmap, cmap="jet", alpha=0.5)
+    axs[1][i].imshow(reconstructions[i])
+    axs[1][i].set_aspect("auto")
     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-plt.savefig("Variational Eagle/Plots/heatmap_all_smooth", bbox_inches="tight")
+
+    # axs[2][i].imshow(residual)
+    axs[2][i].imshow(residuals[i], cmap="gray-r")
+    axs[2][i].set_aspect("auto")
+    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+    avg_residual = str(round(np.mean(residuals[i]), 3))
+    axs[2][i].text(0.01, 0.01, 'X-axis Label', transform=axs[2][i].transAxes, ha='left', va='bottom')
+
+
+
+    heatmap = latent_saliency(encoder=vae.encoder, image=original_images[i], smoothing_sigma=2.0)
+    # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
+
+    axs[3][i].imshow(original_image, cmap="gray")
+    axs[3][i].imshow(heatmap, cmap="coolwarm-r", alpha=0.5)
+    axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+
+axs[0][0].set_ylabel("Original")
+axs[1][0].set_ylabel("Reconstruction")
+axs[2][0].set_ylabel("Residual")
+axs[3][0].set_ylabel("Heatmap")
+
+fig.subplots_adjust(wspace=0.1, hspace=0.05)
+
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap", bbox_inches="tight")
 plt.show()
+plt.close()

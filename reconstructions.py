@@ -439,16 +439,9 @@ random.seed(5)
 # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
 # reconstruction_indices = [3165, 3108, 2161]
 reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
-print(reconstruction_indices)
-print(extracted_features.shape)
+
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
-
-
 original_images = train_images[reconstruction_indices]
-
-
-
-
 
 
 # reconstructions with residual:
