@@ -635,7 +635,7 @@ for i in range(0, len(reconstruction_indices)):
 
     axs[3][i].imshow(original_image, cmap="gray")
     axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.5)
-    axs[i][j].set_aspect("auto")
+    axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
