@@ -638,7 +638,7 @@ for i in range(0, len(reconstruction_indices)):
 
     original_gray = color.rgb2gray(original_image)
     axs[3][i].imshow(original_gray, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="Blues_r", alpha=0.65)
+    axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
