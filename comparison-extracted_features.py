@@ -219,10 +219,10 @@ for run in [run]:
 
 
     # spirals only
-    # spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
-    # print(spiral_indices)
-    # extracted_features = extracted_features[spiral_indices]
-    # all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
+    spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
+    print(spiral_indices)
+    extracted_features = extracted_features[spiral_indices]
+    all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
 
 
 
@@ -263,7 +263,7 @@ for run in [run]:
         # loop through each property
         for gal_property in range(1, len(all_properties.columns)):
 
-            # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+            # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
             # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties.iloc[:, gal_property])[0][1]
             # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
             # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties.iloc[:, gal_property])[0][1]
@@ -273,7 +273,6 @@ for run in [run]:
             # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
 
             correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties.iloc[:, gal_property])
-
             correlation_list.append(correlation)
 
         # add all the correlations for that feature to the dataframe
@@ -294,9 +293,10 @@ for run in [run]:
     selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
 
 
+
     # plot a heatmap for the dataframe (with annotations)
     # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-    ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={'label': 'Correlation'})
+    ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={"label": "Correlation", "pad": 0.02})
 
 
 
@@ -307,6 +307,9 @@ for run in [run]:
     ax.tick_params(length=0, labelsize=15)
     ax.figure.axes[-1].yaxis.label.set_size(15)
 
+    colourbar = ax.collections[0].colorbar
+    colourbar.ax.tick_params(labelsize=15)
+    colourbar.ax.yaxis.label.set_size(15)
 
 
     def wrap_labels(ax, width, break_long_words=False):
@@ -325,13 +328,12 @@ for run in [run]:
     wrap_labels(ax, 10)
 
 
-
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_spirals_dcor", bbox_inches='tight')
     plt.show(block=False)
-    plt.close()
+    # plt.close()
 
 
 
