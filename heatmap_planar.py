@@ -638,14 +638,14 @@ for i in range(0, len(reconstruction_indices)):
 
     original_gray = color.rgb2gray(original_image)
     axs[3][i].imshow(original_gray, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.65)
+    axs[3][i].imshow(heatmap, cmap="jet", alpha=0.65)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
 
 axs[0][0].set_ylabel("Original")
-axs[1][0].set_ylabel("Reconstruction")
+axs[1][0].set_ylabel("Recons.")
 axs[2][0].set_ylabel("Residual")
 axs[3][0].set_ylabel("Heatmap")
 
