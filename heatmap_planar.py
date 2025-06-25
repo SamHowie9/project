@@ -637,7 +637,7 @@ for i in range(0, len(reconstruction_indices)):
     # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
     original_gray = color.rgb2gray(original_image)
-    axs[3][i].imshow(original_gray)
+    axs[3][i].imshow(original_gray, cmap="gray_r")
     # axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.6)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
