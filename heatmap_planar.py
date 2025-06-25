@@ -592,7 +592,7 @@ original_images = train_images[reconstruction_indices]
 
 
 # reconstructions with residual:
-fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 4*5))
+fig, axs = plt.subplots(5, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 5*5))
 
 
 # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
@@ -638,9 +638,15 @@ for i in range(0, len(reconstruction_indices)):
 
     original_gray = color.rgb2gray(original_image)
     axs[3][i].imshow(original_gray, cmap="gray_r")
-    # axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.6)
+    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.6)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+    original_gray = color.rgb2gray(original_image)
+    axs[4][i].imshow(original_gray, cmap="gray_r")
+    # axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.6)
+    axs[4][i].set_aspect("auto")
+    axs[4][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
 axs[0][0].set_ylabel("Original")
