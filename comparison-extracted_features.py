@@ -227,10 +227,10 @@ for run in [run]:
 
 
     # ellipticals only
-    spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
-    print(spiral_indices)
-    extracted_features = extracted_features[spiral_indices]
-    all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+    # spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+    # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
 
 
     # transitional

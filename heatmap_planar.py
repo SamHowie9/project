@@ -585,7 +585,8 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
-reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
+# reconstruction_indices = [560, 743, 839, 780,    2785, 2929, 2227, 3382,     495, 437, 2581]
+reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
 
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
 original_images = train_images[reconstruction_indices]
@@ -638,7 +639,7 @@ for i in range(0, len(reconstruction_indices)):
 
     original_gray = color.rgb2gray(original_image)
     axs[3][i].imshow(original_gray, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="jet", alpha=1)
+    axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -651,6 +652,6 @@ axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_3", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_1", bbox_inches="tight")
 plt.show()
 plt.close()
