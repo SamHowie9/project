@@ -615,7 +615,7 @@ for i in range(0, len(reconstruction_indices)):
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
-    axs[0][i].set_title("D/T=" + str(round(dt, 3)))
+    axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=40)
 
     axs[1][i].imshow(reconstructions[i])
     axs[1][i].set_aspect("auto")
@@ -629,7 +629,7 @@ for i in range(0, len(reconstruction_indices)):
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     avg_residual = str(round(np.mean(residuals[i]), 3))
-    axs[2][i].text(0.01, 0.01, 'X-axis Label', transform=axs[2][i].transAxes, ha='left', va='bottom')
+    axs[2][i].text(0.01, 0.01, avg_residual, transform=axs[2][i].transAxes, ha='left', va='bottom')
 
 
 
@@ -638,7 +638,7 @@ for i in range(0, len(reconstruction_indices)):
 
     original_gray = color.rgb2gray(original_image)
     axs[3][i].imshow(original_gray, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.6)
+    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.65)
     axs[3][i].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
