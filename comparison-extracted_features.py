@@ -191,8 +191,8 @@ for run in [run]:
     # extracted_features = extracted_features[:len(all_properties)]
 
     # perform pca on the extracted features
-    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-    extracted_features = pca.transform(extracted_features)
+    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    # extracted_features = pca.transform(extracted_features)
     # extracted_features = extracted_features[:len(all_properties)]
 
     # print(pca.explained_variance_ratio_)
@@ -227,10 +227,11 @@ for run in [run]:
 
 
     # ellipticals only
-    spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
-    print(spiral_indices)
-    extracted_features = extracted_features[spiral_indices]
-    all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+    # spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+    # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+
 
 
     # transitional
@@ -238,6 +239,7 @@ for run in [run]:
     # print(spiral_indices)
     # extracted_features = extracted_features[spiral_indices]
     # all_properties = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
+
 
 
     # original images
@@ -331,7 +333,7 @@ for run in [run]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals_dcor", bbox_inches='tight')
     plt.show(block=False)
     # plt.close()
 
