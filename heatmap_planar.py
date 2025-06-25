@@ -507,7 +507,7 @@ def pca_saliency(encoder, image, pca_components, pca_component_index, smoothing_
 
 # scale font on plots
 default_size = plt.rcParams['font.size']
-plt.rcParams.update({'font.size': default_size * 5})
+plt.rcParams.update({'font.size': default_size * 4})
 
 
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
@@ -590,7 +590,7 @@ original_images = train_images[reconstruction_indices]
 
 
 # reconstructions with residual:
-fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
+fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 4*5))
 
 
 # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
@@ -621,7 +621,7 @@ for i in range(0, len(reconstruction_indices)):
 
 
     # axs[2][i].imshow(residual)
-    axs[2][i].imshow(residuals[i], cmap="gray_r")
+    axs[2][i].imshow(residuals[i], cmap="gray")
     axs[2][i].set_aspect("auto")
     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -634,7 +634,8 @@ for i in range(0, len(reconstruction_indices)):
     # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
 
     axs[3][i].imshow(original_image, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="coolwarm_r", alpha=0.5)
+    axs[3][i].imshow(heatmap, cmap="viridis", alpha=0.5)
+    axs[i][j].set_aspect("auto")
     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
