@@ -325,10 +325,10 @@ all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_
 # all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
 
 # ellipticals only
-spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
-print(spiral_indices)
-extracted_features = extracted_features[spiral_indices]
-all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+# spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+# print(spiral_indices)
+# extracted_features = extracted_features[spiral_indices]
+# all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
 
 
 # transitional
@@ -363,24 +363,26 @@ plt.rcParams.update({'font.size': default_size * 5})
 
 num_varying_features = 13
 
-med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-print(len(med_pca_features))
+med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+print(len(med_features))
 
 fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
 
+# loop through each feature
 for i in range(len(extracted_features.T)):
 
+    # get the incremental values for that feature
     varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+
 
     for j in range(num_varying_features):
 
-        temp_pca_features = med_pca_features.copy()
-        temp_pca_features[i] = varying_feature_values[j]
+        temp_features = med_features.copy()
+        temp_features[i] = varying_feature_values[j]
 
-        temp_features = temp_pca_features
         temp_features = np.expand_dims(temp_features, axis=0)
 
-        # temp_features = pca.inverse_transform(temp_pca_features)
+        # temp_features = pca.inverse_transform(temp_features)
         # temp_features = np.expand_dims(temp_features, axis=0)
 
         reconstruction = vae.decoder.predict(temp_features)[0]
@@ -400,7 +402,7 @@ fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
 plt.show()
 plt.close()
 

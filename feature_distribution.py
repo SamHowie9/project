@@ -85,15 +85,16 @@ for i in range(rows):
             # sns.histplot(x=approx_dist,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
 
 
-            axs[i][j].set_title("(" + str(round(mean, 3)) + ", " + str(round(std, 3)) + ")", fontsize=25)
-            axs[i][j].set_xlabel("Feature " + str(j + (i*cols) + 1), fontsize=25)
+            axs[i][j].set_title("(" + str(round(mean, 3)) + ", " + str(round(std, 3)) + ")", fontsize=30)
+            axs[i][j].set_xlabel("Feature " + str(j + (i*cols) + 1), fontsize=30)
 
-            # title = "Feature " + str(j + (i*cols) + 1) + "\nμ=" + str(round(mean, 3)) + ", σ=" + str(round(std, 3))
-            # axs[i][j].set_xlabel(title, fontsize=20)
 
             axs[i][j].set_ylabel("")
             axs[i][j].set_yticks([])
-            axs[i][j].xaxis.set_tick_params(labelsize=20)
+
+            ticks = [round(mean-3*std, 3), round(mean, 3), round(mean+3*std, 3)]
+            axs[i][j].set_xticks(ticks)
+            axs[i][j].tick_params(labelsize=22)
 
             axs[i][j].set_xlim(mean-(4*std), mean+(4*std))
 
@@ -105,7 +106,7 @@ axs[3][7].set_axis_off()
 
 fig.subplots_adjust(wspace=0.1, hspace=0.6)
 
-plt.savefig("Variational Eagle/Plots/feature_distributions_latent", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/feature_distributions_latent_2", bbox_inches='tight')
 plt.show()
 
 
