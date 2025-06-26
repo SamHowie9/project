@@ -1,6 +1,8 @@
 import os
 from xml.sax.handler import all_properties
 
+from eagle_image_processing import all_images
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow.keras import layers, Model, metrics, losses, optimizers
@@ -26,7 +28,7 @@ tfd = tfp.distributions
 
 
 
-run = 12
+run = 1
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -52,8 +54,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 # for encoding_dim in range(encoding_dim, encoding_dim+5):
 # for encoding_dim in [49, 50]:
 # for encoding_dim in [encoding_dim]:
-# for run in [9, 10]:
-for run in range(run, run+14):
+for run in [1, 2, 3]:
+# for run in range(run, run+14):
 
 
 
@@ -81,142 +83,80 @@ for run in range(run, run+14):
 
 
 
-    # load the original dataset
 
-    # # load structural and physical properties into dataframes
-    # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-    # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-    #
-    # # dataframe for all properties
-    # all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-    #
-    # # find all bad fit galaxies
-    # bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-    # print("Bad Fit Indices:", bad_fit)
-    #
-    # # remove those galaxies
-    # for galaxy in bad_fit:
-    #     all_properties = all_properties.drop(galaxy, axis=0)
-    #
-    # # get a list of all the ids of the galaxies
-    # chosen_galaxies = list(all_properties["GalaxyID"])
+    # load the images as a balanced dataset (D/T)
+
+    # chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies.npy")
     #
     # # list to contain all galaxy images
     # all_images = []
     #
-    # # # loop through each galaxy in the supplemental file
+    # # loop through each galaxy
     # for i, galaxy in enumerate(chosen_galaxies):
     #
-    #     # get the filename of each galaxy in the supplemental file
-    #     filename = "galrand_" + str(galaxy) + ".png"
-    #
     #     # open the image and append it to the main list
-    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/" + filename)
+    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     #
-    #     # find smallest non zero pixel value in the image and replace all zero values with this (for log transformation)
-    #     smallest_non_zero = np.min(image[image > 0])
-    #     image = np.where(image == 0.0, smallest_non_zero, image)
-    #
-    #     # normalise the image (either each band independently or to the r band)
+    #     # normalise the image (each band independently)
     #     image = normalise_independently(image)
     #
     #     # add the image to the dataset
     #     all_images.append(image)
     #
+    # print("Original Dataset", len(all_images))
     #
     # # split the data into training and testing data (200 images used for testing)
-    # train_images = np.array(all_images[:-200])
-    # test_images = np.array(all_images[-200:])
-
-
-
-
-
-
-
-    # load the images as a balanced dataset (D/T)
-
-    # # load structural and physical properties into dataframes
-    # structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-    # physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+    # train_images = all_images
+    # # train_images = all_images[:-200]
+    # # test_images = np.array(all_images[-200:])
     #
-    # # dataframe for all properties
-    # all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+    # # print("Training Set", len(train_images))
+    # # print("Testing Set", len(test_images))
+    # # print()
     #
-    # # get a list of all the ids of the galaxies
-    # chosen_galaxies = list(all_properties["GalaxyID"])
-
-    chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies.npy")
-
-    # list to contain all galaxy images
-    all_images = []
-
-    # loop through each galaxy
-    for i, galaxy in enumerate(chosen_galaxies):
-
-        # open the image and append it to the main list
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-
-        # normalise the image (each band independently)
-        image = normalise_independently(image)
-
-        # add the image to the dataset
-        all_images.append(image)
-
-    print("Original Dataset", len(all_images))
-
-    # split the data into training and testing data (200 images used for testing)
-    train_images = all_images
-    # train_images = all_images[:-200]
-    # test_images = np.array(all_images[-200:])
-
-    # print("Training Set", len(train_images))
-    # print("Testing Set", len(test_images))
+    #
+    #
+    # # load the filenames of the augmented elliptical images
+    # augmented_galaxies =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
+    #
+    # print("Augmented Ellipticals", len(augmented_galaxies))
+    #
+    # for galaxy in augmented_galaxies:
+    #
+    #     # load each augmented image
+    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/" + galaxy)
+    #
+    #     # normalise the image
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the training set (not the testing set)
+    #     train_images.append(image)
+    #
+    #
+    #
+    # # load the filenames of the augmented transitional images
+    # augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
+    #
+    # print("Augmented Transitional", len(augmented_galaxies))
+    #
+    # for galaxy in augmented_galaxies:
+    #
+    #     # load each augmented image
+    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
+    #
+    #     # normalise the image
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the training set (not the testing set)
+    #     train_images.append(image)
+    #
+    # # convert the training set to a numpy array
+    # train_images = np.array(train_images)
+    #
+    #
+    # print("Training Set", train_images.shape)
+    # # print("Testing Set", test_images.shape)
     # print()
-
-
-
-    # load the filenames of the augmented elliptical images
-    augmented_galaxies =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
-
-    print("Augmented Ellipticals", len(augmented_galaxies))
-
-    for galaxy in augmented_galaxies:
-
-        # load each augmented image
-        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/" + galaxy)
-
-        # normalise the image
-        image = normalise_independently(image)
-
-        # add the image to the training set (not the testing set)
-        train_images.append(image)
-
-
-
-    # load the filenames of the augmented transitional images
-    augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
-
-    print("Augmented Transitional", len(augmented_galaxies))
-
-    for galaxy in augmented_galaxies:
-
-        # load each augmented image
-        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
-
-        # normalise the image
-        image = normalise_independently(image)
-
-        # add the image to the training set (not the testing set)
-        train_images.append(image)
-
-    # convert the training set to a numpy array
-    train_images = np.array(train_images)
-
-
-    print("Training Set", train_images.shape)
-    # print("Testing Set", test_images.shape)
-    print()
 
 
 
@@ -231,10 +171,9 @@ for run in range(run, run+14):
 
     # load spirals only
 
-    all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+    spirals = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_spirals.npy")
 
-
-    spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
+    all_images = []
 
     for galaxy in spirals:
 
@@ -248,12 +187,64 @@ for run in range(run, run+14):
         all_images.append(image)
 
 
+    augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Only/")
+
+    for galaxy in augmented_galaxies:
+
+        # load each augmented image
+        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Only/" + galaxy)
+
+        # normalise the image
+        image = normalise_independently(image)
+
+        # add the image to the training set (not the testing set)
+        all_images.append(image)
+
+
+    train_images = np.array(all_images)
+    # test_images = np.array(all_images[-200:])
+
+    print("Spirals Training Set:", train_images.shape)
+
+
+
 
 
 
 
     # load transitional only
-    spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
+
+    # transitional = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_transitional.npy")
+    #
+    # all_images = []
+    #
+    # for galaxy in transitional:
+    #     # open the image and append it to the main list
+    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    #
+    #     # normalise the image (each band independently)
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the dataset
+    #     all_images.append(image)
+    #
+    # augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
+    #
+    # for galaxy in augmented_galaxies:
+    #
+    #     # load each augmented image
+    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/" + galaxy)
+    #
+    #     # normalise the image
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the training set (not the testing set)
+    #     all_images.append(image)
+    #
+    # train_images = np.array(all_images)
+    # # test_images = np.array(all_images[-200:])
+    #
+    # print("Transitional Training Set:", train_images.shape)
 
 
 
@@ -264,7 +255,38 @@ for run in range(run, run+14):
 
 
     # load elliptical only
-    spirals = list(all_properties["GalaxyID"].loc[all_properties["DiscToTotal"] > 0.2])
+
+    # ellipticals = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_ellipticals.npy")
+    #
+    # all_images = []
+    #
+    # for galaxy in ellipticals:
+    #     # open the image and append it to the main list
+    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    #
+    #     # normalise the image (each band independently)
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the dataset
+    #     all_images.append(image)
+    #
+    # augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/")
+    #
+    # for galaxy in augmented_galaxies:
+    #
+    #     # load each augmented image
+    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/" + galaxy)
+    #
+    #     # normalise the image
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the training set (not the testing set)
+    #     all_images.append(image)
+    #
+    # train_images = np.array(all_images)
+    # # test_images = np.array(all_images[-200:])
+    #
+    # print("Ellipticals Training Set:", train_images.shape)
 
 
 
@@ -503,13 +525,13 @@ for run in range(run, run+14):
     # vae.load_weights("Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
     # save the weights
-    vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
 
 
 
     # get and save the extracted features (pre transformations)
     z_mean, z_log_var, _, _ = vae.encoder.predict(train_images)
-    np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
+    np.save("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
 
 
 
@@ -537,7 +559,7 @@ for run in range(run, run+14):
         sum_log_det_jacobians = np.zeros(z_mean.shape[0], dtype=np.float32)
 
 
-    np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
+    np.save("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
 
 
 
@@ -564,7 +586,7 @@ for run in range(run, run+14):
         total_loss = reconstruction_loss + (beta * kl_loss)
 
         loss = np.array([total_loss, reconstruction_loss, kl_loss])
-        np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+        np.save("Variational Eagle/Loss/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
 
         print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
         print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
@@ -633,7 +655,7 @@ for run in range(run, run+14):
         axs[1, i].get_xaxis().set_visible(False)
         axs[1, i].get_yaxis().set_visible(False)
 
-    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    plt.savefig("Variational Eagle/Reconstructions/Training/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
     plt.close()
 
@@ -662,7 +684,7 @@ for run in range(run, run+14):
             axs[1, i].get_xaxis().set_visible(False)
             axs[1, i].get_yaxis().set_visible(False)
 
-        plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
+        plt.savefig("Variational Eagle/Reconstructions/Training/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
         plt.show()
         plt.close()
 
@@ -813,7 +835,7 @@ for run in range(run, run+14):
 
 
     # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run))
+    plt.savefig("Variational Eagle/Loss Plots/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run))
     plt.show()
     plt.close()
 
