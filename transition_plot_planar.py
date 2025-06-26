@@ -306,8 +306,8 @@ z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow B
 
 
 # select transformed or mean
-# extracted_features = z_mean
-extracted_features = z_transformed
+extracted_features = z_mean
+# extracted_features = z_transformed
 # pca = pca_transformed
 
 
