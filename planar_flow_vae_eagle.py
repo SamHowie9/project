@@ -1,8 +1,4 @@
 import os
-from xml.sax.handler import all_properties
-
-from eagle_image_processing import all_images
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow.keras import layers, Model, metrics, losses, optimizers
