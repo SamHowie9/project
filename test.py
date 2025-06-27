@@ -11,11 +11,10 @@ import random
 # from tensorflow.keras import backend as K
 # import tensorflow as tf
 # os.environ['NUMBA_DISABLE_CACHE'] = '1'
-import dcor
 
 
 
-x = np.random.rand(100)
-y = np.random.rand(100)
+A = [10, 10, 10]
+B = [1, 2, 3]
 
-print(dcor.distance_correlation(x, y))
+print(A-B)

@@ -652,6 +652,7 @@ axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_3", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap.pdf", bbox_inches="tight")
 plt.show()
 plt.close()

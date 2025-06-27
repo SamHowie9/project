@@ -438,71 +438,76 @@ plt.rcParams.update({'font.size': default_size * 3})
 random.seed(5)
 # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
 # reconstruction_indices = [3165, 3108, 2161]
-reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
+# reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
+reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
 
 extracted_features_reconstruct = extracted_features[reconstruction_indices]
 original_images = train_images[reconstruction_indices]
 
 
+
+
+
 # reconstructions with residual:
-fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
-
-pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-pca_features = pca.transform(extracted_features_reconstruct)
-pca_features = pca.inverse_transform(pca_features)
-reconstructions = vae.decoder.predict(pca_features)
-
-# reconstructions = vae.decoder.predict(extracted_features_reconstruct)
-
-residuals = abs(original_images - reconstructions)
-
-# residuals -= residuals.min()
-# residuals /= residuals.max() + 1e-8
-
-for i in range(0, len(reconstruction_indices)):
-
-    original_image = normalise_independently(original_images[i])
-    axs[0][i].imshow(original_image)
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-
-    # reconstruction = vae.decoder.predict(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
-
-    # pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
-    # pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
-    # pca_features = pca.inverse_transform(pca_features)
-    # reconstruction = vae.decoder.predict(pca_features)
-
-
-    axs[1][i].imshow(reconstructions[i])
-    axs[1][i].set_aspect("auto")
-    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-
-    # residual = abs(original_images[i] - reconstructions[i])
-    # residual = residuals[i]
-    # residual -= residual.min()
-    # residual /= residual.max() + 1e-8
-
-    # axs[2][i].imshow(residual)
-    axs[2][i].imshow(residuals[i])
-    axs[2][i].set_aspect("auto")
-    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-axs[0][0].set_ylabel("Original")
-axs[1][0].set_ylabel("Reconstruction")
-axs[2][0].set_ylabel("Residual")
-
-fig.subplots_adjust(wspace=0.1, hspace=0.05)
-
-plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
-plt.show()
-plt.close()
-
-
+# fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
+#
+# pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+# pca_features = pca.transform(extracted_features_reconstruct)
+# pca_features = pca.inverse_transform(pca_features)
+# reconstructions = vae.decoder.predict(pca_features)
+#
+# # reconstructions = vae.decoder.predict(extracted_features_reconstruct)
+#
+# residuals = abs(original_images - reconstructions)
+#
+# # residuals -= residuals.min()
+# # residuals /= residuals.max() + 1e-8
+#
+# for i in range(0, len(reconstruction_indices)):
+#
+#     original_image = normalise_independently(original_images[i])
+#     axs[0][i].imshow(original_image)
+#     axs[0][i].set_aspect("auto")
+#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#
+#     # reconstruction = vae.decoder.predict(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+#
+#     # pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
+#     # pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+#     # pca_features = pca.inverse_transform(pca_features)
+#     # reconstruction = vae.decoder.predict(pca_features)
+#
+#
+#     axs[1][i].imshow(reconstructions[i])
+#     axs[1][i].set_aspect("auto")
+#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#
+#     # residual = abs(original_images[i] - reconstructions[i])
+#     # residual = residuals[i]
+#     # residual -= residual.min()
+#     # residual /= residual.max() + 1e-8
+#
+#     # axs[2][i].imshow(residual)
+#     axs[2][i].imshow(residuals[i])
+#     axs[2][i].set_aspect("auto")
+#     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+# axs[0][0].set_ylabel("Original")
+# axs[1][0].set_ylabel("Reconstruction")
+# axs[2][0].set_ylabel("Residual")
+#
+# fig.subplots_adjust(wspace=0.1, hspace=0.05)
+#
+# plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
+# plt.show()
+# plt.close()
 
 
+
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 
 # scale font on plots
@@ -518,6 +523,9 @@ for i in range(0, len(reconstruction_indices)):
     axs[0][i].imshow(original_images[i])
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+    dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
+    axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=40)
 
     for j, feat in enumerate(range(10, 0, -1)):
 
@@ -537,11 +545,12 @@ for i in range(0, len(reconstruction_indices)):
 axs[0][0].set_ylabel("Original")
 
 
-fig.text(0.09, 0.5, 'Number of Principal Components', va='center', rotation='vertical')
+fig.text(0.09, 0.5, 'Number of Principal Components Used in Reconstructions', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0.1, hspace=0.025)
 
 plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features.pdf", bbox_inches="tight")
 plt.show()
 plt.close()
 
