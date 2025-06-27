@@ -197,7 +197,6 @@ for run in [run]:
 
 
     # properties to plot
-    # selected_properties = ["Sersic Index", "Position Angle", "Axis Ratio", "Semi - Major Axis", "AB Magnitude", "Stellar Mass", "Dark Matter Mass", "Black Hole Mass", "Stellar Age", "Star Formation Rate"]
     # selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
     selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
 

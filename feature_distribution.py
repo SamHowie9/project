@@ -107,6 +107,7 @@ axs[3][7].set_axis_off()
 fig.subplots_adjust(wspace=0.1, hspace=0.6)
 
 plt.savefig("Variational Eagle/Plots/feature_distributions_latent_2", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/feature_distributions_latent_2.pdf", bbox_inches='tight')
 plt.show()
 
 

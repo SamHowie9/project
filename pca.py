@@ -2,6 +2,9 @@ from sklearn.decomposition import PCA
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Rectangle
+from matplotlib.patches import Patch
 import random
 
 
@@ -168,11 +171,13 @@ for components in range(0, 15):
         specific_all.append(specific*100)
 
     min_accumulation.append(min(accumulation_all))
-    med_accumulation.append(np.median(accumulation_all))
+    # med_accumulation.append(np.median(accumulation_all))
+    med_accumulation.append(np.mean(accumulation_all))
     max_accumulation.append(max(accumulation_all))
 
     min_specific.append(min(specific_all))
-    med_specific.append(np.median(specific_all))
+    # med_specific.append(np.median(specific_all))
+    med_specific.append(np.mean(specific_all))
     max_specific.append(max(specific_all))
 
 
@@ -212,9 +217,11 @@ for components in range(0, 15):
 
 # scale font on plots
 default_size = plt.rcParams['font.size']
-plt.rcParams.update({'font.size': default_size * 1.5})
+plt.rcParams.update({'font.size': default_size * 2})
 
 fig, axs = plt.subplots(1, 1, figsize=(10, 8))
+
+plt.grid(alpha=0.25)
 
 axs.bar(range(1, 16), med_specific, color="black", alpha=0.4)
 error_upper = [max_s - med_s for max_s, med_s in zip(max_specific, med_specific)]
@@ -225,16 +232,24 @@ axs.plot(range(1, 16), min_accumulation, color="black", alpha=0.2)
 axs.plot(range(1, 16), med_accumulation, color="black")
 axs.scatter(range(1, 11), med_accumulation[:10], color="black")
 axs.plot(range(1, 16), max_accumulation, color="black", alpha=0.2)
-axs.fill_between(range(1, 16), min_accumulation, max_accumulation, color="black", alpha=0.075)
+axs.fill_between(range(1, 16), min_accumulation, max_accumulation, color="black", alpha=0.06)
 
 axs.set_ylabel("Variance Explained (%)")
 axs.set_xlabel("Principal Components")
 axs.set_xticks(list(range(1, 16)))
 
+custom_legend = [
+    # Line2D([0], [0], marker="o", color="none", label="Cumulative Variance", markerfacecolor="black", markersize=10, linestyle="None"),
+    # Line2D([0], [0], marker="s", color="none", label="Individual Variance", markerfacecolor="black", alpha=0.4, markersize=20, linestyle="None"),
+    Line2D([0], [0], color="black", label="Cumulative Variance"),
+    Patch(label="Individual Variance", facecolor="black", alpha=0.4)
+]
 
+# plt.legend(handles=custom_legend, loc="center right", handleheight=1.1)
+plt.legend(handles=custom_legend, handleheight=1.1, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=len(custom_legend))
 
 print(med_accumulation)
 print(med_specific)
 
-plt.savefig("Variational Eagle/Plots/variance_explained_bars", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/variance_explained_bars_1", bbox_inches="tight")
 plt.show()
