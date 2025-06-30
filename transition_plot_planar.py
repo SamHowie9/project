@@ -415,8 +415,8 @@ plt.rcParams.update({'font.size': default_size * 5})
 
 num_varying_features = 13
 
-med_pca_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-print(len(med_pca_features))
+med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+print(len(med_features))
 
 chosen_features = [18, 13, 6]
 
