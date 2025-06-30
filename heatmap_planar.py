@@ -427,27 +427,33 @@ def latent_flows_saliency(encoder, image, flows=False, feature=None, smoothing_s
 
 def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
 
+    # convert image to tensorflow variable to allow us to compute gradients
     image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)
     image = tf.Variable(image)
 
     with tf.GradientTape() as tape:
 
+        # compute latent features
         z_mean, _, _, _ = encoder(image)
         z_mean = z_mean[0]
 
-
+        # either take vector as a whole or look at a specific feature
         if feature is not None:
             latent_feature = z_mean[feature]
         else:
             latent_feature = z_mean
 
+    # calculate gradients of vector/feature wrt input image
     grads = tape.gradient(latent_feature, image)
+
+    # get the largest value across the three channels per pixel
     saliency = tf.reduce_max(tf.abs(grads), axis=-1).numpy()[0]
 
     # normalise saliency
     saliency -= saliency.min()
     saliency /= saliency.max() + 1e-8
 
+    # smooth the saliency map
     if smoothing_sigma is not None:
 
         # apply gaussian filter
@@ -466,8 +472,6 @@ def latent_saliency(encoder, image, feature=None, smoothing_sigma=None):
 
 
 
-
-
 def pca_saliency(encoder, image, pca_components, pca_component_index, smoothing_sigma=None):
 
     image = tf.convert_to_tensor(image[None, ...], dtype=tf.float32)
@@ -475,9 +479,10 @@ def pca_saliency(encoder, image, pca_components, pca_component_index, smoothing_
 
     with tf.GradientTape() as tape:
 
-        # tape.watch(image)
         z_mean, _, _, _ = encoder(image)
         z_mean = z_mean[0]
+
+        z_mean = pca.transform(z_mean)
 
         pca_direction = tf.convert_to_tensor(pca_components[pca_component_index], dtype=tf.float32)
         pca_feature = tf.tensordot(z_mean, pca_direction, axes=1)
