@@ -428,14 +428,13 @@ for i, feature in enumerate(chosen_features):
 
     for j in range(num_varying_features):
 
-        temp_pca_features = med_pca_features.copy()
-        temp_pca_features[feature] = varying_feature_values[j]
+        temp_features = med_features.copy()
+        temp_features[i] = varying_feature_values[j]
 
-        # temp_features = temp_pca_features
-        # temp_features = np.expand_dims(temp_features, axis=0)
-
-        temp_features = pca_transformed.inverse_transform(temp_pca_features)
         temp_features = np.expand_dims(temp_features, axis=0)
+
+        # temp_features = pca.inverse_transform(temp_features)
+        # temp_features = np.expand_dims(temp_features, axis=0)
 
         reconstruction = vae.decoder.predict(temp_features)[0]
 
