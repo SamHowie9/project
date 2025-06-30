@@ -117,8 +117,8 @@ for run in [run]:
 
 
     # perform pca on the extracted features
-    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-    extracted_features = pca.transform(extracted_features)
+    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    # extracted_features = pca.transform(extracted_features)
 
 
 
@@ -242,7 +242,7 @@ for run in [run]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/physical_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/physical_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     # plt.close()
 
@@ -260,8 +260,11 @@ for run in [run]:
 
     all_properties["pa_r"] = abs(all_properties["pa_r"])
 
-    selected_properties = ["DiscToTotal", "pa_r", "re_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
-    property_names = ["D/T", "Position Angle", "Semi-Major Axis", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
+    # selected_properties = ["DiscToTotal", "pa_r", "re_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
+    # property_names = ["D/T", "Position Angle", "Semi-Major Axis", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
+
+    selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+    property_names = ["Stellar Mass", "Dark Matter Mass", "Black Hole Mass (Particle)", "Black Hole Mass (Subgrid)", "Mean Stellar Age", "Star Formation Rate"]
 
     fig, axs = plt.subplots(len(selected_properties), extracted_features.shape[1], figsize=(extracted_features.shape[1]*5, len(selected_properties)*5))
 
@@ -280,7 +283,7 @@ for run in [run]:
 
     fig.subplots_adjust(wspace=0.2, hspace=0.2)
 
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/scatter_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches="tight")
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/physical_scatter_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches="tight")
     plt.show()
 
 
