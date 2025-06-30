@@ -449,11 +449,10 @@ for i, feature in enumerate(chosen_features):
 
     # axs[i][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
 
-axs[0][0].set_ylabel("dCor < 0.2", rotation=0, labelpad=100, va='center')
-axs[1][0].set_ylabel(r"S\'ersic Index\ndCor = 0.74", rotation=0, labelpad=100, va='center')
-axs[2][0].set_ylabel("Half-Light Radius\ndCor = 0.81", rotation=0, labelpad=100, va='center')
+axs[0][0].set_ylabel("dCor < 0.2", rotation=0, labelpad=150, va='center')
+axs[1][0].set_ylabel(r"S\'{e}rsic Index\ndCor = 0.74", rotation=0, labelpad=150, va='center')
+axs[2][0].set_ylabel("Half-Light Radius\ndCor = 0.81", rotation=0, labelpad=150, va='center')
 
-fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
