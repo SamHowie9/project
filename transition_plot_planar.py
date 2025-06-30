@@ -456,8 +456,8 @@ axs[2][0].set_ylabel("Half-Light Radius\ndCor = 0.81", fonstsize=60, rotation=0,
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run), bbox_inches='tight')
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + ".pdf", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_feature_transitions", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_feature_transitions.pdf", bbox_inches='tight')
 plt.show()
 plt.close()
 
