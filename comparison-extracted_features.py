@@ -227,7 +227,10 @@ for run in [run]:
             # text = label.get_text()
 
         # label_names = ["Sersic Index", "Disk-Total Ratio", "Semi - Major Axis", "Half Light Radius", "Position Angle", "Axis Ratio", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
-        label_names = ["D/T", "Position Angle", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
+        # label_names = ["D/T", "Position Angle", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
+        label_names = ["Stellar Mass", "Dark Matter Mass", "Black Hole Mass (Particle)", "Black Hole Mass (Subgrid)", "Mean Stellar Age" "Star Formation Rate"]
+
+        selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
 
         for text in label_names:
             labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
