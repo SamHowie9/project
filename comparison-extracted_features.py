@@ -230,7 +230,7 @@ for run in [run]:
         # label_names = ["D/T", "Position Angle", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
         label_names = ["Stellar Mass", "Dark Matter Mass", "Black Hole Mass (Particle)", "Black Hole Mass (Subgrid)", "Mean Stellar Age" "Star Formation Rate"]
 
-        selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+        # selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
 
         for text in label_names:
             labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
