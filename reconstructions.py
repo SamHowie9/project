@@ -549,8 +549,8 @@ fig.text(0.09, 0.5, 'Number of Principal Components Used in Reconstructions', va
 
 fig.subplots_adjust(wspace=0.1, hspace=0.025)
 
-plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features", bbox_inches="tight")
-plt.savefig("Variational Eagle/Plots/reconstruction_optimal_pca_features.pdf", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_by_pca", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
 plt.show()
 plt.close()
 
