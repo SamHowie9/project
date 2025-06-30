@@ -198,8 +198,8 @@ for run in [run]:
 
     # properties to plot
     # selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
-    selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
-
+    # selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
+    selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
 
 
     # plot a heatmap for the dataframe (with annotations)
@@ -239,7 +239,7 @@ for run in [run]:
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/physical_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     # plt.close()
 
@@ -271,7 +271,6 @@ for run in [run]:
             if i == 0:
 
                 axs[0][j].set_title("Feature " + str(j+1))
-
 
             # density_scatter(x=extracted_features.T[i], y=all_properties[property], axs=axs[i][j])
             axs[i][j].scatter(x=extracted_features.T[j], y=all_properties[property], s=1)

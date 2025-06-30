@@ -67,7 +67,10 @@ for i in range(rows):
 
         try:
             # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
-            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, stat="density", edgecolor=None, color="grey")
+            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, stat="density", edgecolor="none", linewidth=0, color="grey")
+
+            for patch in axs[i][j].patches:
+                patch.set_rasterized(True)
 
             # if (j + (i*cols) + 1) in [6, 8, 10, 11, 12, 13, 15, 19, 27, 30]:
             #     sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
@@ -106,8 +109,8 @@ axs[3][7].set_axis_off()
 
 fig.subplots_adjust(wspace=0.1, hspace=0.6)
 
-plt.savefig("Variational Eagle/Plots/feature_distributions_latent_2", bbox_inches='tight')
-plt.savefig("Variational Eagle/Plots/feature_distributions_latent_2.pdf", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/latent_feature_distributions", bbox_inches='tight')
+plt.savefig("Variational Eagle/Plots/latent_feature_distributions.pdf", bbox_inches='tight')
 plt.show()
 
 

@@ -228,11 +228,14 @@ error_upper = [max_s - med_s for max_s, med_s in zip(max_specific, med_specific)
 error_lower = [med_s - min_s for med_s, min_s in zip(med_specific, min_specific)]
 axs.errorbar(range(1, 16), med_specific, yerr=[error_lower, error_upper], color="black", capsize=3, linestyle="none")
 
-axs.plot(range(1, 16), min_accumulation, color="black", alpha=0.2)
+# axs.plot(range(1, 16), min_accumulation, color="black", alpha=0.2)
 axs.plot(range(1, 16), med_accumulation, color="black")
 axs.scatter(range(1, 11), med_accumulation[:10], color="black")
-axs.plot(range(1, 16), max_accumulation, color="black", alpha=0.2)
-axs.fill_between(range(1, 16), min_accumulation, max_accumulation, color="black", alpha=0.06)
+# axs.plot(range(1, 16), max_accumulation, color="black", alpha=0.2)
+# axs.fill_between(range(1, 16), min_accumulation, max_accumulation, color="black", alpha=0.06)
+error_upper = [max_c - med_c for max_c, med_c in zip(max_accumulation, med_accumulation)]
+error_lower = [med_c - min_c for med_c, min_c in zip(med_accumulation, min_accumulation)]
+axs.errorbar(range(1, 16), med_accumulation, yerr=[error_lower, error_upper], color="black", capsize=3, linestyle="none")
 
 axs.set_ylabel("Variance Explained (%)")
 axs.set_xlabel("Principal Components")
@@ -251,5 +254,6 @@ plt.legend(handles=custom_legend, handleheight=1.1, loc='lower center', bbox_to_
 print(med_accumulation)
 print(med_specific)
 
-plt.savefig("Variational Eagle/Plots/variance_explained_bars_1", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/variance_explained_mean", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/variance_explained_mean.pdf", bbox_inches="tight")
 plt.show()

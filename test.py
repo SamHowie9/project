@@ -13,8 +13,12 @@ import random
 # os.environ['NUMBA_DISABLE_CACHE'] = '1'
 
 
+pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
+pd.set_option('display.width', None)
 
-A = [10, 10, 10]
-B = [1, 2, 3]
 
-print(A-B)
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+
+print(all_properties)
