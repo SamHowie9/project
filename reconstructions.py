@@ -525,7 +525,7 @@ for i in range(0, len(reconstruction_indices)):
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
-    axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45 pad=10)
+    axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45, pad=10)
 
     for j, feat in enumerate(range(10, 0, -1)):
 
