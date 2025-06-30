@@ -424,12 +424,12 @@ fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num
 
 for i, feature in enumerate(chosen_features):
 
-    varying_feature_values = np.linspace(np.min(extracted_features.T[feature]), np.max(extracted_features.T[feature]), num_varying_features)
+    varying_feature_values = np.linspace(np.min(extracted_features.T[feature-1]), np.max(extracted_features.T[feature-1]), num_varying_features)
 
     for j in range(num_varying_features):
 
         temp_features = med_features.copy()
-        temp_features[feature] = varying_feature_values[j]
+        temp_features[feature-1] = varying_feature_values[j]
 
         temp_features = np.expand_dims(temp_features, axis=0)
 
