@@ -429,7 +429,7 @@ for i, feature in enumerate(chosen_features):
     for j in range(num_varying_features):
 
         temp_features = med_features.copy()
-        temp_features[i] = varying_feature_values[j]
+        temp_features[feature] = varying_feature_values[j]
 
         temp_features = np.expand_dims(temp_features, axis=0)
 
@@ -449,9 +449,9 @@ for i, feature in enumerate(chosen_features):
 
     # axs[i][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
 
-axs[0][0].set_ylabel("dCor < 0.2", rotation=0, labelpad=10, va='center', ha="right")
-axs[1][0].set_ylabel("Sérsic Index\ndCor = 0.74", rotation=0, labelpad=10, va="center", ha="right")
-axs[2][0].set_ylabel("Half-Light Radius\ndCor = 0.81", rotation=0, va="center", ha="right")
+axs[0][0].set_ylabel("dCor < 0.2", rotation=0, labelpad=15, va='center', ha="right")
+axs[1][0].set_ylabel("Sérsic Index\ndCor = 0.74", rotation=0, labelpad=15, va="center", ha="right")
+axs[2][0].set_ylabel("Half-Light Radius\ndCor = 0.81", rotation=0, labelpad=15, va="center", ha="right")
 
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
