@@ -525,7 +525,7 @@ for i in range(0, len(reconstruction_indices)):
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
-    axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=40)
+    axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=40, labelpad=10)
 
     for j, feat in enumerate(range(10, 0, -1)):
 
@@ -540,9 +540,9 @@ for i in range(0, len(reconstruction_indices)):
         axs[j+1][i].set_aspect("auto")
         axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-        axs[j+1][0].set_ylabel(feat, rotation=0, labelpad=40, va='center')
+        axs[j+1][0].set_ylabel(feat, rotation=0, labelpad=10, va='center', ha="right")
 
-axs[0][0].set_ylabel("Original")
+axs[0][0].set_ylabel("Original", labelpad=10)
 
 
 fig.text(0.09, 0.5, 'Number of Principal Components Used in Reconstructions', va='center', rotation='vertical')
