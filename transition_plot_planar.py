@@ -516,7 +516,7 @@ for i in range(len(extracted_features.T)):
     axs[i][2].yaxis.set_label_position("right")  # ← must be separate
     axs[i][2].set_ylabel(("res = " + str(avg_residual) + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
 
-fig.text(0.05, 0.5, 'Extracted Features', va='center', rotation='vertical')
+fig.text(0.0, 0.5, 'Extracted Features', va='center', rotation='vertical')
 axs[0][0].set_title("Minimum", fontsize=50)
 axs[0][1].set_title("Maximum", fontsize=50)
 axs[0][2].set_title("Residual", fontsize=50)
