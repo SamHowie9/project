@@ -521,6 +521,8 @@ axs[0][0].set_title("Minimum")
 axs[0][1].set_title("Maximum")
 axs[0][2].set_title("Residual")
 
+fig.subplots_adjust(wspace=0.1, hspace=0.1)
+
 plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_transition_residual", bbox_inches="tight")
 plt.show(block=False)
 plt.close()
