@@ -477,7 +477,7 @@ med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_
 
 max_corr = np.load("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy")
 
-fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(22, len(extracted_features.T)*5))
+fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(21, len(extracted_features.T)*5))
 
 # for i, feature in enumerate(chosen_features):
 for i in range(len(extracted_features.T)):
@@ -497,16 +497,16 @@ for i in range(len(extracted_features.T)):
 
 
     axs[i][0].imshow(min_reconstruction)
-    axs[i][0].set_aspect("auto")
+    axs[i][0].set_aspect("equal")
     axs[i][0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
     axs[i][0].set_ylabel(i+1, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
 
     axs[i][1].imshow(max_reconstruction)
-    axs[i][1].set_aspect("auto")
+    axs[i][1].set_aspect("equal")
     axs[i][1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     axs[i][2].imshow(residual, cmap="gray_r")
-    axs[i][2].set_aspect("auto")
+    axs[i][2].set_aspect("equal")
     axs[i][2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     avg_residual = round(np.mean(residual), 4)
