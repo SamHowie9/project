@@ -514,7 +514,7 @@ for i in range(len(extracted_features.T)):
     dCor = round(max_corr[i], 5)
 
     axs[i][2].yaxis.set_label_position("right")  # ← must be separate
-    axs[i][2].set_ylabel(("res = " + str(avg_residual) + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
+    axs[i][2].set_ylabel(("res = " + f"{avg_residual:.5f}" + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
 
 fig.text(0.0, 0.5, 'Extracted Features', va='center', rotation='vertical')
 axs[0][0].set_title("Minimum", fontsize=50)
