@@ -533,6 +533,7 @@ plt.close()
 
 
 
+
 # # # take just the spirals
 # # disk_structures = np.array(all_properties["n_r"] <= 2.5)
 # # extracted_features = extracted_features[disk_structures]
