@@ -475,6 +475,8 @@ plt.rcParams.update({'font.size': default_size * 5})
 
 med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 
+max_corr = np.load("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy")
+
 fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(3*5, len(extracted_features.T)*5))
 
 # for i, feature in enumerate(chosen_features):
@@ -509,9 +511,10 @@ for i in range(len(extracted_features.T)):
 
     avg_residual = round(np.mean(residual), 4)
     std = round(np.std(extracted_features.T[i]), 4)
+    dCor = round(max_corr[i], 4)
 
     axs[i][2].yaxis.set_label_position("right")  # ← must be separate
-    axs[i][2].set_ylabel((str(avg_residual) + "\n(" + str(std) + ")"), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
+    axs[i][2].set_ylabel(("res = " + str(avg_residual) + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 axs[0][0].set_title("Minimum")
