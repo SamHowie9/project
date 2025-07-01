@@ -162,6 +162,7 @@ for run in [run]:
     # dataframe to contain correlations between each feature and each property
     correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
 
+    max_corr = []
 
     # loop through each extracted feature
     for feature in range(0, len(extracted_features.T)):
@@ -184,12 +185,15 @@ for run in [run]:
             correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties.iloc[:, gal_property])
             correlation_list.append(correlation)
 
+        max_corr.append(max(correlation_list))
+
         # add all the correlations for that feature to the dataframe
         correlation_df.loc[len(correlation_df)] = correlation_list
 
     # set index so feature label starts at 1 rather than 0
     correlation_df.index = correlation_df.index + 1
 
+    np.save("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy", max_corr)
 
 
     # set the figure size
