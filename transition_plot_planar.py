@@ -477,7 +477,7 @@ med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_
 
 max_corr = np.load("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy")
 
-fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(18, len(extracted_features.T)*5))
+fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(15, len(extracted_features.T)*5))
 
 # for i, feature in enumerate(chosen_features):
 for i in range(len(extracted_features.T)):
@@ -517,9 +517,9 @@ for i in range(len(extracted_features.T)):
     axs[i][2].set_ylabel(("res = " + str(avg_residual) + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
 
 fig.text(0.05, 0.5, 'Extracted Features', va='center', rotation='vertical')
-axs[0][0].set_title("Minimum")
-axs[0][1].set_title("Maximum")
-axs[0][2].set_title("Residual")
+axs[0][0].set_title("Minimum", fontsize=50)
+axs[0][1].set_title("Maximum", fontsize=50)
+axs[0][2].set_title("Residual", fontsize=50)
 
 fig.subplots_adjust(wspace=0.1, hspace=0.1)
 
