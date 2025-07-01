@@ -494,12 +494,12 @@ for i in range(len(extracted_features.T)):
     residual = color.rgb2gray(residual)
 
 
-    axs[i][0].imshow(min_features)
+    axs[i][0].imshow(min_reconstruction)
     axs[i][0].set_aspect("auto")
     axs[i][0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-    axs[i][0].set_ylabel(i, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
+    axs[i][0].set_ylabel(i+1, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
 
-    axs[i][1].imshow(max_features)
+    axs[i][1].imshow(max_reconstruction)
     axs[i][1].set_aspect("auto")
     axs[i][1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -507,8 +507,8 @@ for i in range(len(extracted_features.T)):
     axs[i][2].set_aspect("auto")
     axs[i][2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    avg_residual = round(np.mean(residual), 3)
-    std = round(np.std(extracted_features.T[i]), 3)
+    avg_residual = round(np.mean(residual), 4)
+    std = round(np.std(extracted_features.T[i]), 4)
 
     axs[i][2].yaxis.set_label_position("right")  # ← must be separate
     axs[i][2].set_ylabel((str(avg_residual) + "\n(" + str(std) + ")"), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
