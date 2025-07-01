@@ -509,9 +509,9 @@ for i in range(len(extracted_features.T)):
     axs[i][2].set_aspect("equal")
     axs[i][2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    avg_residual = round(np.mean(residual), 4)
-    std = round(np.std(extracted_features.T[i]), 4)
-    dCor = round(max_corr[i], 4)
+    avg_residual = round(np.mean(residual), 5)
+    std = round(np.std(extracted_features.T[i]), 5)
+    dCor = round(max_corr[i], 5)
 
     axs[i][2].yaxis.set_label_position("right")  # ← must be separate
     axs[i][2].set_ylabel(("res = " + str(avg_residual) + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
