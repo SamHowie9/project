@@ -475,7 +475,7 @@ plt.rcParams.update({'font.size': default_size * 5})
 
 med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
 
-fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(3*5, len(chosen_features)*5))
+fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(3*5, len(extracted_features.T)*5))
 
 # for i, feature in enumerate(chosen_features):
 for i in range(len(extracted_features.T)):
