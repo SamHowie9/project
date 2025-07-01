@@ -477,7 +477,7 @@ med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_
 
 max_corr = np.load("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy")
 
-fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(20, len(extracted_features.T)*5))
+fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(22, len(extracted_features.T)*5))
 
 # for i, feature in enumerate(chosen_features):
 for i in range(len(extracted_features.T)):
