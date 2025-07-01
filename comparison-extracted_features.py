@@ -185,6 +185,11 @@ for run in [run]:
             correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties.iloc[:, gal_property])
             correlation_list.append(correlation)
 
+        # keep correlations of relevant properties
+        selected_property_indices = [66, 4, 33, 3, 5, 40, 41, 42, 9, 11, 12, 13, 14, 15]
+        correlation_list = [correlation_list[index] for index in selected_property_indices]
+
+        # add the maximum correlation to the list
         max_corr.append(max(correlation_list))
 
         # add all the correlations for that feature to the dataframe
