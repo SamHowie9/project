@@ -494,29 +494,29 @@ for i in range(len(extracted_features.T)):
     residual = color.rgb2gray(residual)
 
 
-    axs[0][i].imshow(min_features)
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-    axs[0][i].set_ylabel(i, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
+    axs[i][0].imshow(min_features)
+    axs[i][0].set_aspect("auto")
+    axs[i][0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[i][0].set_ylabel(i, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
 
-    axs[1][i].imshow(max_features)
-    axs[1][i].set_aspect("auto")
-    axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[i][1].imshow(max_features)
+    axs[i][1].set_aspect("auto")
+    axs[i][1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    axs[2][i].imshow(residual, cmap="gray_r")
-    axs[2][i].set_aspect("auto")
-    axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    axs[i][2].imshow(residual, cmap="gray_r")
+    axs[i][2].set_aspect("auto")
+    axs[i][2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
     avg_residual = round(np.mean(residual), 3)
     std = round(np.std(extracted_features.T[i]), 3)
 
-    axs[2][i].yaxis.set_label_position("right")  # ← must be separate
-    axs[2][i].set_ylabel((str(avg_residual) + "\n(" + str(std) + ")"), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
+    axs[i][2].yaxis.set_label_position("right")  # ← must be separate
+    axs[i][2].set_ylabel((str(avg_residual) + "\n(" + str(std) + ")"), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
 
 fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 axs[0][0].set_title("Minimum")
-axs[1][0].set_title("Maximum")
-axs[2][0].set_title("Residual")
+axs[0][1].set_title("Maximum")
+axs[0][2].set_title("Residual")
 
 plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_transition_residual", bbox_inches="tight")
 plt.show(block=False)
