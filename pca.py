@@ -296,6 +296,7 @@ print(contributions)
 # plt.show()
 
 
+
 contributions = np.round(contributions, 3)
 
 fig, axs = plt.subplots(1, 1, figsize=(35, 8))

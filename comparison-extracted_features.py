@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 import random
-import dcor
+# import dcor
 from matplotlib.pyplot import figure
 from sklearn.decomposition import PCA
 # from yellowbrick.cluster import KElbowVisualizer
@@ -159,102 +159,102 @@ for run in [run]:
 
     # correlation plot
 
-    # dataframe to contain correlations between each feature and each property
-    correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
-
-    max_corr = []
-
-    # loop through each extracted feature
-    for feature in range(0, len(extracted_features.T)):
-
-        # create a list to contain the correlation between that feature and each property
-        correlation_list = []
-
-        # loop through each property
-        for gal_property in range(1, len(all_properties.columns)):
-
-            # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-            # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties.iloc[:, gal_property])[0][1]
-            # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
-            # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties.iloc[:, gal_property])[0][1]
-            # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
-            #
-            # # add the strongest type of correlation
-            # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
-
-            correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties.iloc[:, gal_property])
-            correlation_list.append(correlation)
-
-        print(len(correlation_list))
-
-        # keep correlations of relevant properties
-        selected_property_indices = [66, 4, 33, 3, 5, 40, 41, 42, 9, 11, 12, 13, 14, 15]
-
-        # add the maximum correlation to the list
-        max_corr.append(max([correlation_list[index-1] for index in selected_property_indices]))
-
-        # add all the correlations for that feature to the dataframe
-        correlation_df.loc[len(correlation_df)] = correlation_list
-
-    # set index so feature label starts at 1 rather than 0
-    correlation_df.index = correlation_df.index + 1
-
-    np.save("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy", max_corr)
-
-
-    # set the figure size
-    plt.figure(figsize=(20, correlation_df.shape[0]))
-
-
-    # properties to plot
-    # selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
-    selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
-    # selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-
-
-    # plot a heatmap for the dataframe (with annotations)
-    # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
-    ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={"label": "Correlation", "pad": 0.02, "aspect": 60})
-
-
-
-    plt.yticks(rotation=0)
-    plt.ylabel("Extracted Features", fontsize=15)
-    ax.xaxis.tick_top() # x axis on top
-    ax.xaxis.set_label_position('top')
-    ax.tick_params(length=0, labelsize=15)
-    ax.figure.axes[-1].yaxis.label.set_size(15)
-
-    colourbar = ax.collections[0].colorbar
-    colourbar.ax.tick_params(labelsize=15)
-    colourbar.ax.yaxis.label.set_size(15)
-
-
-    def wrap_labels(ax, width, break_long_words=False):
-
-        labels = []
-        # for label in ax.get_xticklabels():
-            # text = label.get_text()
-
-        # label_names = ["Sersic Index", "Disk-Total Ratio", "Semi - Major Axis", "Half Light Radius", "Position Angle", "Axis Ratio", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
-        label_names = ["D/T", "Position Angle", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
-        # label_names = ["Stellar Mass", "Dark Matter Mass", "Black Hole Mass (Particle)", "Black Hole Mass (Subgrid)", "Mean Stellar Age", "Star Formation Rate"]
-
-        # selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-
-        for text in label_names:
-            labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
-        ax.set_xticklabels(labels, rotation=0, fontsize=15)
-
-    wrap_labels(ax, 10)
-
-
-    # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
-    plt.show(block=False)
-    # plt.close()
+    # # dataframe to contain correlations between each feature and each property
+    # correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
+    #
+    # max_corr = []
+    #
+    # # loop through each extracted feature
+    # for feature in range(0, len(extracted_features.T)):
+    #
+    #     # create a list to contain the correlation between that feature and each property
+    #     correlation_list = []
+    #
+    #     # loop through each property
+    #     for gal_property in range(1, len(all_properties.columns)):
+    #
+    #         # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+    #         # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties.iloc[:, gal_property])[0][1]
+    #         # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties.iloc[:, gal_property]))[0][1]
+    #         # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties.iloc[:, gal_property])[0][1]
+    #         # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties.iloc[:, gal_property]))[0][1]
+    #         #
+    #         # # add the strongest type of correlation
+    #         # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+    #
+    #         correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties.iloc[:, gal_property])
+    #         correlation_list.append(correlation)
+    #
+    #     print(len(correlation_list))
+    #
+    #     # keep correlations of relevant properties
+    #     selected_property_indices = [66, 4, 33, 3, 5, 40, 41, 42, 9, 11, 12, 13, 14, 15]
+    #
+    #     # add the maximum correlation to the list
+    #     max_corr.append(max([correlation_list[index-1] for index in selected_property_indices]))
+    #
+    #     # add all the correlations for that feature to the dataframe
+    #     correlation_df.loc[len(correlation_df)] = correlation_list
+    #
+    # # set index so feature label starts at 1 rather than 0
+    # correlation_df.index = correlation_df.index + 1
+    #
+    # np.save("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy", max_corr)
+    #
+    #
+    # # set the figure size
+    # plt.figure(figsize=(20, correlation_df.shape[0]))
+    #
+    #
+    # # properties to plot
+    # # selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
+    # selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
+    # # selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+    #
+    #
+    # # plot a heatmap for the dataframe (with annotations)
+    # # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, cmap="Blues", cbar_kws={'label': 'Correlation'})
+    # ax = sns.heatmap(abs(correlation_df[selected_properties]), annot=True, annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={"label": "Correlation", "pad": 0.02, "aspect": 60})
+    #
+    #
+    #
+    # plt.yticks(rotation=0)
+    # plt.ylabel("Extracted Features", fontsize=15)
+    # ax.xaxis.tick_top() # x axis on top
+    # ax.xaxis.set_label_position('top')
+    # ax.tick_params(length=0, labelsize=15)
+    # ax.figure.axes[-1].yaxis.label.set_size(15)
+    #
+    # colourbar = ax.collections[0].colorbar
+    # colourbar.ax.tick_params(labelsize=15)
+    # colourbar.ax.yaxis.label.set_size(15)
+    #
+    #
+    # def wrap_labels(ax, width, break_long_words=False):
+    #
+    #     labels = []
+    #     # for label in ax.get_xticklabels():
+    #         # text = label.get_text()
+    #
+    #     # label_names = ["Sersic Index", "Disk-Total Ratio", "Semi - Major Axis", "Half Light Radius", "Position Angle", "Axis Ratio", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
+    #     label_names = ["D/T", "Position Angle", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
+    #     # label_names = ["Stellar Mass", "Dark Matter Mass", "Black Hole Mass (Particle)", "Black Hole Mass (Subgrid)", "Mean Stellar Age", "Star Formation Rate"]
+    #
+    #     # selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+    #
+    #     for text in label_names:
+    #         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
+    #     ax.set_xticklabels(labels, rotation=0, fontsize=15)
+    #
+    # wrap_labels(ax, 10)
+    #
+    #
+    # # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
+    # # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
+    # # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    # plt.show(block=False)
+    # # plt.close()
 
 
 
@@ -366,13 +366,13 @@ for run in [run]:
 
 
 
-# fig, axs = plt.subplots(1, 1, figsize=(12, 10))
-#
-# density_scatter(extracted_features.T[3], all_properties["q_r"], axs=axs, s=5)
-# # axs.set_xlabel("")
-# # axs.set_ylabel("Disk-Total Ratio")
-#
-# plt.show()
+fig, axs = plt.subplots(1, 1, figsize=(12, 10))
+
+density_scatter(extracted_features.T[4], all_properties["rhalf_ellip"], axs=axs, s=5)
+axs.set_xlabel("Feature 5")
+axs.set_ylabel("Half-Light Radius")
+
+plt.show()
 
 
 
