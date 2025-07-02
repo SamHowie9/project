@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 2
-encoding_dim = 32
+encoding_dim = 33
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -659,7 +659,7 @@ for encoding_dim in range(encoding_dim, encoding_dim+8):
         axs[1, i].get_yaxis().set_visible(False)
 
     plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
-    plt.show()
+    plt.show(block=False)
     plt.close()
 
 
@@ -688,7 +688,7 @@ for encoding_dim in range(encoding_dim, encoding_dim+8):
             axs[1, i].get_yaxis().set_visible(False)
 
         plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
-        plt.show()
+        plt.show(block=False)
         plt.close()
 
 
