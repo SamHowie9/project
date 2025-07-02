@@ -9,8 +9,8 @@ from matplotlib.patches import Patch
 import random
 
 
-run = 3
-encoding_dim = 30
+run = 1
+encoding_dim = 40
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -263,6 +263,8 @@ np.set_printoptions(linewidth=np.inf)
 
 # latent contribution to pca
 
+# for run in range(1, 26):
+
 extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
 
@@ -305,10 +307,10 @@ fig, axs = plt.subplots(1, 1, figsize=(35, 8))
 ax = sns.heatmap(contributions, annot=True, cmap="Blues", fmt=".3f", cbar_kws={"label": "Contribution", "pad": 0.01, "aspect": 30})
 
 axs.set_ylabel("PCA Features", fontsize=15)
-axs.set_yticklabels(list(range(1, 11)), rotation=0, fontsize=15)
+axs.set_yticklabels(list(range(1, contributions.shape[0]+1)), rotation=0, fontsize=15)
 
 axs.set_xlabel("Latent Features", fontsize=15)
-axs.set_xticklabels(list(range(1, 31)), fontsize=15)
+axs.set_xticklabels(list(range(1, contributions.shape[1]+1)), fontsize=15)
 
 colourbar = ax.collections[0].colorbar
 colourbar.ax.tick_params(labelsize=15)
@@ -332,5 +334,6 @@ for spine in axs.spines.values():
 # colourbar.ax.tick_params(labelsize=15)
 # colourbar.ax.yaxis.label.set_size(15)
 
-plt.savefig("Variational Eagle/Plots/pca_latent_contributions_density", bbox_inches="tight")
+# plt.savefig("Variational Eagle/Contribution Plots/pca_latent_contributions_density_" + str(run), bbox_inches="tight")
 plt.show()
+# plt.close()

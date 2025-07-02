@@ -26,9 +26,12 @@ sns.set_style("ticks")
 
 
 
-encoding_dim = 10
 run = 1
-epochs = 750
+encoding_dim = 40
+n_flows = 0
+beta = 0.0001
+beta_name = "0001"
+epochs = 300
 batch_size = 32
 
 
@@ -470,28 +473,32 @@ df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
 # df_num = pd.DataFrame(columns=["Extracted Features", "1, "2", "3"])
 
 # for i in range(1, 29):
-for i in range(1, 51):
+for encoding_dim in range(1, 51):
 
     # features_1 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_1.npy")[0]
     # features_2 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_2.npy")[0]
     # features_3 = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(i) + "_feature_750_epoch_32_bs_features_3.npy")[0]
 
-    features_1 = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(i) + "_beta_0001_epoch_300_1.npy")[0]
-    features_2 = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(i) + "_beta_0001_epoch_300_2.npy")[0]
-    features_3 = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(i) + "_beta_0001_epoch_300_3.npy")[0]
+    # features_1 = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(i) + "_beta_0001_epoch_300_1.npy")[0]
+    # features_2 = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(i) + "_beta_0001_epoch_300_2.npy")[0]
+    # features_3 = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(i) + "_beta_0001_epoch_300_3.npy")[0]
+    features_1 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+
 
     pca_1 = PCA(n_components=0.99).fit(features_1)
-    pca_2 = PCA(n_components=0.99).fit(features_2)
-    pca_3 = PCA(n_components=0.99).fit(features_3)
+    # pca_2 = PCA(n_components=0.99).fit(features_2)
+    # pca_3 = PCA(n_components=0.99).fit(features_3)
 
     num_1 = pca_1.components_.shape[0]
-    num_2 = pca_2.components_.shape[0]
-    num_3 = pca_3.components_.shape[0]
+    # num_2 = pca_2.components_.shape[0]
+    # num_3 = pca_3.components_.shape[0]
 
-    sorted = np.sort(np.array([num_1, num_2, num_3]))
+    # sorted = np.sort(np.array([num_1, num_2, num_3]))
 
-    df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
+    # df_num.loc[len(df_num)] = [i, sorted[0], sorted[1], sorted[2]]
     # df_num.loc[len(df_num)] = [i, i, num_2, num_3]
+    df_num.loc[len(df_num)] = [encoding_dim, num_1, num_1, num_1]
+
 
 # find the size of the loss error bars for reconstruction loss
 num_err_upper = np.array(df_num["Max"] - df_num["Med"])

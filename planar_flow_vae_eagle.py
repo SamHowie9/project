@@ -24,8 +24,8 @@ tfd = tfp.distributions
 
 
 
-run = 8
-encoding_dim = 30
+run = 2
+encoding_dim = 25
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="9"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -53,8 +53,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="9"
 # for run in [1, 2, 3]:
 # for run in range(run, run+14):
 # for run in [run]:
-for run in [run, run+1, run+2]:
-
+# for run in [run, run+1, run+2]:
+for encoding_dim in range(encoding_dim, encoding_dim+8):
 
 
     print("\n \n")
@@ -85,77 +85,77 @@ for run in [run, run+1, run+2]:
 
     # load the images as a balanced dataset (D/T)
 
-    # chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies.npy")
-    #
-    # # list to contain all galaxy images
-    # all_images = []
-    #
-    # # loop through each galaxy
-    # for i, galaxy in enumerate(chosen_galaxies):
-    #
-    #     # open the image and append it to the main list
-    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-    #
-    #     # normalise the image (each band independently)
-    #     image = normalise_independently(image)
-    #
-    #     # add the image to the dataset
-    #     all_images.append(image)
-    #
-    # print("Original Dataset", len(all_images))
-    #
-    # # split the data into training and testing data (200 images used for testing)
-    # train_images = all_images
-    # # train_images = all_images[:-200]
-    # # test_images = np.array(all_images[-200:])
-    #
-    # # print("Training Set", len(train_images))
-    # # print("Testing Set", len(test_images))
-    # # print()
-    #
-    #
-    #
-    # # load the filenames of the augmented elliptical images
-    # augmented_galaxies =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
-    #
-    # print("Augmented Ellipticals", len(augmented_galaxies))
-    #
-    # for galaxy in augmented_galaxies:
-    #
-    #     # load each augmented image
-    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/" + galaxy)
-    #
-    #     # normalise the image
-    #     image = normalise_independently(image)
-    #
-    #     # add the image to the training set (not the testing set)
-    #     train_images.append(image)
-    #
-    #
-    #
-    # # load the filenames of the augmented transitional images
-    # augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
-    #
-    # print("Augmented Transitional", len(augmented_galaxies))
-    #
-    # for galaxy in augmented_galaxies:
-    #
-    #     # load each augmented image
-    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
-    #
-    #     # normalise the image
-    #     image = normalise_independently(image)
-    #
-    #     # add the image to the training set (not the testing set)
-    #     train_images.append(image)
-    #
-    # # convert the training set to a numpy array
-    # train_images = np.array(train_images)
-    #
-    #
-    # print("Training Set", train_images.shape)
-    # # print("Testing Set", test_images.shape)
+    chosen_galaxies = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies.npy")
+
+    # list to contain all galaxy images
+    all_images = []
+
+    # loop through each galaxy
+    for i, galaxy in enumerate(chosen_galaxies):
+
+        # open the image and append it to the main list
+        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+
+        # normalise the image (each band independently)
+        image = normalise_independently(image)
+
+        # add the image to the dataset
+        all_images.append(image)
+
+    print("Original Dataset", len(all_images))
+
+    # split the data into training and testing data (200 images used for testing)
+    train_images = all_images
+    # train_images = all_images[:-200]
+    # test_images = np.array(all_images[-200:])
+
+    # print("Training Set", len(train_images))
+    # print("Testing Set", len(test_images))
     # print()
+
+
+
+    # load the filenames of the augmented elliptical images
+    augmented_galaxies =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
+
+    print("Augmented Ellipticals", len(augmented_galaxies))
+
+    for galaxy in augmented_galaxies:
+
+        # load each augmented image
+        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/" + galaxy)
+
+        # normalise the image
+        image = normalise_independently(image)
+
+        # add the image to the training set (not the testing set)
+        train_images.append(image)
+
+
+
+    # load the filenames of the augmented transitional images
+    augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
+
+    print("Augmented Transitional", len(augmented_galaxies))
+
+    for galaxy in augmented_galaxies:
+
+        # load each augmented image
+        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
+
+        # normalise the image
+        image = normalise_independently(image)
+
+        # add the image to the training set (not the testing set)
+        train_images.append(image)
+
+    # convert the training set to a numpy array
+    train_images = np.array(train_images)
+
+
+    print("Training Set", train_images.shape)
+    # print("Testing Set", test_images.shape)
+    print()
 
 
 
@@ -214,38 +214,38 @@ for run in [run, run+1, run+2]:
 
     # load transitional only
 
-    transitional = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_transitional.npy")
-
-    all_images = []
-
-    for galaxy in transitional:
-        # open the image and append it to the main list
-        image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-
-        # normalise the image (each band independently)
-        image = normalise_independently(image)
-
-        # add the image to the dataset
-        all_images.append(image)
-
-    augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
-
-    for galaxy in augmented_galaxies:
-
-        # load each augmented image
-        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/" + galaxy)
-
-        # normalise the image
-        image = normalise_independently(image)
-
-        # add the image to the training set (not the testing set)
-        all_images.append(image)
-
-    train_images = np.array(all_images)
-    # test_images = np.array(all_images[-200:])
-
-    print("Transitional Training Set:", train_images.shape)
-    print()
+    # transitional = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_transitional.npy")
+    #
+    # all_images = []
+    #
+    # for galaxy in transitional:
+    #     # open the image and append it to the main list
+    #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    #
+    #     # normalise the image (each band independently)
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the dataset
+    #     all_images.append(image)
+    #
+    # augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
+    #
+    # for galaxy in augmented_galaxies:
+    #
+    #     # load each augmented image
+    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/" + galaxy)
+    #
+    #     # normalise the image
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the training set (not the testing set)
+    #     all_images.append(image)
+    #
+    # train_images = np.array(all_images)
+    # # test_images = np.array(all_images[-200:])
+    #
+    # print("Transitional Training Set:", train_images.shape)
+    # print()
 
 
 
@@ -528,13 +528,13 @@ for run in [run, run+1, run+2]:
     # vae.load_weights("Variational Eagle/Weights/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
     # save the weights
-    vae.save_weights(filepath="Variational Eagle/Weights/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
 
 
 
     # get and save the extracted features (pre transformations)
     z_mean, z_log_var, _, _ = vae.encoder.predict(train_images)
-    np.save("Variational Eagle/Extracted Features/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
+    np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
 
 
 
@@ -562,7 +562,7 @@ for run in [run, run+1, run+2]:
         sum_log_det_jacobians = np.zeros(z_mean.shape[0], dtype=np.float32)
 
 
-    np.save("Variational Eagle/Extracted Features/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
+    np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
 
 
 
@@ -589,7 +589,7 @@ for run in [run, run+1, run+2]:
         total_loss = reconstruction_loss + (beta * kl_loss)
 
         loss = np.array([total_loss, reconstruction_loss, kl_loss])
-        np.save("Variational Eagle/Loss/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+        np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
 
         print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
         print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
@@ -658,7 +658,7 @@ for run in [run, run+1, run+2]:
         axs[1, i].get_xaxis().set_visible(False)
         axs[1, i].get_yaxis().set_visible(False)
 
-    plt.savefig("Variational Eagle/Reconstructions/Training/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show()
     plt.close()
 
@@ -687,7 +687,7 @@ for run in [run, run+1, run+2]:
             axs[1, i].get_xaxis().set_visible(False)
             axs[1, i].get_yaxis().set_visible(False)
 
-        plt.savefig("Variational Eagle/Reconstructions/Training/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
+        plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed")
         plt.show()
         plt.close()
 
@@ -776,71 +776,71 @@ for run in [run, run+1, run+2]:
 
     # loss plot for run
 
-    fig, axs = plt.subplots(3, 3, figsize=(30, 15))
-
-    axs[0][0].plot(range(1, epochs+1), model_loss.history["loss"], label="Total Loss", color="black")
-    axs[0][0].plot(range(1, epochs+1), model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
-    axs[0][0].plot(range(1, epochs+1), model_loss.history["kl_loss"], label="KL Divergence", color="C1")
-    axs[0][0].legend()
-    axs[0][0].set_xlabel("Epoch")
-    axs[0][0].set_ylabel("Loss")
-
-    axs[0][1].plot(range(1, 11), model_loss.history["loss"][:10], label="Total Loss", color="black")
-    axs[0][1].plot(range(1, 11), model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
-    axs[0][1].plot(range(1, 11), model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
-    axs[0][1].legend()
-    axs[0][1].set_xlabel("Epoch")
-    axs[0][1].set_ylabel("Loss")
-
-    axs[0][2].plot(range(200, epochs+1), model_loss.history["loss"][199:], label="Total Loss", color="black")
-    axs[0][2].plot(range(200, epochs+1), model_loss.history["reconstruction_loss"][199:], label="Reconstruction Loss", color="C0")
-    axs[0][2].plot(range(200, epochs+1), model_loss.history["kl_loss"][199:], label="KL Divergence", color="C1")
-    axs[0][2].legend()
-    axs[0][2].set_xlabel("Epoch")
-    axs[0][2].set_ylabel("Loss")
-
-
-
-
-    axs[1][0].plot(range(1, epochs+1), model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
-    axs2 = axs[1][0].twinx()
-    axs2.plot(range(1, epochs+1), model_loss.history["kl_loss"], label="KL Divergence", color="C1")
-    lines = axs[1][0].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
-    labels = axs[1][0].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
-    axs[1][0].legend(lines, labels)
-    # axs[1].legend()
-    axs[1][0].set_xlabel("Epoch")
-    axs[1][0].set_ylabel("Reconstruction Loss")
-    axs2.set_ylabel("KL Divergence")
-
-    axs[1][1].plot(range(1, 11), model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
-    axs2 = axs[1][1].twinx()
-    axs2.plot(range(1, 11), model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
-    lines = axs[1][1].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
-    labels = axs[1][1].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
-    axs[1][1].legend(lines, labels)
-    # axs[1].legend()
-    axs[1][1].set_xlabel("Epoch")
-    axs[1][1].set_ylabel("Reconstruction Loss")
-    axs2.set_ylabel("KL Divergence")
-
-    axs[1][2].plot(range(200, epochs+1), model_loss.history["reconstruction_loss"][199:], label="Reconstruction Loss", color="C0")
-    axs2 = axs[1][2].twinx()
-    axs2.plot(range(200, epochs+1), model_loss.history["kl_loss"][199:], label="KL Divergence", color="C1")
-    lines = axs[1][2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
-    labels = axs[1][2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
-    axs[1][2].legend(lines, labels)
-    # axs[1].legend()
-    axs[1][2].set_xlabel("Epoch")
-    axs[1][2].set_ylabel("Reconstruction Loss")
-    axs2.set_ylabel("KL Divergence")
-
-
-
-    # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
-    plt.savefig("Variational Eagle/Loss Plots/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run))
-    plt.show()
-    plt.close()
+    # fig, axs = plt.subplots(3, 3, figsize=(30, 15))
+    #
+    # axs[0][0].plot(range(1, epochs+1), model_loss.history["loss"], label="Total Loss", color="black")
+    # axs[0][0].plot(range(1, epochs+1), model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    # axs[0][0].plot(range(1, epochs+1), model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    # axs[0][0].legend()
+    # axs[0][0].set_xlabel("Epoch")
+    # axs[0][0].set_ylabel("Loss")
+    #
+    # axs[0][1].plot(range(1, 11), model_loss.history["loss"][:10], label="Total Loss", color="black")
+    # axs[0][1].plot(range(1, 11), model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
+    # axs[0][1].plot(range(1, 11), model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
+    # axs[0][1].legend()
+    # axs[0][1].set_xlabel("Epoch")
+    # axs[0][1].set_ylabel("Loss")
+    #
+    # axs[0][2].plot(range(200, epochs+1), model_loss.history["loss"][199:], label="Total Loss", color="black")
+    # axs[0][2].plot(range(200, epochs+1), model_loss.history["reconstruction_loss"][199:], label="Reconstruction Loss", color="C0")
+    # axs[0][2].plot(range(200, epochs+1), model_loss.history["kl_loss"][199:], label="KL Divergence", color="C1")
+    # axs[0][2].legend()
+    # axs[0][2].set_xlabel("Epoch")
+    # axs[0][2].set_ylabel("Loss")
+    #
+    #
+    #
+    #
+    # axs[1][0].plot(range(1, epochs+1), model_loss.history["reconstruction_loss"], label="Reconstruction Loss", color="C0")
+    # axs2 = axs[1][0].twinx()
+    # axs2.plot(range(1, epochs+1), model_loss.history["kl_loss"], label="KL Divergence", color="C1")
+    # lines = axs[1][0].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    # labels = axs[1][0].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    # axs[1][0].legend(lines, labels)
+    # # axs[1].legend()
+    # axs[1][0].set_xlabel("Epoch")
+    # axs[1][0].set_ylabel("Reconstruction Loss")
+    # axs2.set_ylabel("KL Divergence")
+    #
+    # axs[1][1].plot(range(1, 11), model_loss.history["reconstruction_loss"][:10], label="Reconstruction Loss", color="C0")
+    # axs2 = axs[1][1].twinx()
+    # axs2.plot(range(1, 11), model_loss.history["kl_loss"][:10], label="KL Divergence", color="C1")
+    # lines = axs[1][1].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    # labels = axs[1][1].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    # axs[1][1].legend(lines, labels)
+    # # axs[1].legend()
+    # axs[1][1].set_xlabel("Epoch")
+    # axs[1][1].set_ylabel("Reconstruction Loss")
+    # axs2.set_ylabel("KL Divergence")
+    #
+    # axs[1][2].plot(range(200, epochs+1), model_loss.history["reconstruction_loss"][199:], label="Reconstruction Loss", color="C0")
+    # axs2 = axs[1][2].twinx()
+    # axs2.plot(range(200, epochs+1), model_loss.history["kl_loss"][199:], label="KL Divergence", color="C1")
+    # lines = axs[1][2].get_legend_handles_labels()[0] + axs2.get_legend_handles_labels()[0]
+    # labels = axs[1][2].get_legend_handles_labels()[1] + axs2.get_legend_handles_labels()[1]
+    # axs[1][2].legend(lines, labels)
+    # # axs[1].legend()
+    # axs[1][2].set_xlabel("Epoch")
+    # axs[1][2].set_ylabel("Reconstruction Loss")
+    # axs2.set_ylabel("KL Divergence")
+    #
+    #
+    #
+    # # plt.savefig("Variational Eagle/Loss Plots/fully_balanced_mean_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epochs_" + str(batch_size) + "_bs_loss_" + str(run))
+    # plt.savefig("Variational Eagle/Loss Plots/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run))
+    # plt.show()
+    # plt.close()
 
 
 

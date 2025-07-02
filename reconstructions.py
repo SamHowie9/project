@@ -507,52 +507,79 @@ original_images = train_images[reconstruction_indices]
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 
-# scale font on plots
-# default_size = plt.rcParams['font.size']
-plt.rcParams.update({'font.size': default_size * 5})
-
-# pca reconstructions by feature
-
-fig, axs = plt.subplots(11, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 11*5))
-
-for i in range(0, len(reconstruction_indices)):
-
-    axs[0][i].imshow(original_images[i])
-    axs[0][i].set_aspect("auto")
-    axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-    dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
-    axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45, pad=10)
-
-    for j, feat in enumerate(range(10, 0, -1)):
-
-        pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
-
-        pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
-        pca_features = pca.inverse_transform(pca_features)
-
-        pca_reconstruction = vae.decoder.predict(pca_features)[0]
-
-        axs[j+1][i].imshow(pca_reconstruction)
-        axs[j+1][i].set_aspect("auto")
-        axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-        axs[j+1][0].set_ylabel(feat, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
-
-axs[0][0].set_ylabel("Original", fontsize=45, labelpad=10)
 
 
-fig.text(0.09, 0.5, 'Number of Principal Components Used in Reconstructions', fontsize=45, va='center', rotation='vertical')
+# reconstruction by pca
 
-fig.subplots_adjust(wspace=0.1, hspace=0.025)
+# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+#
+#
+# # scale font on plots
+# # default_size = plt.rcParams['font.size']
+# plt.rcParams.update({'font.size': default_size * 5})
+#
+# # pca reconstructions by feature
+#
+# fig, axs = plt.subplots(11, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 11*5))
+#
+# for i in range(0, len(reconstruction_indices)):
+#
+#     axs[0][i].imshow(original_images[i])
+#     axs[0][i].set_aspect("auto")
+#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
+#     axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45, pad=10)
+#
+#     for j, feat in enumerate(range(10, 0, -1)):
+#
+#         pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
+#
+#         pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+#         pca_features = pca.inverse_transform(pca_features)
+#
+#         pca_reconstruction = vae.decoder.predict(pca_features)[0]
+#
+#         axs[j+1][i].imshow(pca_reconstruction)
+#         axs[j+1][i].set_aspect("auto")
+#         axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#         axs[j+1][0].set_ylabel(feat, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
+#
+# axs[0][0].set_ylabel("Original", fontsize=45, labelpad=10)
+#
+#
+# fig.text(0.09, 0.5, 'Number of Principal Components Used in Reconstructions', fontsize=45, va='center', rotation='vertical')
+#
+# fig.subplots_adjust(wspace=0.1, hspace=0.025)
+#
+# plt.savefig("Variational Eagle/Plots/reconstructions_by_pca", bbox_inches="tight")
+# plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
+# plt.show()
+# plt.close()
 
-plt.savefig("Variational Eagle/Plots/reconstructions_by_pca", bbox_inches="tight")
-plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
-plt.show()
-plt.close()
+
+
+
+
+
+
+
+# reconstruction by residual
+
+selected_features = [1, 3, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+
+fig, axs = plt.subplots(len(original_images), len(selected_features), figsize=(len(selected_features)*5, len(original_images)*5))
+
+for i, feature in enumerate(selected_features):
+
+    for j in range(len(original_images)):
+
+        axs[0][i].imshow(original_images[i])
+        axs[0][i].set_aspect("auto")
+        axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
 
