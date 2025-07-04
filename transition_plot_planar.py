@@ -17,7 +17,7 @@ from skimage import color
 
 
 
-run = 3
+run = 16
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -300,10 +300,10 @@ z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow B
 
 
 # perform PCA on both sets of features
-# pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
-# z_mean = pca_mean.transform(z_mean)
-# pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
-# z_transformed = pca_transformed.transform(z_transformed)
+pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
+z_mean = pca_mean.transform(z_mean)
+pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
+z_transformed = pca_transformed.transform(z_transformed)
 
 
 
@@ -363,50 +363,50 @@ plt.rcParams.update({'font.size': default_size * 5})
 
 # transition plot for all extracted features
 
-# num_varying_features = 13
-#
-# med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-# print(len(med_features))
-#
-# fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
-#
-# # loop through each feature
-# for i in range(len(extracted_features.T)):
-#
-#     # get the incremental values for that feature
-#     varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
-#
-#
-#     for j in range(num_varying_features):
-#
-#         temp_features = med_features.copy()
-#         temp_features[i] = varying_feature_values[j]
-#
-#         temp_features = np.expand_dims(temp_features, axis=0)
-#
-#         # temp_features = pca.inverse_transform(temp_features)
-#         # temp_features = np.expand_dims(temp_features, axis=0)
-#
-#         reconstruction = vae.decoder.predict(temp_features)[0]
-#
-#         axs[i][j].imshow(reconstruction)
-#         axs[i][j].set_aspect("auto")
-#         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#         # remove the spines
-#         # for spine in axs[i][j].spines.values():
-#         #     spine.set_visible(False)
-#
-#     axs[i][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
-#
-# fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
-#
-#
-# fig.subplots_adjust(wspace=0, hspace=0.05)
-#
-# plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
-# plt.show(block=False)
-# plt.close()
+num_varying_features = 13
+
+med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+print(len(med_features))
+
+fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5))
+
+# loop through each feature
+for i in range(len(extracted_features.T)):
+
+    # get the incremental values for that feature
+    varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+
+
+    for j in range(num_varying_features):
+
+        temp_features = med_features.copy()
+        temp_features[i] = varying_feature_values[j]
+
+        temp_features = np.expand_dims(temp_features, axis=0)
+
+        # temp_features = pca.inverse_transform(temp_features)
+        # temp_features = np.expand_dims(temp_features, axis=0)
+
+        reconstruction = vae.decoder.predict(temp_features)[0]
+
+        axs[i][j].imshow(reconstruction)
+        axs[i][j].set_aspect("auto")
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+        # remove the spines
+        # for spine in axs[i][j].spines.values():
+        #     spine.set_visible(False)
+
+    axs[i][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
+
+fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
+
+
+fig.subplots_adjust(wspace=0, hspace=0.05)
+
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
+plt.show(block=False)
+plt.close()
 
 
 
@@ -473,59 +473,59 @@ plt.rcParams.update({'font.size': default_size * 5})
 
 # transition plot residual
 
-med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-
-max_corr = np.load("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy")
-
-fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(15, len(extracted_features.T)*5))
-
-# for i, feature in enumerate(chosen_features):
-for i in range(len(extracted_features.T)):
-
-    min_features = med_features.copy()
-    min_features[i] = np.min(extracted_features.T[i])
-    min_features = np.expand_dims(min_features, axis=0)
-    min_reconstruction = vae.decoder.predict(min_features)[0]
-
-    max_features = med_features.copy()
-    max_features[i] = np.max(extracted_features.T[i])
-    max_features = np.expand_dims(max_features, axis=0)
-    max_reconstruction = vae.decoder.predict(max_features)[0]
-
-    residual = abs(max_reconstruction - min_reconstruction)
-    residual = color.rgb2gray(residual)
-
-
-    axs[i][0].imshow(min_reconstruction)
-    axs[i][0].set_aspect("equal")
-    axs[i][0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-    axs[i][0].set_ylabel(i+1, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
-
-    axs[i][1].imshow(max_reconstruction)
-    axs[i][1].set_aspect("equal")
-    axs[i][1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-    axs[i][2].imshow(residual, cmap="gray_r")
-    axs[i][2].set_aspect("equal")
-    axs[i][2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-    avg_residual = round(np.mean(residual), 5)
-    std = round(np.std(extracted_features.T[i]), 5)
-    dCor = round(max_corr[i], 5)
-
-    axs[i][2].yaxis.set_label_position("right")  # ← must be separate
-    axs[i][2].set_ylabel(("res = " + f"{avg_residual:.5f}" + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
-
-fig.text(0.0, 0.5, 'Extracted Features', va='center', rotation='vertical')
-axs[0][0].set_title("Minimum", fontsize=50)
-axs[0][1].set_title("Maximum", fontsize=50)
-axs[0][2].set_title("Residual", fontsize=50)
-
-fig.subplots_adjust(wspace=0.05, hspace=0.05)
-
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_transition_residual", bbox_inches="tight")
-plt.show(block=False)
-plt.close()
+# med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+#
+# max_corr = np.load("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy")
+#
+# fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(15, len(extracted_features.T)*5))
+#
+# # for i, feature in enumerate(chosen_features):
+# for i in range(len(extracted_features.T)):
+#
+#     min_features = med_features.copy()
+#     min_features[i] = np.min(extracted_features.T[i])
+#     min_features = np.expand_dims(min_features, axis=0)
+#     min_reconstruction = vae.decoder.predict(min_features)[0]
+#
+#     max_features = med_features.copy()
+#     max_features[i] = np.max(extracted_features.T[i])
+#     max_features = np.expand_dims(max_features, axis=0)
+#     max_reconstruction = vae.decoder.predict(max_features)[0]
+#
+#     residual = abs(max_reconstruction - min_reconstruction)
+#     residual = color.rgb2gray(residual)
+#
+#
+#     axs[i][0].imshow(min_reconstruction)
+#     axs[i][0].set_aspect("equal")
+#     axs[i][0].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#     axs[i][0].set_ylabel(i+1, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
+#
+#     axs[i][1].imshow(max_reconstruction)
+#     axs[i][1].set_aspect("equal")
+#     axs[i][1].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     axs[i][2].imshow(residual, cmap="gray_r")
+#     axs[i][2].set_aspect("equal")
+#     axs[i][2].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+#
+#     avg_residual = round(np.mean(residual), 5)
+#     std = round(np.std(extracted_features.T[i]), 5)
+#     dCor = round(max_corr[i], 5)
+#
+#     axs[i][2].yaxis.set_label_position("right")  # ← must be separate
+#     axs[i][2].set_ylabel(("res = " + f"{avg_residual:.5f}" + "\nstd = " + str(std) + "\ndCor = " + str(dCor)), rotation=0, fontsize=45, labelpad=10, va='center', ha="left")
+#
+# fig.text(0.0, 0.5, 'Extracted Features', va='center', rotation='vertical')
+# axs[0][0].set_title("Minimum", fontsize=50)
+# axs[0][1].set_title("Maximum", fontsize=50)
+# axs[0][2].set_title("Residual", fontsize=50)
+#
+# fig.subplots_adjust(wspace=0.05, hspace=0.05)
+#
+# plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_transition_residual_" + str(run), bbox_inches="tight")
+# plt.show(block=False)
+# plt.close()
 
 
 
