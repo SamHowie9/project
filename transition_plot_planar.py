@@ -300,17 +300,17 @@ z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow B
 
 
 # perform PCA on both sets of features
-pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
-z_mean = pca_mean.transform(z_mean)
-pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
-z_transformed = pca_transformed.transform(z_transformed)
+# pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
+# z_mean = pca_mean.transform(z_mean)
+# pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
+# z_transformed = pca_transformed.transform(z_transformed)
+# pca = pca_transformed
 
 
 
 # select transformed or mean
 extracted_features = z_mean
 # extracted_features = z_transformed
-pca = pca_transformed
 
 
 
@@ -382,9 +382,8 @@ for i in range(len(extracted_features.T)):
         temp_features = med_features.copy()
         temp_features[i] = varying_feature_values[j]
 
-        # temp_features = np.expand_dims(temp_features, axis=0)
+        # temp_features = pca.inverse_transform(temp_features)
 
-        temp_features = pca.inverse_transform(temp_features)
         temp_features = np.expand_dims(temp_features, axis=0)
 
         reconstruction = vae.decoder.predict(temp_features)[0]
@@ -404,7 +403,7 @@ fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
 
 fig.subplots_adjust(wspace=0, hspace=0.05)
 
-plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
+plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
 plt.show(block=False)
 plt.close()
 
