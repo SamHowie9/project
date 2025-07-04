@@ -17,7 +17,7 @@ from skimage import color
 
 
 
-run = 16
+run = 25
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -382,7 +382,7 @@ for i in range(len(extracted_features.T)):
         temp_features = med_features.copy()
         temp_features[i] = varying_feature_values[j]
 
-        temp_features = np.expand_dims(temp_features, axis=0)
+        # temp_features = np.expand_dims(temp_features, axis=0)
 
         temp_features = pca.inverse_transform(temp_features)
         temp_features = np.expand_dims(temp_features, axis=0)
