@@ -310,7 +310,7 @@ z_transformed = pca_transformed.transform(z_transformed)
 # select transformed or mean
 extracted_features = z_mean
 # extracted_features = z_transformed
-# pca = pca_transformed
+pca = pca_transformed
 
 
 
