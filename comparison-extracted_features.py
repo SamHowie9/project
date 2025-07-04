@@ -94,15 +94,15 @@ all_properties = all_properties_balanced
 
 
 
-
+16, 25
 
 
 
 
 # for n_flows in [n_flows]:
-# for run in [1, 2, 3]:
+for run in [16, 25]:
 # for run in range(1, 11):
-for run in range(1, 26):
+# for run in range(1, 26):
 
     print(n_flows, run)
 
@@ -118,8 +118,8 @@ for run in range(1, 26):
 
 
     # perform pca on the extracted features
-    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-    extracted_features = pca.transform(extracted_features)
+    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    # extracted_features = pca.transform(extracted_features)
 
 
 
@@ -255,7 +255,7 @@ for run in range(1, 26):
     # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     # plt.close()
 
