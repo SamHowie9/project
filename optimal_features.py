@@ -27,7 +27,7 @@ sns.set_style("ticks")
 
 
 run = 1
-encoding_dim = 30
+encoding_dim = 40
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -522,7 +522,7 @@ axs.set_ylabel("Meaningful Extracted Features")
 # plt.scatter(df_num["Extracted Features"], df_num["2"])
 # plt.scatter(df_num["Extracted Features"], df_num["3"])
 
-plt.savefig("Variational Eagle/Plots/meaningful_features", bbox_inches='tight')
+# plt.savefig("Variational Eagle/Plots/meaningful_features", bbox_inches='tight')
 plt.show()
 
 
