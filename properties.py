@@ -113,6 +113,7 @@ print(all_properties_balanced.shape)
 
 all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
+print()
 
 
 
@@ -122,8 +123,7 @@ all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_propertie
 
 
 
-
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 
 spiral_names = np.load("Galaxy Properties/Eagle Properties/augmented_spiral_only.npy")
 
@@ -141,7 +141,7 @@ for galaxy in spiral_names:
 
 print(all_properties_spirals.shape)
 
-all_properties_spirals.to_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
+all_properties_spirals.to_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 
 print()
 
@@ -152,7 +152,7 @@ print()
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 
 elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_only.npy")
 
