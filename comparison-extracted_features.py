@@ -146,7 +146,7 @@ for run in range(1, 11):
     # transitional only
     spiral_indices = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")].index.tolist()
     # print(spiral_indices)
-    extracted_features = extracted_features[spiral_indices]
+    # extracted_features = extracted_features[spiral_indices]
     all_properties = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
 
 
