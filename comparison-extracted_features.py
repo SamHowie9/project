@@ -128,10 +128,10 @@ for run in range(1, 11):
 
 
     # spirals only
-    # spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
-    # print(spiral_indices)
-    # extracted_features = extracted_features[spiral_indices]
-    # all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
+    spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
+    print(spiral_indices)
+    extracted_features = extracted_features[spiral_indices]
+    all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
 
 
 
