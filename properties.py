@@ -182,7 +182,7 @@ print()
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 
 transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_transitional_only.npy")
 
