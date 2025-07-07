@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 import random
-# import dcor
+import dcor
 from matplotlib.pyplot import figure
 from sklearn.decomposition import PCA
 # from yellowbrick.cluster import KElbowVisualizer
