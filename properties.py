@@ -100,3 +100,91 @@ all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_propertie
 
 
 
+
+
+
+
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+
+spiral_names = np.load("Galaxy Properties/Eagle Properties/augmented_spirals_all.npy")
+
+all_properties_balanced = all_properties.copy()
+
+all_properties_balanced = all_properties_balanced[all_properties_balanced["DiscToTotal"] > 0.2]
+
+print(all_properties_balanced.shape)
+
+for galaxy in spiral_names:
+
+    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    all_properties_balanced.loc[len(all_properties_balanced)] = properties
+
+print(all_properties_balanced.shape)
+
+all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
+
+
+
+
+
+
+
+
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+
+elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_all.npy")
+
+all_properties_balanced = all_properties.copy()
+
+all_properties_balanced = all_properties_balanced[all_properties_balanced["DiscToTotal"] < 0.2]
+
+print(all_properties_balanced.shape)
+
+for galaxy in elliptical_names:
+
+    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    all_properties_balanced.loc[len(all_properties_balanced)] = properties
+
+print(all_properties_balanced.shape)
+
+all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
+
+
+
+
+
+
+
+
+
+
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+
+transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_transitional_all.npy")
+
+all_properties_balanced = all_properties.copy()
+
+all_properties_balanced = all_properties_balanced[all_properties_balanced["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
+
+print(all_properties_balanced.shape)
+
+for galaxy in transitional_names:
+
+    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    all_properties_balanced.loc[len(all_properties_balanced)] = properties
+
+print(all_properties_balanced.shape)
+
+
+all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
+
+
+
+
+
+
+
+
