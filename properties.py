@@ -136,6 +136,7 @@ print(all_properties_balanced.shape)
 for galaxy in spiral_names:
 
     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    print(properties)
     all_properties_balanced.loc[len(all_properties_balanced)] = properties
 
 print(all_properties_balanced.shape)
@@ -164,6 +165,7 @@ print(all_properties_balanced.shape)
 for galaxy in elliptical_names:
 
     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    print(properties)
     all_properties_balanced.loc[len(all_properties_balanced)] = properties
 
 print(all_properties_balanced.shape)
@@ -193,6 +195,7 @@ print(all_properties_balanced.shape)
 for galaxy in transitional_names:
 
     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    print(properties)
     all_properties_balanced.loc[len(all_properties_balanced)] = properties
 
 print(all_properties_balanced.shape)
