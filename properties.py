@@ -96,6 +96,10 @@ all_properties_balanced = all_properties.copy()
 
 print(all_properties_balanced.shape)
 
+print(all_properties_balanced)
+
+print(elliptical_names)
+
 for galaxy in elliptical_names:
 
     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
