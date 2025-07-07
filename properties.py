@@ -30,6 +30,7 @@ pd.set_option('display.width', None)
 
 
 
+
 # load structural and physical properties into dataframes
 structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
 physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
