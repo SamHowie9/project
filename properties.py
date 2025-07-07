@@ -42,6 +42,8 @@ np.save("Galaxy Properties/Eagle Properties/augmented_transitional_only", galaxy
 
 
 
+print()
+
 
 
 
@@ -127,8 +129,8 @@ spiral_names = np.load("Galaxy Properties/Eagle Properties/augmented_spiral_only
 
 all_properties_balanced = all_properties.copy()
 
+print(all_properties_balanced.shape)
 all_properties_balanced = all_properties_balanced[all_properties_balanced["DiscToTotal"] > 0.2]
-
 print(all_properties_balanced.shape)
 
 for galaxy in spiral_names:
@@ -140,6 +142,7 @@ print(all_properties_balanced.shape)
 
 all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
 
+print()
 
 
 
@@ -154,8 +157,8 @@ elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_ellipti
 
 all_properties_balanced = all_properties.copy()
 
+print(all_properties_balanced.shape)
 all_properties_balanced = all_properties_balanced[all_properties_balanced["DiscToTotal"] < 0.2]
-
 print(all_properties_balanced.shape)
 
 for galaxy in elliptical_names:
@@ -167,7 +170,7 @@ print(all_properties_balanced.shape)
 
 all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
 
-
+print()
 
 
 
@@ -183,8 +186,8 @@ transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_trans
 
 all_properties_balanced = all_properties.copy()
 
+print(all_properties_balanced.shape)
 all_properties_balanced = all_properties_balanced[all_properties_balanced["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
-
 print(all_properties_balanced.shape)
 
 for galaxy in transitional_names:
@@ -194,10 +197,9 @@ for galaxy in transitional_names:
 
 print(all_properties_balanced.shape)
 
-
 all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
 
-
+print()
 
 
 
