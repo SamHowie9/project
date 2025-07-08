@@ -99,68 +99,38 @@ print()
 
 
 
-# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
-#
-# elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_all.npy")
-# transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_transitional_all.npy")
-#
-# all_properties_balanced = all_properties.copy()
-#
-# print(all_properties_balanced.shape)
-#
-# # print(all_properties_balanced)
-#
-# print(elliptical_names)
-#
-# for galaxy in elliptical_names:
-#
-#     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
-#     all_properties_balanced.loc[len(all_properties_balanced)] = properties
-#
-# print(all_properties_balanced.shape)
-#
-# for galaxy in transitional_names:
-#
-#     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
-#     all_properties_balanced.loc[len(all_properties_balanced)] = properties
-#
-# print(all_properties_balanced.shape)
-#
-#
-# all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv", index=False)
-#
-# print()
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+
+elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_all.npy")
+transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_transitional_all.npy")
+
+all_properties_balanced = all_properties.copy()
+
+print(all_properties_balanced.shape)
+
+# print(all_properties_balanced)
+
+print(elliptical_names)
+
+for galaxy in elliptical_names:
+
+    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    all_properties_balanced.loc[len(all_properties_balanced)] = properties
+
+print(all_properties_balanced.shape)
+
+for galaxy in transitional_names:
+
+    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    all_properties_balanced.loc[len(all_properties_balanced)] = properties
+
+print(all_properties_balanced.shape)
 
 
+all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv", index=False)
 
+print()
 
-
-
-
-
-
-# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
-#
-# spiral_names = np.load("Galaxy Properties/Eagle Properties/augmented_spiral_only.npy")
-#
-# all_properties_spirals = all_properties.copy()
-#
-# print(all_properties_spirals.shape)
-# all_properties_spirals = all_properties_spirals[all_properties_spirals["DiscToTotal"] > 0.2].reset_index(drop=True)
-# # all_properties_spirals = all_properties_spirals.reset_index()
-# print(all_properties_spirals.shape)
-#
-# for galaxy in spiral_names:
-#
-#     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
-#     # print(len(properties))
-#     all_properties_spirals.loc[len(all_properties_spirals)] = properties
-#
-# print(all_properties_spirals.shape)
-#
-# all_properties_spirals.to_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv", index=False)
-#
-# print()
 
 
 
@@ -171,7 +141,35 @@ print()
 
 all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 
-print(all_properties)
+spiral_names = np.load("Galaxy Properties/Eagle Properties/augmented_spiral_only.npy")
+
+all_properties_spirals = all_properties.copy()
+
+print(all_properties_spirals.shape)
+all_properties_spirals = all_properties_spirals[all_properties_spirals["DiscToTotal"] > 0.2].reset_index(drop=True)
+# all_properties_spirals = all_properties_spirals.reset_index()
+print(all_properties_spirals.shape)
+
+for galaxy in spiral_names:
+
+    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+    # print(len(properties))
+    all_properties_spirals.loc[len(all_properties_spirals)] = properties
+
+print(all_properties_spirals.shape)
+
+all_properties_spirals.to_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv", index=False)
+
+print()
+
+
+
+
+
+
+
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 
 elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_only.npy")
 
