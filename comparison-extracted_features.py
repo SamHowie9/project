@@ -143,17 +143,17 @@ for encoding_dim in [encoding_dim]:
 
 
     # ellipticals only
-    # spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
-    # # print(spiral_indices)
-    # extracted_features = extracted_features[spiral_indices]
-    # all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
+    spiral_indices = all_properties[all_properties["DiscToTotal"] < 0.1].index.tolist()
+    # print(spiral_indices)
+    extracted_features = extracted_features[spiral_indices]
+    all_properties = all_properties[all_properties["DiscToTotal"] < 0.1]
 
 
     # transitional only
-    spiral_indices = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")].index.tolist()
-    # print(spiral_indices)
-    extracted_features = extracted_features[spiral_indices]
-    all_properties = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
+    # spiral_indices = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")].index.tolist()
+    # # print(spiral_indices)
+    # extracted_features = extracted_features[spiral_indices]
+    # all_properties = all_properties[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")]
 
 
 
@@ -259,7 +259,7 @@ for encoding_dim in [encoding_dim]:
     wrap_labels(ax, 10)
 
 
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_transitional_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_ellipticals_dcor", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     # plt.close()
