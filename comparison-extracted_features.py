@@ -175,7 +175,7 @@ for run in range(1, 26):
     max_corr = []
 
     # loop through each extracted feature
-    for feature in range(0, extracted_features.shape[0]):
+    for feature in range(0, extracted_features.shape[1]):
 
         # create a list to contain the correlation between that feature and each property
         correlation_list = []
