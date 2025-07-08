@@ -344,7 +344,7 @@ for run in range(1, 2):
     med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
     print(len(med_features))
 
-    fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*2.5, len(extracted_features.T)*2.5), dpi=100)
+    fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5), dpi=100)
 
     # loop through each feature
     for i in range(len(extracted_features.T)):
