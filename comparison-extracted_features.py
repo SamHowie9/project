@@ -114,11 +114,9 @@ for run in range(1, 11):
     print(n_flows, run)
 
     # load the extracted features
-    # extracted_features = np.load("Variational Eagle/Extracted Features/Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_features_" + str(run) + ".npy")[0]
-    # extracted_features = np.load("Variational Eagle/Extracted Features/Test/bce_beta_01.npy")[0]
-    # extracted_features = np.load("Variational Eagle/Extracted Features/Final/bce_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_300_" + str(run) + ".npy")[0]
-    # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
     extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    # extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+
     encoding_dim = extracted_features.shape[1]
 
     print(extracted_features.shape)
@@ -137,10 +135,10 @@ for run in range(1, 11):
 
 
     # spirals only
-    # spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
-    # # print(spiral_indices)
-    # extracted_features = extracted_features[spiral_indices]
-    # all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
+    spiral_indices = all_properties[all_properties["DiscToTotal"] > 0.2].index.tolist()
+    # print(spiral_indices)
+    extracted_features = extracted_features[spiral_indices]
+    all_properties = all_properties[all_properties["DiscToTotal"] > 0.2]
 
 
 
@@ -261,10 +259,8 @@ for run in range(1, 11):
     wrap_labels(ax, 10)
 
 
-    # plt.savefig("Variational Eagle/Correlation Plots/fully_balanced_" + str(encoding_dim) + "_feature_vae_all_property_correlation_" + str(run), bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Correlation Plots/Correlation Fully Balanced/" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_" + str(batch_size) + "_bs_correlation_" + str(run), bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Correlation Plots/Final/top_4_pca_" + str(encoding_dim) + "_feature_" + str(epochs) + "_epoch_correlation_" + str(run), bbox_inches='tight')
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_spirals_dcor", bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     # plt.close()
 
