@@ -385,7 +385,7 @@ for run in range(1, 26):
     fig.subplots_adjust(wspace=0, hspace=0.05)
 
     plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
-    plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Transition Plots/Transitional/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Transition Plots/Transitional/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
 
