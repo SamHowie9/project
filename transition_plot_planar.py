@@ -330,7 +330,7 @@ for run in range(1, 2):
 
     # scale font on plots
     default_size = plt.rcParams['font.size']
-    plt.rcParams.update({'font.size': default_size * 3})
+    plt.rcParams.update({'font.size': default_size * 6})
 
 
 
