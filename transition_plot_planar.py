@@ -46,7 +46,7 @@ def normalise_independently(image):
 
 
 
-for run in range(1, 11):
+for run in range(1, 2):
 
     # Define VAE model with custom train step
     class VAE(Model):
@@ -330,7 +330,7 @@ for run in range(1, 11):
 
     # scale font on plots
     default_size = plt.rcParams['font.size']
-    plt.rcParams.update({'font.size': default_size * 5})
+    plt.rcParams.update({'font.size': default_size * 3})
 
 
 
@@ -344,7 +344,7 @@ for run in range(1, 11):
     med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
     print(len(med_features))
 
-    fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*4, len(extracted_features.T)*4))
+    fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*2.5, len(extracted_features.T)*2.5), dpi=100)
 
     # loop through each feature
     for i in range(len(extracted_features.T)):
@@ -401,7 +401,7 @@ for run in range(1, 11):
     #
     # chosen_features = [18, 13, 6]
     #
-    # fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*4, len(chosen_features)*4))
+    # fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*2.5, len(chosen_features)*2.5), dpi=100)
     #
     # for i, feature in enumerate(chosen_features):
     #
@@ -459,7 +459,7 @@ for run in range(1, 11):
     #
     # max_corr = np.load("Variational Eagle/Correlation Plots/Normalising Flows Balanced/Normal/max_corr.npy")
     #
-    # fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(12, len(extracted_features.T)*4))
+    # fig, axs = plt.subplots(len(extracted_features.T), 3, figsize=(12, len(extracted_features.T)*2.5), dpi=100)
     #
     # # for i, feature in enumerate(chosen_features):
     # for i in range(len(extracted_features.T)):
