@@ -175,13 +175,13 @@ for run in range(1, 11):
     max_corr = []
 
     # loop through each extracted feature
-    for feature in range(0, len(extracted_features.T)):
+    for feature in range(0, extracted_features.shape[0]):
 
         # create a list to contain the correlation between that feature and each property
         correlation_list = []
 
         # loop through each property
-        for gal_property in range(1, len(all_properties.columns)):
+        for gal_property in range(1, all_properties.shape[1]):
 
             # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
             # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties.iloc[:, gal_property])[0][1]
@@ -198,7 +198,7 @@ for run in range(1, 11):
         print(len(correlation_list))
 
         # keep correlations of relevant properties
-        selected_property_indices = [66, 4, 33, 3, 5, 40, 41, 42, 9, 11, 12, 13, 14, 15]
+        selected_property_indices = [64, 1, 3, 2, 31, 38, 39, 40, 7, 9, 10, 11, 12, 13]
 
         # add the maximum correlation to the list
         max_corr.append(max([correlation_list[index-1] for index in selected_property_indices]))
