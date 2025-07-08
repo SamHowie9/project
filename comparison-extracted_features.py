@@ -107,9 +107,9 @@ print(all_properties.shape)
 
 # for n_flows in [n_flows]:
 # for run in [16, 25]:
-for run in range(1, 11):
+# for run in range(1, 11):
 # for run in range(1, 26):
-# for encoding_dim in [encoding_dim]:
+for encoding_dim in [encoding_dim]:
 
     print(n_flows, run)
 
