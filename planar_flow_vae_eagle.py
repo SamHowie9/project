@@ -24,8 +24,8 @@ tfd = tfp.distributions
 
 
 
-run = 2
-encoding_dim = 40
+run = 11
+encoding_dim = 30
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -42,7 +42,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
-# for encoding_dim in [encoding_dim]:
+for encoding_dim in [encoding_dim]:
 # for n_flows in [1, 2, 3]:
 # for encoding_dim, n_flows in [[encoding_dim, 1], [encoding_dim, 2], [encoding_dim, 3], [encoding_dim+1, 1], [encoding_dim+1, 2], [encoding_dim+1, 3]]:
 # for encoding_dim in [encoding_dim, encoding_dim+1, encoding_dim+2, encoding_dim+3, encoding_dim+4, encoding_dim+5]:
@@ -58,7 +58,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 # for run, encoding_dim in [[1, 49], [1, 50], [2, 49], [2, 50]]:
 # for encoding_dim in [35, 36, 37, 38, 39, 40, 44, 45, 46, 47, 48, 49, 50]:
 # for run, encoding_dim in [[3, 29], [3, 31], [3, 32], [2, 35], [3, 35], [2, 36], [2, 37], [2, 38], [3, 38], [2, 39], [2, 40], [3, 43], [2, 44], [2, 45], [2, 46], [2, 47], [2, 48], [2, 49], [2, 50]]:
-for run, encoding_dim in [[4, 40], [5, 40], [6, 40], [7, 40], [8, 40], [9, 40], [10, 40], [4, 50], [5, 50], [6, 50], [7, 50], [8, 50], [9, 50], [10, 50]]:
+# for run, encoding_dim in [[4, 40], [5, 40], [6, 40], [7, 40], [8, 40], [9, 40], [10, 40], [4, 50], [5, 50], [6, 50], [7, 50], [8, 50], [9, 50], [10, 50]]:
 
 
 # 29 - 3
