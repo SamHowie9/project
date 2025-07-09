@@ -536,15 +536,6 @@ for encoding_dim in [encoding_dim]:
     # train the model
     # model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
-    # # get loss, reconstruction loss and kl loss and save as numpy array
-    # loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
-    # np.save("Variational Eagle/Loss/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
-    #
-    # print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
-    # print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
-
-
-
     vae.build(input_shape=(None, 256, 256, 3))
 
     # or load the weights from a previous run
