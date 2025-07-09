@@ -21,9 +21,9 @@ transitional_losses = []
 
 
 
-# for run in range(1, 26):
-#     balanced_loss = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
-#     balanced_losses.append(balanced_loss)
+for run in range(1, 26):
+    balanced_loss = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+    balanced_losses.append(balanced_loss[1])
 
 for run in range(1, 11):
     spiral_loss = np.load("Variational Eagle/Loss/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
@@ -35,15 +35,69 @@ for run in range(1, 11):
     elliptical_loss = np.load("Variational Eagle/Loss/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
     elliptical_losses.append(elliptical_loss[1])
 
-all_losses = [spiral_losses, transitional_losses, elliptical_losses]
 
-fig, axs = plt.subplots(1, 1, figsize=(20, 20))
+all_losses = [balanced_losses, spiral_losses, transitional_losses, elliptical_losses]
 
-# axs.boxplot(balanced_losses)
-axs.boxplot(spiral_losses)
-axs.boxplot(transitional_losses)
-axs.boxplot(elliptical_losses)
 
+
+
+# fig, axs = plt.subplots(1, 1, figsize=(20, 20))
+#
 # axs.boxplot(x=all_losses)
+#
+# plt.show()
 
+
+
+
+
+
+# fig, axs = plt.subplots(1, 1, figsize=(20, 20))
+#
+# axs.scatter([0]*len(balanced_losses), balanced_losses)
+# axs.scatter([1]*len(spiral_losses), spiral_losses)
+# axs.scatter([2]*len(transitional_losses), transitional_losses)
+# axs.scatter([3]*len(elliptical_losses), elliptical_losses)
+#
+# plt.show()
+
+
+
+
+
+mean_losses = [np.mean(balanced_losses), np.mean(spiral_losses), np.mean(transitional_losses), np.mean(elliptical_losses)]
+print(mean_losses)
+
+fig, axs = plt.subplots(1, 1, figsize=(5, 10))
+
+axs.scatter([0, 0, 0, 0], mean_losses, s=150)
+
+# labels = ["Balanced", "Disk-Dominated", "Transitional", "Bulge-Dominated"]
+
+axs.text(0.05, mean_losses[0], "Balanced", fontsize=20, ha="left", va="center")
+axs.text(0.05, mean_losses[1], "Disk-Dominated", fontsize=20, ha="left", va="center")
+axs.text(0.05, mean_losses[2], "Transitional", fontsize=20, ha="left", va="center")
+axs.text(0.05, mean_losses[3], "Bulge-Dominated", fontsize=20, ha="left", va="center")
+
+axs.set_ylabel("Reconstruction Loss (BCE)", fontsize=20, labelpad=20)
+axs.tick_params(labelsize=20)
+axs.set_xlim(-0.1, 0.6)
+axs.set_xticks([])
+# axs.set_yticks([round(mean_losses[2], 3), round(mean_losses[1], 3), round(mean_losses[0], 3), round(mean_losses[3], 3)])
+# axs.set_yticks([0.204, 0.206, 0.208, 0.210, 0.212, 0.214, 0.216])
+
+plt.savefig("Variational Eagle/Plots/subset_loss_comparison", bbox_inches="tight")
 plt.show()
+
+
+
+
+
+# fig, axs = plt.subplots(1, 4, figsize=(20, 20))
+#
+# axs[0].boxplot(balanced_losses)
+# axs[1].boxplot(spiral_losses)
+# axs[2].boxplot(transitional_losses)
+# axs[3].boxplot(elliptical_losses)
+#
+# plt.show()
