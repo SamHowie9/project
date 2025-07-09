@@ -534,7 +534,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # train the model
-    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
+    # model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
     # # get loss, reconstruction loss and kl loss and save as numpy array
     # loss = np.array([model_loss.history["loss"][-1], model_loss.history["reconstruction_loss"][-1], model_loss.history["kl_loss"][-1]])
@@ -551,7 +551,7 @@ for encoding_dim in [encoding_dim]:
     vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
     # save the weights
-    # vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
+    vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
 
 
 
