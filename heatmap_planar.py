@@ -789,7 +789,7 @@ for i in range(0, len(reconstruction_indices)):
 axs[0][0].set_ylabel("Original")
 axs[1][0].set_ylabel("Recons.")
 axs[2][0].set_ylabel("Residual")
-axs[3][0].set_ylabel("Heatmap")
+# axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
