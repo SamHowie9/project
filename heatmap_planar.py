@@ -723,7 +723,7 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 # reconstructions and heatmaps
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 # # reconstruction_indices = [560, 743, 839, 780,    2785, 2929, 2227, 3382,     495, 437, 2581]
 # reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
@@ -779,7 +779,8 @@ for i in range(0, len(original_images)):
     axs[0][i].set_aspect("auto")
     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
-    dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
+    # dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
+    dt = all_properties[all_properties["GalaxyID"] == galaxy_ids[i]]["DiscToTotal"]
     axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=40)
 
     axs[1][i].imshow(reconstructions[i])

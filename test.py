@@ -37,7 +37,9 @@ reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
 print(all_properties)
 print(all_properties.loc[reconstruction_indices]["GalaxyID"].tolist())
 
-[8827412, 8407169, 8756517, 13632283, 16618997, 17171464, 8274107, 8101596, 15583095]
+# [8827412, 8407169, 8756517, 13632283, 16618997, 17171464, 8274107, 8101596, 15583095]
+
+print(all_properties[all_properties["GalaxyID"] == 8827412]["DiscToTotal"])
 
 
 
