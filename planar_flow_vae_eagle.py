@@ -609,9 +609,9 @@ for run in [run]:
         total_loss = reconstruction_loss + (beta * kl_loss)
 
         loss = np.array([total_loss, reconstruction_loss, kl_loss])
-        np.save("Variational Eagle/Loss/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+        np.save("Variational Eagle/Loss/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
 
-        np.save("Variational Eagle/Loss/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_reconstruction.npy", reconstruction_loss_individual)
+        np.save("Variational Eagle/Loss/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_reconstruction.npy", reconstruction_loss_individual)
 
 
         print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
