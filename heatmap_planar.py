@@ -725,16 +725,35 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
-# reconstruction_indices = [560, 743, 839, 780,    2785, 2929, 2227, 3382,     495, 437, 2581]
-reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
+# # reconstruction_indices = [560, 743, 839, 780,    2785, 2929, 2227, 3382,     495, 437, 2581]
+# reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
+#
+# extracted_features_reconstruct = extracted_features[reconstruction_indices]
+# original_images = train_images[reconstruction_indices]
 
-extracted_features_reconstruct = extracted_features[reconstruction_indices]
-original_images = train_images[reconstruction_indices]
+
+galaxy_ids = [8827412, 8407169, 8756517, 13632283, 16618997, 17171464, 8274107, 8101596, 15583095]
+
+# original_images = []
+#
+# for galaxy in galaxy_ids:
+#
+#     # open the image and append it to the main list
+#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+#
+#     # normalise the image (each band independently)
+#     image = normalise_independently(image)
+#
+#     # add the image to the dataset
+#     original_images.append(image)
+#
+# extracted_features_reconstruct = vae.encoder.predict(original_images)[0]
+
 
 
 # reconstructions with residual:
-# fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 4*5))
-fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
+fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 4*5))
+# fig, axs = plt.subplots(3, len(original_images), figsize=(len(original_images)*5, 3*5))
 
 
 # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
@@ -749,7 +768,7 @@ residuals = abs(original_images - reconstructions)
 # residuals -= residuals.min()
 # residuals /= residuals.max() + 1e-8
 
-for i in range(0, len(reconstruction_indices)):
+for i in range(0, len(original_images)):
 
     original_image = normalise_independently(original_images[i])
     axs[0][i].imshow(original_image)
@@ -775,25 +794,25 @@ for i in range(0, len(reconstruction_indices)):
 
 
 
-    # heatmap = latent_saliency(encoder=vae.encoder, image=original_images[i], smoothing_sigma=2.0)
-    # # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
-    #
-    # original_gray = color.rgb2gray(original_image)
-    # axs[3][i].imshow(original_gray, cmap="gray")
-    # axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
-    # axs[3][i].set_aspect("auto")
-    # axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    heatmap = latent_saliency(encoder=vae.encoder, image=original_images[i], smoothing_sigma=2.0)
+    # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
+
+    original_gray = color.rgb2gray(original_image)
+    axs[3][i].imshow(original_gray, cmap="gray")
+    axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
+    axs[3][i].set_aspect("auto")
+    axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
 
 axs[0][0].set_ylabel("Original")
 axs[1][0].set_ylabel("Recons.")
 axs[2][0].set_ylabel("Residual")
-# axs[3][0].set_ylabel("Heatmap")
+axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_balanced", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_balanced", bbox_inches="tight")
 # plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap.pdf", bbox_inches="tight")
 plt.show()
 plt.close()

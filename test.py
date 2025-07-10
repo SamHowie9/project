@@ -21,31 +21,24 @@ pd.set_option('display.width', None)
 
 all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
+# print(all_properties)
+#
+# selected_structure = ["DiscToTotal", "n_r", "q_r", "pa_r", "rhalf_ellip", "concentration", "asymmetry", "smoothness"]
+# selected_physical = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
+#
+# selected_properties = selected_structure + selected_physical
+#
+# print(selected_properties)
+#
+# indices = [all_properties.columns.get_loc(property) for property in selected_properties]
+
+reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
+
 print(all_properties)
+print(all_properties.loc[reconstruction_indices]["GalaxyID"].tolist())
 
-selected_structure = ["DiscToTotal", "n_r", "q_r", "pa_r", "rhalf_ellip", "concentration", "asymmetry", "smoothness"]
-selected_physical = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
-
-selected_properties = selected_structure + selected_physical
-
-print(selected_properties)
-
-indices = [all_properties.columns.get_loc(property) for property in selected_properties]
-
-print(indices)
-
-# print(all_properties[selected_properties])
-
-row = all_properties.iloc[0].tolist()
-
-print(all_properties[selected_properties])
-
-print([row[index] for index in indices])
-
-print(row)
+[8827412, 8407169, 8756517, 13632283, 16618997, 17171464, 8274107, 8101596, 15583095]
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
-print(all_properties)
 
 
