@@ -756,7 +756,7 @@ print(extracted_features_reconstruct.shape)
 
 
 # reconstructions with residual:
-fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 4*5))
+fig, axs = plt.subplots(4, len(original_images), figsize=(len(original_images)*5, 4*5))
 # fig, axs = plt.subplots(3, len(original_images), figsize=(len(original_images)*5, 3*5))
 
 
