@@ -598,7 +598,8 @@ original_images = train_images[reconstruction_indices]
 
 
 # reconstructions with residual:
-fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 4*5))
+# fig, axs = plt.subplots(4, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 4*5))
+fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
 
 
 # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
@@ -639,14 +640,14 @@ for i in range(0, len(reconstruction_indices)):
 
 
 
-    heatmap = latent_saliency(encoder=vae.encoder, image=original_images[i], smoothing_sigma=2.0)
-    # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
-
-    original_gray = color.rgb2gray(original_image)
-    axs[3][i].imshow(original_gray, cmap="gray")
-    axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
-    axs[3][i].set_aspect("auto")
-    axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    # heatmap = latent_saliency(encoder=vae.encoder, image=original_images[i], smoothing_sigma=2.0)
+    # # heatmap = pca_saliency(encoder=vae.encoder, image=train_images[img_index], pca_components=pca_components, pca_component_index=feature, smoothing_sigma=2.0)
+    #
+    # original_gray = color.rgb2gray(original_image)
+    # axs[3][i].imshow(original_gray, cmap="gray")
+    # axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
+    # axs[3][i].set_aspect("auto")
+    # axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
 
@@ -657,7 +658,7 @@ axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap", bbox_inches="tight")
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap.pdf", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_balanced", bbox_inches="tight")
+# plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap.pdf", bbox_inches="tight")
 plt.show()
 plt.close()

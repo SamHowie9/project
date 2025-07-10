@@ -22,10 +22,12 @@ transitional_losses = []
 
 
 for run in range(1, 26):
+
     balanced_loss = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
     balanced_losses.append(balanced_loss[1])
 
-for run in range(1, 11):
+# for run in range(1, 11):
+
     spiral_loss = np.load("Variational Eagle/Loss/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
     spiral_losses.append(spiral_loss[1])
 
@@ -86,7 +88,7 @@ axs.set_xticks([])
 # axs.set_yticks([round(mean_losses[2], 3), round(mean_losses[1], 3), round(mean_losses[0], 3), round(mean_losses[3], 3)])
 # axs.set_yticks([0.204, 0.206, 0.208, 0.210, 0.212, 0.214, 0.216])
 
-plt.savefig("Variational Eagle/Plots/subset_loss_comparison", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/subset_loss_comparison_2", bbox_inches="tight")
 plt.show()
 
 
