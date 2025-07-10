@@ -747,7 +747,11 @@ for galaxy in galaxy_ids:
     # add the image to the dataset
     original_images.append(image)
 
+original_images = np.array(original_images)
+print(original_images.shape)
+
 extracted_features_reconstruct = vae.encoder.predict(original_images)[0]
+print(extracted_features_reconstruct.shape)
 
 
 
