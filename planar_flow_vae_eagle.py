@@ -591,7 +591,9 @@ for run in [run]:
 
         print(losses.binary_crossentropy(train_images, reconstructed_images).shape)
 
-        reconstruction_loss_individual = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images), axis=(1, 2, 3)).numpy().item()
+        reconstruction_loss_individual = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images), axis=[1, 2]).numpy().item()
+
+        print(reconstruction_loss_individual.shape)
 
         # # kl loss
         # kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
@@ -608,6 +610,9 @@ for run in [run]:
 
         loss = np.array([total_loss, reconstruction_loss, kl_loss])
         np.save("Variational Eagle/Loss/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+
+        np.save("Variational Eagle/Loss/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_reconstruction.npy", reconstruction_loss_individual)
+
 
         print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
         print(str(loss[0]) + "   " + str(loss[1]) + "   " + str(loss[2]) + "\n")
