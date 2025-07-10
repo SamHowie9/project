@@ -591,7 +591,7 @@ for run in [run]:
 
         print(losses.binary_crossentropy(train_images, reconstructed_images).shape)
 
-        reconstruction_loss_individual = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images), axis=[1, 2]).numpy().item()
+        reconstruction_loss_individual = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images), axis=[1, 2]).numpy()
 
         print(reconstruction_loss_individual.shape)
 
