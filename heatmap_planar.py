@@ -29,7 +29,7 @@ tfd = tfp.distributions
 
 
 
-run = 3
+run = 16
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
