@@ -725,29 +725,29 @@ img_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
 
 all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
 
-# reconstruction_indices = [560, 743, 839, 780,    2785, 2929, 2227, 3382,     495, 437, 2581]
-reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
+# # reconstruction_indices = [560, 743, 839, 780,    2785, 2929, 2227, 3382,     495, 437, 2581]
+# reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
+#
+# extracted_features_reconstruct = extracted_features[reconstruction_indices]
+# original_images = train_images[reconstruction_indices]
 
-extracted_features_reconstruct = extracted_features[reconstruction_indices]
-original_images = train_images[reconstruction_indices]
 
+galaxy_ids = [8827412, 8407169, 8756517, 13632283, 16618997, 17171464, 8274107, 8101596, 15583095]
 
-# galaxy_ids = [8827412, 8407169, 8756517, 13632283, 16618997, 17171464, 8274107, 8101596, 15583095]
-#
-# original_images = []
-#
-# for galaxy in galaxy_ids:
-#
-#     # open the image and append it to the main list
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#
-#     # normalise the image (each band independently)
-#     image = normalise_independently(image)
-#
-#     # add the image to the dataset
-#     original_images.append(image)
-#
-# extracted_features_reconstruct = vae.encoder.predict(original_images)[0]
+original_images = []
+
+for galaxy in galaxy_ids:
+
+    # open the image and append it to the main list
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+
+    # normalise the image (each band independently)
+    image = normalise_independently(image)
+
+    # add the image to the dataset
+    original_images.append(image)
+
+extracted_features_reconstruct = vae.encoder.predict(original_images)[0]
 
 
 
@@ -812,7 +812,7 @@ axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_spirals", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_spirals_all", bbox_inches="tight")
 # plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap.pdf", bbox_inches="tight")
 plt.show()
 plt.close()
