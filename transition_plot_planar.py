@@ -368,7 +368,7 @@ for run in [run]:
             # axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
             reconstruction_grey = color.rgb2gray(reconstruction)
-            axs[i][j].imshow(reconstruction, cmap="gray_r")
+            axs[i][j].imshow(reconstruction_grey, cmap="gray_r")
             axs[i][j].set_aspect("auto")
             axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
