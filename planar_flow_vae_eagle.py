@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -50,7 +50,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="4"
 # for encoding_dim in range(encoding_dim, encoding_dim+5):
 # for encoding_dim in [49, 50]:
 # for encoding_dim in [encoding_dim]:
-for run in [23, 24, 25]:
+for run in [11, 12, 13]:
 # for run in range(11, 16):
 # for run in [run]:
 # for run in [run, run+1, run+2]:
@@ -534,12 +534,12 @@ for run in [23, 24, 25]:
 
 
     # train the model
-    # model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
+    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
     vae.build(input_shape=(None, 256, 256, 3))
 
     # or load the weights from a previous run
-    vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    # vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
     # save the weights
     vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
