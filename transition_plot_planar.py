@@ -17,7 +17,7 @@ from skimage import color
 
 
 
-run = 3
+run = 16
 encoding_dim = 30
 n_flows = 0
 beta = 0.0001
@@ -269,16 +269,16 @@ for run in [run]:
     vae.build(input_shape=(None, 256, 256, 3))
 
     # or load the weights from a previous run
-    # vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
-    vae.load_weights("Variational Eagle/Weights/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    # vae.load_weights("Variational Eagle/Weights/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
 
 
     # load the original and transformed features
-    # z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
-    # z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-    z_mean = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
-    z_transformed = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+    z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    # z_mean = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+    # z_transformed = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
     # perform PCA on both sets of features
     # pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
@@ -384,9 +384,9 @@ for run in [run]:
 
     fig.subplots_adjust(wspace=0, hspace=0.05)
 
-    # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_inverted", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_inverted", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
-    plt.savefig("Variational Eagle/Transition Plots/Ellipticals/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_inverted", bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Transition Plots/Ellipticals/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_inverted", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Transition Plots/Spirals/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
 
     plt.show(block=False)
