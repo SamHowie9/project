@@ -363,14 +363,14 @@ for run in [run]:
 
             reconstruction = vae.decoder.predict(temp_features)[0]
 
-            # axs[i][j].imshow(reconstruction)
-            # axs[i][j].set_aspect("auto")
-            # axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-            reconstruction_grey = color.rgb2gray(reconstruction)
-            axs[i][j].imshow(reconstruction_grey, cmap="gray_r")
+            axs[i][j].imshow(reconstruction)
             axs[i][j].set_aspect("auto")
             axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+            # reconstruction_grey = color.rgb2gray(reconstruction)
+            # axs[i][j].imshow(reconstruction_grey, cmap="gray_r")
+            # axs[i][j].set_aspect("auto")
+            # axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
 
             # remove the spines
@@ -384,9 +384,9 @@ for run in [run]:
 
     fig.subplots_adjust(wspace=0, hspace=0.05)
 
-    plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_inverted", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
-    # plt.savefig("Variational Eagle/Transition Plots/Ellipticals/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_inverted", bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Transition Plots/Ellipticals/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Transition Plots/Spirals/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
 
     plt.show(block=False)
