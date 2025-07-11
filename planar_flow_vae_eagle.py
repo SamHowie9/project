@@ -24,8 +24,8 @@ tfd = tfp.distributions
 
 
 
-run = 3
-encoding_dim = 50
+run = 16
+encoding_dim = 30
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="5"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -50,9 +50,9 @@ os.environ["CUDA_VISIBLE_DEVICES"]="5"
 # for encoding_dim in range(encoding_dim, encoding_dim+5):
 # for encoding_dim in [49, 50]:
 # for encoding_dim in [encoding_dim]:
-for run in [24, 25]:
+# for run in [24, 25]:
 # for run in range(14, 26):
-# for run in [run]:
+for run in [run]:
 # for run in [run, run+1, run+2]:
 # for encoding_dim in range(encoding_dim, encoding_dim+3):
 # for run, encoding_dim in [[1, 49], [1, 50], [2, 49], [2, 50]]:
@@ -517,12 +517,12 @@ for run in [24, 25]:
 
 
     # train the model
-    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
+    # model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
     vae.build(input_shape=(None, 256, 256, 3))
 
     # or load the weights from a previous run
-    # vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
     # save the weights
     vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)
@@ -574,10 +574,6 @@ for run in [24, 25]:
 
         print(losses.binary_crossentropy(train_images, reconstructed_images).shape)
 
-        reconstruction_loss_individual = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images), axis=[1, 2]).numpy()
-
-        print(reconstruction_loss_individual.shape)
-
         # # kl loss
         # kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
         # kl_loss = (tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians) / z_mean.shape[1]
@@ -594,7 +590,21 @@ for run in [24, 25]:
         loss = np.array([total_loss, reconstruction_loss, kl_loss])
         np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
 
+
+        # individual losses of each image
+        reconstruction_loss_individual = tf.reduce_mean(losses.binary_crossentropy(train_images, reconstructed_images), axis=[1, 2]).numpy()
+        print(reconstruction_loss_individual.shape)
+
+        # save individual losses
         np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_reconstruction.npy", reconstruction_loss_individual)
+
+
+        # individual residuals of each image
+        residuals = abs(train_images - reconstructed_images)
+        residuals = tf.reduce_mean(residuals, axis=-1)
+
+        # save the individual residuals
+        np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_residual.npy", residuals)
 
 
         print("\n \n" + str(encoding_dim) + "   " + str(n_flows) + "   " + str(run))
