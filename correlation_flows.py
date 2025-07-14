@@ -165,7 +165,7 @@ print(all_properties)
 # fig, axs = plt.subplots(1, 1, figsize=(25, encoding_dim/2))
 # fig, axs = plt.subplots(2, 1, figsize=(25, encoding_dim))
 # fig, axs = plt.subplots(2, 1, figsize=(55, 30))
-fig, axs = plt.subplots(2, 1, figsize=(25, 15))
+fig, axs = plt.subplots(2, 1, figsize=(30, 15))
 
 
 
