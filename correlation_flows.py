@@ -251,7 +251,7 @@ axs[0].set_ylabel("Extracted Features", fontsize=15)
 axs[0].xaxis.tick_top() # x axis on top
 axs[0].xaxis.set_label_position('top')
 axs[0].tick_params(length=0, labelsize=15)
-axs[0].tick_params(axis="y", label_rotation=0)
+axs[0].tick_params(axis="y", labelrotation=0)
 axs[0].figure.axes[-1].yaxis.label.set_size(15)
 
 colourbar = axs[0].collections[0].colorbar
@@ -371,7 +371,7 @@ axs[1].set_ylabel("Extracted Features", fontsize=15)
 axs[1].xaxis.tick_top() # x axis on top
 axs[1].xaxis.set_label_position('top')
 axs[1].tick_params(length=0, labelsize=15)
-axs[1].tick_params(axis="y", label_rotation=0)
+axs[1].tick_params(axis="y", labelrotation=0)
 axs[1].figure.axes[-1].yaxis.label.set_size(15)
 
 colourbar = axs[1].collections[0].colorbar
