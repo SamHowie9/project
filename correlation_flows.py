@@ -209,9 +209,10 @@ for feature in range(0, 15):
         correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["n_r"])
         correlation_list.append(correlation)
 
-
-
     correlation_df.loc[len(correlation_df)] = correlation_list
+
+# set index so feature label starts at 1 rather than 0
+correlation_df.index = correlation_df.index + 1
 
 print(correlation_df)
 
@@ -328,6 +329,8 @@ for feature in range(0, 15):
     correlation_df.loc[len(correlation_df)] = correlation_list
 
 
+# set index so feature label starts at 1 rather than 0
+correlation_df.index = correlation_df.index + 1
 
 print(correlation_df)
 
