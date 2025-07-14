@@ -4,55 +4,30 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 from sklearn.decomposition import PCA
+import dcor
 
 
 
-encoding_dim = 30
+
+run = 16
+encoding_dim = 50
+n_flows = 0
 beta = 0.0001
 beta_name = "0001"
 epochs = 750
-n_flows = 3
-run = 2
 batch_size = 32
 
 
 
 
 
-# load structural and physical properties into dataframes
-structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-
-# dataframe for all properties
-all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-
-# load the non parametric properties (restructure the dataframe to match the others)
-non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
-non_parametric_properties = non_parametric_properties.reset_index()
-non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
-
-# add the non parametric properties to the other properties dataframe
-all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
 
 
-# find all bad fit galaxies
-# bad_fit = all_properties[((all_properties["flag_r"] == 4) | (all_properties["flag_r"] == 1) | (all_properties["flag_r"] == 5))].index.tolist()
-bad_fit = all_properties[((all_properties["flag_r"] == 1) |
-                          (all_properties["flag_r"] == 4) |
-                          (all_properties["flag_r"] == 5) |
-                          (all_properties["flag_r"] == 6))].index.tolist()
 
-# remove those galaxies
-for galaxy in bad_fit:
-    all_properties = all_properties.drop(galaxy, axis=0)
-
-# reset the index values
-all_properties = all_properties.reset_index(drop=True)
-
-# account for the testing dataset
-all_properties = all_properties.iloc[:-200]
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 print(all_properties)
+
 
 
 
@@ -194,7 +169,10 @@ fig, axs = plt.subplots(2, 1, figsize=(25, 15))
 
 
 
-correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
+# correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
+# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"])
+# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"])
+correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"])
 
 # for feature in range(0, encoding_dim):
 for feature in range(0, 15):
@@ -202,31 +180,31 @@ for feature in range(0, 15):
     correlation_list = []
 
     # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
-    for encoding_dim in range(25, 41):
+    # for encoding_dim in range(25, 41):
+    # for run in range(1, 26):
+    # for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15]:
+    for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 17, 20, 23]:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
         encoding_dim = extracted_features.shape[1]
-        extracted_features_switch = extracted_features.T
 
 
-        # remove augmented images
-        extracted_features = extracted_features[:len(all_properties)]
-        extracted_features_switch = extracted_features.T
 
         # perform pca on the extracted features
         pca = PCA(n_components=15).fit(extracted_features)
         extracted_features = pca.transform(extracted_features)
-        extracted_features = extracted_features[:len(all_properties)]
-        extracted_features_switch = extracted_features.T
 
 
 
         # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-        correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties["n_r"])[0][1]
-        correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties["n_r"]))[0][1]
-        correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties["n_r"])[0][1]
-        correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties["n_r"]))[0][1]
+        # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["n_r"])[0][1]
+        # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["n_r"]))[0][1]
+        # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["n_r"])[0][1]
+        # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["n_r"]))[0][1]
+
+        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["n_r"])
+        correlation_list.append(correlation)
 
         # add the strongest correlation
         correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
@@ -250,27 +228,33 @@ print(correlation_text_df)
 # order each of the columns (remove the number corresponding to each feature)
 
 # order the original dataframe
-correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+# correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
 
-# order the annotation dataframe
-for col in correlation_text_df.columns:
-    correlation_text_df[col] = correlation_text_df[col].iloc[
-        correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
-    ].values
+# # order the annotation dataframe
+# for col in correlation_text_df.columns:
+#     correlation_text_df[col] = correlation_text_df[col].iloc[
+#         correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
+#     ].values
+#
+# print(correlation_text_df)
 
-print(correlation_text_df)
 
 
+# sns.heatmap(abs(correlation_df), ax=axs[0], annot=correlation_text_df, fmt="", cmap="Blues", vmax=0.7, cbar_kws={'label': 'Correlation'})
+sns.heatmap(abs(correlation_df), ax=axs[0], annot=True, annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={"label": "Correlation", "pad": 0.02, "aspect": 60})
 
-sns.heatmap(abs(correlation_df), ax=axs[0], annot=correlation_text_df, fmt="", cmap="Blues", vmax=0.7, cbar_kws={'label': 'Correlation'})
 
 axs[0].set_title("Sersic Index Correlation", fontsize=20, pad=20)
-axs[0].set_yticks([])
-axs[0].set_ylabel("Extracted Features", fontsize=15, labelpad=10)
+axs[0].set_yticks(rotation=0)
+axs[0].set_ylabel("Extracted Features", fontsize=15)
 axs[0].xaxis.tick_top() # x axis on top
 axs[0].xaxis.set_label_position('top')
-axs[0].tick_params(length=0)
+axs[0].tick_params(length=0, labelsize=15)
 axs[0].figure.axes[-1].yaxis.label.set_size(15)
+
+colourbar = axs[0].collections[0].colorbar
+colourbar.ax.tick_params(labelsize=15)
+colourbar.ax.yaxis.label.set_size(15)
 
 
 def wrap_labels(ax, width, break_long_words=False):
@@ -279,7 +263,11 @@ def wrap_labels(ax, width, break_long_words=False):
     # for label in ax.get_xticklabels():
         # text = label.get_text()
 
-    label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
+    # label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
+    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
+    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"]
+    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"]
+
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -296,7 +284,10 @@ wrap_labels(axs[0], 10)
 
 
 
-correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
+# correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
+# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"])
+# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"])
+correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"])
 
 # for feature in range(0, encoding_dim):
 for feature in range(0, 15):
@@ -304,33 +295,37 @@ for feature in range(0, 15):
     correlation_list = []
 
     # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
-    for encoding_dim in range(25, 41):
+    # for encoding_dim in range(25, 41):
+    # for run in range(1, 26):
+    # for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15]:
+    for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 17, 20, 23]:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
         encoding_dim = extracted_features.shape[1]
-        extracted_features_switch = extracted_features.T
 
-        # remove augmented images
-        extracted_features = extracted_features[:len(all_properties)]
-        extracted_features_switch = extracted_features.T
+
 
         # perform pca on the extracted features
         pca = PCA(n_components=15).fit(extracted_features)
         extracted_features = pca.transform(extracted_features)
-        extracted_features = extracted_features[:len(all_properties)]
-        extracted_features_switch = extracted_features.T
+
 
         # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-        correlation_1 = np.corrcoef(extracted_features_switch[feature], all_properties["re_r"])[0][1]
-        correlation_2 = np.corrcoef(extracted_features_switch[feature], abs(all_properties["re_r"]))[0][1]
-        correlation_3 = np.corrcoef(abs(extracted_features_switch[feature]), all_properties["re_r"])[0][1]
-        correlation_4 = np.corrcoef(abs(extracted_features_switch[feature]), abs(all_properties["re_r"]))[0][1]
+        # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["re_r"])[0][1]
+        # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["re_r"]))[0][1]
+        # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["re_r"])[0][1]
+        # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["re_r"]))[0][1]
 
         # add the strongest correlation
-        correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+        # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+
+        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
+        correlation_list.append(correlation)
 
     correlation_df.loc[len(correlation_df)] = correlation_list
+
+
 
 print(correlation_df)
 
@@ -349,13 +344,13 @@ print(correlation_text_df)
 # order each of the columns (remove the number corresponding to each feature)
 
 # order the original dataframe
-correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+# correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
 
-# order the annotation dataframe
-for col in correlation_text_df.columns:
-    correlation_text_df[col] = correlation_text_df[col].iloc[
-        correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
-    ].values
+# # order the annotation dataframe
+# for col in correlation_text_df.columns:
+#     correlation_text_df[col] = correlation_text_df[col].iloc[
+#         correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
+#     ].values
 
 print(correlation_text_df)
 
@@ -365,7 +360,9 @@ print(correlation_text_df)
 
 
 
-sns.heatmap(abs(correlation_df), ax=axs[1], annot=correlation_text_df, fmt="", cmap="Blues", vmax=0.7, cbar_kws={'label': 'Correlation'})
+# sns.heatmap(abs(correlation_df), ax=axs[1], annot=correlation_text_df, fmt="", cmap="Blues", vmax=0.7, cbar_kws={'label': 'Correlation'})
+sns.heatmap(abs(correlation_df), ax=axs[1], annot=True, annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={"label": "Correlation", "pad": 0.02, "aspect": 60})
+
 
 axs[1].set_title("Semi-Major Axis Correlation", fontsize=20, pad=20)
 axs[1].set_yticks([])
@@ -382,7 +379,11 @@ def wrap_labels(ax, width, break_long_words=False):
     # for label in ax.get_xticklabels():
         # text = label.get_text()
 
-    label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
+    # label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
+    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
+    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"]
+    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"]
+
 
     for text in label_names:
         labels.append(textwrap.fill(text, width=width, break_long_words=break_long_words))
@@ -393,10 +394,7 @@ wrap_labels(axs[1], 10)
 
 
 
-
-
-
-plt.savefig("Variational Eagle/Correlation Plots/Normalising Flows/PCA/" + str(n_flows) + "_flows_correlation", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/latent_" + str(encoding_dim) + "_correlation", bbox_inches='tight')
 plt.show()
 
 
