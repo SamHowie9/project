@@ -10,7 +10,7 @@ import dcor
 
 
 run = 16
-encoding_dim = 50
+encoding_dim = 30
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -165,14 +165,14 @@ print(all_properties)
 # fig, axs = plt.subplots(1, 1, figsize=(25, encoding_dim/2))
 # fig, axs = plt.subplots(2, 1, figsize=(25, encoding_dim))
 # fig, axs = plt.subplots(2, 1, figsize=(55, 30))
-fig, axs = plt.subplots(2, 1, figsize=(25, 15))
+fig, axs = plt.subplots(2, 1, figsize=(30, 15))
 
 
 
 # correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
-# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"])
+correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"])
 # correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"])
-correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"])
+# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"])
 
 # for feature in range(0, encoding_dim):
 for feature in range(0, 15):
@@ -181,9 +181,9 @@ for feature in range(0, 15):
 
     # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
     # for encoding_dim in range(25, 41):
-    # for run in range(1, 26):
+    for run in range(1, 26):
     # for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15]:
-    for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 17, 20, 23]:
+    # for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 17, 20, 23]:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
         extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
@@ -266,9 +266,9 @@ def wrap_labels(ax, width, break_long_words=False):
         # text = label.get_text()
 
     # label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
-    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
+    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
     # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"]
-    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"]
+    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"]
 
 
     for text in label_names:
@@ -287,9 +287,9 @@ wrap_labels(axs[0], 10)
 
 
 # correlation_df = pd.DataFrame(columns=["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"])
-# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"])
+correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"])
 # correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"])
-correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"])
+# correlation_df = pd.DataFrame(columns=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"])
 
 # for feature in range(0, encoding_dim):
 for feature in range(0, 15):
@@ -298,9 +298,9 @@ for feature in range(0, 15):
 
     # for n_flows in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
     # for encoding_dim in range(25, 41):
-    # for run in range(1, 26):
+    for run in range(1, 26):
     # for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15]:
-    for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 17, 20, 23]:
+    # for run in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 17, 20, 23]:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
         extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
@@ -382,9 +382,9 @@ def wrap_labels(ax, width, break_long_words=False):
         # text = label.get_text()
 
     # label_names = ["25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40"]
-    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
+    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
     # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "14", "15"]
-    label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"]
+    # label_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "14", "17", "20", "23"]
 
 
     for text in label_names:
