@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -121,47 +121,47 @@ for run in [run]:
 
 
 
-    # load the filenames of the augmented elliptical images
-    augmented_galaxies =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
-
-    print("Augmented Ellipticals", len(augmented_galaxies))
-
-    for galaxy in augmented_galaxies:
-
-        # load each augmented image
-        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/" + galaxy)
-
-        # normalise the image
-        image = normalise_independently(image)
-
-        # add the image to the training set (not the testing set)
-        train_images.append(image)
-
-
-
-    # load the filenames of the augmented transitional images
-    augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
-
-    print("Augmented Transitional", len(augmented_galaxies))
-
-    for galaxy in augmented_galaxies:
-
-        # load each augmented image
-        image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
-
-        # normalise the image
-        image = normalise_independently(image)
-
-        # add the image to the training set (not the testing set)
-        train_images.append(image)
-
-    # convert the training set to a numpy array
-    train_images = np.array(train_images)
-
-
-    print("Training Set", train_images.shape)
-    # print("Testing Set", test_images.shape)
-    print()
+    # # load the filenames of the augmented elliptical images
+    # augmented_galaxies =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/")
+    #
+    # print("Augmented Ellipticals", len(augmented_galaxies))
+    #
+    # for galaxy in augmented_galaxies:
+    #
+    #     # load each augmented image
+    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals All/" + galaxy)
+    #
+    #     # normalise the image
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the training set (not the testing set)
+    #     train_images.append(image)
+    #
+    #
+    #
+    # # load the filenames of the augmented transitional images
+    # augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/")
+    #
+    # print("Augmented Transitional", len(augmented_galaxies))
+    #
+    # for galaxy in augmented_galaxies:
+    #
+    #     # load each augmented image
+    #     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional All/" + galaxy)
+    #
+    #     # normalise the image
+    #     image = normalise_independently(image)
+    #
+    #     # add the image to the training set (not the testing set)
+    #     train_images.append(image)
+    #
+    # # convert the training set to a numpy array
+    # train_images = np.array(train_images)
+    #
+    #
+    # print("Training Set", train_images.shape)
+    # # print("Testing Set", test_images.shape)
+    # print()
 
 
 
@@ -531,7 +531,7 @@ for run in [run]:
 
     # get and save the extracted features (pre transformations)
     z_mean, z_log_var, _, _ = vae.encoder.predict(train_images)
-    np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
+    # np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", z_mean)
 
 
 
@@ -559,7 +559,7 @@ for run in [run]:
         sum_log_det_jacobians = np.zeros(z_mean.shape[0], dtype=np.float32)
 
 
-    np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
+    # np.save("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy", z_transformed)
 
 
 
@@ -588,7 +588,7 @@ for run in [run]:
         total_loss = reconstruction_loss + (beta * kl_loss)
 
         loss = np.array([total_loss, reconstruction_loss, kl_loss])
-        np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
+        # np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy", loss)
 
 
         # individual losses of each image
@@ -596,7 +596,7 @@ for run in [run]:
         print(reconstruction_loss_individual.shape)
 
         # save individual losses
-        np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_reconstruction.npy", reconstruction_loss_individual)
+        # np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_reconstruction.npy", reconstruction_loss_individual)
 
 
         # individual residuals of each image
@@ -674,7 +674,7 @@ for run in [run]:
         axs[1, i].get_xaxis().set_visible(False)
         axs[1, i].get_yaxis().set_visible(False)
 
-    plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
+    # plt.savefig("Variational Eagle/Reconstructions/Training/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default")
     plt.show(block=False)
     plt.close()
 
