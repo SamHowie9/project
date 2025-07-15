@@ -1,10 +1,4 @@
 import os
-os.environ["KERAS_BACKEND"] = "tensorflow"
-import tensorflow as tf
-import keras
-from keras import ops
-from keras.layers import Layer, Conv2D, Dense, Flatten, Reshape, Conv2DTranspose, GlobalAveragePooling2D
-from tensorflow.keras import backend as K
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
@@ -26,13 +20,156 @@ sns.set_style("ticks")
 
 
 
-run = 1
-encoding_dim = 40
+run = 16
+encoding_dim = 50
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
-epochs = 300
+epochs = 750
 batch_size = 32
+
+
+
+
+reconstruction_losses = []
+kl_losses = []
+num_components = []
+
+for encoding_dim in range(10, 51):
+
+    latent_reconstruction_losses = []
+    latent_kl_losses = []
+    latent_num_components = []
+
+    for run in range(1, 26):
+
+        try:
+
+            # get the reconstruction and kl loss for that run, and add them to the lists for that latent feature
+            _, reconstruction_loss, kl_loss = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+            latent_reconstruction_losses.append(reconstruction_loss)
+            latent_kl_losses.append(kl_loss)
+
+            # find the number of prinipal components for that run, and add to the list for that latent feature
+            extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+            pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+            components = pca.components_.shape[0]
+            latent_num_components.append(components)
+
+        except:
+            pass
+
+    # find min, max and median for losses and number of components, and append onto other latent features as a sublist
+
+    min_reconstruction = min(latent_reconstruction_losses)
+    med_reconstruction = np.median(latent_reconstruction_losses)
+    max_reconstruction = max(latent_reconstruction_losses)
+    reconstruction_losses.append([min_reconstruction, med_reconstruction, max_reconstruction])
+
+    min_kl = min(latent_kl_losses)
+    med_kl = np.median(latent_kl_losses)
+    max_kl = max(latent_kl_losses)
+    kl_losses.append([min_kl, med_kl, max_kl])
+
+    min_components = min(latent_num_components)
+    med_components = np.median(latent_num_components)
+    max_components = max(latent_num_components)
+    num_components.append([min_components, med_components, max_components])
+
+# convert lists to numpy arrays
+reconstruction_losses = np.array(reconstruction_losses)
+kl_losses = np.array(kl_losses)
+num_components = np.array(num_components)
+
+
+fig, axs = plt.subplots(3, 1, figsize=(12, 15))
+
+
+# axs[0].scatter(x=range(10, 51), y=reconstruction_losses.T[1])
+# axs[1].scatter(x=range(10, 51), y=kl_losses.T[1])
+# axs[2].scatter(x=range(10, 51), y=num_components.T[1])
+
+
+# calculate error bars and plot reconstruction loss
+recon_err_lower = reconstruction_losses.T[1] - reconstruction_losses.T[0]
+recon_err_upper = reconstruction_losses.T[2] - reconstruction_losses.T[1]
+axs[0].errorbar(x=range(10, 51), y=reconstruction_losses.T[1], yerr=[recon_err_lower, recon_err_upper], fmt="o", color="black",)
+axs[0].get_yaxis().get_major_formatter().set_useOffset(False)
+
+
+# calculate error bars and plot kl loss
+kl_err_lower = kl_losses.T[1] - kl_losses.T[0]
+kl_err_upper = kl_losses.T[2] - kl_losses.T[1]
+axs[1].errorbar(x=range(10, 51), y=kl_losses.T[1], yerr=[kl_err_lower, kl_err_upper], fmt="o", color="black",)
+
+# calculate error bars and plot number of principal components
+components_err_lower = num_components.T[1] - num_components.T[0]
+components_err_upper = num_components.T[2] - num_components.T[1]
+axs[2].errorbar(x=range(10, 51), y=num_components.T[1], yerr=[components_err_lower, components_err_upper], fmt="o", color="black",)
+
+
+axs[0].set_ylabel("Reconstruction Loss", labelpad=10, fontsize=20, loc="center")
+axs[0].yaxis.set_label_coords(-0.1, 0.5)
+axs[1].set_ylabel("KL Divergence", labelpad=10, fontsize=20, loc="center")
+axs[1].yaxis.set_label_coords(-0.1, 0.5)
+axs[2].set_ylabel("Number of Principal \nComponents", labelpad=10, fontsize=20, loc="center")
+axs[2].yaxis.set_label_coords(-0.068, 0.5)
+
+axs[0].tick_params(axis="both", labelsize=15)
+axs[1].tick_params(axis="both", labelsize=15)
+axs[2].tick_params(axis="both", labelsize=15)
+
+# axs[0].set_xlabel("Latent Features", fontsize=20)
+# axs[1].set_xlabel("Latent Features", fontsize=20)
+axs[2].set_xlabel("Latent Features", fontsize=20)
+
+axs[0].set_xticks(list(range(10, 51, 5)))
+axs[1].set_xticks(list(range(10, 51, 5)))
+axs[2].set_xticks(list(range(10, 51, 5)))
+
+# axs[0].set_xticks([])
+# axs[1].set_xticks([])
+# axs[2].set_xticks(list(range(10, 51, 5)))
+
+# axs[0].grid(axis="x")
+# axs[1].grid(axis="x")
+# axs[2].grid(axis="x")
+
+# axs[1].set_zorder(1)
+
+# axs[0].xaxis.set_tick_params(bottom=True, top=False, direction="inout", length=8)
+# axs[1].xaxis.set_tick_params(bottom=True, top=True, direction="inout", length=8)
+# # axs[2].xaxis.set_tick_params(bottom=True, top=False, direction="out")
+# # axs[2].xaxis.set_tick_params(bottom=False, top=True, direction="inout", length=8)
+# axs[1].set_xticklabels([])
+#
+# # axs[2].tick_params(bottom=True, top=True, direction="inout", length=8)
+#
+# axs[2].set_xlabel("Latent Features", fontsize=20)
+
+
+axs[1].xaxis.set_tick_params(bottom=True, top=True, direction="out")
+axs[2].xaxis.set_tick_params(bottom=True, top=True, direction="out")
+
+fig.subplots_adjust(hspace=0.1)
+
+plt.savefig("Variational Eagle/Plots/optimal_features_3_2", bbox_inches="tight")
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # # dataframe to store the losses
@@ -467,63 +604,63 @@ batch_size = 32
 
 # Meaningful extracted features
 
-fig, axs = plt.subplots(1, 1, figsize=(10, 5))
-
-df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
-# df_num = pd.DataFrame(columns=["Extracted Features", "1, "2", "3"])
-
-# for i in range(1, 29):
-for encoding_dim in range(1, 51):
-
-    try:
-
-        features_1 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_1_default_transformed.npy")
-        features_2 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_2_default_transformed.npy")
-        features_3 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_3_default_transformed.npy")
-
-
-        pca_1 = PCA(n_components=0.99).fit(features_1)
-        pca_2 = PCA(n_components=0.99).fit(features_2)
-        pca_3 = PCA(n_components=0.99).fit(features_3)
-
-        num_1 = pca_1.components_.shape[0]
-        num_2 = pca_2.components_.shape[0]
-        num_3 = pca_3.components_.shape[0]
-
-        sorted = np.sort(np.array([num_1, num_2, num_3]))
-
-        df_num.loc[len(df_num)] = [encoding_dim, sorted[0], sorted[1], sorted[2]]
-
-    except Exception as e:
-
-        print(e)
-
-        features_1 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_1_default_transformed.npy")
-
-        pca_1 = PCA(n_components=0.99).fit(features_1)
-
-        num_1 = pca_1.components_.shape[0]
-
-        df_num.loc[len(df_num)] = [encoding_dim, num_1, num_1, num_1]
-
-
-# find the size of the loss error bars for reconstruction loss
-num_err_upper = np.array(df_num["Max"] - df_num["Med"])
-num_err_lower = np.array(df_num["Med"] - df_num["Min"])
-
-axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
-
-# axs.set_xticks(range(2, 30, 2))
-axs.set_xticks([1] + list(range(5, 51, 5)))
-axs.set_xlabel("Latent Features")
-axs.set_ylabel("Meaningful Extracted Features")
-
-# plt.scatter(df_num["Extracted Features"], df_num["1"])
-# plt.scatter(df_num["Extracted Features"], df_num["2"])
-# plt.scatter(df_num["Extracted Features"], df_num["3"])
-
-# plt.savefig("Variational Eagle/Plots/meaningful_features", bbox_inches='tight')
-plt.show()
+# fig, axs = plt.subplots(1, 1, figsize=(10, 5))
+#
+# df_num = pd.DataFrame(columns=["Extracted Features", "Min", "Med", "Max"])
+# # df_num = pd.DataFrame(columns=["Extracted Features", "1, "2", "3"])
+#
+# # for i in range(1, 29):
+# for encoding_dim in range(1, 51):
+#
+#     try:
+#
+#         features_1 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_1_default_transformed.npy")
+#         features_2 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_2_default_transformed.npy")
+#         features_3 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_3_default_transformed.npy")
+#
+#
+#         pca_1 = PCA(n_components=0.99).fit(features_1)
+#         pca_2 = PCA(n_components=0.99).fit(features_2)
+#         pca_3 = PCA(n_components=0.99).fit(features_3)
+#
+#         num_1 = pca_1.components_.shape[0]
+#         num_2 = pca_2.components_.shape[0]
+#         num_3 = pca_3.components_.shape[0]
+#
+#         sorted = np.sort(np.array([num_1, num_2, num_3]))
+#
+#         df_num.loc[len(df_num)] = [encoding_dim, sorted[0], sorted[1], sorted[2]]
+#
+#     except Exception as e:
+#
+#         print(e)
+#
+#         features_1 = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_1_default_transformed.npy")
+#
+#         pca_1 = PCA(n_components=0.99).fit(features_1)
+#
+#         num_1 = pca_1.components_.shape[0]
+#
+#         df_num.loc[len(df_num)] = [encoding_dim, num_1, num_1, num_1]
+#
+#
+# # find the size of the loss error bars for reconstruction loss
+# num_err_upper = np.array(df_num["Max"] - df_num["Med"])
+# num_err_lower = np.array(df_num["Med"] - df_num["Min"])
+#
+# axs.errorbar(df_num["Extracted Features"], df_num["Med"], yerr=[num_err_lower, num_err_upper], fmt="o")
+#
+# # axs.set_xticks(range(2, 30, 2))
+# axs.set_xticks([1] + list(range(5, 51, 5)))
+# axs.set_xlabel("Latent Features")
+# axs.set_ylabel("Meaningful Extracted Features")
+#
+# # plt.scatter(df_num["Extracted Features"], df_num["1"])
+# # plt.scatter(df_num["Extracted Features"], df_num["2"])
+# # plt.scatter(df_num["Extracted Features"], df_num["3"])
+#
+# # plt.savefig("Variational Eagle/Plots/meaningful_features", bbox_inches='tight')
+# plt.show()
 
 
 

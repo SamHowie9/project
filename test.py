@@ -13,11 +13,17 @@ import random
 # os.environ['NUMBA_DISABLE_CACHE'] = '1'
 
 
-pd.set_option('display.max_columns', None)
-# pd.set_option('display.max_rows', None)
-pd.set_option('display.width', None)
+# pd.set_option('display.max_columns', None)
+# # pd.set_option('display.max_rows', None)
+# pd.set_option('display.width', None)
 
+A = [1, 2, 3, 4, 5]
+B = [str(a) for a in A]
+C = ["1", "2", "3", "4", "5"]
 
+print(A)
+print(B)
+print(C)
 
 # all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 #
@@ -43,10 +49,10 @@ pd.set_option('display.width', None)
 
 
 
-individual_reconstructions = np.load("Variational Eagle/Loss/Transitional/planar_new_latent_30_beta_0001_epoch_750_flows_0_3_default_individual_reconstruction.npy")
-
-plt.hist(individual_reconstructions)
-plt.show()
+# individual_reconstructions = np.load("Variational Eagle/Loss/Transitional/planar_new_latent_30_beta_0001_epoch_750_flows_0_3_default_individual_reconstruction.npy")
+#
+# plt.hist(individual_reconstructions)
+# plt.show()
 
 
 
