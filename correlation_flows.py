@@ -10,7 +10,7 @@ import dcor
 
 
 run = 16
-encoding_dim = 40
+encoding_dim = 50
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -171,7 +171,8 @@ fig, axs = plt.subplots(2, 1, figsize=(25, 15))
 
 
 # run_order = [9, 23] + [4, 5, 7, 11, 12, 20, 24] + [1, 2, 3, 6, 8, 13, 14, 16, 17, 18, 19, 22, 25] + [10, 15, 21]
-run_order = [9] + [7] + [1, 3, 5, 8, 10, 15] + [2, 4, 6, 11, 12, 14]
+# run_order = [9] + [7] + [1, 3, 5, 8, 10, 15] + [2, 4, 6, 11, 12, 14]
+run_order = [1, 2, 3, 4, 5, 7, 8, 10, 11, 14, 20, 23] + [6, 9, 17]
 
 run_names = [str(a) for a in run_order]
 
@@ -395,7 +396,8 @@ wrap_labels(axs[1], 10)
 
 
 # cols = [2, 9, 22]
-cols = [1, 2, 8]
+# cols = [1, 2, 8]
+cols = [12]
 
 ymin, ymax = axs[0].get_ylim()
 for col in cols:
