@@ -165,7 +165,7 @@ print(all_properties)
 # fig, axs = plt.subplots(1, 1, figsize=(25, encoding_dim/2))
 # fig, axs = plt.subplots(2, 1, figsize=(25, encoding_dim))
 # fig, axs = plt.subplots(2, 1, figsize=(55, 30))
-fig, axs = plt.subplots(2, 1, figsize=(25, 15))
+fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 
 
 
@@ -184,7 +184,7 @@ correlation_df = pd.DataFrame(columns=run_names)
 
 
 # for feature in range(0, encoding_dim):
-for feature in range(0, 15):
+for feature in range(0, 13):
 
     correlation_list = []
 
@@ -202,17 +202,17 @@ for feature in range(0, 15):
 
 
         # perform pca on the extracted features
-        pca = PCA(n_components=15).fit(extracted_features)
+        pca = PCA(n_components=13).fit(extracted_features)
         extracted_features = pca.transform(extracted_features)
 
 
 
-        # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+        # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
         # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["n_r"])[0][1]
         # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["n_r"]))[0][1]
         # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["n_r"])[0][1]
         # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["n_r"]))[0][1]
-
+        #
         # # add the strongest correlation
         # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
 
@@ -308,7 +308,7 @@ correlation_df = pd.DataFrame(columns=run_names)
 
 
 # for feature in range(0, encoding_dim):
-for feature in range(0, 15):
+for feature in range(0, 13):
 
     correlation_list = []
 
@@ -327,17 +327,17 @@ for feature in range(0, 15):
 
 
         # perform pca on the extracted features
-        pca = PCA(n_components=15).fit(extracted_features)
+        pca = PCA(n_components=13).fit(extracted_features)
         extracted_features = pca.transform(extracted_features)
 
 
-        # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+        # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
         # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["re_r"])[0][1]
         # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["re_r"]))[0][1]
         # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["re_r"])[0][1]
         # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["re_r"]))[0][1]
-
-        # add the strongest correlation
+        #
+        # # add the strongest correlation
         # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
 
         correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
