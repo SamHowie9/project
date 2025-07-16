@@ -81,10 +81,20 @@ print(all_properties.shape)
 all_properties = all_properties[all_properties["DiscToTotal"] >= 0]
 
 print(all_properties.shape)
+
+
+
+ab_mags_dusty = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes_dusty.txt", comment="#")
+print(ab_mags_dusty.shape)
+ab_mags = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes.csv", comment="#")
+print(ab_mags.shape)
+# all_properties = pd.merge(all_properties, ab_mags, on="GalaxyID")
+
+print(all_properties.shape)
+
+
+
 print(all_properties)
-
-# print(all_properties)
-
 all_properties.to_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv", index=False)
 
 galaxy_names = all_properties["GalaxyID"].tolist()
