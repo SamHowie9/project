@@ -602,6 +602,7 @@ for run in range(1, 26):
 
         # individual residuals of each image
         residuals = abs(train_images - reconstructed_images)
+        print("Residual Shape", residuals.shape)
         residuals = tf.reduce_mean(residuals, axis=-1)
         print("Residual Shape", residuals.shape)
 
