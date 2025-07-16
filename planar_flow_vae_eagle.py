@@ -603,6 +603,7 @@ for run in range(1, 26):
         # individual residuals of each image
         residuals = abs(train_images - reconstructed_images)
         residuals = tf.reduce_mean(residuals, axis=-1)
+        print("Residual Shape", residuals.shape)
 
         # save the individual residuals
         np.save("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_residual.npy", residuals)
