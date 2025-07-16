@@ -35,7 +35,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="3"
+os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
 
@@ -61,7 +61,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="3"
 # for run, encoding_dim in [[4, 40], [5, 40], [6, 40], [7, 40], [8, 40], [9, 40], [10, 40], [4, 50], [5, 50], [6, 50], [7, 50], [8, 50], [9, 50], [10, 50]]:
 # for run in [24, 25]:
 # for run in range(1, 26):
-for encoding_dim in range(10, 16):
+for encoding_dim in range(15, 21):
 
 # 12, 13, 15, 16, 18, 19, 21, 22, 24, 25
 
