@@ -57,7 +57,13 @@ for encoding_dim in range(10, 51):
             latent_num_components.append(components)
 
         except:
-            pass
+            # pass
+
+            if encoding_dim == 40:
+                print(encoding_dim, run)
+
+            if encoding_dim == 50:
+                print(encoding_dim, run)
 
     # find min, max and median for losses and number of components, and append onto other latent features as a sublist
 
@@ -109,15 +115,20 @@ axs[2].errorbar(x=range(10, 51), y=num_components.T[1], yerr=[components_err_low
 
 
 axs[0].set_ylabel("Reconstruction Loss", labelpad=10, fontsize=20, loc="center")
-axs[0].yaxis.set_label_coords(-0.1, 0.5)
+# axs[0].yaxis.set_label_coords(-0.1, 0.5)
+axs[0].yaxis.set_label_coords(-0.13, 0.5)
 axs[1].set_ylabel("KL Divergence", labelpad=10, fontsize=20, loc="center")
-axs[1].yaxis.set_label_coords(-0.1, 0.5)
-axs[2].set_ylabel("Number of Principal \nComponents", labelpad=10, fontsize=20, loc="center")
-axs[2].yaxis.set_label_coords(-0.068, 0.5)
+# axs[1].yaxis.set_label_coords(-0.1, 0.5)
+axs[1].yaxis.set_label_coords(-0.13, 0.5)
+# axs[2].set_ylabel("Number of Principal \nComponents", labelpad=10, fontsize=20, loc="center")
+axs[2].set_ylabel("Number of Principal \nComponents Contributing \nto 99.9% Variance", labelpad=10, fontsize=20, loc="center")
+# axs[2].yaxis.set_label_coords(-0.068, 0.5)
+# axs[2].yaxis.set_label_coords(-0.098, 0.5)
+axs[2].yaxis.set_label_coords(-0.066, 0.5)
 
-axs[0].tick_params(axis="both", labelsize=15)
-axs[1].tick_params(axis="both", labelsize=15)
-axs[2].tick_params(axis="both", labelsize=15)
+axs[0].tick_params(axis="both", labelsize=20)
+axs[1].tick_params(axis="both", labelsize=20)
+axs[2].tick_params(axis="both", labelsize=20)
 
 # axs[0].set_xlabel("Latent Features", fontsize=20)
 # axs[1].set_xlabel("Latent Features", fontsize=20)
@@ -131,9 +142,9 @@ axs[2].set_xticks(list(range(10, 51, 5)))
 # axs[1].set_xticks([])
 # axs[2].set_xticks(list(range(10, 51, 5)))
 
-# axs[0].grid(axis="x")
-# axs[1].grid(axis="x")
-# axs[2].grid(axis="x")
+axs[0].grid(axis="x")
+axs[1].grid(axis="x")
+axs[2].grid(axis="x")
 
 # axs[1].set_zorder(1)
 
@@ -148,12 +159,12 @@ axs[2].set_xticks(list(range(10, 51, 5)))
 # axs[2].set_xlabel("Latent Features", fontsize=20)
 
 
-axs[1].xaxis.set_tick_params(bottom=True, top=True, direction="out")
-axs[2].xaxis.set_tick_params(bottom=True, top=True, direction="out")
+# axs[1].xaxis.set_tick_params(bottom=True, top=True, direction="out")
+# axs[2].xaxis.set_tick_params(bottom=True, top=True, direction="out")
 
-fig.subplots_adjust(hspace=0.1)
+fig.subplots_adjust(hspace=0.0)
 
-plt.savefig("Variational Eagle/Plots/optimal_features_3_2", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/optimal_features_7", bbox_inches="tight")
 plt.show()
 
 

@@ -1,5 +1,3 @@
-from xml.sax.handler import all_properties
-
 import numpy as np
 import pandas as pd
 from PIL.GimpGradientFile import linear
