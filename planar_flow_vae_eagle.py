@@ -25,7 +25,7 @@ tfd = tfp.distributions
 
 
 run = 3
-encoding_dim = 75
+encoding_dim = 41
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
