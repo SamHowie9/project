@@ -24,7 +24,7 @@ tfd = tfp.distributions
 
 
 
-run = 2
+run = 3
 encoding_dim = 40
 n_flows = 0
 beta = 0.0001
@@ -292,8 +292,8 @@ print()
 # for run, encoding_dim in [[4, 40], [5, 40], [6, 40], [7, 40], [8, 40], [9, 40], [10, 40], [4, 50], [5, 50], [6, 50], [7, 50], [8, 50], [9, 50], [10, 50]]:
 # for run in [17, 18, 19, 20, 21, 22, 23, 24, 25]:
 # for run in range(1, 26):
-for encoding_dim in range(10, 26):
-
+# for encoding_dim in range(10, 26):
+for encoding_dim in [10, 11, 12, 13, 14]:
 
 
 
