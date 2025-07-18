@@ -397,7 +397,8 @@ wrap_labels(axs[1], 10)
 
 # cols = [2, 9, 22]
 # cols = [1, 2, 8]
-cols = [12]
+# cols = [12]
+cols = [2, 22]
 
 ymin, ymax = axs[0].get_ylim()
 for col in cols:
