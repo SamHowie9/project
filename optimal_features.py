@@ -35,7 +35,8 @@ reconstruction_losses = []
 kl_losses = []
 num_components = []
 
-for encoding_dim in range(10, 51):
+# for encoding_dim in range(10, 51):
+for encoding_dim in list(range(10, 51)) + [75]:
 
     latent_reconstruction_losses = []
     latent_kl_losses = []
@@ -68,17 +69,17 @@ for encoding_dim in range(10, 51):
     # find min, max and median for losses and number of components, and append onto other latent features as a sublist
 
     min_reconstruction = min(latent_reconstruction_losses)
-    med_reconstruction = np.median(latent_reconstruction_losses)
+    med_reconstruction = np.mean(latent_reconstruction_losses)
     max_reconstruction = max(latent_reconstruction_losses)
     reconstruction_losses.append([min_reconstruction, med_reconstruction, max_reconstruction])
 
     min_kl = min(latent_kl_losses)
-    med_kl = np.median(latent_kl_losses)
+    med_kl = np.mean(latent_kl_losses)
     max_kl = max(latent_kl_losses)
     kl_losses.append([min_kl, med_kl, max_kl])
 
     min_components = min(latent_num_components)
-    med_components = np.median(latent_num_components)
+    med_components = np.mean(latent_num_components)
     max_components = max(latent_num_components)
     num_components.append([min_components, med_components, max_components])
 
@@ -88,30 +89,33 @@ kl_losses = np.array(kl_losses)
 num_components = np.array(num_components)
 
 
-fig, axs = plt.subplots(3, 1, figsize=(12, 15))
+# fig, axs = plt.subplots(3, 1, figsize=(12, 15))
+fig, axs = plt.subplots(3, 1, figsize=(20, 15))
 
 
 # axs[0].scatter(x=range(10, 51), y=reconstruction_losses.T[1])
 # axs[1].scatter(x=range(10, 51), y=kl_losses.T[1])
 # axs[2].scatter(x=range(10, 51), y=num_components.T[1])
 
+# x_range = list(range(10, 51))
+x_range = list(range(10, 51)) + [75]
 
 # calculate error bars and plot reconstruction loss
 recon_err_lower = reconstruction_losses.T[1] - reconstruction_losses.T[0]
 recon_err_upper = reconstruction_losses.T[2] - reconstruction_losses.T[1]
-axs[0].errorbar(x=range(10, 51), y=reconstruction_losses.T[1], yerr=[recon_err_lower, recon_err_upper], fmt="o", color="black",)
+axs[0].errorbar(x=x_range, y=reconstruction_losses.T[1], yerr=[recon_err_lower, recon_err_upper], fmt="o", color="black",)
 axs[0].get_yaxis().get_major_formatter().set_useOffset(False)
 
 
 # calculate error bars and plot kl loss
 kl_err_lower = kl_losses.T[1] - kl_losses.T[0]
 kl_err_upper = kl_losses.T[2] - kl_losses.T[1]
-axs[1].errorbar(x=range(10, 51), y=kl_losses.T[1], yerr=[kl_err_lower, kl_err_upper], fmt="o", color="black",)
+axs[1].errorbar(x=x_range, y=kl_losses.T[1], yerr=[kl_err_lower, kl_err_upper], fmt="o", color="black",)
 
 # calculate error bars and plot number of principal components
 components_err_lower = num_components.T[1] - num_components.T[0]
 components_err_upper = num_components.T[2] - num_components.T[1]
-axs[2].errorbar(x=range(10, 51), y=num_components.T[1], yerr=[components_err_lower, components_err_upper], fmt="o", color="black",)
+axs[2].errorbar(x=x_range, y=num_components.T[1], yerr=[components_err_lower, components_err_upper], fmt="o", color="black",)
 
 
 axs[0].set_ylabel("Reconstruction Loss", labelpad=10, fontsize=20, loc="center")
@@ -134,9 +138,12 @@ axs[2].tick_params(axis="both", labelsize=20)
 # axs[1].set_xlabel("Latent Features", fontsize=20)
 axs[2].set_xlabel("Latent Features", fontsize=20)
 
-axs[0].set_xticks(list(range(10, 51, 5)))
-axs[1].set_xticks(list(range(10, 51, 5)))
-axs[2].set_xticks(list(range(10, 51, 5)))
+# axs[0].set_xticks(list(range(10, 51, 5)))
+# axs[1].set_xticks(list(range(10, 51, 5)))
+# axs[2].set_xticks(list(range(10, 51, 5)))
+axs[0].set_xticks(list(range(10, 51, 5)) + [75])
+axs[1].set_xticks(list(range(10, 51, 5)) + [75])
+axs[2].set_xticks(list(range(10, 51, 5)) + [75])
 
 # axs[0].set_xticks([])
 # axs[1].set_xticks([])
@@ -164,7 +171,7 @@ axs[2].grid(axis="x")
 
 fig.subplots_adjust(hspace=0.0)
 
-plt.savefig("Variational Eagle/Plots/optimal_features_7", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/optimal_features_mean_75", bbox_inches="tight")
 plt.show()
 
 
