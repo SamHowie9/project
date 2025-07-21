@@ -292,9 +292,8 @@ print()
 # for run, encoding_dim in [[4, 40], [5, 40], [6, 40], [7, 40], [8, 40], [9, 40], [10, 40], [4, 50], [5, 50], [6, 50], [7, 50], [8, 50], [9, 50], [10, 50]]:
 # for run in [1, 2, 3]:
 # for run in range(17, 26):
-# for encoding_dim in range(10, 26):
+for encoding_dim in range(10, 26):
 # for encoding_dim in [20, 21, 22, 23, 24, 25]:
-for run in [run]:
 
 
 
@@ -531,12 +530,12 @@ for run in [run]:
 
 
     # train the model
-    model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
+    # model_loss = vae.fit(train_images, epochs=epochs, batch_size=batch_size)
 
     vae.build(input_shape=(None, 256, 256, 3))
 
     # or load the weights from a previous run
-    # vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
     # save the weights
     vae.save_weights(filepath="Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5", overwrite=True)

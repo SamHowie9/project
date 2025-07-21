@@ -32,6 +32,7 @@ batch_size = 32
 
 
 reconstruction_losses = []
+residuals = []
 kl_losses = []
 num_components = []
 
@@ -39,10 +40,11 @@ num_components = []
 for encoding_dim in list(range(10, 51)) + [75]:
 
     latent_reconstruction_losses = []
+    latent_residuals = []
     latent_kl_losses = []
     latent_num_components = []
 
-    for run in range(1, 26):
+    for run in range(1, 4):
 
         try:
 
@@ -57,19 +59,30 @@ for encoding_dim in list(range(10, 51)) + [75]:
             components = pca.components_.shape[0]
             latent_num_components.append(components)
 
-        except:
+            residual = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_individual_residual.npy")
+            residual = np.mean(residual)
+            latent_residuals.append(residual)
+
+        except Exception as e:
             # pass
+            print(e)
+            # print(encoding_dim, run)
 
-            if encoding_dim == 40:
-                print(encoding_dim, run)
-
-            if encoding_dim == 50:
-                print(encoding_dim, run)
+            # if encoding_dim == 40:
+            #     print(encoding_dim, run)
+            #
+            # if encoding_dim == 50:
+            #     print(encoding_dim, run)
 
     if encoding_dim == 16:
         print(latent_reconstruction_losses)
 
     # find min, max and median for losses and number of components, and append onto other latent features as a sublist
+
+    print(len(latent_reconstruction_losses))
+    print(len(latent_residuals))
+    print(len(latent_kl_losses))
+    print(len(latent_num_components))
 
     min_reconstruction = min(latent_reconstruction_losses)
     med_reconstruction = np.mean(latent_reconstruction_losses)
@@ -180,7 +193,7 @@ axs[2].grid(axis="x")
 
 fig.subplots_adjust(hspace=0.0)
 
-plt.savefig("Variational Eagle/Plots/optimal_features_mean_75", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/optimal_features_mean_75_residual", bbox_inches="tight")
 plt.show()
 
 
