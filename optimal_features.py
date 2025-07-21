@@ -44,7 +44,7 @@ for encoding_dim in list(range(10, 51)) + [75]:
     latent_kl_losses = []
     latent_num_components = []
 
-    for run in range(1, 4):
+    for run in range(1, 26):
 
         try:
 
@@ -64,8 +64,8 @@ for encoding_dim in list(range(10, 51)) + [75]:
             latent_residuals.append(residual)
 
         except Exception as e:
-            # pass
-            print(e)
+            pass
+
             # print(encoding_dim, run)
 
             # if encoding_dim == 40:
@@ -74,20 +74,18 @@ for encoding_dim in list(range(10, 51)) + [75]:
             # if encoding_dim == 50:
             #     print(encoding_dim, run)
 
-    if encoding_dim == 16:
-        print(latent_reconstruction_losses)
 
     # find min, max and median for losses and number of components, and append onto other latent features as a sublist
-
-    print(len(latent_reconstruction_losses))
-    print(len(latent_residuals))
-    print(len(latent_kl_losses))
-    print(len(latent_num_components))
 
     min_reconstruction = min(latent_reconstruction_losses)
     med_reconstruction = np.mean(latent_reconstruction_losses)
     max_reconstruction = max(latent_reconstruction_losses)
     reconstruction_losses.append([min_reconstruction, med_reconstruction, max_reconstruction])
+
+    min_residual = min(latent_residuals)
+    med_residual = np.mean(latent_residuals)
+    max_residual = max(latent_residuals)
+    residuals.append([min_residual, med_residual, max_residual])
 
     min_kl = min(latent_kl_losses)
     med_kl = np.mean(latent_kl_losses)
@@ -101,6 +99,7 @@ for encoding_dim in list(range(10, 51)) + [75]:
 
 # convert lists to numpy arrays
 reconstruction_losses = np.array(reconstruction_losses)
+residuals = np.array(residuals)
 kl_losses = np.array(kl_losses)
 num_components = np.array(num_components)
 
@@ -116,10 +115,16 @@ fig, axs = plt.subplots(3, 1, figsize=(20, 15))
 # x_range = list(range(10, 51))
 x_range = list(range(10, 51)) + [75]
 
+# # calculate error bars and plot reconstruction loss
+# recon_err_lower = reconstruction_losses.T[1] - reconstruction_losses.T[0]
+# recon_err_upper = reconstruction_losses.T[2] - reconstruction_losses.T[1]
+# axs[0].errorbar(x=x_range, y=reconstruction_losses.T[1], yerr=[recon_err_lower, recon_err_upper], fmt="o", color="black",)
+# axs[0].get_yaxis().get_major_formatter().set_useOffset(False)
+
 # calculate error bars and plot reconstruction loss
-recon_err_lower = reconstruction_losses.T[1] - reconstruction_losses.T[0]
-recon_err_upper = reconstruction_losses.T[2] - reconstruction_losses.T[1]
-axs[0].errorbar(x=x_range, y=reconstruction_losses.T[1], yerr=[recon_err_lower, recon_err_upper], fmt="o", color="black",)
+residual_err_lower = residuals.T[1] - residuals.T[0]
+residual_err_upper = residuals.T[2] - residuals.T[1]
+axs[0].errorbar(x=x_range, y=residuals.T[1], yerr=[residual_err_lower, residual_err_upper], fmt="o", color="black",)
 axs[0].get_yaxis().get_major_formatter().set_useOffset(False)
 
 
