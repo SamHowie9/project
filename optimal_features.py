@@ -66,6 +66,9 @@ for encoding_dim in list(range(10, 51)) + [75]:
             if encoding_dim == 50:
                 print(encoding_dim, run)
 
+    if encoding_dim == 16:
+        print(latent_reconstruction_losses)
+
     # find min, max and median for losses and number of components, and append onto other latent features as a sublist
 
     min_reconstruction = min(latent_reconstruction_losses)
@@ -120,15 +123,21 @@ axs[2].errorbar(x=x_range, y=num_components.T[1], yerr=[components_err_lower, co
 
 axs[0].set_ylabel("Reconstruction Loss", labelpad=10, fontsize=20, loc="center")
 # axs[0].yaxis.set_label_coords(-0.1, 0.5)
-axs[0].yaxis.set_label_coords(-0.13, 0.5)
+# axs[0].yaxis.set_label_coords(-0.13, 0.5)
+axs[0].yaxis.set_label_coords(-0.09, 0.5)
+
 axs[1].set_ylabel("KL Divergence", labelpad=10, fontsize=20, loc="center")
 # axs[1].yaxis.set_label_coords(-0.1, 0.5)
-axs[1].yaxis.set_label_coords(-0.13, 0.5)
+# axs[1].yaxis.set_label_coords(-0.13, 0.5)
+axs[1].yaxis.set_label_coords(-0.09, 0.5)
+
 # axs[2].set_ylabel("Number of Principal \nComponents", labelpad=10, fontsize=20, loc="center")
-axs[2].set_ylabel("Number of Principal \nComponents Contributing \nto 99.9% Variance", labelpad=10, fontsize=20, loc="center")
+# axs[2].set_ylabel("Number of Principal \nComponents Contributing \nto 99.9% Variance", labelpad=10, fontsize=20, loc="center")
+axs[2].set_ylabel("Number of PCs \n(99.9% Variance Explained)", labelpad=10, fontsize=20, loc="center")
 # axs[2].yaxis.set_label_coords(-0.068, 0.5)
 # axs[2].yaxis.set_label_coords(-0.098, 0.5)
-axs[2].yaxis.set_label_coords(-0.066, 0.5)
+axs[2].yaxis.set_label_coords(-0.07, 0.5)
+# axs[2].yaxis.set_label_coords(-0.1, 0.5)
 
 axs[0].tick_params(axis="both", labelsize=20)
 axs[1].tick_params(axis="both", labelsize=20)

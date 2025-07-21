@@ -231,48 +231,49 @@ for components in range(0, 15):
 
 
 
-# # scale font on plots
-# default_size = plt.rcParams['font.size']
-# plt.rcParams.update({'font.size': default_size * 2})
-#
-# fig, axs = plt.subplots(1, 1, figsize=(10, 8))
-#
-# plt.grid(alpha=0.25)
-#
-# axs.bar(range(1, 16), med_specific, color="black", alpha=0.4)
-# error_upper = [max_s - med_s for max_s, med_s in zip(max_specific, med_specific)]
-# error_lower = [med_s - min_s for med_s, min_s in zip(med_specific, min_specific)]
-# axs.errorbar(range(1, 16), med_specific, yerr=[error_lower, error_upper], color="black", capsize=3, linestyle="none")
-#
-# # axs.plot(range(1, 16), min_accumulation, color="black", alpha=0.2)
-# axs.plot(range(1, 16), med_accumulation, color="black")
-# axs.scatter(range(1, 11), med_accumulation[:10], color="black")
-# # axs.plot(range(1, 16), max_accumulation, color="black", alpha=0.2)
-# # axs.fill_between(range(1, 16), min_accumulation, max_accumulation, color="black", alpha=0.06)
-# error_upper = [max_c - med_c for max_c, med_c in zip(max_accumulation, med_accumulation)]
-# error_lower = [med_c - min_c for med_c, min_c in zip(med_accumulation, min_accumulation)]
-# axs.errorbar(range(1, 16), med_accumulation, yerr=[error_lower, error_upper], color="black", capsize=3, linestyle="none")
-#
-# axs.set_ylabel("Variance Explained (%)")
-# axs.set_xlabel("Principal Components")
-# axs.set_xticks(list(range(1, 16)))
-#
-# custom_legend = [
-#     # Line2D([0], [0], marker="o", color="none", label="Cumulative Variance", markerfacecolor="black", markersize=10, linestyle="None"),
-#     # Line2D([0], [0], marker="s", color="none", label="Individual Variance", markerfacecolor="black", alpha=0.4, markersize=20, linestyle="None"),
-#     Line2D([0], [0], color="black", label="Cumulative Variance"),
-#     Patch(label="Individual Variance", facecolor="black", alpha=0.4)
-# ]
-#
-# # plt.legend(handles=custom_legend, loc="center right", handleheight=1.1)
-# plt.legend(handles=custom_legend, handleheight=1.1, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=len(custom_legend))
-#
-# print(med_accumulation)
-# print(med_specific)
-#
-# plt.savefig("Variational Eagle/Plots/variance_explained_mean_" + str(encoding_dim) + "_balanced", bbox_inches="tight")
-# # plt.savefig("Variational Eagle/Plots/variance_explained_mean.pdf", bbox_inches="tight")
-# plt.show()
+# scale font on plots
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 2})
+
+fig, axs = plt.subplots(1, 1, figsize=(10, 8))
+
+plt.grid(alpha=0.25)
+
+axs.bar(range(1, 16), med_specific, color="black", alpha=0.4)
+error_upper = [max_s - med_s for max_s, med_s in zip(max_specific, med_specific)]
+error_lower = [med_s - min_s for med_s, min_s in zip(med_specific, min_specific)]
+axs.errorbar(range(1, 16), med_specific, yerr=[error_lower, error_upper], color="black", capsize=3, linestyle="none")
+
+# axs.plot(range(1, 16), min_accumulation, color="black", alpha=0.2)
+axs.plot(range(1, 16), med_accumulation, color="black")
+# axs.scatter(range(1, 13), med_accumulation[:12], color="black")
+axs.scatter(range(1, 16), med_accumulation, color="black")
+# axs.plot(range(1, 16), max_accumulation, color="black", alpha=0.2)
+# axs.fill_between(range(1, 16), min_accumulation, max_accumulation, color="black", alpha=0.06)
+error_upper = [max_c - med_c for max_c, med_c in zip(max_accumulation, med_accumulation)]
+error_lower = [med_c - min_c for med_c, min_c in zip(med_accumulation, min_accumulation)]
+axs.errorbar(range(1, 16), med_accumulation, yerr=[error_lower, error_upper], color="black", capsize=3, linestyle="none")
+
+axs.set_ylabel("Variance Explained (%)")
+axs.set_xlabel("Principal Components")
+axs.set_xticks(list(range(1, 16)))
+
+custom_legend = [
+    # Line2D([0], [0], marker="o", color="none", label="Cumulative Variance", markerfacecolor="black", markersize=10, linestyle="None"),
+    # Line2D([0], [0], marker="s", color="none", label="Individual Variance", markerfacecolor="black", alpha=0.4, markersize=20, linestyle="None"),
+    Line2D([0], [0], color="black", label="Cumulative Variance"),
+    Patch(label="Individual Variance", facecolor="black", alpha=0.4)
+]
+
+# plt.legend(handles=custom_legend, loc="center right", handleheight=1.1)
+plt.legend(handles=custom_legend, handleheight=1.1, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=len(custom_legend))
+
+print(med_accumulation)
+print(med_specific)
+
+plt.savefig("Variational Eagle/Plots/variance_explained_mean_" + str(encoding_dim) + "_balanced", bbox_inches="tight")
+# plt.savefig("Variational Eagle/Plots/variance_explained_mean.pdf", bbox_inches="tight")
+plt.show()
 
 
 
