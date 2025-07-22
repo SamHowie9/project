@@ -56,33 +56,28 @@ ab_mags_dusty = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes_du
 ab_mags = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes.csv", comment="#")
 
 
-ab = pd.merge(ab_mags_dusty, ab_mags, on="GalaxyID")
-# print(ab[ab["GalaxyID"] == 14289611])
-subset = ab[ab["GalaxyID"].isin([14289611, 16090542, 2637010, 6643600, 19195804])]
-print(subset)
-subset.columns = ["GalaxyID", "dusty g", "dusty r", "dusty i", "no dust g", "no dust r", "no dust i"]
-print(subset[["GalaxyID", "dusty g", "no dust g", "dusty i", "no dust i", "dusty r", "no dust r"]])
+# ab = pd.merge(ab_mags_dusty, ab_mags, on="GalaxyID")
+# # print(ab[ab["GalaxyID"] == 14289611])
+# subset = ab[ab["GalaxyID"].isin([14289611, 16090542, 2637010, 6643600, 19195804])]
+# print(subset)
+# subset.columns = ["GalaxyID", "dusty g", "dusty r", "dusty i", "no dust g", "no dust r", "no dust i"]
+# print(subset[["GalaxyID", "dusty g", "no dust g", "dusty i", "no dust i", "dusty r", "no dust r"]])
 
 
+all_mags = pd.merge(particle_count, ab_mags_dusty, on="GalaxyID", how="outer")
 
-# print(particle_count)
-# print(zero)
-# print(small)
-print(large.sort_values(by="Count_Dust"))
+print(all_mags)
 
-# print(particle_count)
-#
-# bins = [0, 10, 100, 200, 300, 400, 500, 1000]
-#
-# # Plot
-# counts, edges, patches = plt.hist(particle_count["Count_Dust"], bins=bins, edgecolor='black')
-#
-# # Set x-ticks with last bin labeled "1000+"
-# # xticks = list(range(0, 1001, 100)) + [1100]
-# # xticklabels = [str(x) for x in range(0, 1001, 100)] + ['1000+']
-# # plt.xticks(xticks, xticklabels)
-#
-# plt.xlabel('Galaxy Size')
-# plt.ylabel('Count')
-# plt.title('Galaxy Size Distribution')
-# plt.show()
+all_mags = pd.merge(all_mags, ab_mags, on="GalaxyID")
+
+print(all_mags)
+
+all_mags["SDSS_g"] = all_mags["SDSS_g"].fillna(all_mags["g_nodust"])
+all_mags["SDSS_r"] = all_mags["SDSS_r"].fillna(all_mags["r_nodust"])
+all_mags["SDSS_i"] = all_mags["SDSS_i"].fillna(all_mags["i_nodust"])
+
+print(all_mags)
+
+all_mags = all_mags[["GalaxyID", "SDSS_g", "SDSS_r", "SDSS_i"]]
+
+print(all_mags)

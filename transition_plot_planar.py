@@ -50,7 +50,7 @@ def normalise_independently(image):
 
 
 
-for encoding_dim in [30, 40, 50]:
+for encoding_dim in [35]:
     for run in range(1, 26):
 
 
