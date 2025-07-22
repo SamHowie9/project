@@ -10,7 +10,7 @@ import random
 
 
 run = 1
-encoding_dim = 30
+encoding_dim = 50
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
