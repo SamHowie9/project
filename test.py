@@ -81,3 +81,9 @@ print(all_mags)
 all_mags = all_mags[["GalaxyID", "SDSS_g", "SDSS_r", "SDSS_i"]]
 
 print(all_mags)
+
+all_mags["r-i"] = all_mags["SDSS_r"] - all_mags["SDSS_i"]
+
+print(all_mags)
+
+print(all_mags[all_mags["SDSS_g"]<all_mags["SDSS_i"]])
