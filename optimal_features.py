@@ -37,7 +37,7 @@ kl_losses = []
 num_components = []
 
 # for encoding_dim in range(10, 51):
-for encoding_dim in list(range(10, 51)) + [55, 60, 65, 70, 75]:
+for encoding_dim in list(range(10, 51)) + [51, 52, 53, 54, 55, 57, 60, 65, 70, 75]:
 
     latent_reconstruction_losses = []
     latent_residuals = []
@@ -118,7 +118,7 @@ fig, axs = plt.subplots(3, 1, figsize=(20, 15))
 
 # x_range = list(range(10, 51))
 # x_range = list(range(10, 51)) + [75]
-x_range = list(range(10, 51)) + [55, 60, 65, 70, 75]
+x_range = list(range(10, 51)) + [51, 52, 53, 54, 55, 57, 60, 65, 70, 75]
 
 # # calculate error bars and plot reconstruction loss
 # recon_err_lower = reconstruction_losses.T[1] - reconstruction_losses.T[0]
