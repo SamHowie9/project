@@ -273,7 +273,7 @@ print()
 
 
 
-for encoding_dim in [56, 58, 59, 61, 62]:
+for encoding_dim in [63, 64]:
     for run in [1, 2, 3]:
 
 
