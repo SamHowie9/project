@@ -18,7 +18,7 @@ from skimage import color
 
 
 run = 16
-encoding_dim = 30
+encoding_dim = 45
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
