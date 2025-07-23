@@ -37,7 +37,7 @@ kl_losses = []
 num_components = []
 
 # for encoding_dim in range(10, 51):
-for encoding_dim in list(range(10, 51)) + [75]:
+for encoding_dim in list(range(10, 51)) + [55, 60, 65, 70, 75]:
 
     latent_reconstruction_losses = []
     latent_residuals = []
@@ -78,22 +78,26 @@ for encoding_dim in list(range(10, 51)) + [75]:
     # find min, max and median for losses and number of components, and append onto other latent features as a sublist
 
     min_reconstruction = min(latent_reconstruction_losses)
-    med_reconstruction = np.median(latent_reconstruction_losses)
+    # med_reconstruction = np.median(latent_reconstruction_losses)
+    med_reconstruction = np.mean(latent_reconstruction_losses)
     max_reconstruction = max(latent_reconstruction_losses)
     reconstruction_losses.append([min_reconstruction, med_reconstruction, max_reconstruction])
 
     min_residual = min(latent_residuals)
-    med_residual = np.median(latent_residuals)
+    # med_residual = np.median(latent_residuals)
+    med_residual = np.mean(latent_residuals)
     max_residual = max(latent_residuals)
     residuals.append([min_residual, med_residual, max_residual])
 
     min_kl = min(latent_kl_losses)
-    med_kl = np.median(latent_kl_losses)
+    # med_kl = np.median(latent_kl_losses)
+    med_kl = np.mean(latent_kl_losses)
     max_kl = max(latent_kl_losses)
     kl_losses.append([min_kl, med_kl, max_kl])
 
     min_components = min(latent_num_components)
-    med_components = np.median(latent_num_components)
+    # med_components = np.median(latent_num_components)
+    med_components = np.mean(latent_num_components)
     max_components = max(latent_num_components)
     num_components.append([min_components, med_components, max_components])
 
@@ -113,7 +117,8 @@ fig, axs = plt.subplots(3, 1, figsize=(20, 15))
 # axs[2].scatter(x=range(10, 51), y=num_components.T[1])
 
 # x_range = list(range(10, 51))
-x_range = list(range(10, 51)) + [75]
+# x_range = list(range(10, 51)) + [75]
+x_range = list(range(10, 51)) + [55, 60, 65, 70, 75]
 
 # # calculate error bars and plot reconstruction loss
 # recon_err_lower = reconstruction_losses.T[1] - reconstruction_losses.T[0]
@@ -168,9 +173,12 @@ axs[2].set_xlabel("Latent Features", fontsize=20)
 # axs[0].set_xticks(list(range(10, 51, 5)))
 # axs[1].set_xticks(list(range(10, 51, 5)))
 # axs[2].set_xticks(list(range(10, 51, 5)))
-axs[0].set_xticks(list(range(10, 51, 5)) + [75])
-axs[1].set_xticks(list(range(10, 51, 5)) + [75])
-axs[2].set_xticks(list(range(10, 51, 5)) + [75])
+# axs[0].set_xticks(list(range(10, 51, 5)) + [75])
+# axs[1].set_xticks(list(range(10, 51, 5)) + [75])
+# axs[2].set_xticks(list(range(10, 51, 5)) + [75])
+axs[0].set_xticks(list(range(10, 76, 5)))
+axs[1].set_xticks(list(range(10, 76, 5)))
+axs[2].set_xticks(list(range(10, 76, 5)))
 
 # axs[0].set_xticks([])
 # axs[1].set_xticks([])
@@ -198,7 +206,7 @@ axs[2].grid(axis="x")
 
 fig.subplots_adjust(hspace=0.0)
 
-plt.savefig("Variational Eagle/Plots/optimal_features_mean_75_residual_median", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/optimal_features_75_residual_mean", bbox_inches="tight")
 plt.show()
 
 
