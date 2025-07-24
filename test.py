@@ -45,15 +45,15 @@ pd.set_option('display.width', None)
 # print(df)
 
 
-particle_count = pd.read_csv("Galaxy Properties/Eagle Properties/particle_counts.csv", comment="#")
-
-zero = particle_count[particle_count["Count_Dust"] == 0]
-small = particle_count[particle_count["Count_Dust"].between(0, 250, inclusive="neither")]
-large = particle_count[particle_count["Count_Dust"] > 250]
-
-
-ab_mags_dusty = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes_dusty.txt", comment="#")
-ab_mags = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes.csv", comment="#")
+# particle_count = pd.read_csv("Galaxy Properties/Eagle Properties/particle_counts.csv", comment="#")
+#
+# zero = particle_count[particle_count["Count_Dust"] == 0]
+# small = particle_count[particle_count["Count_Dust"].between(0, 250, inclusive="neither")]
+# large = particle_count[particle_count["Count_Dust"] > 250]
+#
+#
+# ab_mags_dusty = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes_dusty.txt", comment="#")
+# ab_mags = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes.csv", comment="#")
 
 
 # ab = pd.merge(ab_mags_dusty, ab_mags, on="GalaxyID")
@@ -64,26 +64,32 @@ ab_mags = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes.csv", co
 # print(subset[["GalaxyID", "dusty g", "no dust g", "dusty i", "no dust i", "dusty r", "no dust r"]])
 
 
-all_mags = pd.merge(particle_count, ab_mags_dusty, on="GalaxyID", how="outer")
+# all_mags = pd.merge(particle_count, ab_mags_dusty, on="GalaxyID", how="outer")
+#
+# print(all_mags)
+#
+# all_mags = pd.merge(all_mags, ab_mags, on="GalaxyID")
+#
+# print(all_mags)
+#
+# all_mags["SDSS_g"] = all_mags["SDSS_g"].fillna(all_mags["g_nodust"])
+# all_mags["SDSS_r"] = all_mags["SDSS_r"].fillna(all_mags["r_nodust"])
+# all_mags["SDSS_i"] = all_mags["SDSS_i"].fillna(all_mags["i_nodust"])
+#
+# print(all_mags)
+#
+# all_mags = all_mags[["GalaxyID", "SDSS_g", "SDSS_r", "SDSS_i"]]
+#
+# print(all_mags)
+#
+# all_mags["r-i"] = all_mags["SDSS_r"] - all_mags["SDSS_i"]
+#
+# print(all_mags)
+#
+# print(all_mags[all_mags["SDSS_g"]<all_mags["SDSS_i"]])
 
-print(all_mags)
 
-all_mags = pd.merge(all_mags, ab_mags, on="GalaxyID")
 
-print(all_mags)
-
-all_mags["SDSS_g"] = all_mags["SDSS_g"].fillna(all_mags["g_nodust"])
-all_mags["SDSS_r"] = all_mags["SDSS_r"].fillna(all_mags["r_nodust"])
-all_mags["SDSS_i"] = all_mags["SDSS_i"].fillna(all_mags["i_nodust"])
-
-print(all_mags)
-
-all_mags = all_mags[["GalaxyID", "SDSS_g", "SDSS_r", "SDSS_i"]]
-
-print(all_mags)
-
-all_mags["r-i"] = all_mags["SDSS_r"] - all_mags["SDSS_i"]
-
-print(all_mags)
-
-print(all_mags[all_mags["SDSS_g"]<all_mags["SDSS_i"]])
+A = [1, 2, 3, 4, 5, 6, 7, 8]
+subset_indices = [2, 3, 5]
+print([A[index] for index in subset_indices])
