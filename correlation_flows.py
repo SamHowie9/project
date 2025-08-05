@@ -171,8 +171,8 @@ fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 # run_order = [13, 21] + [1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 14, 15, 16, 18, 19, 20, 22, 23, 24, 25] + [6, 9, 17]
 
 # spirals, transitional, ellipticals
-run_order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25] + [20]
-
+# run_order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25] + [20]
+run_order = [3, 7, 14, 20, 22] + [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25] + [1, 4, 5, 10, 15, 18, 21, 24]
 
 run_names = [str(a) for a in run_order]
 
@@ -402,8 +402,8 @@ wrap_labels(axs[1], 10)
 # cols = [2, 22]
 
 # spirals, transitional, ellipiticals
-cols = [24]
-
+# cols = [24]
+cols = [5, 17]
 
 ymin, ymax = axs[0].get_ylim()
 for col in cols:
