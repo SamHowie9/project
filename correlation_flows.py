@@ -10,7 +10,7 @@ import dcor
 
 
 run = 16
-encoding_dim = 35
+encoding_dim = 30
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -170,10 +170,15 @@ fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 # run_order = [2, 3, 10, 11, 20, 22, 24] + [1, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23] + [25]
 # run_order = [13, 21] + [1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 14, 15, 16, 18, 19, 20, 22, 23, 24, 25] + [6, 9, 17]
 
-# spirals, transitional, ellipticals
+# spirals (35)
 # run_order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25] + [20]
+
+# transitional (35)
 # run_order = [3, 7, 14, 20, 22] + [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25] + [1, 4, 5, 10, 15, 18, 21, 24]
-run_order = [6] + [2, 3, 5, 8, 13, 16, 20, 24] + [4, 9, 11, 12, 14, 15, 18, 19, 23, 25] + [1, 7, 10, 17, 21, 22]
+
+# ellipticals (30, 35)
+run_order = [1, 2, 10, 13, 16, 18, 21, 24] + [3, 4, 5, 12, 14, 15, 17, 22, 23, 25] + [6, 7, 8, 19, 20] + [9, 11]
+# run_order = [6] + [2, 3, 5, 8, 13, 16, 20, 24] + [4, 9, 11, 12, 14, 15, 18, 19, 23, 25] + [1, 7, 10, 17, 21, 22]
 
 run_names = [str(a) for a in run_order]
 
@@ -402,10 +407,15 @@ wrap_labels(axs[1], 10)
 # cols = [7, 24]
 # cols = [2, 22]
 
-# spirals, transitional, ellipiticals
+# spirals (35)
 # cols = [24]
+
+# transitional (35)
 # cols = [5, 17]
-cols = [1, 9, 19]
+
+# ellipticals (35)
+cols = 8, 18, 23
+# cols = [1, 9, 19]
 
 ymin, ymax = axs[0].get_ylim()
 for col in cols:
