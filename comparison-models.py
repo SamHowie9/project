@@ -52,7 +52,7 @@ for run in range(1, 26):
     transitional_all += transitional_loss.tolist()
     transitional_loss = np.mean(transitional_loss)
     transitional_losses.append(transitional_loss)
-    print(run, transitional_loss)
+    # print(run, transitional_loss)
 
     # elliptical_loss = np.load("Variational Eagle/Loss/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
     # elliptical_losses.append(elliptical_loss[1])
@@ -61,6 +61,15 @@ for run in range(1, 26):
     elliptical_loss = np.mean(elliptical_loss)
     elliptical_losses.append(elliptical_loss)
     # print(run, elliptical_loss)
+
+
+print()
+print(np.sort(spiral_losses))
+print(np.sort(balanced_losses))
+print(np.sort(transitional_losses))
+print(np.sort(elliptical_losses))
+print()
+
 
 
 all_losses = [balanced_losses, spiral_losses, transitional_losses, elliptical_losses]
@@ -117,7 +126,7 @@ mean_losses = np.array([np.mean(balanced_losses), np.mean(spiral_losses), np.mea
 max_losses = np.array([max(balanced_losses), max(spiral_losses), max(transitional_losses), max(elliptical_losses)])
 print(mean_losses)
 
-print(max_losses[2])
+# print(max_losses[2])
 
 
 
@@ -148,8 +157,8 @@ print(max_losses[2])
 fig, axs = plt.subplots(1, 1, figsize=(5, 10))
 
 # axs.scatter([0, 0, 0, 0], mean_losses, s=150)
-axs.errorbar([0, 0, 0, 0], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
-# axs.errorbar([0, 0, -0.015, 0.015], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
+# axs.errorbar([0, 0, 0, 0], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
+axs.errorbar([0, 0, -0.015, 0.015], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
 
 # labels = ["Balanced", "Disk-Dominated", "Transitional", "Bulge-Dominated"]
 
@@ -162,6 +171,7 @@ axs.text(0.05, mean_losses[3], "Bulge-Dominated", fontsize=20, ha="left", va="ce
 axs.set_ylabel("Mean Residual", fontsize=20, labelpad=20)
 axs.tick_params(labelsize=20)
 axs.set_xlim(-0.1, 0.6)
+axs.set_ylim(0.0046, 0.0075)
 axs.set_xticks([])
 # axs.set_yticks([round(mean_losses[2], 3), round(mean_losses[1], 3), round(mean_losses[0], 3), round(mean_losses[3], 3)])
 # axs.set_yticks([0.204, 0.206, 0.208, 0.210, 0.212, 0.214, 0.216])
