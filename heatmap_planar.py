@@ -780,6 +780,7 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
     for i in range(0, len(original_images)):
 
         original_image = normalise_independently(original_images[i])
+        # axs[0][i].imshow(original_image)
         axs[0][i].imshow(color.rgb2gray(original_image))
         axs[0][i].set_aspect("auto")
         axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
