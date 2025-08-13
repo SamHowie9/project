@@ -26,6 +26,10 @@ tfd = tfp.distributions
 
 
 
+# scale font on plots
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 4})
+
 
 
 
@@ -648,9 +652,9 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
 
 
-    # scale font on plots
-    default_size = plt.rcParams['font.size']
-    plt.rcParams.update({'font.size': default_size * 4})
+    # # scale font on plots
+    # default_size = plt.rcParams['font.size']
+    # plt.rcParams.update({'font.size': default_size * 4})
 
 
     extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
@@ -776,7 +780,7 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
     for i in range(0, len(original_images)):
 
         original_image = normalise_independently(original_images[i])
-        axs[0][i].imshow(original_image)
+        axs[0][i].imshow(color.rgb2gray(original_image))
         axs[0][i].set_aspect("auto")
         axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -784,7 +788,7 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
         dt = all_properties[all_properties["GalaxyID"] == galaxy_ids[i]]["DiscToTotal"].values[0]
         axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=40)
 
-        axs[1][i].imshow(reconstructions[i])
+        axs[1][i].imshow(color.rgb2gray(reconstructions[i]))
         axs[1][i].set_aspect("auto")
         axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
