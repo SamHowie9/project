@@ -149,8 +149,8 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 # augment the transitional images
 
-# for galaxy in transitional:
-for galaxy in [9020524, 9419560, 9606058, 9821193, 9837200, 10007497, 10670174, 11450390, 14032065, 16696731, 17374403, 18096816, 18112849, 19534449, 20695120]:
+for galaxy in transitional:
+# for galaxy in [9020524, 9419560, 9606058, 9821193, 9837200, 10007497, 10670174, 11450390, 14032065, 16696731, 17374403, 18096816, 18112849, 19534449, 20695120]:
 
     # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
@@ -167,8 +167,8 @@ print("...")
 
 # augment the elliptical images
 
-# for galaxy in ellipticals:
-for galaxy in [8935447, 9578505, 15151456, 15172289, 15953506, 16504439, 16583347, 17086648, 18060726, 18160043, 19299051, 19987958]:
+for galaxy in ellipticals:
+# for galaxy in [8935447, 9578505, 15151456, 15172289, 15953506, 16504439, 16583347, 17086648, 18060726, 18160043, 19299051, 19987958]:
 
     # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
@@ -218,7 +218,7 @@ for galaxy in transitional:
     for file in augmented_transitional:
         if file.startswith(str(galaxy) + "_"):
             count += 1
-    if count != 26:
+    if count != 8:
         print(galaxy, count)
 
 print()
@@ -230,7 +230,7 @@ for galaxy in ellipticals:
     for file in augmented_ellipticals:
         if file.startswith(str(galaxy) + "_"):
             count += 1
-    if count != 26:
+    if count != 8:
         print(galaxy, count)
 
 
