@@ -149,34 +149,36 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 # augment the transitional images
 
-# # for galaxy in transitional:
-# for galaxy in [9020524, 9419560, 9606058, 9821193, 9837200, 10007497, 10670174, 11450390, 14032065, 16696731, 17374403, 18096816, 18112849, 19534449, 20695120]:
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i >= 1:
-#             break
-# print("...")
+# for galaxy in transitional:
+for galaxy in [9020524, 9419560, 9606058, 9821193, 9837200, 10007497, 10670174, 11450390, 14032065, 16696731, 17374403, 18096816, 18112849, 19534449, 20695120]:
+
+    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Face/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i >= 8:
+            break
+print("...")
 
 
 
 # augment the elliptical images
 
-# # for galaxy in ellipticals:
-# for galaxy in [8935447, 9578505, 15151456, 15172289, 15953506, 16504439, 16583347, 17086648, 18060726, 18160043, 19299051, 19987958]:
-#
-#     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-#     image = image.reshape(1, 256, 256, 3)
-#
-#     i = 0
-#     for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/", save_prefix=galaxy, save_format="png"):
-#         i += 1
-#         if i >= 1:
-#             break
+# for galaxy in ellipticals:
+for galaxy in [8935447, 9578505, 15151456, 15172289, 15953506, 16504439, 16583347, 17086648, 18060726, 18160043, 19299051, 19987958]:
+
+    # image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
+    image = image.reshape(1, 256, 256, 3)
+
+    i = 0
+    for batch in datagen.flow(image, batch_size=1, save_to_dir="/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Face/", save_prefix=galaxy, save_format="png"):
+        i += 1
+        if i >= 8:
+            break
 
 
 
@@ -187,27 +189,27 @@ datagen = ImageDataGenerator(rotation_range=360, fill_mode="nearest")
 
 
 # check the number of augmented images
-augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Only/")
-augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
-augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/")
+# augmented_spirals = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Spirals Face/")
+augmented_transitional = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Face/")
+augmented_ellipticals =  os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Face/")
 
 print()
-print(len(augmented_spirals)+len(spirals))
+# print(len(augmented_spirals)+len(spirals))
 print(len(augmented_transitional)+len(transitional))
 print(len(augmented_ellipticals)+len(ellipticals))
 print()
 
-print("Spiral Errors:")
-
-for galaxy in spirals:
-    count = 0
-    for file in augmented_spirals:
-        if file.startswith(str(galaxy) + "_"):
-            count += 1
-    if count != 2:
-        print(galaxy, count)
-
-print()
+# print("Spiral Errors:")
+#
+# for galaxy in spirals:
+#     count = 0
+#     for file in augmented_spirals:
+#         if file.startswith(str(galaxy) + "_"):
+#             count += 1
+#     if count != 2:
+#         print(galaxy, count)
+#
+# print()
 
 print("Transitional Errors:")
 
