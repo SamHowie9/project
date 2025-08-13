@@ -30,7 +30,7 @@ tfd = tfp.distributions
 
 
 run = 16
-encoding_dim = 30
+encoding_dim = 35
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -817,7 +817,7 @@ axs[3][0].set_ylabel("Heatmap")
 
 fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_balanced_all", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap_balanced_" + str(encoding_dim) + "_reversed", bbox_inches="tight")
 # plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap.pdf", bbox_inches="tight")
 plt.show()
 plt.close()
