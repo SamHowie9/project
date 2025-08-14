@@ -170,6 +170,9 @@ fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 # run_order = [2, 3, 10, 11, 20, 22, 24] + [1, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23] + [25]
 # run_order = [13, 21] + [1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 14, 15, 16, 18, 19, 20, 22, 23, 24, 25] + [6, 9, 17]
 
+# face on (35)
+run_order = [2, 4, 7, 17, 21] + [1, 3, 5, 6, 8, 10, 13, 18, 20, 22, 24] + [11, 14, 15, 19, 23] + [9, 12, 16, 25]
+
 # spirals (30, 35)
 run_order = [3, 4, 5, 17, 18] + [1, 2, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25] + [8]
 # run_order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25] + [20]
@@ -196,7 +199,7 @@ for feature in range(0, 13):
     for run in run_order:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
         encoding_dim = extracted_features.shape[1]
 
         # perform pca on the extracted features
@@ -303,7 +306,7 @@ for feature in range(0, 13):
     for run in run_order:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
-        extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
         encoding_dim = extracted_features.shape[1]
 
         # perform pca on the extracted features
@@ -409,8 +412,11 @@ wrap_labels(axs[1], 10)
 # cols = [7, 24]
 # cols = [2, 22]
 
+# face on (35)
+cols = [5, 16, 21]
+
 # spirals (30, 35)
-cols = [5, 24]
+# cols = [5, 24]
 # cols = [24]
 
 # transitional (30, 35)
@@ -431,7 +437,7 @@ for col in cols:
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/latent_" + str(encoding_dim) + "_correlation", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Face/PCA/latent_" + str(encoding_dim) + "_correlation", bbox_inches='tight')
 plt.show()
 
 
