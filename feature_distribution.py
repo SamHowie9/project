@@ -29,7 +29,7 @@ from scipy.stats import norm
 
 
 run = 3
-encoding_dim = 30
+encoding_dim = 35
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -39,79 +39,80 @@ batch_size = 32
 
 
 
+for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
+
+    extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+
+    extracted_features_switch = extracted_features.T
+
+    # perform pca on the extracted features
+    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    # extracted_features = pca.transform(extracted_features)
+    # extracted_features_switch = extracted_features.T
+
+    print(extracted_features.shape)
+
+    # rows, cols = [2, 5]
+    # rows, cols = [6, 5]
+    rows, cols = [4, 8]
+    fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*5))
+
+    # standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
+    standard_normal = np.random.normal(loc=0, scale=1, size=100000)
+
+    print(rows, cols)
+
+    for i in range(rows):
+        for j in range(cols):
+
+            try:
+                # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
+                sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, stat="density", edgecolor="none", linewidth=0, color="grey")
+
+                for patch in axs[i][j].patches:
+                    patch.set_rasterized(True)
+
+                # if (j + (i*cols) + 1) in [6, 8, 10, 11, 12, 13, 15, 19, 27, 30]:
+                #     sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
+
+                # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
+
+                mean = np.mean(extracted_features.T[j + (i*cols)])
+                std = np.std(extracted_features.T[j + (i*cols)])
+
+                approx_dist_x = np.linspace(mean-(4*std), mean+(4*std), 1000)
+                approx_dist_y = norm.pdf(approx_dist_x, mean, std)
+                axs[i][j].plot(approx_dist_x, approx_dist_y, color="black")
+
+                # approx_dist = np.random.normal(loc=mean, scale=std, size=1000000)
+                # sns.histplot(x=approx_dist,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
 
 
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-
-extracted_features_switch = extracted_features.T
-
-# perform pca on the extracted features
-# pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-# extracted_features = pca.transform(extracted_features)
-# extracted_features_switch = extracted_features.T
-
-print(extracted_features.shape)
-
-# rows, cols = [2, 5]
-# rows, cols = [6, 5]
-rows, cols = [4, 8]
-fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*5))
-
-# standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
-standard_normal = np.random.normal(loc=0, scale=1, size=100000)
-
-print(rows, cols)
-
-for i in range(rows):
-    for j in range(cols):
-
-        try:
-            # sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, element="poly", label="Transformed")
-            sns.histplot(x=extracted_features.T[j + (i*cols)],ax=axs[i][j], bins=50, stat="density", edgecolor="none", linewidth=0, color="grey")
-
-            for patch in axs[i][j].patches:
-                patch.set_rasterized(True)
-
-            # if (j + (i*cols) + 1) in [6, 8, 10, 11, 12, 13, 15, 19, 27, 30]:
-            #     sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
-
-            # sns.histplot(x=standard_normal,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
-
-            mean = np.mean(extracted_features.T[j + (i*cols)])
-            std = np.std(extracted_features.T[j + (i*cols)])
-
-            approx_dist_x = np.linspace(mean-(4*std), mean+(4*std), 1000)
-            approx_dist_y = norm.pdf(approx_dist_x, mean, std)
-            axs[i][j].plot(approx_dist_x, approx_dist_y, color="black")
-
-            # approx_dist = np.random.normal(loc=mean, scale=std, size=1000000)
-            # sns.histplot(x=approx_dist,ax=axs[i][j], kde=True, stat="density", color="black", fill=False, alpha=0, bins=50)
+                axs[i][j].set_title("(" + str(round(mean, 3)) + ", " + str(round(std, 3)) + ")", fontsize=30)
+                axs[i][j].set_xlabel("Feature " + str(j + (i*cols) + 1), fontsize=30)
 
 
-            axs[i][j].set_title("(" + str(round(mean, 3)) + ", " + str(round(std, 3)) + ")", fontsize=30)
-            axs[i][j].set_xlabel("Feature " + str(j + (i*cols) + 1), fontsize=30)
+                axs[i][j].set_ylabel("")
+                axs[i][j].set_yticks([])
 
+                ticks = [round(mean-3*std, 3), round(mean, 3), round(mean+3*std, 3)]
+                axs[i][j].set_xticks(ticks)
+                axs[i][j].tick_params(labelsize=22)
 
-            axs[i][j].set_ylabel("")
-            axs[i][j].set_yticks([])
+                axs[i][j].set_xlim(mean-(4*std), mean+(4*std))
 
-            ticks = [round(mean-3*std, 3), round(mean, 3), round(mean+3*std, 3)]
-            axs[i][j].set_xticks(ticks)
-            axs[i][j].tick_params(labelsize=22)
+            except:
+                print(j + (i*cols))
 
-            axs[i][j].set_xlim(mean-(4*std), mean+(4*std))
+    axs[3][6].set_axis_off()
+    axs[3][7].set_axis_off()
 
-        except:
-            print(j + (i*cols))
+    fig.subplots_adjust(wspace=0.1, hspace=0.6)
 
-axs[3][6].set_axis_off()
-axs[3][7].set_axis_off()
-
-fig.subplots_adjust(wspace=0.1, hspace=0.6)
-
-plt.savefig("Variational Eagle/Plots/latent_feature_distributions", bbox_inches='tight')
-plt.savefig("Variational Eagle/Plots/latent_feature_distributions.pdf", bbox_inches='tight')
-plt.show()
+    plt.savefig("Variational Eagle/Plots/latent_feature_distributions_" + str(encoding_dim), bbox_inches='tight')
+    # plt.savefig("Variational Eagle/Plots/latent_feature_distributions.pdf", bbox_inches='tight')
+    plt.show(block=False)
+    plt.close()
 
 
 

@@ -130,7 +130,7 @@ for run in range(1, 26):
 # for run in range(1, 11):
 
     try:
-        extracted_features = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
         pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
 
@@ -168,7 +168,7 @@ for components in range(0, 15):
     for run in range(1, 26):
     # for run in range(1, 11):
 
-        extracted_features = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_750_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
         pca = PCA(n_components=encoding_dim, svd_solver="full").fit(extracted_features)
         variance_explained = pca.explained_variance_ratio_
@@ -271,8 +271,8 @@ plt.legend(handles=custom_legend, handleheight=1.1, loc='lower center', bbox_to_
 print(med_accumulation)
 print(med_specific)
 
-plt.savefig("Variational Eagle/Plots/variance_explained_mean_" + str(encoding_dim) + "_face", bbox_inches="tight")
-# plt.savefig("Variational Eagle/Plots/variance_explained_mean.pdf", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/variance_explained_" + str(encoding_dim) + "_balanced", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/variance_explained_" + str(encoding_dim) + "_balanced.pdf", bbox_inches="tight")
 plt.show()
 
 

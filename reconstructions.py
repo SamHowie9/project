@@ -43,6 +43,14 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
+# scale font on plots
+# default_size = plt.rcParams['font.size']
+# plt.rcParams.update({'font.size': default_size * 3})
+
+default_size = plt.rcParams['font.size']
+plt.rcParams.update({'font.size': default_size * 5})
+
+
 
 
 # normalise each band individually
@@ -136,104 +144,161 @@ print()
 
 
 
+for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
+    # Define VAE model with custom train step
+    class VAE(Model):
 
-# Define VAE model with custom train step
-class VAE(Model):
+        def __init__(self, encoder, decoder, **kwargs):
+            super().__init__(**kwargs)
+            self.encoder = encoder
+            self.decoder = decoder
+            self.total_loss_tracker = metrics.Mean(name="total_loss")
+            self.reconstruction_loss_tracker = metrics.Mean(name="reconstruction_loss")
+            self.kl_loss_tracker = metrics.Mean(name="kl_loss")
 
-    def __init__(self, encoder, decoder, **kwargs):
-        super().__init__(**kwargs)
-        self.encoder = encoder
-        self.decoder = decoder
-        self.total_loss_tracker = metrics.Mean(name="total_loss")
-        self.reconstruction_loss_tracker = metrics.Mean(name="reconstruction_loss")
-        self.kl_loss_tracker = metrics.Mean(name="kl_loss")
+        @property
+        def metrics(self):
+            return[
+                self.total_loss_tracker,
+                self.reconstruction_loss_tracker,
+                self.kl_loss_tracker,
+            ]
 
-    @property
-    def metrics(self):
-        return[
-            self.total_loss_tracker,
-            self.reconstruction_loss_tracker,
-            self.kl_loss_tracker,
-        ]
+        # custom train step
+        def train_step(self, data):
 
-    # custom train step
-    def train_step(self, data):
+            with tf.GradientTape() as tape:
 
-        with tf.GradientTape() as tape:
+                # get the latent representation (run image through the encoder)
+                z_mean, z_log_var, z, sum_log_det_jacobians  = self.encoder(data)
 
-            # get the latent representation (run image through the encoder)
-            z_mean, z_log_var, z, sum_log_det_jacobians  = self.encoder(data)
+                print("Z Shape", z_mean.shape, z.shape)
 
-            print("Z Shape", z_mean.shape, z.shape)
+                # form the reconstruction (run latent representation through decoder)
+                reconstruction = self.decoder(z)
 
-            # form the reconstruction (run latent representation through decoder)
-            reconstruction = self.decoder(z)
+                # reconstruction loss
+                reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(data, reconstruction))
 
-            # reconstruction loss
-            reconstruction_loss = tf.reduce_mean(losses.binary_crossentropy(data, reconstruction))
+                # kl loss
+                kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
+                kl_loss = (tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians) / z.shape[1]
+                kl_loss = tf.reduce_mean(kl_loss)
 
-            # kl loss
-            kl_loss = -0.5 * (1 + z_log_var - tf.square(z_mean) - tf.exp(z_log_var))
-            kl_loss = (tf.reduce_sum(kl_loss, axis=1) - sum_log_det_jacobians) / z.shape[1]
-            kl_loss = tf.reduce_mean(kl_loss)
-
-            # total loss
-            # total_loss = reconstruction_loss + kl_loss
-            total_loss = reconstruction_loss + (beta * kl_loss)
-
-
-
-        # gradient decent based on total loss
-        grads = tape.gradient(total_loss, self.trainable_weights)
-        self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
-
-        # update loss trackers
-        self.total_loss_tracker.update_state(total_loss)
-        self.reconstruction_loss_tracker.update_state(reconstruction_loss)
-        self.kl_loss_tracker.update_state(kl_loss)
-
-
-        # return total loss, reconstruction loss and kl divergence
-        return {
-            "loss": self.total_loss_tracker.result(),
-            "reconstruction_loss": self.reconstruction_loss_tracker.result(),
-            "kl_loss": self.kl_loss_tracker.result(),
-        }
+                # total loss
+                # total_loss = reconstruction_loss + kl_loss
+                total_loss = reconstruction_loss + (beta * kl_loss)
 
 
 
+            # gradient decent based on total loss
+            grads = tape.gradient(total_loss, self.trainable_weights)
+            self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
+
+            # update loss trackers
+            self.total_loss_tracker.update_state(total_loss)
+            self.reconstruction_loss_tracker.update_state(reconstruction_loss)
+            self.kl_loss_tracker.update_state(kl_loss)
 
 
-# define sampling layer
-class Sampling(Layer):
+            # return total loss, reconstruction loss and kl divergence
+            return {
+                "loss": self.total_loss_tracker.result(),
+                "reconstruction_loss": self.reconstruction_loss_tracker.result(),
+                "kl_loss": self.kl_loss_tracker.result(),
+            }
 
-    def __init__(self, latent_dim, n_flows=1, **kwargs):
-        super().__init__(**kwargs)
-        self.latent_dim = latent_dim
-        self.n_flows = n_flows
-        self.flows = [PlanarFlow(latent_dim) for _ in range(n_flows)]
 
-    def call(self, inputs):
 
-        # get the latent distributions
-        z_mean, z_log_var = inputs
 
-        # find the batch size and number of latent features (dim)
-        batch = tf.shape(z_mean)[0]
-        dim = tf.shape(z_mean)[1]
 
-        # generate the random variables
-        epsilon = tf.random.normal(shape=(batch, dim))
+    # define sampling layer
+    class Sampling(Layer):
 
-        # perform reparameterisation trick
-        z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
+        def __init__(self, latent_dim, n_flows=1, **kwargs):
+            super().__init__(**kwargs)
+            self.latent_dim = latent_dim
+            self.n_flows = n_flows
+            self.flows = [PlanarFlow(latent_dim) for _ in range(n_flows)]
 
-        # initialise as a tensor of batch size shape (same shape as first latent feature)
-        sum_log_det_jacobian = tf.zeros_like(z_mean[:, 0])
+        def call(self, inputs):
 
-        # apply flow transformations
-        for flow in self.flows:
+            # get the latent distributions
+            z_mean, z_log_var = inputs
+
+            # find the batch size and number of latent features (dim)
+            batch = tf.shape(z_mean)[0]
+            dim = tf.shape(z_mean)[1]
+
+            # generate the random variables
+            epsilon = tf.random.normal(shape=(batch, dim))
+
+            # perform reparameterisation trick
+            z = z_mean + tf.exp(0.5 * z_log_var) * epsilon
+
+            # initialise as a tensor of batch size shape (same shape as first latent feature)
+            sum_log_det_jacobian = tf.zeros_like(z_mean[:, 0])
+
+            # apply flow transformations
+            for flow in self.flows:
+                z, log_det = flow(z)
+                sum_log_det_jacobian += log_det
+
+            return z, sum_log_det_jacobian
+
+
+
+
+
+    # define planar flows
+    class PlanarFlow(Layer):
+
+        def __init__(self, latent_dim, **kwargs):
+            super().__init__(**kwargs)
+            self.latent_dim = latent_dim
+
+        def build(self, input_shape):
+
+            # Initialize weights and bias for the planar transformation
+            self.u = self.add_weight(shape=(self.latent_dim,), initializer='random_normal', trainable=True)
+            self.w = self.add_weight(shape=(self.latent_dim,), initializer='random_normal', trainable=True)
+            self.b = self.add_weight(shape=(), initializer='zeros', trainable=True)
+
+        def call(self, z):
+
+            # parameterization of u (ensure eTu > -1)
+            u_hat = self.u + (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (tf.norm(self.w) ** 2 + 1e-8)
+
+            # transformation
+            w_dot_z = tf.reduce_sum(self.w * z, axis=1, keepdims=True)
+            activation = tf.tanh(w_dot_z + self.b)
+            z_transformed = z + (u_hat * activation)
+
+            # derivative of flow function
+            psi = (1.0 - tf.square(activation)) * self.w
+
+            # compute the log det jacobian
+            det_jacobian = 1.0 + tf.reduce_sum(psi * u_hat, axis=1)  # shape: (batch_size,)
+            log_det_jacobian = tf.math.log(tf.abs(det_jacobian) + 1e-8)  # add epsilon for numerical stability
+
+            return z_transformed, log_det_jacobian
+
+
+
+
+
+    # apply the flows to the latent vectors after training
+    def apply_flows(z_mean, flows):
+
+        # convert vectors to tensor and clip (as done in sampling layer)
+        z = tf.convert_to_tensor(z_mean, dtype=tf.float32)
+        z = tf.clip_by_value(z, -4 + 1e-4, 4 - 1e-4)
+
+        sum_log_det_jacobian = 0.0
+
+        # apply the flows
+        for flow in flows:
             z, log_det = flow(z)
             sum_log_det_jacobian += log_det
 
@@ -243,344 +308,260 @@ class Sampling(Layer):
 
 
 
-# define planar flows
-class PlanarFlow(Layer):
+    # Define keras tensor for the encoder
+    input_image = Input(shape=(256, 256, 3))                                                                               # (256, 256, 3)
 
-    def __init__(self, latent_dim, **kwargs):
-        super().__init__(**kwargs)
-        self.latent_dim = latent_dim
+    # layers for the encoder
+    x = layers.Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
+    x = layers.Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
+    x = layers.Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
+    x = layers.Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
+    x = layers.Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
+    # x = Flatten()(x)                                                                                                     # (8*8*512 = 32768)
+    x = layers.GlobalAveragePooling2D()(x)                                                                                 # (512)
+    x = layers.Dense(128, activation="relu")(x)                                                                            # (128)
+
+    z_mean = layers.Dense(encoding_dim, name="z_mean")(x)
+    z_log_var = layers.Dense(encoding_dim, name="z_log_var")(x)
+
+    z, sum_log_det_jacobians = Sampling(encoding_dim, n_flows=n_flows)([z_mean, z_log_var])
+
+    # build the encoder
+    encoder = Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
+    encoder.summary()
 
-    def build(self, input_shape):
 
-        # Initialize weights and bias for the planar transformation
-        self.u = self.add_weight(shape=(self.latent_dim,), initializer='random_normal', trainable=True)
-        self.w = self.add_weight(shape=(self.latent_dim,), initializer='random_normal', trainable=True)
-        self.b = self.add_weight(shape=(), initializer='zeros', trainable=True)
 
-    def call(self, z):
+    # Define keras tensor for the decoder
+    latent_input = Input(shape=(encoding_dim,))
 
-        # parameterization of u (ensure eTu > -1)
-        u_hat = self.u + (tf.nn.softplus(tf.reduce_sum(self.w * self.u)) - 1 - tf.reduce_sum(self.w * self.u)) * self.w / (tf.norm(self.w) ** 2 + 1e-8)
+    # layers for the decoder
+    x = layers.Dense(units=128, activation="relu")(latent_input)                                                           # (64)
+    x = layers.Dense(units=512, activation="relu")(x)                                                                      # (256)
+    x = layers.Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
+    x = layers.Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
+    x = layers.Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
+    x = layers.Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
+    x = layers.Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
+    x = layers.Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
+    decoded = layers.Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)         # (256, 256, 3)
 
-        # transformation
-        w_dot_z = tf.reduce_sum(self.w * z, axis=1, keepdims=True)
-        activation = tf.tanh(w_dot_z + self.b)
-        z_transformed = z + (u_hat * activation)
+    # build the decoder
+    decoder = Model(latent_input, decoded, name="decoder")
+    decoder.summary()
 
-        # derivative of flow function
-        psi = (1.0 - tf.square(activation)) * self.w
 
-        # compute the log det jacobian
-        det_jacobian = 1.0 + tf.reduce_sum(psi * u_hat, axis=1)  # shape: (batch_size,)
-        log_det_jacobian = tf.math.log(tf.abs(det_jacobian) + 1e-8)  # add epsilon for numerical stability
 
-        return z_transformed, log_det_jacobian
+    # build and compile the VAE
+    vae = VAE(encoder, decoder)
+    # vae.compile(optimizer=optimizers.Adam(clipnorm=1.0))
+    vae.compile(optimizer=optimizers.Adam())
 
 
 
 
+    vae.build(input_shape=(None, 256, 256, 3))
 
-# apply the flows to the latent vectors after training
-def apply_flows(z_mean, flows):
 
-    # convert vectors to tensor and clip (as done in sampling layer)
-    z = tf.convert_to_tensor(z_mean, dtype=tf.float32)
-    z = tf.clip_by_value(z, -4 + 1e-4, 4 - 1e-4)
 
-    sum_log_det_jacobian = 0.0
+    # latent features vs pca
 
-    # apply the flows
-    for flow in flows:
-        z, log_det = flow(z)
-        sum_log_det_jacobian += log_det
+    # load the weights
+    vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
-    return z, sum_log_det_jacobian
+    # get the extracted features
+    extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 
 
 
 
-# Define keras tensor for the encoder
-input_image = Input(shape=(256, 256, 3))                                                                               # (256, 256, 3)
+    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    # pca_top = PCA(n_components=4, svd_solver="full").fit(extracted_features)
+    #
+    #
+    # # number of images to reconstruct
+    # n = 12
+    #
+    #
+    # # get the images to reconstruct
+    # random.seed(5)
+    # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+    # extracted_features = extracted_features[reconstruction_indices]
+    #
+    #
+    # pca_features = pca.transform(extracted_features)
+    # pca_features = pca.inverse_transform(pca_features)
+    #
+    # pca_features_top = pca_top.transform(extracted_features)
+    # pca_features_top = pca_top.inverse_transform(pca_features_top)
+    #
+    # reconstructions = vae.decoder.predict(extracted_features)
+    # pca_reconstructions = vae.decoder.predict(pca_features)
+    # pca_reconstructions_top = vae.decoder.predict(pca_features_top)
+    #
+    # original_images = train_images[reconstruction_indices]
+    #
+    # fig, axs = plt.subplots(4, n, figsize=(n*10, 40))
+    #
+    # for i in range(0, n):
+    #
+    #     axs[0][i].imshow(original_images[i])
+    #     axs[0][i].set_aspect("auto")
+    #     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    #     axs[1][i].imshow(reconstructions[i])
+    #     axs[1][i].set_aspect("auto")
+    #     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    #     axs[2][i].imshow(pca_reconstructions[i])
+    #     axs[2][i].set_aspect("auto")
+    #     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    #     axs[3][i].imshow(pca_reconstructions_top[i])
+    #     axs[3][i].set_aspect("auto")
+    #     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    # plt.savefig("Variational Eagle/Plots/latent_vs_pca_vs_top", bbox_inches="tight")
+    # plt.show()
 
-# layers for the encoder
-x = layers.Conv2D(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(input_image)                # (128, 128, 32)
-x = layers.Conv2D(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                          # (64, 64, 64)
-x = layers.Conv2D(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (32, 32, 128)
-x = layers.Conv2D(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (16, 16, 256)
-x = layers.Conv2D(filters=512, kernel_size=3, strides=2, activation="relu", padding="same")(x)                         # (8, 8, 512)
-# x = Flatten()(x)                                                                                                     # (8*8*512 = 32768)
-x = layers.GlobalAveragePooling2D()(x)                                                                                 # (512)
-x = layers.Dense(128, activation="relu")(x)                                                                            # (128)
 
-z_mean = layers.Dense(encoding_dim, name="z_mean")(x)
-z_log_var = layers.Dense(encoding_dim, name="z_log_var")(x)
 
-z, sum_log_det_jacobians = Sampling(encoding_dim, n_flows=n_flows)([z_mean, z_log_var])
 
-# build the encoder
-encoder = Model(input_image, [z_mean, z_log_var, z, sum_log_det_jacobians], name="encoder")
-encoder.summary()
 
 
 
-# Define keras tensor for the decoder
-latent_input = Input(shape=(encoding_dim,))
 
-# layers for the decoder
-x = layers.Dense(units=128, activation="relu")(latent_input)                                                           # (64)
-x = layers.Dense(units=512, activation="relu")(x)                                                                      # (256)
-x = layers.Dense(units=8*8*512, activation="relu")(x)                                                                  # (8*8*512 = 32768)
-x = layers.Reshape((8, 8, 512))(x)                                                                                     # (8, 8, 512)
-x = layers.Conv2DTranspose(filters=256, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (16, 16, 256)
-x = layers.Conv2DTranspose(filters=128, kernel_size=3, strides=2, activation="relu", padding="same")(x)                # (32, 32, 128)
-x = layers.Conv2DTranspose(filters=64, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (64, 64, 64)
-x = layers.Conv2DTranspose(filters=32, kernel_size=3, strides=2, activation="relu", padding="same")(x)                 # (128, 128, 32)
-decoded = layers.Conv2DTranspose(filters=3, kernel_size=3, strides=2, activation="sigmoid", padding="same")(x)         # (256, 256, 3)
 
-# build the decoder
-decoder = Model(latent_input, decoded, name="decoder")
-decoder.summary()
 
 
 
-# build and compile the VAE
-vae = VAE(encoder, decoder)
-# vae.compile(optimizer=optimizers.Adam(clipnorm=1.0))
-vae.compile(optimizer=optimizers.Adam())
 
+    # number of images to reconstruct
+    # n = 12
 
+    # get the images to reconstruct
+    random.seed(5)
+    # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+    # reconstruction_indices = [3165, 3108, 2161]
+    # reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
+    reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
 
+    extracted_features_reconstruct = extracted_features[reconstruction_indices]
+    original_images = train_images[reconstruction_indices]
 
-vae.build(input_shape=(None, 256, 256, 3))
 
 
 
-# latent features vs pca
 
-# load the weights
-vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    # reconstructions with residual:
+    # fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
+    #
+    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    # pca_features = pca.transform(extracted_features_reconstruct)
+    # pca_features = pca.inverse_transform(pca_features)
+    # reconstructions = vae.decoder.predict(pca_features)
+    #
+    # # reconstructions = vae.decoder.predict(extracted_features_reconstruct)
+    #
+    # residuals = abs(original_images - reconstructions)
+    #
+    # # residuals -= residuals.min()
+    # # residuals /= residuals.max() + 1e-8
+    #
+    # for i in range(0, len(reconstruction_indices)):
+    #
+    #     original_image = normalise_independently(original_images[i])
+    #     axs[0][i].imshow(original_image)
+    #     axs[0][i].set_aspect("auto")
+    #     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    #
+    #     # reconstruction = vae.decoder.predict(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+    #
+    #     # pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
+    #     # pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+    #     # pca_features = pca.inverse_transform(pca_features)
+    #     # reconstruction = vae.decoder.predict(pca_features)
+    #
+    #
+    #     axs[1][i].imshow(reconstructions[i])
+    #     axs[1][i].set_aspect("auto")
+    #     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    #
+    #     # residual = abs(original_images[i] - reconstructions[i])
+    #     # residual = residuals[i]
+    #     # residual -= residual.min()
+    #     # residual /= residual.max() + 1e-8
+    #
+    #     # axs[2][i].imshow(residual)
+    #     axs[2][i].imshow(residuals[i])
+    #     axs[2][i].set_aspect("auto")
+    #     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    # axs[0][0].set_ylabel("Original")
+    # axs[1][0].set_ylabel("Reconstruction")
+    # axs[2][0].set_ylabel("Residual")
+    #
+    # fig.subplots_adjust(wspace=0.1, hspace=0.05)
+    #
+    # plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
+    # plt.show()
+    # plt.close()
 
-# get the extracted features
-extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 
 
 
 
-# pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-# pca_top = PCA(n_components=4, svd_solver="full").fit(extracted_features)
-#
-#
-# # number of images to reconstruct
-# n = 12
-#
-#
-# # get the images to reconstruct
-# random.seed(5)
-# reconstruction_indices = random.sample(range(train_images.shape[0]), n)
-# extracted_features = extracted_features[reconstruction_indices]
-#
-#
-# pca_features = pca.transform(extracted_features)
-# pca_features = pca.inverse_transform(pca_features)
-#
-# pca_features_top = pca_top.transform(extracted_features)
-# pca_features_top = pca_top.inverse_transform(pca_features_top)
-#
-# reconstructions = vae.decoder.predict(extracted_features)
-# pca_reconstructions = vae.decoder.predict(pca_features)
-# pca_reconstructions_top = vae.decoder.predict(pca_features_top)
-#
-# original_images = train_images[reconstruction_indices]
-#
-# fig, axs = plt.subplots(4, n, figsize=(n*10, 40))
-#
-# for i in range(0, n):
-#
-#     axs[0][i].imshow(original_images[i])
-#     axs[0][i].set_aspect("auto")
-#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#     axs[1][i].imshow(reconstructions[i])
-#     axs[1][i].set_aspect("auto")
-#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#     axs[2][i].imshow(pca_reconstructions[i])
-#     axs[2][i].set_aspect("auto")
-#     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#     axs[3][i].imshow(pca_reconstructions_top[i])
-#     axs[3][i].set_aspect("auto")
-#     axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-# plt.savefig("Variational Eagle/Plots/latent_vs_pca_vs_top", bbox_inches="tight")
-# plt.show()
-
-
-
-
-
-
-# scale font on plots
-default_size = plt.rcParams['font.size']
-plt.rcParams.update({'font.size': default_size * 3})
-
-
-
-
-
-
-# number of images to reconstruct
-# n = 12
-
-# get the images to reconstruct
-random.seed(5)
-# reconstruction_indices = random.sample(range(train_images.shape[0]), n)
-# reconstruction_indices = [3165, 3108, 2161]
-# reconstruction_indices = [560, 743, 839, 780, 2785, 2929, 2227, 3382, 495, 437, 2581]
-reconstruction_indices = [780, 560, 743, 2227, 2785, 2929, 495, 437, 2581]
-
-extracted_features_reconstruct = extracted_features[reconstruction_indices]
-original_images = train_images[reconstruction_indices]
-
-
-
-
-
-# reconstructions with residual:
-# fig, axs = plt.subplots(3, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 3*5))
-#
-# pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-# pca_features = pca.transform(extracted_features_reconstruct)
-# pca_features = pca.inverse_transform(pca_features)
-# reconstructions = vae.decoder.predict(pca_features)
-#
-# # reconstructions = vae.decoder.predict(extracted_features_reconstruct)
-#
-# residuals = abs(original_images - reconstructions)
-#
-# # residuals -= residuals.min()
-# # residuals /= residuals.max() + 1e-8
-#
-# for i in range(0, len(reconstruction_indices)):
-#
-#     original_image = normalise_independently(original_images[i])
-#     axs[0][i].imshow(original_image)
-#     axs[0][i].set_aspect("auto")
-#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#
-#     # reconstruction = vae.decoder.predict(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
-#
-#     # pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
-#     # pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
-#     # pca_features = pca.inverse_transform(pca_features)
-#     # reconstruction = vae.decoder.predict(pca_features)
-#
-#
-#     axs[1][i].imshow(reconstructions[i])
-#     axs[1][i].set_aspect("auto")
-#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#
-#     # residual = abs(original_images[i] - reconstructions[i])
-#     # residual = residuals[i]
-#     # residual -= residual.min()
-#     # residual /= residual.max() + 1e-8
-#
-#     # axs[2][i].imshow(residual)
-#     axs[2][i].imshow(residuals[i])
-#     axs[2][i].set_aspect("auto")
-#     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-# axs[0][0].set_ylabel("Original")
-# axs[1][0].set_ylabel("Reconstruction")
-# axs[2][0].set_ylabel("Residual")
-#
-# fig.subplots_adjust(wspace=0.1, hspace=0.05)
-#
-# plt.savefig("Variational Eagle/Plots/reconstruction_latent_residual", bbox_inches="tight")
-# plt.show()
-# plt.close()
-
-
-
-
-
-
-
-
-# reconstruction by pca
-
-# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
-#
-#
-# # scale font on plots
-# # default_size = plt.rcParams['font.size']
-# plt.rcParams.update({'font.size': default_size * 5})
-#
-# # pca reconstructions by feature
-#
-# fig, axs = plt.subplots(11, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 11*5))
-#
-# for i in range(0, len(reconstruction_indices)):
-#
-#     axs[0][i].imshow(original_images[i])
-#     axs[0][i].set_aspect("auto")
-#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#     dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
-#     axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45, pad=10)
-#
-#     for j, feat in enumerate(range(10, 0, -1)):
-#
-#         pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
-#
-#         pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
-#         pca_features = pca.inverse_transform(pca_features)
-#
-#         pca_reconstruction = vae.decoder.predict(pca_features)[0]
-#
-#         axs[j+1][i].imshow(pca_reconstruction)
-#         axs[j+1][i].set_aspect("auto")
-#         axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#         axs[j+1][0].set_ylabel(feat, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
-#
-# axs[0][0].set_ylabel("Original", fontsize=45, labelpad=10)
-#
-#
-# fig.text(0.09, 0.5, 'Number of Principal Components Used in Reconstructions', fontsize=45, va='center', rotation='vertical')
-#
-# fig.subplots_adjust(wspace=0.1, hspace=0.025)
-#
-# plt.savefig("Variational Eagle/Plots/reconstructions_by_pca", bbox_inches="tight")
-# plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
-# plt.show()
-# plt.close()
-
-
-
-
-
-
-
-
-# reconstruction by residual
-
-selected_features = [1, 3, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
-
-fig, axs = plt.subplots(len(original_images), len(selected_features), figsize=(len(selected_features)*5, len(original_images)*5))
-
-for i, feature in enumerate(selected_features):
-
-    for j in range(len(original_images)):
+
+
+    # reconstruction by pca
+
+    all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+
+
+
+    # pca reconstructions by feature
+
+    fig, axs = plt.subplots(11, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 11*5))
+
+    for i in range(0, len(reconstruction_indices)):
 
         axs[0][i].imshow(original_images[i])
         axs[0][i].set_aspect("auto")
         axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
+        dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
+        axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45, pad=10)
+
+        for j, feat in enumerate(range(10, 0, -1)):
+
+            pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
+
+            pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
+            pca_features = pca.inverse_transform(pca_features)
+
+            pca_reconstruction = vae.decoder.predict(pca_features)[0]
+
+            axs[j+1][i].imshow(pca_reconstruction)
+            axs[j+1][i].set_aspect("auto")
+            axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+            axs[j+1][0].set_ylabel(feat, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
+
+    axs[0][0].set_ylabel("Original", fontsize=45, labelpad=10)
+
+
+    fig.text(0.09, 0.5, 'Number of Principal Components Used in Reconstructions', fontsize=45, va='center', rotation='vertical')
+
+    fig.subplots_adjust(wspace=0.1, hspace=0.025)
+
+    plt.savefig("Variational Eagle/Plots/reconstructions_by_pca", bbox_inches="tight")
+    plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
+    plt.show(block=False)
+    plt.close()
 
 
 
@@ -589,67 +570,89 @@ for i, feature in enumerate(selected_features):
 
 
 
-# flows vs normal reconstruction
+    # reconstruction by residual
 
-# # get the images to reconstruct
-# random.seed(5)
-# reconstruction_indices = random.sample(range(train_images.shape[0]), n)
-#
-# # original images
-# original_images = train_images[reconstruction_indices]
-#
-#
-#
-# # normal model reconstructions
-# n_flows = 0
-#
-# # load the weights
-# vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
-#
-# # get the extracted features
-# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-# extracted_features = extracted_features[reconstruction_indices]
-#
-# # reconstruct the images
-# reconstructions_normal = vae.decoder.predict(extracted_features)
-#
-#
-#
-# # flow model reconstructions
-# n_flows = 3
-#
-# # load the weights
-# vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
-#
-# # get the extracted features
-# extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-# extracted_features = extracted_features[reconstruction_indices]
-#
-# # reconstruct the images
-# reconstructions_flows = vae.decoder.predict(extracted_features)
-#
-#
-# # number of images to reconstruct
-# n = 12
-#
-# fig, axs = plt.subplots(3, n, figsize=(n*10, 30))
-#
-# for i in range(0, n):
-#
-#     axs[0][i].imshow(original_images[i])
-#     axs[0][i].set_aspect("auto")
-#     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#     axs[1][i].imshow(reconstructions_normal[i])
-#     axs[1][i].set_aspect("auto")
-#     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-#     axs[2][i].imshow(reconstructions_flows[i])
-#     axs[2][i].set_aspect("auto")
-#     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-#
-# plt.savefig("Variational Eagle/Plots/flows_vs_normal", bbox_inches="tight")
-# plt.show()
+    # selected_features = [1, 3, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+    #
+    # fig, axs = plt.subplots(len(original_images), len(selected_features), figsize=(len(selected_features)*5, len(original_images)*5))
+    #
+    # for i, feature in enumerate(selected_features):
+    #
+    #     for j in range(len(original_images)):
+    #
+    #         axs[0][i].imshow(original_images[i])
+    #         axs[0][i].set_aspect("auto")
+    #         axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+
+
+
+
+
+
+
+
+    # flows vs normal reconstruction
+
+    # # get the images to reconstruct
+    # random.seed(5)
+    # reconstruction_indices = random.sample(range(train_images.shape[0]), n)
+    #
+    # # original images
+    # original_images = train_images[reconstruction_indices]
+    #
+    #
+    #
+    # # normal model reconstructions
+    # n_flows = 0
+    #
+    # # load the weights
+    # vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    #
+    # # get the extracted features
+    # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    # extracted_features = extracted_features[reconstruction_indices]
+    #
+    # # reconstruct the images
+    # reconstructions_normal = vae.decoder.predict(extracted_features)
+    #
+    #
+    #
+    # # flow model reconstructions
+    # n_flows = 3
+    #
+    # # load the weights
+    # vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    #
+    # # get the extracted features
+    # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    # extracted_features = extracted_features[reconstruction_indices]
+    #
+    # # reconstruct the images
+    # reconstructions_flows = vae.decoder.predict(extracted_features)
+    #
+    #
+    # # number of images to reconstruct
+    # n = 12
+    #
+    # fig, axs = plt.subplots(3, n, figsize=(n*10, 30))
+    #
+    # for i in range(0, n):
+    #
+    #     axs[0][i].imshow(original_images[i])
+    #     axs[0][i].set_aspect("auto")
+    #     axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    #     axs[1][i].imshow(reconstructions_normal[i])
+    #     axs[1][i].set_aspect("auto")
+    #     axs[1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    #     axs[2][i].imshow(reconstructions_flows[i])
+    #     axs[2][i].set_aspect("auto")
+    #     axs[2][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+    #
+    # plt.savefig("Variational Eagle/Plots/flows_vs_normal", bbox_inches="tight")
+    # plt.show()
 
 
 

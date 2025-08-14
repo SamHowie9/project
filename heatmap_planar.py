@@ -745,7 +745,6 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
         # open the image and append it to the main list
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-
         # normalise the image (each band independently)
         image = normalise_independently(image)
 
