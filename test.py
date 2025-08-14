@@ -90,6 +90,12 @@ pd.set_option('display.width', None)
 
 
 
-A = [1, 2, 3, 4, 5, 6, 7, 8]
-subset_indices = [2, 3, 5]
-print([A[index] for index in subset_indices])
+non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galface/r")
+non_parametric_properties = non_parametric_properties.reset_index()
+non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+print(non_parametric_properties)
+
+non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galrand/r")
+non_parametric_properties = non_parametric_properties.reset_index()
+non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+print(non_parametric_properties)
