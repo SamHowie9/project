@@ -30,13 +30,13 @@ pd.set_option('display.width', None)
 
 # face on augmented images
 
-augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticas Face/")
+augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Face/")
 galaxy_names = [galaxy.split("_")[0] for galaxy in augmented_galaxies]
 # print(galaxy_names)
 print(len(galaxy_names))
 np.save("Galaxy Properties/Eagle Properties/augmented_elliptical_face", galaxy_names)
 
-augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Face/")
+augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Face/")
 galaxy_names = [galaxy.split("_")[0] for galaxy in augmented_galaxies]
 # print(galaxy_names)
 print(len(galaxy_names))
