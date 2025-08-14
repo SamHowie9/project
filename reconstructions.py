@@ -1,7 +1,4 @@
 import os
-
-from keras.src.backend.jax.random import normal
-
 os.environ["KERAS_BACKEND"] = "tensorflow"
 import tensorflow as tf
 from tensorflow.keras import layers, Model, metrics, losses, optimizers
@@ -15,6 +12,7 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 from sklearn.decomposition import PCA
 import time
+from skimage import io, color
 
 
 tf.keras.mixed_precision.set_global_policy('float32')
@@ -29,7 +27,7 @@ tfd = tfp.distributions
 
 
 run = 3
-encoding_dim = 30
+encoding_dim = 35
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -529,7 +527,8 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
     for i in range(0, len(reconstruction_indices)):
 
-        axs[0][i].imshow(original_images[i])
+        # axs[0][i].imshow(original_images[i])
+        axs[0][i].imshow(color.rgb2gray(original_images[i]), cmap="gray_r")
         axs[0][i].set_aspect("auto")
         axs[0][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -545,7 +544,8 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
             pca_reconstruction = vae.decoder.predict(pca_features)[0]
 
-            axs[j+1][i].imshow(pca_reconstruction)
+            # axs[j+1][i].imshow(pca_reconstruction)
+            axs[j+1][i].imshow(color.rgb2gray(pca_reconstruction), cmap="gray_r")
             axs[j+1][i].set_aspect("auto")
             axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -558,8 +558,8 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
     fig.subplots_adjust(wspace=0.1, hspace=0.025)
 
-    plt.savefig("Variational Eagle/Plots/reconstructions_by_pca", bbox_inches="tight")
-    plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
+    plt.savefig("Variational Eagle/Plots/reconstructions_by_pca_" + str(run) + "_reversed", bbox_inches="tight")
+    # plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
     plt.show(block=False)
     plt.close()
 
