@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import tables
+# import tables
 import os
 
 # print(np.__version__)
@@ -24,6 +24,8 @@ pd.set_option('display.width', None)
 # # print(galaxy_names)
 # print(len(galaxy_names))
 # np.save("Galaxy Properties/Eagle Properties/augmented_transitional_all", galaxy_names)
+
+
 
 
 # face on augmented images
