@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 print(all_properties)
 
 
