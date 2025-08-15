@@ -538,8 +538,6 @@ for run in [2]:
 
         for j, feat in enumerate(range(11, 0, -1)):
 
-            print(j+1, feat, pca.explained_variance_ratio_.sum())
-
             pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
 
             pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
