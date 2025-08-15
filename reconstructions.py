@@ -142,7 +142,8 @@ print()
 
 
 
-for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
+# for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
+for run in [2]:
 
     # Define VAE model with custom train step
     class VAE(Model):
@@ -537,6 +538,8 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
         for j, feat in enumerate(range(11, 0, -1)):
 
+            print(j+1, feat, pca.explained_variance_ratio_.sum())
+
             pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
 
             pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
@@ -550,6 +553,9 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
             axs[j+1][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
             axs[j+1][0].set_ylabel(feat, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
+
+            print(j+1, feat, pca.explained_variance_ratio_.sum())
+            print()
 
     axs[0][0].set_ylabel("Original", fontsize=45, labelpad=10)
 
