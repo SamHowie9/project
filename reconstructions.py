@@ -555,7 +555,7 @@ for run in [2]:
             if i == 0:
                 print(j+1, feat, pca.explained_variance_ratio_.sum())
                 if j == 0:
-                    print(pca.pca.explained_variance_ratio_)
+                    print(pca.explained_variance_ratio_)
 
                 print()
 
