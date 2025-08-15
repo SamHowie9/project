@@ -543,7 +543,7 @@ for run in [2]:
             pca_features = pca.transform(extracted_features_reconstruct[i].reshape(-1, encoding_dim))
             pca_features = pca.inverse_transform(pca_features)
 
-            pca_reconstruction = vae.decoder.predict(pca_features)[0]
+            pca_reconstruction = vae.decoder.predict(pca_features, verbose=0)[0]
 
             # axs[j+1][i].imshow(pca_reconstruction)
             axs[j+1][i].imshow(color.rgb2gray(pca_reconstruction), cmap="gray_r")
@@ -552,8 +552,13 @@ for run in [2]:
 
             axs[j+1][0].set_ylabel(feat, rotation=0, fontsize=45, labelpad=10, va='center', ha="right")
 
-            print(j+1, feat, pca.explained_variance_ratio_.sum())
-            print()
+            if i == 0:
+                print(j+1, feat, pca.explained_variance_ratio_.sum())
+                if j == 0:
+                    print(pca.pca.explained_variance_ratio_)
+
+                print()
+
 
     axs[0][0].set_ylabel("Original", fontsize=45, labelpad=10)
 
