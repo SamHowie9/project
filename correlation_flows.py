@@ -258,15 +258,15 @@ print(correlation_text_df)
 # order each of the columns (remove the number corresponding to each feature)
 
 # order the original dataframe
-# correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
 
-# # order the annotation dataframe
-# for col in correlation_text_df.columns:
-#     correlation_text_df[col] = correlation_text_df[col].iloc[
-#         correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
-#     ].values
-#
-# print(correlation_text_df)
+# order the annotation dataframe
+for col in correlation_text_df.columns:
+    correlation_text_df[col] = correlation_text_df[col].iloc[
+        correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
+    ].values
+
+print(correlation_text_df)
 
 
 
