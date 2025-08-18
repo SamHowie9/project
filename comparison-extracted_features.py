@@ -1,17 +1,12 @@
 import numpy as np
 import pandas as pd
-from PIL.GimpGradientFile import linear
 from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 import random
 import dcor
-from matplotlib.pyplot import figure
 from sklearn.decomposition import PCA
-# from yellowbrick.cluster import KElbowVisualizer
 from scipy.optimize import curve_fit
-# from sklearn.cluster import AgglomerativeClustering, HDBSCAN, KMeans, SpectralClustering
-# from sklearn.neighbors import NearestCentroid
 from sklearn.linear_model import LinearRegression
 from matplotlib import cm
 from matplotlib.colors import Normalize
@@ -31,7 +26,7 @@ np.set_printoptions(linewidth=np.inf)
 # 16, 25
 
 run = 16
-encoding_dim = 30
+encoding_dim = 35
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"

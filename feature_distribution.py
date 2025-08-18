@@ -109,7 +109,7 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
     fig.subplots_adjust(wspace=0.1, hspace=0.6)
 
-    plt.savefig("Variational Eagle/Plots/latent_feature_distributions_" + str(encoding_dim), bbox_inches='tight')
+    plt.savefig("Variational Eagle/Distribution Plots/Latent/latent_feature_distributions_" + str(run) , bbox_inches='tight')
     # plt.savefig("Variational Eagle/Plots/latent_feature_distributions.pdf", bbox_inches='tight')
     plt.show(block=False)
     plt.close()

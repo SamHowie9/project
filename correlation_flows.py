@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_face.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 print(all_properties)
 
 
@@ -153,25 +153,23 @@ print(all_properties)
 
 
 
-# encoding_dim = 30
 
 
-# fig, axs = plt.subplots(1, 1, figsize=(25, encoding_dim/2))
-# fig, axs = plt.subplots(2, 1, figsize=(25, encoding_dim))
-# fig, axs = plt.subplots(2, 1, figsize=(55, 30))
-fig, axs = plt.subplots(2, 1, figsize=(35, 15))
+
+fig, axs = plt.subplots(2, 1, figsize=(35, 35))
+# fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 
 
 
 # balanced dataset (30, 35, 40, 45, 50)
 # run_order = [9, 23] + [4, 5, 7, 11, 12, 20, 24] + [1, 2, 3, 6, 8, 13, 14, 16, 17, 18, 19, 22, 25] + [10, 15, 21]
-# run_order = [4, 8, 11, 16] + [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23] + [1, 3, 6, 9, 13, 14, 21, 24, 25]
+run_order = [4, 8, 11, 16] + [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23] + [1, 3, 6, 9, 13, 14, 21, 24, 25]
 # run_order = [9] + [7, 17] + [1, 3, 5, 8, 10, 15, 20, 21, 23, 24] + [2, 4, 6, 11, 12, 13, 14, 16, 18, 19, 22, 25]
 # run_order = [2, 3, 10, 11, 20, 22, 24] + [1, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23] + [25]
 # run_order = [13, 21] + [1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 14, 15, 16, 18, 19, 20, 22, 23, 24, 25] + [6, 9, 17]
 
 # face on (35)
-run_order = [2, 4, 7, 17, 21] + [1, 3, 5, 6, 8, 10, 13, 18, 20, 22, 24] + [11, 14, 15, 19, 23] + [9, 12, 16, 25]
+# run_order = [2, 4, 7, 17, 21] + [1, 3, 5, 6, 8, 10, 13, 18, 20, 22, 24] + [11, 14, 15, 19, 23] + [9, 12, 16, 25]
 
 # spirals (30, 35)
 # run_order = [3, 4, 5, 17, 18] + [1, 2, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25] + [8]
@@ -191,8 +189,8 @@ run_names = [str(a) for a in run_order]
 correlation_df = pd.DataFrame(columns=run_names)
 
 
-# for feature in range(0, encoding_dim):
-for feature in range(0, 13):
+for feature in range(0, encoding_dim):
+# for feature in range(0, 13):
 
     correlation_list = []
 
@@ -200,30 +198,42 @@ for feature in range(0, 13):
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
         extracted_features = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-        encoding_dim = extracted_features.shape[1]
 
-        # perform pca on the extracted features
-        pca = PCA(n_components=13).fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
 
-        variance = pca.explained_variance_ratio_[feature]
 
-        if variance >= 0.001:
+        # pca feature correlation
 
-            # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-            # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["n_r"])[0][1]
-            # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["n_r"]))[0][1]
-            # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["n_r"])[0][1]
-            # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["n_r"]))[0][1]
-            #
-            # # add the strongest correlation
-            # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+        # # perform pca on the extracted features
+        # pca = PCA(n_components=13).fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        #
+        # variance = pca.explained_variance_ratio_[feature]
+        #
+        # if variance >= 0.001:
+        #
+        #     # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+        #     # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["re_r"])[0][1]
+        #     # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["re_r"]))[0][1]
+        #     # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["re_r"])[0][1]
+        #     # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["re_r"]))[0][1]
+        #     #
+        #     # # add the strongest correlation
+        #     # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+        #
+        #     correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
+        #     correlation_list.append(correlation)
+        #
+        # else:
+        #     correlation_list.append(0)
 
-            correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["n_r"])
-            correlation_list.append(correlation)
 
-        else:
-            correlation_list.append(0)
+
+        # latent feature correlation
+
+        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
+        correlation_list.append(correlation)
+
+
 
     correlation_df.loc[len(correlation_df)] = correlation_list
 
@@ -298,8 +308,8 @@ wrap_labels(axs[0], 10)
 correlation_df = pd.DataFrame(columns=run_names)
 
 
-# for feature in range(0, encoding_dim):
-for feature in range(0, 13):
+for feature in range(0, encoding_dim):
+# for feature in range(0, 13):
 
     correlation_list = []
 
@@ -307,30 +317,39 @@ for feature in range(0, 13):
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")[0]
         extracted_features = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-        encoding_dim = extracted_features.shape[1]
 
-        # perform pca on the extracted features
-        pca = PCA(n_components=13).fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
 
-        variance = pca.explained_variance_ratio_[feature]
 
-        if variance >= 0.001:
+        # pca feature correlation
 
-            # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-            # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["re_r"])[0][1]
-            # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["re_r"]))[0][1]
-            # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["re_r"])[0][1]
-            # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["re_r"]))[0][1]
-            #
-            # # add the strongest correlation
-            # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+        # # perform pca on the extracted features
+        # pca = PCA(n_components=13).fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        #
+        # variance = pca.explained_variance_ratio_[feature]
+        #
+        # if variance >= 0.001:
+        #
+        #     # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+        #     # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["re_r"])[0][1]
+        #     # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["re_r"]))[0][1]
+        #     # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["re_r"])[0][1]
+        #     # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["re_r"]))[0][1]
+        #     #
+        #     # # add the strongest correlation
+        #     # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+        #
+        #     correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
+        #     correlation_list.append(correlation)
+        #
+        # else:
+        #     correlation_list.append(0)
 
-            correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
-            correlation_list.append(correlation)
 
-        else:
-            correlation_list.append(0)
+        # latent feature correlation
+
+        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
+        correlation_list.append(correlation)
 
     correlation_df.loc[len(correlation_df)] = correlation_list
 
@@ -357,13 +376,13 @@ print(correlation_text_df)
 # order each of the columns (remove the number corresponding to each feature)
 
 # order the original dataframe
-# correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
 
-# # order the annotation dataframe
-# for col in correlation_text_df.columns:
-#     correlation_text_df[col] = correlation_text_df[col].iloc[
-#         correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
-#     ].values
+# order the annotation dataframe
+for col in correlation_text_df.columns:
+    correlation_text_df[col] = correlation_text_df[col].iloc[
+        correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
+    ].values
 
 print(correlation_text_df)
 
@@ -407,13 +426,13 @@ wrap_labels(axs[1], 10)
 
 # balanced dataset (30, 35, 40, 45, 50)
 # cols = [2, 9, 22]
-# cols = [4, 16]
+cols = [4, 16]
 # cols = [1, 3, 13]
 # cols = [7, 24]
 # cols = [2, 22]
 
 # face on (35)
-cols = [5, 16, 21]
+# cols = [5, 16, 21]
 
 # spirals (30, 35)
 # cols = [5, 24]
@@ -437,7 +456,7 @@ for col in cols:
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Face/PCA/latent_" + str(encoding_dim) + "_correlation", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow/Latent/latent_" + str(encoding_dim) + "_correlation", bbox_inches='tight')
 plt.show()
 
 
