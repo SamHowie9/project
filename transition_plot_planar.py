@@ -339,7 +339,6 @@ for encoding_dim in [encoding_dim]:
 
 
 
-
         # transition plot for all extracted features
 
         num_varying_features = 13
