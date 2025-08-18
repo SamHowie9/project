@@ -52,7 +52,7 @@ def normalise_independently(image):
 
 for encoding_dim in [encoding_dim]:
     # for run in range(1, 26):
-    for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
+    for run in [4, 8, 11, 16]:
     # for run in [run]:
 
 
@@ -392,7 +392,7 @@ for encoding_dim in [encoding_dim]:
         # plt.savefig("Variational Eagle/Transition Plots/Face/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
         # plt.savefig("Variational Eagle/Transition Plots/Spirals/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
         # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/" + str(len(extracted_features.T)) + " PCs/transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
-        plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/11 PCs/latent_transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
+        plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/10 PCs/latent_transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
 
         plt.show(block=False)
         plt.close()
