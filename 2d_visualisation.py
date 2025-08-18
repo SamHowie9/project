@@ -4,12 +4,12 @@ import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-# from umap import UMAP
+from umap import UMAP
 import seaborn as sns
 
 
-run = 3
-encoding_dim = 30
+run = 18
+encoding_dim = 35
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -17,6 +17,10 @@ epochs = 750
 batch_size = 32
 
 
+
+pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_rows', None)
+pd.set_option('display.width', None)
 
 
 
@@ -58,57 +62,53 @@ batch_size = 32
 
 
 
-all_properties_real = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
-all_properties_balanced = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
-
-all_properties = all_properties_balanced
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 
 
 
 
 # extracted_features_all = np.load("Variational Eagle/Extracted Features/Normalising Flow/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-extracted_features_all = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
-extracted_features_real = extracted_features_all[:len(all_properties)]
-
-
-
-
-print(extracted_features_all.shape)
-print(extracted_features_real.shape)
-
-pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features_all)
-extracted_features_all = pca.transform(extracted_features_all)
-extracted_features_real = pca.transform(extracted_features_real)
-
-
-print(extracted_features_all.shape)
-print(extracted_features_real.shape)
+# extracted_features_real = extracted_features_all[:len(all_properties)]
 
 
 
 
-def classify_morphology(dt):
+print(extracted_features.shape)
+print(extracted_features.shape)
 
-    if dt > 0.2:
-        return "Spiral"
-    elif dt < 0.1:
-        return "Elliptical"
-    else:
-        return "Transitional"
+pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+extracted_features = pca.transform(extracted_features)
 
-# def classify_morphology(n):
+
+print(extracted_features.shape)
+print(extracted_features.shape)
+
+
+
+
+# def classify_morphology(dt):
 #
-#     if n <= 2.5:
+#     if dt > 0.2:
 #         return "Spiral"
-#     elif n >= 4:
+#     elif dt < 0.1:
 #         return "Elliptical"
 #     else:
 #         return "Transitional"
-
-morphology = all_properties["DiscToTotal"].apply(classify_morphology).tolist()
-# morphology = all_properties["n_r"].apply(classify_morphology).tolist()
+#
+# # def classify_morphology(n):
+# #
+# #     if n <= 2.5:
+# #         return "Spiral"
+# #     elif n >= 4:
+# #         return "Elliptical"
+# #     else:
+# #         return "Transitional"
+#
+# morphology = all_properties["DiscToTotal"].apply(classify_morphology).tolist()
+# # morphology = all_properties["n_r"].apply(classify_morphology).tolist()
 
 # print(morphology)
 
@@ -137,15 +137,20 @@ print(len(spirals_indices))
 
 
 
-tsne = TSNE(n_components=2, random_state=0).fit_transform(extracted_features_all)
+# # tsne = TSNE(n_components=2, random_state=0).fit_transform(extracted_features)
+#
+# # umap = UMAP().fit_transform(extracted_features)
+#
+# print(tsne.shape)
+#
+# tsne = tsne[transitional_indices]
+#
+# print(tsne.shape)
 
-# umap = UMAP().fit_transform(extracted_features)
 
-print(tsne.shape)
 
-tsne = tsne[transitional_indices]
 
-print(tsne.shape)
+
 
 # fig, axs = plt.subplots(1, 1, figsize=(10, 10))
 #
@@ -177,24 +182,56 @@ print(tsne.shape)
 
 
 
-fig, axs = plt.subplots(1, 1, figsize=(12, 10))
 
 
-# norm = TwoSlopeNorm(vmin=all_properties["DiscToTotal"].min(), vcenter=0.15, vmax=all_properties["DiscToTotal"].max())
-norm = TwoSlopeNorm(vmin=0, vcenter=0.15, vmax=1)
+# fig, axs = plt.subplots(1, 1, figsize=(12, 10))
+#
+#
+# # norm = TwoSlopeNorm(vmin=all_properties["DiscToTotal"].min(), vcenter=0.15, vmax=all_properties["DiscToTotal"].max())
+# norm = TwoSlopeNorm(vmin=0, vcenter=0.15, vmax=1)
+#
+# # sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, c=all_properties["DiscToTotal"], cmap="jet", linewidth=0, size=20)
+# # tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="Blues", s=10)
+# # tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="RdYlBu", norm=norm, s=10)
+# tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"].loc[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")], cmap="RdYlBu", norm=norm, s=10)
+#
+# # cbar = plt.colorbar(tsne_scatter, ax=axs, label="Disk-Total Ratio")
+# # cbar.ax.yaxis.set_label_position('left')
 
-# sns.scatterplot(x=tsne.T[0], y=tsne.T[1], ax=axs, c=all_properties["DiscToTotal"], cmap="jet", linewidth=0, size=20)
-# tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="Blues", s=10)
-# tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"], cmap="RdYlBu", norm=norm, s=10)
-tsne_scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"].loc[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")], cmap="RdYlBu", norm=norm, s=10)
+print(all_properties)
 
-cbar = plt.colorbar(tsne_scatter, ax=axs, label="Disk-Total Ratio")
+
+fig, axs=plt.subplots(1, 1, figsize=(10, 10))
+# plt.hist(all_properties[all_properties["re_r"] < 15]["re_r"])
+plt.hist(all_properties["rhalf_ellip"])
+plt.show()
+
+
+
+# umap = UMAP(n_components=2, init="pca", random_state=0).fit_transform(extracted_features)
+# np.save("Variational Eagle/2D Visualisation/umap_pca.npy", umap)
+
+umap = np.load("Variational Eagle/2D Visualisation/umap_spectral.npy")
+
+
+# norm = TwoSlopeNorm(vmin=all_properties["n_r"].min(), vcenter=1.5, vmax=all_properties["n_r"].max())
+# norm = TwoSlopeNorm(vmin=all_properties["MassType_Star"].min(), vmax=0.25e12)
+
+
+fig, axs = plt.subplots(1, 1, figsize=(14, 10))
+
+
+# scatter = axs.scatter(x=tsne.T[0], y=tsne.T[1], c=all_properties["DiscToTotal"].loc[all_properties["DiscToTotal"].between(0.1, 0.2, inclusive="both")], cmap="RdYlBu", norm=norm, s=10)
+# scatter = axs.scatter(x=umap.T[0], y=umap.T[1], s=10)
+# scatter = axs.scatter(x=umap.T[0], y=umap.T[1], c=all_properties["MassType_Star"], cmap="RdYlBu", norm=norm, s=10)
+# scatter = axs.scatter(x=umap.T[0], y=umap.T[1], c=all_properties["rhalf_ellip"], cmap="RdYlBu", vmin=all_properties["re_r"].min(), vmax=15, s=10)
+scatter = axs.scatter(x=umap.T[0], y=umap.T[1], c=all_properties["rhalf_ellip"], cmap="RdYlBu", s=10)
+
+cbar = plt.colorbar(scatter, ax=axs, label="Half-Light Radius")
 cbar.ax.yaxis.set_label_position('left')
 
 
 
-# axs.set_xlim(-95, 95)
-# axs.set_ylim(-95, 95)
-
-plt.savefig("Variational Eagle/Plots/tsne_nop_flow_pca_ellipticals_" + str(n_flows) + "_" + str(run) + "_4", bbox_inches="tight")
+plt.savefig("Variational Eagle/2D Visualisation/umap_half_light_radius_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
+# plt.savefig("Variational Eagle/2D Visualisation/pca", bbox_inches="tight")
 plt.show()

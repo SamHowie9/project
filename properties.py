@@ -3,6 +3,7 @@ import numpy as np
 # import tables
 import os
 
+
 # print(np.__version__)
 # print(tables.__version__)
 
@@ -75,49 +76,65 @@ print()
 
 # original image properties
 
-# # load structural and physical properties into dataframes
-# structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
-# physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
-#
-# # print(structure_properties)
-#
-# # dataframe for all properties
-# all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
-#
-# print(all_properties.shape)
-#
-# # load the non parametric properties (restructure the dataframe to match the others)
+# load structural and physical properties into dataframes
+structure_properties = pd.read_csv("Galaxy Properties/Eagle Properties/structure_propeties.csv", comment="#")
+physical_properties = pd.read_csv("Galaxy Properties/Eagle Properties/physical_properties.csv", comment="#")
+
+# print(structure_properties)
+
+# dataframe for all properties
+all_properties = pd.merge(structure_properties, physical_properties, on="GalaxyID")
+
+print(all_properties.shape)
+
+# load the non parametric properties (restructure the dataframe to match the others)
+non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galrand/r")
 # non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galrand/r")
-# # non_parametric_properties = pd.read_hdf("Galaxy Properties/Eagle Properties/Ref100N1504.hdf5", key="galrand/r")
-# non_parametric_properties = non_parametric_properties.reset_index()
-# non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
-#
-# # load the disk-total ratios
-# disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
-#
-# # add the non parametric properties, and the disk-total to the other properties dataframe
-# all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
-# all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
-#
+non_parametric_properties = non_parametric_properties.reset_index()
+non_parametric_properties = non_parametric_properties.sort_values(by="GalaxyID")
+
+# load the disk-total ratios
+disk_total = pd.read_csv("Galaxy Properties/Eagle Properties/disk_to_total.csv", comment="#")
+
+# add the non parametric properties, and the disk-total to the other properties dataframe
+all_properties = pd.merge(all_properties, non_parametric_properties, on="GalaxyID")
+all_properties = pd.merge(all_properties, disk_total, on="GalaxyID")
+
+print(all_properties.shape)
+
+# drop invalid d/t ratio
+all_properties = all_properties[all_properties["DiscToTotal"] >= 0]
+
+print(all_properties.shape)
+
+
+
+ab_mags_dusty = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes_dusty.txt", comment="#")
+# print(ab_mags_dusty)
+ab_mags = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes.csv", comment="#")
+# print(ab_mags)
+# all_properties = pd.merge(all_properties, ab_mags, on="GalaxyID")
+all_ab_mags = pd.merge(ab_mags, ab_mags_dusty, on="GalaxyID", how="left")
+# print(all_ab_mags)
+all_ab_mags["SDSS_g"] = all_ab_mags["SDSS_g"].fillna(all_ab_mags["g_nodust"])
+all_ab_mags["SDSS_r"] = all_ab_mags["SDSS_r"].fillna(all_ab_mags["r_nodust"])
+all_ab_mags["SDSS_i"] = all_ab_mags["SDSS_i"].fillna(all_ab_mags["i_nodust"])
+# print(all_ab_mags)
+all_ab_mags = all_ab_mags[["GalaxyID", "SDSS_g", "SDSS_r", "SDSS_i"]]
+# print(all_ab_mags)
+all_ab_mags["g-r"] = abs(all_ab_mags["SDSS_g"] - all_ab_mags["SDSS_r"])
+all_ab_mags["g-i"] = abs(all_ab_mags["SDSS_g"] - all_ab_mags["SDSS_i"])
+# print(all_ab_mags)
+
+
+all_properties = pd.merge(all_properties, all_ab_mags, on="GalaxyID")
+
+print(all_properties.shape)
+
 # print(all_properties.shape)
-#
-# # drop invalid d/t ratio
-# all_properties = all_properties[all_properties["DiscToTotal"] >= 0]
-#
-# print(all_properties.shape)
-#
-#
-#
-# ab_mags_dusty = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes_dusty.txt", comment="#")
-# print(ab_mags_dusty.shape)
-# ab_mags = pd.read_csv("Galaxy Properties/Eagle Properties/ab_magnitudes.csv", comment="#")
-# print(ab_mags.shape)
-# # all_properties = pd.merge(all_properties, ab_mags, on="GalaxyID")
-#
-# print(all_properties.shape)
-#
-#
-#
+
+
+
 # print(all_properties)
 # all_properties.to_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv", index=False)
 #
@@ -125,6 +142,9 @@ print()
 # np.save("Galaxy Properties/Eagle Properties/chosen_glaxies.npy", galaxy_names)
 #
 # print()
+
+
+
 
 
 
@@ -173,37 +193,37 @@ print()
 
 # face on properties
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
-
-elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_face.npy")
-transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_transitional_face.npy")
-
-all_properties_balanced = all_properties.copy()
-
-print(all_properties_balanced.shape)
-
-# print(all_properties_balanced)
-
-print(elliptical_names)
-
-for galaxy in elliptical_names:
-
-    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
-    all_properties_balanced.loc[len(all_properties_balanced)] = properties
-
-print(all_properties_balanced.shape)
-
-for galaxy in transitional_names:
-
-    properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
-    all_properties_balanced.loc[len(all_properties_balanced)] = properties
-
-print(all_properties_balanced.shape)
-
-
-all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_face.csv", index=False)
-
-print()
+# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
+#
+# elliptical_names = np.load("Galaxy Properties/Eagle Properties/augmented_elliptical_face.npy")
+# transitional_names = np.load("Galaxy Properties/Eagle Properties/augmented_transitional_face.npy")
+#
+# all_properties_balanced = all_properties.copy()
+#
+# print(all_properties_balanced.shape)
+#
+# # print(all_properties_balanced)
+#
+# print(elliptical_names)
+#
+# for galaxy in elliptical_names:
+#
+#     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+#     all_properties_balanced.loc[len(all_properties_balanced)] = properties
+#
+# print(all_properties_balanced.shape)
+#
+# for galaxy in transitional_names:
+#
+#     properties = all_properties[all_properties["GalaxyID"] == int(galaxy)].iloc[0].tolist()
+#     all_properties_balanced.loc[len(all_properties_balanced)] = properties
+#
+# print(all_properties_balanced.shape)
+#
+#
+# all_properties_balanced.to_csv("Galaxy Properties/Eagle Properties/all_properties_face.csv", index=False)
+#
+# print()
 
 
 

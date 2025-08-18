@@ -54,7 +54,7 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
     # rows, cols = [2, 5]
     # rows, cols = [6, 5]
-    rows, cols = [4, 8]
+    rows, cols = [5, 7]
     fig, axs = plt.subplots(rows, cols, figsize=(cols*5, rows*5))
 
     # standard_normal = np.random.normal(loc=0, scale=1, size=extracted_features.shape[0])
@@ -95,17 +95,17 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
                 axs[i][j].set_ylabel("")
                 axs[i][j].set_yticks([])
 
-                ticks = [round(mean-3*std, 3), round(mean, 3), round(mean+3*std, 3)]
+                ticks = [round(mean-3*std, 2), round(mean, 2), round(mean+3*std, 2)]
                 axs[i][j].set_xticks(ticks)
-                axs[i][j].tick_params(labelsize=22)
+                axs[i][j].tick_params(labelsize=25)
 
                 axs[i][j].set_xlim(mean-(4*std), mean+(4*std))
 
             except:
                 print(j + (i*cols))
 
-    axs[3][6].set_axis_off()
-    axs[3][7].set_axis_off()
+    # axs[3][6].set_axis_off()
+    # axs[3][7].set_axis_off()
 
     fig.subplots_adjust(wspace=0.1, hspace=0.6)
 

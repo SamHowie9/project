@@ -191,9 +191,13 @@ axs[2].set_xticks(list(range(10, 76, 5)))
 # axs[1].set_xticks([])
 # axs[2].set_xticks(list(range(10, 51, 5)))
 
-axs[0].grid(axis="x")
-axs[1].grid(axis="x")
-axs[2].grid(axis="x")
+# axs[0].grid(axis="x")
+# axs[1].grid(axis="x")
+# axs[2].grid(axis="x")
+
+axs[0].grid(axis="both")
+axs[1].grid(axis="both")
+axs[2].grid(axis="both")
 
 # axs[1].set_zorder(1)
 
@@ -213,8 +217,8 @@ axs[2].grid(axis="x")
 
 fig.subplots_adjust(hspace=0.0)
 
-plt.savefig("Variational Eagle/Plots/optimal_features_75_residual_mean", bbox_inches="tight")
-plt.savefig("Variational Eagle/Plots/optimal_features_75_residual_mean.pdf", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/optimal_features_75_residual_mean_2", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/optimal_features_75_residual_mean_2.pdf", bbox_inches="tight")
 plt.show()
 
 
