@@ -8,7 +8,6 @@ from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import seaborn as sns
 
-from test import subset_indices
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 500)
@@ -135,7 +134,7 @@ subset_indices = [20, 25, 30, 35, 40]
 residual_err_lower = residuals.T[1] - residuals.T[0]
 residual_err_upper = residuals.T[2] - residuals.T[1]
 axs[0].errorbar(x=x_range, y=residuals.T[1], yerr=[residual_err_lower, residual_err_upper], fmt="o", color="black",)
-axs[0].errorbar(x=[30, 35, 40, 45, 50], y=[residuals.T[1][i] for i in subset_indices], yerr=[[residual_err_lower[i] for i in subset_indices], [residual_err_upper[i] for i in subset_indices]], fmt="o", color="C0",)
+axs[0].errorbar(x=[30, 35, 40, 45, 50], y=[residuals.T[1][i] for i in subset_indices], yerr=[[residual_err_lower[i] for i in subset_indices], [residual_err_upper[i] for i in subset_indices]], fmt="o", color="red",)
 axs[0].get_yaxis().get_major_formatter().set_useOffset(False)
 
 
@@ -143,40 +142,40 @@ axs[0].get_yaxis().get_major_formatter().set_useOffset(False)
 kl_err_lower = kl_losses.T[1] - kl_losses.T[0]
 kl_err_upper = kl_losses.T[2] - kl_losses.T[1]
 axs[1].errorbar(x=x_range, y=kl_losses.T[1], yerr=[kl_err_lower, kl_err_upper], fmt="o", color="black",)
-axs[1].errorbar(x=[30, 35, 40, 45, 50], y=[kl_losses.T[1][i] for i in subset_indices], yerr=[[kl_err_lower[i] for i in subset_indices], [kl_err_upper[i] for i in subset_indices]], fmt="o", color="C0",)
+axs[1].errorbar(x=[30, 35, 40, 45, 50], y=[kl_losses.T[1][i] for i in subset_indices], yerr=[[kl_err_lower[i] for i in subset_indices], [kl_err_upper[i] for i in subset_indices]], fmt="o", color="red",)
 
 # calculate error bars and plot number of principal components
 components_err_lower = num_components.T[1] - num_components.T[0]
 components_err_upper = num_components.T[2] - num_components.T[1]
 axs[2].errorbar(x=x_range, y=num_components.T[1], yerr=[components_err_lower, components_err_upper], fmt="o", color="black",)
-axs[2].errorbar(x=[30, 35, 40, 45, 50], y=[num_components.T[1][i] for i in subset_indices], yerr=[[components_err_lower[i] for i in subset_indices], [components_err_upper[i] for i in subset_indices]], fmt="o", color="C0")
+axs[2].errorbar(x=[30, 35, 40, 45, 50], y=[num_components.T[1][i] for i in subset_indices], yerr=[[components_err_lower[i] for i in subset_indices], [components_err_upper[i] for i in subset_indices]], fmt="o", color="red")
 
 
-axs[0].set_ylabel("Residual", labelpad=10, fontsize=20, loc="center")
+axs[0].set_ylabel("Residual", labelpad=10, fontsize=25, loc="center")
 # axs[0].yaxis.set_label_coords(-0.1, 0.5)
 # axs[0].yaxis.set_label_coords(-0.13, 0.5)
 axs[0].yaxis.set_label_coords(-0.09, 0.5)
 
-axs[1].set_ylabel("KL Divergence", labelpad=10, fontsize=20, loc="center")
+axs[1].set_ylabel("KL Divergence", labelpad=10, fontsize=25, loc="center")
 # axs[1].yaxis.set_label_coords(-0.1, 0.5)
 # axs[1].yaxis.set_label_coords(-0.13, 0.5)
 axs[1].yaxis.set_label_coords(-0.09, 0.5)
 
 # axs[2].set_ylabel("Number of Principal \nComponents", labelpad=10, fontsize=20, loc="center")
 # axs[2].set_ylabel("Number of Principal \nComponents Contributing \nto 99.9% Variance", labelpad=10, fontsize=20, loc="center")
-axs[2].set_ylabel("Number of PCs \n(99.9% Variance Explained)", labelpad=10, fontsize=20, loc="center")
+axs[2].set_ylabel("Number of PCs \n(99.9% Variance Explained)", labelpad=10, fontsize=25, loc="center")
 # axs[2].yaxis.set_label_coords(-0.068, 0.5)
 # axs[2].yaxis.set_label_coords(-0.098, 0.5)
 axs[2].yaxis.set_label_coords(-0.07, 0.5)
 # axs[2].yaxis.set_label_coords(-0.1, 0.5)
 
-axs[0].tick_params(axis="both", labelsize=20)
-axs[1].tick_params(axis="both", labelsize=20)
-axs[2].tick_params(axis="both", labelsize=20)
+axs[0].tick_params(axis="both", labelsize=25)
+axs[1].tick_params(axis="both", labelsize=25)
+axs[2].tick_params(axis="both", labelsize=25)
 
 # axs[0].set_xlabel("Latent Features", fontsize=20)
 # axs[1].set_xlabel("Latent Features", fontsize=20)
-axs[2].set_xlabel("Latent Features", fontsize=20)
+axs[2].set_xlabel("Latent Features", fontsize=25)
 
 # axs[0].set_xticks(list(range(10, 51, 5)))
 # axs[1].set_xticks(list(range(10, 51, 5)))
@@ -214,7 +213,7 @@ axs[2].grid(axis="x")
 
 fig.subplots_adjust(hspace=0.0)
 
-plt.savefig("Variational Eagle/Plots/optimal_features_75_residual_mean_3", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/optimal_features_75_residual_mean_2", bbox_inches="tight")
 plt.show()
 
 
