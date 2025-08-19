@@ -118,8 +118,8 @@ for encoding_dim in [encoding_dim]:
 
 
     # perform pca on the extracted features
-    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-    # extracted_features = pca.transform(extracted_features)
+    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    extracted_features = pca.transform(extracted_features)
 
     print(extracted_features.shape)
 
@@ -204,7 +204,7 @@ for encoding_dim in [encoding_dim]:
 
 
     # set the figure size
-    plt.figure(figsize=(20, correlation_df.shape[0]))
+    plt.figure(figsize=(22, correlation_df.shape[0]))
 
 
     # properties to plot
@@ -252,7 +252,7 @@ for encoding_dim in [encoding_dim]:
     wrap_labels(ax, 10)
 
 
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/Latent/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     plt.close()
