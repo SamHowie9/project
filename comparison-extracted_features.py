@@ -102,7 +102,8 @@ print(all_properties.shape)
 # for run in [16, 25]:
 # for run in range(1, 11):
 # for run in range(1, 26):
-for encoding_dim in [encoding_dim]:
+# for encoding_dim in [encoding_dim]:
+for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
     print(n_flows, run)
 
@@ -252,7 +253,7 @@ for encoding_dim in [encoding_dim]:
     wrap_labels(ax, 10)
 
 
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/Latent/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/Latent/structure_measurement_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     plt.close()
