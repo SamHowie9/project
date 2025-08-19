@@ -136,7 +136,7 @@ all_properties.to_csv("Galaxy Properties/Eagle Properties/all_properties_all.csv
 
 print(all_properties.shape)
 # selected properties
-chosen_properties = ["GalaxyID", "DiscToTotal", "n_r", "q_r", "re_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate", "rhalf_ellip", "gini", "m20", "concentration", "asymmetry", "smoothness", "SDSS_g", "SDSS_r", "SDSS_i", "g-r", "g-i"]
+chosen_properties = ["GalaxyID", "DiscToTotal", "n_r", "q_r", "re_r", "pa_r", "MassType_Star", "MassType_Gas", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate", "rhalf_ellip", "gini", "m20", "concentration", "asymmetry", "smoothness", "SDSS_g", "SDSS_r", "SDSS_i", "g-r", "g-i"]
 all_properties = all_properties[chosen_properties]
 
 print(all_properties.shape)
