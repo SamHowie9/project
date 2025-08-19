@@ -119,8 +119,8 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 
 
     # perform pca on the extracted features
-    # pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
-    # extracted_features = pca.transform(extracted_features)
+    pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
+    extracted_features = pca.transform(extracted_features)
 
     print(extracted_features.shape)
 
@@ -253,7 +253,7 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
     wrap_labels(ax, 10)
 
 
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/Latent/structure_measurement_correlation_" + str(run), bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_measurement_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     plt.close()
