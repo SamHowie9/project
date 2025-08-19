@@ -463,7 +463,7 @@ for col in cols:
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow/Latent/latent_" + str(encoding_dim) + "_correlation", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/Latent/latent_" + str(encoding_dim) + "_correlation", bbox_inches='tight')
 plt.show()
 
 
