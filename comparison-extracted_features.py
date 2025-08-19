@@ -163,7 +163,7 @@ for encoding_dim in [encoding_dim]:
     # dataframe to contain correlations between each feature and each property
     correlation_df = pd.DataFrame(columns=list(all_properties.columns)[1:])
 
-    max_corr = []
+    # max_corr = []
 
     # loop through each extracted feature
     for feature in range(0, extracted_features.shape[1]):
@@ -188,11 +188,11 @@ for encoding_dim in [encoding_dim]:
 
         print(len(correlation_list))
 
-        # keep correlations of relevant properties
-        selected_property_indices = [64, 1, 3, 2, 31, 38, 39, 40, 7, 9, 10, 11, 12, 13]
-
-        # add the maximum correlation to the list
-        max_corr.append(max([correlation_list[index-1] for index in selected_property_indices]))
+        # # keep correlations of relevant properties
+        # selected_property_indices = [64, 1, 3, 2, 31, 38, 39, 40, 7, 9, 10, 11, 12, 13]
+        #
+        # # add the maximum correlation to the list
+        # max_corr.append(max([correlation_list[index-1] for index in selected_property_indices]))
 
         # add all the correlations for that feature to the dataframe
         correlation_df.loc[len(correlation_df)] = correlation_list
@@ -210,7 +210,7 @@ for encoding_dim in [encoding_dim]:
     # properties to plot
     # selected_properties = ["n_r", "DiscToTotal", "re_r", "rhalf_ellip", "pa_r", "q_r",  "mag_r", "MassType_Star", "InitialMassWeightedStellarAge", "StarFormationRate", "gini", "m20", "concentration", "asymmetry", "smoothness"]
     # selected_properties = ["DiscToTotal", "pa_r", "rhalf_ellip", "n_r", "q_r", "concentration", "asymmetry", "smoothness"]
-    selected_properties = ["DiscToTotal", "n_r", "q_r", "pa_r", "rhalf_ellip", "concentration", "asymmetry", "smoothness"]
+    selected_properties = ["DiscToTotal", "n_r", "q_r", "pa_r", "rhalf_ellip", "concentration", "asymmetry", "smoothness", "g-r", "g-i"]
     # selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
 
 
@@ -240,7 +240,7 @@ for encoding_dim in [encoding_dim]:
 
         # label_names = ["Sersic Index", "Disk-Total Ratio", "Semi - Major Axis", "Half Light Radius", "Position Angle", "Axis Ratio", "AB Magnitude", "Stellar Mass", "Stellar Age", "Star Formation Rate", "Gini Coefficient", "M20", "Concentration", "Asymmetry", "Smoothness"]
         # label_names = ["D/T", "Position Angle", "Half Light Radius", "Sersic Index", "Axis Ratio", "Concentration", "Asymmetry", "Smoothness"]
-        label_names = ["D/T", "Sérsic Index", "Axis Ratio", "Position Angle", "Half-Light Radius", "Concentration", "Asymmetry", "Smoothness"]
+        label_names = ["D/T", "Sérsic Index", "Axis Ratio", "Position Angle", "Half-Light Radius", "Concentration", "Asymmetry", "Smoothness", "g-r", "g-i"]
         # label_names = ["Stellar Mass", "Dark Matter Mass", "Black Hole Mass (Particle)", "Black Hole Mass (Subgrid)", "Mean Stellar Age", "Star Formation Rate"]
 
         # selected_properties = ["MassType_Star", "MassType_DM", "MassType_BH", "BlackHoleMass", "InitialMassWeightedStellarAge", "StarFormationRate"]
