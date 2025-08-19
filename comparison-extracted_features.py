@@ -25,7 +25,7 @@ np.set_printoptions(linewidth=np.inf)
 
 # 16, 25
 
-run = 16
+run = 18
 encoding_dim = 35
 n_flows = 0
 beta = 0.0001
@@ -252,10 +252,10 @@ for encoding_dim in [encoding_dim]:
     wrap_labels(ax, 10)
 
 
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_spirals_dcor", bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
-    # plt.close()
+    plt.close()
 
 
 
