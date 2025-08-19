@@ -245,17 +245,19 @@ print(correlation_df)
 
 
 
-# create string labels for each of the correlations with the extracted feature index
-# correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"#{row.name}: {val:.2f}"), axis=1)
-# print(correlation_text_df)
 
-correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"{val:.2f}"), axis=1)
-correlation_text_df = correlation_text_df.replace("0.00", "")
-print(correlation_text_df)
+
+# correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"{val:.2f}"), axis=1)
+# correlation_text_df = correlation_text_df.replace("0.00", "")
+# print(correlation_text_df)
 
 
 
 # order each of the columns (remove the number corresponding to each feature)
+
+# create string labels for each of the correlations with the extracted feature index
+correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"#{row.name}: {val:.2f}"), axis=1)
+print(correlation_text_df)
 
 # order the original dataframe
 correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
