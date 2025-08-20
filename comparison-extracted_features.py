@@ -56,10 +56,10 @@ def density_scatter(x ,y, axs, **kwargs):
 
 
 # all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
+# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 # all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
-# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
 # all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
 
 
@@ -103,12 +103,13 @@ print(all_properties.shape)
 # for run in range(1, 11):
 # for run in range(1, 26):
 # for encoding_dim in [encoding_dim]:
-for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
+# for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
+for run in [4, 9, 11, 12, 14, 15, 18, 19, 23, 25]:
 
     print(n_flows, run)
 
     # load the extracted features
-    extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
     # extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
     encoding_dim = extracted_features.shape[1]
@@ -253,7 +254,7 @@ for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
     wrap_labels(ax, 10)
 
 
-    plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_measurement_correlation_" + str(run), bbox_inches='tight')
+    plt.savefig("Variational Eagle/Correlation Plots/Ellipticals/PCA/structure_measurement_correlation_" + str(run), bbox_inches='tight')
     # plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced_dcor", bbox_inches='tight')
     plt.show(block=False)
     plt.close()
