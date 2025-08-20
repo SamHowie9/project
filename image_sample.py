@@ -21,7 +21,7 @@ for i in range(0, 5):
         axs[i][j].imshow(image)
 
         dt = all_properties[all_properties["GalaxyID"] == galaxy]["DiscToTotal"].values[0]
-        sersic = all_properties[all_properties["n_r"] == galaxy]["DiscToTotal"].values[0]
+        sersic = all_properties[all_properties["GalaxyID"] == galaxy]["n_r"].values[0]
         axs[0][i].set_title("D/T=" + str(round(dt, 3) + ", n=" + str(round(sersic, 3))))
 
         n += 1
