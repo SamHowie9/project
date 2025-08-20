@@ -19,10 +19,11 @@ for i in range(0, 5):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
 
         axs[i][j].imshow(image)
+        axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
         dt = all_properties[all_properties["GalaxyID"] == galaxy]["DiscToTotal"].values[0]
         sersic = all_properties[all_properties["GalaxyID"] == galaxy]["n_r"].values[0]
-        axs[i][j].set_title("D/T=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 3)))
+        axs[i][j].set_title("D/T=" + str(round(dt, 3)) + ", n=" + str(round(sersic, 3)), fontsize=20)
 
         n += 1
 
