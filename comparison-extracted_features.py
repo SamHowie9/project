@@ -58,9 +58,9 @@ def density_scatter(x ,y, axs, **kwargs):
 # all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_real.csv")
 # all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
+# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
 # all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
-# all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
 
 
 print(all_properties.shape)
