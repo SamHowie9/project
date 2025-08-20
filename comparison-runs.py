@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
 print(all_properties)
 
 
@@ -58,7 +58,7 @@ fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 
 # spirals (30, 35)
 # run_order = [3, 4, 5, 17, 18] + [1, 2, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25] + [8]
-# run_order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25] + [20]
+run_order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25] + [20]
 
 # transitional (30, 35)
 # run_order = [8] + [10, 12] + [2, 4, 5, 6, 11, 13, 14, 18, 21, 22, 23] + [1, 7, 15, 16, 17, 19, 20, 24, 25] + [3, 9]
@@ -66,7 +66,7 @@ fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 
 # ellipticals (30, 35)
 # run_order = [1, 2, 10, 13, 16, 18, 21, 24] + [3, 4, 5, 12, 14, 15, 17, 22, 23, 25] + [6, 7, 8, 19, 20] + [9, 11]
-run_order = [6] + [2, 3, 5, 8, 13, 16, 20, 24] + [4, 9, 11, 12, 14, 15, 18, 19, 23, 25] + [1, 7, 10, 17, 21, 22]
+# run_order = [6] + [2, 3, 5, 8, 13, 16, 20, 24] + [4, 9, 11, 12, 14, 15, 18, 19, 23, 25] + [1, 7, 10, 17, 21, 22]
 
 run_names = [str(a) for a in run_order]
 
@@ -82,7 +82,7 @@ for feature in range(0, 13):
     for run in run_order:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-        extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 
 
@@ -203,7 +203,7 @@ for feature in range(0, 13):
     for run in run_order:
 
         # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-        extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 
 
@@ -325,7 +325,7 @@ wrap_labels(axs[1], 10)
 
 # spirals (30, 35)
 # cols = [5, 24]
-# cols = [24]
+cols = [24]
 
 # transitional (30, 35)
 # cols = [1, 3, 14, 23]
@@ -333,7 +333,7 @@ wrap_labels(axs[1], 10)
 
 # ellipticals (35)
 # cols = 8, 18, 23
-cols = [1, 9, 19]
+# cols = [1, 9, 19]
 
 ymin, ymax = axs[0].get_ylim()
 for col in cols:
@@ -345,7 +345,7 @@ for col in cols:
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Ellipticals/PCA/run_comparison_" + str(encoding_dim) + "_features", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/run_comparison_" + str(encoding_dim) + "_features", bbox_inches='tight')
 plt.show()
 
 
