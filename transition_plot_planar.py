@@ -51,8 +51,8 @@ def normalise_independently(image):
 
 
 for encoding_dim in [encoding_dim]:
-    # for run in range(1, 26):
-    for run in [1, 3, 6, 9, 13, 14, 21, 24, 25]:
+    for run in range(1, 26):
+    # for run in [1, 3, 6, 9, 13, 14, 21, 24, 25]:
     # for run in [run]:
 
 
@@ -273,23 +273,23 @@ for encoding_dim in [encoding_dim]:
         vae.build(input_shape=(None, 256, 256, 3))
 
         # or load the weights from a previous run
-        vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
-        # vae.load_weights("Variational Eagle/Weights/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+        # vae.load_weights("Variational Eagle/Weights/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+        vae.load_weights("Variational Eagle/Weights/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
 
 
         # load the original and transformed features
-        z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
-        z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-        # z_mean = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
-        # z_transformed = np.load("Variational Eagle/Extracted Features/Face/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        # z_mean = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+        # z_transformed = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+        z_mean = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
+        z_transformed = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
         # perform PCA on both sets of features
-        # pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
-        # z_mean = pca_mean.transform(z_mean)
-        # pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
-        # z_transformed = pca_transformed.transform(z_transformed)
-        # pca = pca_transformed
+        pca_mean = PCA(n_components=0.999, svd_solver="full").fit(z_mean)
+        z_mean = pca_mean.transform(z_mean)
+        pca_transformed = PCA(n_components=0.999, svd_solver="full").fit(z_transformed)
+        z_transformed = pca_transformed.transform(z_transformed)
+        pca = pca_transformed
 
 
 
@@ -360,7 +360,7 @@ for encoding_dim in [encoding_dim]:
                 temp_features = med_features.copy()
                 temp_features[i] = varying_feature_values[j]
 
-                # temp_features = pca.inverse_transform(temp_features)
+                temp_features = pca.inverse_transform(temp_features)
 
                 temp_features = np.expand_dims(temp_features, axis=0)
 
@@ -392,7 +392,7 @@ for encoding_dim in [encoding_dim]:
         # plt.savefig("Variational Eagle/Transition Plots/Face/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
         # plt.savefig("Variational Eagle/Transition Plots/Spirals/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
         # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/" + str(len(extracted_features.T)) + " PCs/transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
-        plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/12 PCs/latent_transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
+        plt.savefig("Variational Eagle/Transition Plots/Spirals/" + str(encoding_dim) + " Latent Features/12 PCs/latent_transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
 
         plt.show(block=False)
         plt.close()
