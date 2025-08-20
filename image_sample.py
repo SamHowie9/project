@@ -1,6 +1,9 @@
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
+import pandas as pd
 
+
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
 
 
 
@@ -16,6 +19,10 @@ for i in range(0, 5):
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galface_" + str(galaxy) + ".png")
 
         axs[i][j].imshow(image)
+
+        dt = all_properties[all_properties["GalaxyID"] == galaxy]["DiscToTotal"].values[0]
+        sersic = all_properties[all_properties["n_r"] == galaxy]["DiscToTotal"].values[0]
+        axs[0][i].set_title("D/T=" + str(round(dt, 3) + ", n=" + str(round(sersic, 3))))
 
         n += 1
 
