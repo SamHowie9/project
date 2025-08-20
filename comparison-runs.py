@@ -218,15 +218,15 @@ for feature in range(0, encoding_dim):
         # if variance >= 0.001:
         #
         #     # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-        #     # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["re_r"])[0][1]
-        #     # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["re_r"]))[0][1]
-        #     # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["re_r"])[0][1]
-        #     # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["re_r"]))[0][1]
+        #     # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["rhalf_ellip"])[0][1]
+        #     # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["rhalf_ellip"]))[0][1]
+        #     # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["rhalf_ellip"])[0][1]
+        #     # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["rhalf_ellip"]))[0][1]
         #     #
         #     # # add the strongest correlation
         #     # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
         #
-        #     correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
+        #     correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["rhalf_ellip"])
         #     correlation_list.append(correlation)
         #
         # else:
@@ -235,7 +235,7 @@ for feature in range(0, encoding_dim):
 
         # latent feature correlation
 
-        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["re_r"])
+        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["rhalf_ellip"])
         correlation_list.append(correlation)
 
     correlation_df.loc[len(correlation_df)] = correlation_list
