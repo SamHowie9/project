@@ -41,8 +41,8 @@ print(all_properties)
 
 
 
-# fig, axs = plt.subplots(2, 1, figsize=(50, 35))
-fig, axs = plt.subplots(2, 1, figsize=(35, 15))
+fig, axs = plt.subplots(2, 1, figsize=(50, 35))
+# fig, axs = plt.subplots(2, 1, figsize=(35, 15))
 
 
 
