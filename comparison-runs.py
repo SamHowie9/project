@@ -74,8 +74,8 @@ run_names = [str(a) for a in run_order]
 correlation_df = pd.DataFrame(columns=run_names)
 
 
-# for feature in range(0, encoding_dim):
-for feature in range(0, 13):
+for feature in range(0, encoding_dim):
+# for feature in range(0, 13):
 
     correlation_list = []
 
@@ -88,35 +88,35 @@ for feature in range(0, 13):
 
         # pca feature correlation
 
-        # perform pca on the extracted features
-        pca = PCA(n_components=13, svd_solver="full").fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
-
-        variance = pca.explained_variance_ratio_[feature]
-
-        if variance >= 0.001:
-
-            # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-            # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["n_r"])[0][1]
-            # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["n_r"]))[0][1]
-            # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["n_r"])[0][1]
-            # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["n_r"]))[0][1]
-            #
-            # # add the strongest correlation
-            # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
-
-            correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["n_r"])
-            correlation_list.append(correlation)
-
-        else:
-            correlation_list.append(0)
+        # # perform pca on the extracted features
+        # pca = PCA(n_components=13, svd_solver="full").fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        #
+        # variance = pca.explained_variance_ratio_[feature]
+        #
+        # if variance >= 0.001:
+        #
+        #     # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+        #     # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["n_r"])[0][1]
+        #     # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["n_r"]))[0][1]
+        #     # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["n_r"])[0][1]
+        #     # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["n_r"]))[0][1]
+        #     #
+        #     # # add the strongest correlation
+        #     # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+        #
+        #     correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["n_r"])
+        #     correlation_list.append(correlation)
+        #
+        # else:
+        #     correlation_list.append(0)
 
 
 
         # latent feature correlation
 
-        # correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["n_r"])
-        # correlation_list.append(correlation)
+        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["n_r"])
+        correlation_list.append(correlation)
 
 
 
@@ -132,28 +132,28 @@ print(correlation_df)
 
 
 
-correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"{val:.2f}"), axis=1)
-correlation_text_df = correlation_text_df.replace("0.00", "")
-print(correlation_text_df)
+# correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"{val:.2f}"), axis=1)
+# correlation_text_df = correlation_text_df.replace("0.00", "")
+# print(correlation_text_df)
 
 
 
 # order each of the columns (remove the number corresponding to each feature)
 
-# # create string labels for each of the correlations with the extracted feature index
-# correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"#{row.name}: {val:.2f}"), axis=1)
-# print(correlation_text_df)
-#
-# # order the original dataframe
-# correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
-#
-# # order the annotation dataframe
-# for i, col in enumerate(correlation_text_df.columns):
-#     correlation_text_df[col] = correlation_text_df[col].loc[
-#         correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
-#     ].values
-#
-# print(correlation_text_df)
+# create string labels for each of the correlations with the extracted feature index
+correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"#{row.name}: {val:.2f}"), axis=1)
+print(correlation_text_df)
+
+# order the original dataframe
+correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+
+# order the annotation dataframe
+for i, col in enumerate(correlation_text_df.columns):
+    correlation_text_df[col] = correlation_text_df[col].loc[
+        correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
+    ].values
+
+print(correlation_text_df)
 
 
 
@@ -195,8 +195,8 @@ wrap_labels(axs[0], 10)
 correlation_df = pd.DataFrame(columns=run_names)
 
 
-# for feature in range(0, encoding_dim):
-for feature in range(0, 13):
+for feature in range(0, encoding_dim):
+# for feature in range(0, 13):
 
     correlation_list = []
 
@@ -209,34 +209,34 @@ for feature in range(0, 13):
 
         # pca feature correlation
 
-        # perform pca on the extracted features
-        pca = PCA(n_components=13, svd_solver="full").fit(extracted_features)
-        extracted_features = pca.transform(extracted_features)
-
-        variance = pca.explained_variance_ratio_[feature]
-
-        if variance >= 0.001:
-
-            # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-            # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["rhalf_ellip"])[0][1]
-            # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["rhalf_ellip"]))[0][1]
-            # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["rhalf_ellip"])[0][1]
-            # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["rhalf_ellip"]))[0][1]
-            #
-            # # add the strongest correlation
-            # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
-
-            correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["rhalf_ellip"])
-            correlation_list.append(correlation)
-
-        else:
-            correlation_list.append(0)
+        # # perform pca on the extracted features
+        # pca = PCA(n_components=13, svd_solver="full").fit(extracted_features)
+        # extracted_features = pca.transform(extracted_features)
+        #
+        # variance = pca.explained_variance_ratio_[feature]
+        #
+        # if variance >= 0.001:
+        #
+        #     # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
+        #     # correlation_1 = np.corrcoef(extracted_features.T[feature], all_properties["rhalf_ellip"])[0][1]
+        #     # correlation_2 = np.corrcoef(extracted_features.T[feature], abs(all_properties["rhalf_ellip"]))[0][1]
+        #     # correlation_3 = np.corrcoef(abs(extracted_features.T[feature]), all_properties["rhalf_ellip"])[0][1]
+        #     # correlation_4 = np.corrcoef(abs(extracted_features.T[feature]), abs(all_properties["rhalf_ellip"]))[0][1]
+        #     #
+        #     # # add the strongest correlation
+        #     # correlation_list.append(max(abs(correlation_1), abs(correlation_2), abs(correlation_3), abs(correlation_4)))
+        #
+        #     correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["rhalf_ellip"])
+        #     correlation_list.append(correlation)
+        #
+        # else:
+        #     correlation_list.append(0)
 
 
         # latent feature correlation
 
-        # correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["rhalf_ellip"])
-        # correlation_list.append(correlation)
+        correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties["rhalf_ellip"])
+        correlation_list.append(correlation)
 
     correlation_df.loc[len(correlation_df)] = correlation_list
 
@@ -250,9 +250,9 @@ print(correlation_df)
 
 
 # create string labels for each of the correlations with the extracted feature index
-correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"{val:.2f}"), axis=1)
-correlation_text_df = correlation_text_df.replace("0.00", "")
-print(correlation_text_df)
+# correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"{val:.2f}"), axis=1)
+# correlation_text_df = correlation_text_df.replace("0.00", "")
+# print(correlation_text_df)
 
 
 
@@ -260,20 +260,20 @@ print(correlation_text_df)
 
 # order each of the columns (remove the number corresponding to each feature)
 
-# # create string labels for each of the correlations with the extracted feature index
-# correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"#{row.name}: {val:.2f}"), axis=1)
-# print(correlation_text_df)
-#
-# # order the original dataframe
-# correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
-#
-# # order the annotation dataframe
-# for col in correlation_text_df.columns:
-#     correlation_text_df[col] = correlation_text_df[col].loc[
-#         correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
-#     ].values
-#
-# print(correlation_text_df)
+# create string labels for each of the correlations with the extracted feature index
+correlation_text_df = correlation_df.apply(lambda row: row.map(lambda val: f"#{row.name}: {val:.2f}"), axis=1)
+print(correlation_text_df)
+
+# order the original dataframe
+correlation_df = pd.DataFrame({col: sorted(correlation_df[col], reverse=True) for col in correlation_df.columns})
+
+# order the annotation dataframe
+for col in correlation_text_df.columns:
+    correlation_text_df[col] = correlation_text_df[col].loc[
+        correlation_text_df[col].apply(lambda x: float(x.split(': ')[1])).sort_values(ascending=False).index
+    ].values
+
+print(correlation_text_df)
 
 
 
@@ -345,7 +345,7 @@ for col in cols:
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/run_comparison_" + str(encoding_dim) + "_features", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/Latent/run_comparison_" + str(encoding_dim) + "_features", bbox_inches='tight')
 plt.show()
 
 
