@@ -286,7 +286,7 @@ print(correlation_text_df)
 sns.heatmap(abs(correlation_df), ax=axs[1], annot=correlation_text_df, fmt="", annot_kws={"size":15}, cmap="Blues", vmin=0, vmax=0.8, cbar_kws={"label": "Correlation", "pad": 0.015, "aspect": 30})
 
 
-axs[1].set_title("Semi-Major Axis Correlation", fontsize=20, pad=20)
+axs[1].set_title("Half-Light Radius", fontsize=20, pad=20)
 axs[1].set_ylabel("Extracted Features", fontsize=15)
 axs[1].xaxis.tick_top() # x axis on top
 axs[1].xaxis.set_label_position('top')
