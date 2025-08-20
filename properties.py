@@ -122,9 +122,12 @@ all_ab_mags["SDSS_i"] = all_ab_mags["SDSS_i"].fillna(all_ab_mags["i_nodust"])
 # print(all_ab_mags)
 all_ab_mags = all_ab_mags[["GalaxyID", "SDSS_g", "SDSS_r", "SDSS_i"]]
 # print(all_ab_mags)
-all_ab_mags["g-r"] = abs(all_ab_mags["SDSS_g"] - all_ab_mags["SDSS_r"])
-all_ab_mags["g-i"] = abs(all_ab_mags["SDSS_g"] - all_ab_mags["SDSS_i"])
+all_ab_mags["g-r"] = all_ab_mags["SDSS_g"] - all_ab_mags["SDSS_r"]
+all_ab_mags["g-i"] = all_ab_mags["SDSS_g"] - all_ab_mags["SDSS_i"]
 # print(all_ab_mags)
+
+
+
 
 
 all_properties = pd.merge(all_properties, all_ab_mags, on="GalaxyID")
