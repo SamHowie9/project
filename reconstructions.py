@@ -37,7 +37,7 @@ batch_size = 32
 
 # select which gpu to use
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
 
@@ -191,53 +191,11 @@ def normalise_independently(image):
 
 # load transitional only
 
-transitional = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_transitional.npy")
-
-all_images = []
-
-for galaxy in transitional:
-    # open the image and append it to the main list
-    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
-
-    # normalise the image (each band independently)
-    image = normalise_independently(image)
-
-    # add the image to the dataset
-    all_images.append(image)
-
-augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
-
-for galaxy in augmented_galaxies:
-
-    # load each augmented image
-    image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/" + galaxy)
-
-    # normalise the image
-    image = normalise_independently(image)
-
-    # add the image to the training set (not the testing set)
-    all_images.append(image)
-
-train_images = np.array(all_images)
-# test_images = np.array(all_images[-200:])
-
-print("Transitional Training Set:", train_images.shape)
-print()
-
-
-
-
-
-
-
-
-# load elliptical only
-
-# ellipticals = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_ellipticals.npy")
+# transitional = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_transitional.npy")
 #
 # all_images = []
 #
-# for galaxy in ellipticals:
+# for galaxy in transitional:
 #     # open the image and append it to the main list
 #     image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
 #
@@ -247,12 +205,12 @@ print()
 #     # add the image to the dataset
 #     all_images.append(image)
 #
-# augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/")
+# augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/")
 #
 # for galaxy in augmented_galaxies:
 #
 #     # load each augmented image
-#     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/" + galaxy)
+#     image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Transitional Only/" + galaxy)
 #
 #     # normalise the image
 #     image = normalise_independently(image)
@@ -263,8 +221,50 @@ print()
 # train_images = np.array(all_images)
 # # test_images = np.array(all_images[-200:])
 #
-# print("Ellipticals Training Set:", train_images.shape)
+# print("Transitional Training Set:", train_images.shape)
 # print()
+
+
+
+
+
+
+
+
+# load elliptical only
+
+ellipticals = np.load("Galaxy Properties/Eagle Properties/chosen_glaxies_ellipticals.npy")
+
+all_images = []
+
+for galaxy in ellipticals:
+    # open the image and append it to the main list
+    image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
+
+    # normalise the image (each band independently)
+    image = normalise_independently(image)
+
+    # add the image to the dataset
+    all_images.append(image)
+
+augmented_galaxies = os.listdir("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/")
+
+for galaxy in augmented_galaxies:
+
+    # load each augmented image
+    image = mpimg.imread("/cosma5/data/durham/dc-howi1/project/Eagle Augmented/Ellipticals Only/" + galaxy)
+
+    # normalise the image
+    image = normalise_independently(image)
+
+    # add the image to the training set (not the testing set)
+    all_images.append(image)
+
+train_images = np.array(all_images)
+# test_images = np.array(all_images[-200:])
+
+print("Ellipticals Training Set:", train_images.shape)
+print()
 
 
 
@@ -274,7 +274,8 @@ print()
 
 # for run in [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]:
 # for run in range(1, 26):
-for run in [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]:
+# for run in [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]:
+for run in [4, 9, 11, 12, 14, 15, 18, 19, 23, 25]:
 # for run in [2]:
 
     # Define VAE model with custom train step
@@ -498,10 +499,10 @@ for run in [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]:
     # latent features vs pca
 
     # load the weights
-    vae.load_weights("Variational Eagle/Weights/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
+    vae.load_weights("Variational Eagle/Weights/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.weights.h5")
 
     # get the extracted features
-    extracted_features = np.load("Variational Eagle/Extracted Features/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+    extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
 
 
@@ -582,8 +583,8 @@ for run in [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]:
 
     # spirals, transitional, ellipticals
     # reconstruction_indices = [2767, 698, 754, 501, 663]
-    reconstruction_indices = [143, 139, 289, 217, 230]
-    # reconstruction_indices = [21, 76, 16, 168, 243]
+    # reconstruction_indices = [143, 139, 289, 217, 230]
+    reconstruction_indices = [21, 76, 16, 168, 243]
 
 
 
@@ -596,13 +597,13 @@ for run in [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]:
 
     # reconstruction by pca
 
-    all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
+    all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
 
 
 
     # pca reconstructions by feature
 
-    fig, axs = plt.subplots(11, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 11*5))
+    fig, axs = plt.subplots(10, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 10*5))
 
     for i in range(0, len(reconstruction_indices)):
 
@@ -614,7 +615,7 @@ for run in [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]:
         dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
         axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45, pad=10)
 
-        for j, feat in enumerate(range(10, 0, -1)):
+        for j, feat in enumerate(range(9, 0, -1)):
 
             pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
 
@@ -644,7 +645,7 @@ for run in [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]:
 
     fig.subplots_adjust(wspace=0.1, hspace=0.025)
 
-    plt.savefig("Variational Eagle/Reconstructions by PCA/reconstructions_by_pca_" + str(run) + "_transitional", bbox_inches="tight")
+    plt.savefig("Variational Eagle/Reconstructions by PCA/reconstructions_by_pca_" + str(run) + "_ellipticals", bbox_inches="tight")
     # plt.savefig("Variational Eagle/Plots/reconstructions_by_pca.pdf", bbox_inches="tight")
     plt.show(block=False)
     plt.close()
