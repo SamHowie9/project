@@ -601,7 +601,7 @@ for run in range(1, 26):
 
     # pca reconstructions by feature
 
-    fig, axs = plt.subplots(12, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 12*5))
+    fig, axs = plt.subplots(12, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 13*5))
 
     for i in range(0, len(reconstruction_indices)):
 
@@ -613,7 +613,7 @@ for run in range(1, 26):
         dt = all_properties.loc[reconstruction_indices[i], "DiscToTotal"]
         axs[0][i].set_title("D/T=" + str(round(dt, 3)), fontsize=45, pad=10)
 
-        for j, feat in enumerate(range(11, 0, -1)):
+        for j, feat in enumerate(range(12, 0, -1)):
 
             pca = PCA(n_components=feat, svd_solver="full").fit(extracted_features)
 
