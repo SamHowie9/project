@@ -601,7 +601,7 @@ for run in range(1, 26):
 
     # pca reconstructions by feature
 
-    fig, axs = plt.subplots(12, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 13*5))
+    fig, axs = plt.subplots(13, len(reconstruction_indices), figsize=(len(reconstruction_indices)*5, 13*5))
 
     for i in range(0, len(reconstruction_indices)):
 
