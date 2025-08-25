@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 from sklearn.decomposition import PCA
-# import dcor
+import dcor
 
 
 
@@ -440,13 +440,13 @@ def get_property_correlation(property):
 
 
             # # calculate the correlation coefficients (multiple for different types of correlation eg. mirrored)
-            correlation = np.corrcoef(extracted_features.T[feature], all_properties[property])[0][1]
-            correlation_list.append(abs(correlation))
+            # correlation = np.corrcoef(extracted_features.T[feature], all_properties[property])[0][1]
+            # correlation_list.append(abs(correlation))
 
 
             # calculate the dcor value
-            # correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties[property])
-            # correlation_list.append(correlation)
+            correlation = dcor.distance_correlation(extracted_features.T[feature], all_properties[property])
+            correlation_list.append(correlation)
 
         correlation_df.loc[len(correlation_df)] = correlation_list
 
@@ -495,11 +495,9 @@ sersic_x = default_x + 0.1
 
 # axs.scatter(x=range(1, 12), y=sersic_correlation.T[1])
 axs.bar(radius_x, radius_correlation.T[1], label="Half-Light Radius", width=0.2, yerr=radius_error, capsize=2, lw=1)
-# axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
 # axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", label="Half-Light Radius", markersize=10, lw=2)
 
 axs.bar(sersic_x, sersic_correlation.T[1], label="Sersic Index", width=0.2, yerr=sersic_error, capsize=2, lw=1)
-# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
 # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
 
 axs.set_ylabel("dCor", fontsize=20)
@@ -520,57 +518,47 @@ plt.show()
 
 
 
-# fig, axs = plt.subplots(1, 1, figsize=(20, 10))
-#
-# radius, sersic, q, pa, c, a, s
-#
-# default_x = np.array(range(1, 12))
-#
-# radius_x = default_x - 0.3
-# sersic_x = default_x - 0.2
-# axis_ratio_x = default_x - 0.1
-# position_angle_x = default_x
-# concentration_x = default_x + 0.1
-# asymmetry_x = default_x + 0.2
-# smoothness_x = default_x + 0.03
-#
-#
-# # axs.scatter(x=range(1, 12), y=sersic_correlation.T[1])
-# axs.bar(radius_x, radius_correlation.T[1], label="Half-Light Radius", width=0.1)
-# axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
-# # axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", label="Half-Light Radius", markersize=10, lw=2)
-#
-# axs.bar(sersic_x, sersic_correlation.T[1], yerr=sersic_error, label="Sersic Index", width=0.1)
-# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
-# # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
-#
-# axs.bar(axis_ratio_x, axis_ratio_correlation.T[1], yerr=axis_ratio_error, label="Axis Ratio", width=0.1)
-# axs.errorbar(x=axis_ratio_x, y=axis_ratio_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
-# # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
-#
-# axs.bar(sersic_x, sersic_correlation.T[1], yerr=sersic_error, label="Sersic Index", width=0.1)
-# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
-# # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
-#
-# axs.bar(sersic_x, sersic_correlation.T[1], yerr=sersic_error, label="Sersic Index", width=0.1)
-# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
-# # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
-#
-# axs.bar(sersic_x, sersic_correlation.T[1], yerr=sersic_error, label="Sersic Index", width=0.1)
-# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
-# # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
-#
-# axs.bar(sersic_x, sersic_correlation.T[1], yerr=sersic_error, label="Sersic Index", width=0.1)
-# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
-# # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
-#
-# axs.set_ylabel("dCor", fontsize=20)
-# axs.set_xlabel("Principal Components", fontsize=20)
-# axs.set_xticks(range(1, 12))
-# axs.tick_params(axis="both", labelsize=20)
-# axs.legend(fontsize=20)
-#
-#
-#
-# plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
-# plt.show()
+fig, axs = plt.subplots(1, 1, figsize=(30, 10))
+
+
+default_x = np.array(range(1, 12))
+
+radius_x = default_x - 0.3
+sersic_x = default_x - 0.2
+axis_ratio_x = default_x - 0.1
+position_angle_x = default_x
+concentration_x = default_x + 0.1
+asymmetry_x = default_x + 0.2
+smoothness_x = default_x + 0.3
+
+
+# axs.scatter(x=range(1, 12), y=sersic_correlation.T[1])
+axs.bar(radius_x, radius_correlation.T[1], label="Half-Light Radius", width=0.1, yerr=radius_error, capsize=2, lw=1)
+# axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", label="Half-Light Radius", markersize=10, lw=2)
+
+axs.bar(sersic_x, sersic_correlation.T[1], label="Sersic Index", width=0.1, yerr=sersic_error, capsize=2, lw=1)
+# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
+
+axs.bar(axis_ratio_x, axis_ratio_correlation.T[1], label="Axis Ratio", width=0.1, yerr=axis_ratio_error, capsize=2, lw=1)
+# axs.errorbar(x=axis_ratio_x, y=axis_ratio_correlation.T[1], yerr=axis_ratio_error, fmt="o", label="Axis Ratio", markersize=10, lw=2)
+
+axs.bar(position_angle_x, position_angle_correlation.T[1], label="Position Angle", width=0.1, yerr=position_angle_error, capsize=2, lw=1)
+
+axs.bar(concentration_x, concentration_correlation.T[1], label="Concentration", width=0.1, yerr=concentration_error, capsize=2, lw=1)
+
+axs.bar(asymmetry_x, asymmetry_correlation.T[1], label="Asymmetry", width=0.1, yerr=asymmetry_error, capsize=2, lw=1)
+
+axs.bar(smoothness_x, smoothness_correlation.T[1], label="Smoothness", width=0.1, yerr=smoothness_error, capsize=2, lw=1)
+
+
+
+axs.set_ylabel("dCor", fontsize=20)
+axs.set_xlabel("Principal Components", fontsize=20)
+axs.set_xticks(range(1, 12))
+axs.tick_params(axis="both", labelsize=20)
+axs.legend(fontsize=20, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
+
+
+
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
+plt.show()
