@@ -372,14 +372,19 @@ radius_error = [radius_correlation.T[1]-radius_correlation.T[0], radius_correlat
 sersic_error = [sersic_correlation.T[1]-sersic_correlation.T[0], sersic_correlation.T[2]-sersic_correlation.T[1]]
 
 default_x = np.array(range(1, 12))
-radius_x = default_x - 0.05
-sersic_x = default_x + 0.05
+radius_x = default_x - 0.1
+sersic_x = default_x + 0.1
 
 fig, axs = plt.subplots(1, 1, figsize=(20, 10))
 
 # axs.scatter(x=range(1, 12), y=sersic_correlation.T[1])
-axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", label="Half-Light Radius", markersize=10, lw=2)
-axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
+axs.bar(radius_x, radius_correlation.T[1], label="Half-Light Radius", width=0.2)
+axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
+# axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", label="Half-Light Radius", markersize=10, lw=2)
+
+axs.bar(sersic_x, sersic_correlation.T[1], yerr=sersic_error, label="Sersic Index", width=0.2)
+axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", color="black", capsize=2, markersize=5, lw=1)
+# axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
 
 axs.set_ylabel("dCor", fontsize=20)
 axs.set_xlabel("Principal Components", fontsize=20)
