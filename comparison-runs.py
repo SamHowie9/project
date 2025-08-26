@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_ellipticals.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
 print(all_properties)
 
 
@@ -421,8 +421,8 @@ def get_property_correlation(property):
     # balanced, spirals, transitional, elliptical
     # selected_runs = [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]
     # selected_runs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25]
-    # selected_runs = [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]
-    selected_runs = [4, 9, 11, 12, 14, 15, 18, 19, 23, 25]
+    selected_runs = [2, 6, 8, 9, 11, 12, 13, 16, 17, 19, 23, 25]
+    # selected_runs = [4, 9, 11, 12, 14, 15, 18, 19, 23, 25]
 
     run_names = [str(a) for a in selected_runs]
 
@@ -431,15 +431,15 @@ def get_property_correlation(property):
     # balanced, spirals, transitional, ellipticals
     # for feature in range(0, 11):
     # for feature in range(0, 12):
-    # for feature in range(0, 10):
-    for feature in range(0, 9):
+    for feature in range(0, 10):
+    # for feature in range(0, 9):
 
         correlation_list = []
 
         for run in selected_runs:
 
             # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-            extracted_features = np.load("Variational Eagle/Extracted Features/Ellipticals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+            extracted_features = np.load("Variational Eagle/Extracted Features/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
             # pca feature correlation
 
@@ -521,7 +521,7 @@ axs.legend(fontsize=20)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Ellipticals/PCA/sersic_radius_correlation_run_comparison_bars", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Transitional/PCA/sersic_radius_correlation_run_comparison_bars", bbox_inches='tight')
 plt.show()
 
 
@@ -577,5 +577,5 @@ axs.legend(fontsize=20, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Ellipticals/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Transitional/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
 plt.show()
