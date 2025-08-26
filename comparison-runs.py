@@ -502,7 +502,7 @@ print()
 
 fig, axs = plt.subplots(1, 1, figsize=(20, 10))
 
-default_x = np.array(range(1, radius_correlation.shape[0]))
+default_x = np.array(range(1, radius_correlation.shape[0]+1))
 radius_x = default_x - 0.1
 sersic_x = default_x + 0.1
 
@@ -515,7 +515,7 @@ axs.bar(sersic_x, sersic_correlation.T[1], label="Sersic Index", width=0.2, yerr
 
 axs.set_ylabel("dCor", fontsize=20)
 axs.set_xlabel("Principal Components", fontsize=20)
-axs.set_xticks(range(1, radius_correlation.shape[0]))
+axs.set_xticks(range(1, radius_correlation.shape[0]+1))
 axs.tick_params(axis="both", labelsize=20)
 axs.legend(fontsize=20)
 
@@ -534,7 +534,7 @@ plt.show()
 fig, axs = plt.subplots(1, 1, figsize=(30, 10))
 
 
-default_x = np.array(range(1, radius_correlation.shape[0]))
+default_x = np.array(range(1, radius_correlation.shape[0]+1))
 
 radius_x = default_x - 0.3
 sersic_x = default_x - 0.2
@@ -571,7 +571,7 @@ axs.bar(smoothness_x, smoothness_correlation.T[1], label="Smoothness", width=0.1
 
 axs.set_ylabel("dCor", fontsize=20)
 axs.set_xlabel("Principal Components", fontsize=20)
-axs.set_xticks(range(1, radius_correlation.shape[0]))
+axs.set_xticks(range(1, radius_correlation.shape[0]+1))
 axs.tick_params(axis="both", labelsize=20)
 axs.legend(fontsize=20, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
 
