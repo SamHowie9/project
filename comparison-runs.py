@@ -428,7 +428,9 @@ def get_property_correlation(property):
 
     correlation_df = pd.DataFrame(columns=run_names)
 
-    for feature in range(0, 11):
+    # balanced, spirals, transitional, ellipticals
+    # for feature in range(0, 11):
+    for feature in range(0, 12):
 
         correlation_list = []
 
