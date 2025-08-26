@@ -418,7 +418,10 @@ print(all_properties)
 
 def get_property_correlation(property):
 
-    selected_runs = [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]
+    # balanced, spirals, transitional, elliptical
+    # selected_runs = [2, 5, 7, 10, 12, 15, 17, 18, 19, 20, 22, 23]
+    selected_runs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25]
+
     run_names = [str(a) for a in selected_runs]
 
     correlation_df = pd.DataFrame(columns=run_names)
@@ -435,7 +438,7 @@ def get_property_correlation(property):
             # pca feature correlation
 
             # perform pca on the extracted features
-            pca = PCA(n_components=11, svd_solver="full").fit(extracted_features)
+            pca = PCA(n_components=0.999, svd_solver="full").fit(extracted_features)
             extracted_features = pca.transform(extracted_features)
 
 
