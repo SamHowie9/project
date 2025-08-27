@@ -546,10 +546,10 @@ smoothness_x = default_x + 0.3
 
 
 # axs.scatter(x=range(1, 12), y=sersic_correlation.T[1])
-axs.bar(radius_x, radius_correlation.T[1], label="Half-Light Radius", width=0.1, yerr=radius_error, capsize=2, lw=1)
+axs.bar(radius_x, radius_correlation.T[1], label="Half-light Radius", width=0.1, yerr=radius_error, capsize=2, lw=1)
 # axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", label="Half-Light Radius", markersize=10, lw=2)
 
-axs.bar(sersic_x, sersic_correlation.T[1], label="Sersic Index", width=0.1, yerr=sersic_error, capsize=2, lw=1)
+axs.bar(sersic_x, sersic_correlation.T[1], label="Sèrsic Index", width=0.1, yerr=sersic_error, capsize=2, lw=1)
 # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
 
 axs.bar(axis_ratio_x, axis_ratio_correlation.T[1], label="Axis Ratio", width=0.1, yerr=axis_ratio_error, capsize=2, lw=1)
