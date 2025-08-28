@@ -235,9 +235,9 @@ cbar.ax.tick_params(labelsize=20)
 cbar.ax.invert_yaxis()
 
 gr_scatter = axs[2][1].scatter(x=umap.T[0], y=umap.T[1], c=all_properties["g-r"], vmin=0.45, vmax=0.8, cmap="RdYlBu_r", s=2)
-axs[2][1].set_title("Colour", fontsize=20)
-cbar = plt.colorbar(gr_scatter, ax=axs[2][1], label="g-r Magnitude", pad=0.08)
-cbar.set_label(label="g-r Magnitude", fontsize=20)
+axs[2][1].set_title("g-r", fontsize=20)
+cbar = plt.colorbar(gr_scatter, ax=axs[2][1], label="g-r", pad=0.08)
+cbar.set_label(label="g-r", fontsize=20)
 cbar.ax.yaxis.set_label_position('left')
 cbar.ax.tick_params(labelsize=20)
 
@@ -246,8 +246,8 @@ sm_scatter = axs[2][2].scatter(x=umap.T[0], y=umap.T[1], c=np.log10(all_properti
 axs[2][2].set_title("Stellar Mass", fontsize=20)
 # cbar = plt.colorbar(sm_scatter, ax=axs[2][2], label="Log(Stellar Mass)", pad=0.08)
 # cbar.set_label(label="Log(Stellar Mass)", fontsize=20)
-cbar = plt.colorbar(sm_scatter, ax=axs[2][2], label=r"$\log\left( \mathrm{M_*} \right)/M_{\odot}$", pad=0.08)
-cbar.set_label(label=r"$\log\left( \mathrm{M_*} \right)/M_{\odot}$", fontsize=20)
+cbar = plt.colorbar(sm_scatter, ax=axs[2][2], label=r"$\log\left( M_* \right)/M_{\odot}$", pad=0.08)
+cbar.set_label(label=r"$\log\left( M_* \right)/M_{\odot}$", fontsize=20)
 cbar.ax.yaxis.set_label_position('left')
 cbar.ax.tick_params(labelsize=20)
 
@@ -262,7 +262,7 @@ for ax_row in axs:
 
 
 plt.savefig("Variational Eagle/2D Visualisation/umap_all_properties_" + str(n_neighbors) + "_balanced", bbox_inches="tight")
-# plt.savefig("Variational Eagle/2D Visualisation/umap_all_properties_" + str(n_neighbors) + "_balanced.pdf", bbox_inches="tight")
+plt.savefig("Variational Eagle/2D Visualisation/umap_all_properties_" + str(n_neighbors) + "_balanced.pdf", bbox_inches="tight")
 plt.show()
 
 
