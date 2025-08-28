@@ -33,6 +33,7 @@ plt.rcParams.update({'font.size': default_size * 4})
 
 
 
+
 run = 18
 encoding_dim = 35
 n_flows = 0
