@@ -811,7 +811,7 @@ for run in [run]:
 
         original_gray = color.rgb2gray(original_image)
         axs[3][i].imshow(original_gray, cmap="gray")
-        axs[3][i].imshow(heatmap, cmap="jet", alpha=0.5)
+        axs[3][i].imshow(heatmap, cmap="jet", alpha=0.7)
         axs[3][i].set_aspect("auto")
         axs[3][i].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
@@ -824,8 +824,8 @@ for run in [run]:
 
     fig.subplots_adjust(wspace=0.1, hspace=0.05)
 
-    plt.savefig("Variational Eagle/Reconstructions/Heatmaps/reconstructions_residuals_heatmap_reversed_" + str(run), bbox_inches="tight")
-    plt.savefig("Variational Eagle/Reconstructions/Heatmaps/reconstructions_residuals_heatmap_reversed_" + str(run) + ".pdf", bbox_inches="tight")
+    # plt.savefig("Variational Eagle/Reconstructions/Heatmaps/reconstructions_residuals_heatmap_reversed_" + str(run), bbox_inches="tight")
+    plt.savefig("Variational Eagle/Reconstructions/Heatmaps/reconstructions_residuals_heatmap_reversed_" + str(run) + "_2.pdf", bbox_inches="tight")
     # plt.savefig("Variational Eagle/Plots/reconstructions_residuals_heatmap.pdf", bbox_inches="tight")
     plt.show()
     plt.close()
