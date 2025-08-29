@@ -577,5 +577,6 @@ axs.legend(fontsize=30, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars_5", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars.png", bbox_inches='tight')
 plt.show()
