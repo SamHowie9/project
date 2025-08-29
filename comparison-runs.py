@@ -569,14 +569,14 @@ axs.bar(smoothness_x, smoothness_correlation.T[1], label="Smoothness", width=0.1
 
 
 
-axs.set_ylabel("dCor", fontsize=25)
-axs.set_xlabel("Principal Components", fontsize=25)
+axs.set_ylabel("dCor", fontsize=22)
+axs.set_xlabel("Principal Components", fontsize=22)
 axs.set_xticks(range(1, radius_correlation.shape[0]+1))
-axs.tick_params(axis="both", labelsize=25)
-axs.legend(fontsize=25, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
+axs.tick_params(axis="both", labelsize=22)
+axs.legend(fontsize=22, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
 
 
 
 plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
-plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars.png", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars.pdf", bbox_inches='tight')
 plt.show()
