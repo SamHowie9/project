@@ -341,62 +341,62 @@ for encoding_dim in [encoding_dim]:
 
         # transition plot for all extracted features
 
-        num_varying_features = 13
-
-        med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-        print(len(med_features))
-
-        fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5), dpi=100)
-
-        # loop through each feature
-        for i in range(len(extracted_features.T)):
-
-            # get the incremental values for that feature
-            varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
-
-
-            for j in range(num_varying_features):
-
-                temp_features = med_features.copy()
-                temp_features[i] = varying_feature_values[j]
-
-                temp_features = pca.inverse_transform(temp_features)
-
-                temp_features = np.expand_dims(temp_features, axis=0)
-
-                reconstruction = vae.decoder.predict(temp_features)[0]
-
-                # axs[i][j].imshow(reconstruction)
-                # axs[i][j].set_aspect("auto")
-                # axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-                reconstruction_grey = color.rgb2gray(reconstruction)
-                axs[i][j].imshow(reconstruction_grey, cmap="gray_r")
-                axs[i][j].set_aspect("auto")
-                axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-
-
-                # remove the spines
-                # for spine in axs[i][j].spines.values():
-                #     spine.set_visible(False)
-
-            axs[i][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
-
-        fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
-
-
-        fig.subplots_adjust(wspace=0, hspace=0.05)
-
-        # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
-        # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
-        # plt.savefig("Variational Eagle/Transition Plots/Face/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
-        # plt.savefig("Variational Eagle/Transition Plots/Spirals/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
-        plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/" + str(len(extracted_features.T)) + " PCs/transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
-        plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/" + str(len(extracted_features.T)) + " PCs/transition_plot_" + str(encoding_dim) + "_" + str(run) + ".pdf", bbox_inches="tight")
-        # plt.savefig("Variational Eagle/Transition Plots/Transitional/" + str(encoding_dim) + " Latent Features/12 PCs/latent_transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
-
-        plt.show(block=False)
-        plt.close()
+        # num_varying_features = 13
+        #
+        # med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+        # print(len(med_features))
+        #
+        # fig, axs = plt.subplots(len(extracted_features.T), num_varying_features, figsize=(num_varying_features*5, len(extracted_features.T)*5), dpi=100)
+        #
+        # # loop through each feature
+        # for i in range(len(extracted_features.T)):
+        #
+        #     # get the incremental values for that feature
+        #     varying_feature_values = np.linspace(np.min(extracted_features.T[i]), np.max(extracted_features.T[i]), num_varying_features)
+        #
+        #
+        #     for j in range(num_varying_features):
+        #
+        #         temp_features = med_features.copy()
+        #         temp_features[i] = varying_feature_values[j]
+        #
+        #         temp_features = pca.inverse_transform(temp_features)
+        #
+        #         temp_features = np.expand_dims(temp_features, axis=0)
+        #
+        #         reconstruction = vae.decoder.predict(temp_features)[0]
+        #
+        #         # axs[i][j].imshow(reconstruction)
+        #         # axs[i][j].set_aspect("auto")
+        #         # axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        #
+        #         reconstruction_grey = color.rgb2gray(reconstruction)
+        #         axs[i][j].imshow(reconstruction_grey, cmap="gray_r")
+        #         axs[i][j].set_aspect("auto")
+        #         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+        #
+        #
+        #         # remove the spines
+        #         # for spine in axs[i][j].spines.values():
+        #         #     spine.set_visible(False)
+        #
+        #     axs[i][0].set_ylabel(i+1, rotation=0, labelpad=40, va='center')
+        #
+        # fig.text(0.09, 0.5, 'Extracted Features', va='center', rotation='vertical')
+        #
+        #
+        # fig.subplots_adjust(wspace=0, hspace=0.05)
+        #
+        # # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
+        # # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
+        # # plt.savefig("Variational Eagle/Transition Plots/Face/latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced", bbox_inches='tight')
+        # # plt.savefig("Variational Eagle/Transition Plots/Spirals/pca_latent_" + str(encoding_dim) + "_flows_" + str(n_flows) + "_" + str(run) + "_balanced.pdf", bbox_inches='tight')
+        # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/" + str(len(extracted_features.T)) + " PCs/transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
+        # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/" + str(encoding_dim) + " Latent Features/" + str(len(extracted_features.T)) + " PCs/transition_plot_" + str(encoding_dim) + "_" + str(run) + ".pdf", bbox_inches="tight")
+        # # plt.savefig("Variational Eagle/Transition Plots/Transitional/" + str(encoding_dim) + " Latent Features/12 PCs/latent_transition_plot_" + str(encoding_dim) + "_" + str(run), bbox_inches="tight")
+        #
+        # plt.show(block=False)
+        # plt.close()
 
 
 
@@ -405,56 +405,57 @@ for encoding_dim in [encoding_dim]:
 
         # transition plot for group of features
 
-        # num_varying_features = 13
-        #
-        # med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
-        # print(len(med_features))
-        #
+        num_varying_features = 13
+
+        med_features = [np.median(extracted_features.T[i]) for i in range(len(extracted_features.T))]
+        print(len(med_features))
+
         # chosen_features = [18, 13, 6]
-        #
-        # fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*2.5, len(chosen_features)*2.5), dpi=100)
-        #
-        # for i, feature in enumerate(chosen_features):
-        #
-        #     varying_feature_values = np.linspace(np.min(extracted_features.T[feature-1]), np.max(extracted_features.T[feature-1]), num_varying_features)
-        #
-        #     for j in range(num_varying_features):
-        #
-        #         temp_features = med_features.copy()
-        #         temp_features[feature-1] = varying_feature_values[j]
-        #
-        #         temp_features = np.expand_dims(temp_features, axis=0)
-        #
-        #         # temp_features = pca.inverse_transform(temp_features)
-        #         # temp_features = np.expand_dims(temp_features, axis=0)
-        #
-        #         reconstruction = vae.decoder.predict(temp_features)[0]
-        #
-        #         axs[i][j].imshow(reconstruction)
-        #         axs[i][j].set_aspect("auto")
-        #         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
-        #
-        #         # axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
-        #         #
-        #         # if j == (num_varying_features - 1)/2:
-        #         #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
-        #
-        #     # axs[i][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
-        #
-        # axs[0][0].set_ylabel("dCor < 0.2", fontsize=60, rotation=0, labelpad=15, va='center', ha="right")
-        # axs[1][0].set_ylabel("Sérsic Index\ndCor = 0.74", fontsize=60, rotation=0, labelpad=15, va="center", ha="right")
-        # axs[2][0].set_ylabel("Half-Light Radius\ndCor = 0.81", fontsize=60, rotation=0, labelpad=15, va="center", ha="right")
-        #
-        #
-        # fig.subplots_adjust(wspace=0, hspace=0.05)
-        #
-        # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_feature_transitions", bbox_inches='tight')
-        # plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_feature_transitions.pdf", bbox_inches='tight')
-        # # plt.savefig("Variational Eagle/Transition Plots/Spirals/selected_latent_feature_transitions", bbox_inches='tight')
-        # # plt.savefig("Variational Eagle/Transition Plots/Spirals/selected_latent_feature_transitions.pdf", bbox_inches='tight')
-        #
-        # plt.show(block=False)
-        # plt.close()
+        chosen_features = [32, 33, 13, 6]
+
+        fig, axs = plt.subplots(len(chosen_features), num_varying_features, figsize=(num_varying_features*2.5, len(chosen_features)*2.5), dpi=100)
+
+        for i, feature in enumerate(chosen_features):
+
+            varying_feature_values = np.linspace(np.min(extracted_features.T[feature-1]), np.max(extracted_features.T[feature-1]), num_varying_features)
+
+            for j in range(num_varying_features):
+
+                temp_features = med_features.copy()
+                temp_features[feature-1] = varying_feature_values[j]
+
+                temp_features = np.expand_dims(temp_features, axis=0)
+
+                # temp_features = pca.inverse_transform(temp_features)
+                # temp_features = np.expand_dims(temp_features, axis=0)
+
+                reconstruction = vae.decoder.predict(temp_features)[0]
+
+                axs[i][j].imshow(reconstruction)
+                axs[i][j].set_aspect("auto")
+                axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+                # axs[i][j].set_xlabel(round(varying_feature_values[j], 2))
+                #
+                # if j == (num_varying_features - 1)/2:
+                #     axs[i][j].set_xlabel(str(round(varying_feature_values[j], 2)) + "\nPCA Feature " + str(feature))
+
+            # axs[i][0].set_ylabel(feature+1, rotation=0, labelpad=40, va='center')
+
+        axs[0][0].set_ylabel("dCor < 0.2", fontsize=60, rotation=0, labelpad=15, va='center', ha="right")
+        axs[1][0].set_ylabel("Sérsic Index\n(dCor = 0.53)", fontsize=60, rotation=0, labelpad=15, va="center", ha="right")
+        axs[2][0].set_ylabel("Half-Light Radius\n(dCor = 0.81)", fontsize=60, rotation=0, labelpad=15, va="center", ha="right")
+
+
+        fig.subplots_adjust(wspace=0, hspace=0.05)
+
+        plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_feature_transitions", bbox_inches='tight')
+        plt.savefig("Variational Eagle/Transition Plots/Normalising Flow Balanced/selected_latent_feature_transitions.pdf", bbox_inches='tight')
+        # plt.savefig("Variational Eagle/Transition Plots/Spirals/selected_latent_feature_transitions", bbox_inches='tight')
+        # plt.savefig("Variational Eagle/Transition Plots/Spirals/selected_latent_feature_transitions.pdf", bbox_inches='tight')
+
+        plt.show(block=False)
+        plt.close()
 
 
 

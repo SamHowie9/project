@@ -468,3 +468,83 @@ plt.show()
 #         galaxies.append(galaxy)
 #
 # print(random.sample(galaxies, 25))
+
+
+
+
+
+
+
+
+
+
+
+
+random.seed(0)
+
+print(umap.shape)
+
+
+galaxies = []
+
+for i, (u1, u2) in enumerate(umap):
+    if (8.9 < u1 < 9.1) & (7.3 < u2 < 7.7):
+        galaxy = int(all_properties.iloc[i]["GalaxyID"])
+        galaxies.append(galaxy)
+
+print(random.sample(galaxies, 9))
+
+
+
+galaxies = []
+
+for i, (u1, u2) in enumerate(umap):
+    if (7.9 < u1 < 8.1) & (6.8 < u2 < 7.2):
+        galaxy = int(all_properties.iloc[i]["GalaxyID"])
+        galaxies.append(galaxy)
+
+print(random.sample(galaxies, 9))
+
+
+
+galaxies = []
+
+for i, (u1, u2) in enumerate(umap):
+    if (9.9 < u1 < 10.1) & (5.8 < u2 < 6.2):
+        galaxy = int(all_properties.iloc[i]["GalaxyID"])
+        galaxies.append(galaxy)
+
+print(random.sample(galaxies, 9))
+
+
+
+galaxies = []
+
+for i, (u1, u2) in enumerate(umap):
+    if (9.9 < u1 < 10.1) & (3.8 < u2 < 4.2):
+        galaxy = int(all_properties.iloc[i]["GalaxyID"])
+        galaxies.append(galaxy)
+
+print(random.sample(galaxies, 9))
+
+
+
+galaxies = []
+
+for i, (u1, u2) in enumerate(umap):
+    if (11.9 < u1 < 12.1) & (6.3 < u2 < 6.7):
+        galaxy = int(all_properties.iloc[i]["GalaxyID"])
+        galaxies.append(galaxy)
+
+print(random.sample(galaxies, 9))
+
+
+
+galaxies = []
+
+for i, (u1, u2) in enumerate(umap):
+    if (11.9 < u1 < 12.1) & (3.8 < u2 < 4.2):
+        galaxy = int(all_properties.iloc[i]["GalaxyID"])
+        galaxies.append(galaxy)
+
+print(random.sample(galaxies, 9))

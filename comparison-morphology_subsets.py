@@ -4,8 +4,8 @@ from matplotlib import pyplot as plt
 
 
 
-run = 16
-encoding_dim = 30
+run = 18
+encoding_dim = 35
 n_flows = 0
 beta = 0.0001
 beta_name = "0001"
@@ -27,6 +27,7 @@ transitional_all = []
 
 
 for run in range(1, 26):
+# for run in [run]:
 
     # balanced_loss = np.load("Variational Eagle/Loss/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default.npy")
     # balanced_losses.append(balanced_loss[1])
@@ -157,8 +158,8 @@ print(mean_losses)
 fig, axs = plt.subplots(1, 1, figsize=(5, 10))
 
 # axs.scatter([0, 0, 0, 0], mean_losses, s=150)
-# axs.errorbar([0, 0, 0, 0], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
-axs.errorbar([0, 0, -0.015, 0.015], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
+axs.errorbar([0, 0, 0, 0], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
+# axs.errorbar([0, 0, -0.015, 0.015], mean_losses, yerr=[mean_losses-min_losses, max_losses-mean_losses], fmt="o", color="black", capsize=5, markersize=10)
 
 # labels = ["Balanced", "Disk-Dominated", "Transitional", "Bulge-Dominated"]
 
@@ -176,7 +177,8 @@ axs.set_xticks([])
 # axs.set_yticks([round(mean_losses[2], 3), round(mean_losses[1], 3), round(mean_losses[0], 3), round(mean_losses[3], 3)])
 # axs.set_yticks([0.204, 0.206, 0.208, 0.210, 0.212, 0.214, 0.216])
 
-plt.savefig("Variational Eagle/Plots/subset_loss_comparison_residual_" + str(encoding_dim), bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/subset_loss_comparison_residual_" + str(encoding_dim) + "_features", bbox_inches="tight")
+plt.savefig("Variational Eagle/Plots/subset_loss_comparison_residual_" + str(encoding_dim) + "_features.pdf", bbox_inches="tight")
 plt.show()
 
 
