@@ -24,7 +24,7 @@ batch_size = 32
 
 
 
-all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_spirals.csv")
+all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_transitional.csv")
 print(all_properties)
 
 
@@ -439,7 +439,7 @@ def get_property_correlation(property):
         for run in selected_runs:
 
             # extracted_features = np.load("Variational Eagle/Extracted Features/Normalising Flow Balanced/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
-            extracted_features = np.load("Variational Eagle/Extracted Features/Spirals/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
+            extracted_features = np.load("Variational Eagle/Extracted Features/Transitional/planar_new_latent_" + str(encoding_dim) + "_beta_" + beta_name + "_epoch_" + str(epochs) + "_flows_" + str(n_flows) + "_" + str(run) + "_default_transformed.npy")
 
             # pca feature correlation
 
@@ -577,6 +577,6 @@ axs.legend(fontsize=22, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
-plt.savefig("Variational Eagle/Correlation Plots/Spirals/PCA/structure_correlation_run_comparison_bars.pdf", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Transitional/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Transitional/PCA/structure_correlation_run_comparison_bars.pdf", bbox_inches='tight')
 plt.show()
