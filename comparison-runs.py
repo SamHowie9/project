@@ -544,27 +544,28 @@ concentration_x = default_x + 0.1
 asymmetry_x = default_x + 0.2
 smoothness_x = default_x + 0.3
 
+tab20 = plt.get_cmap("tab20")
 
 # axs.scatter(x=range(1, 12), y=sersic_correlation.T[1])
-axs.bar(radius_x, radius_correlation.T[1], label="Half-light Radius", width=0.1, yerr=radius_error, capsize=2, lw=1)
+axs.bar(radius_x, radius_correlation.T[1], label="Half-light Radius", width=0.1, yerr=radius_error, capsize=2, lw=1, color=tab20(0))
 # axs.errorbar(x=radius_x, y=radius_correlation.T[1], yerr=radius_error, fmt="o", label="Half-Light Radius", markersize=10, lw=2)
 
-axs.bar(sersic_x, sersic_correlation.T[1], label="Sèrsic Index", width=0.1, yerr=sersic_error, capsize=2, lw=1)
+axs.bar(sersic_x, sersic_correlation.T[1], label="Sèrsic Index", width=0.1, yerr=sersic_error, capsize=2, lw=1, color=tab20(0))
 # axs.errorbar(x=sersic_x, y=sersic_correlation.T[1], yerr=sersic_error, fmt="o", label="Sersic Index", markersize=10, lw=2)
 
-axs.bar(axis_ratio_x, axis_ratio_correlation.T[1], label="Axis Ratio", width=0.1, yerr=axis_ratio_error, capsize=2, lw=1)
+axs.bar(axis_ratio_x, axis_ratio_correlation.T[1], label="Axis Ratio", width=0.1, yerr=axis_ratio_error, capsize=2, lw=1, color=tab20(0))
 # axs.errorbar(x=axis_ratio_x, y=axis_ratio_correlation.T[1], yerr=axis_ratio_error, fmt="o", label="Axis Ratio", markersize=10, lw=2)
 
-axs.bar(position_angle_x, position_angle_correlation.T[1], label="Position Angle", width=0.1, yerr=position_angle_error, capsize=2, lw=1)
+axs.bar(position_angle_x, position_angle_correlation.T[1], label="Position Angle", width=0.1, yerr=position_angle_error, capsize=2, lw=1, color=tab20(0))
 # axs.errorbar(x=position_angle_x, y=position_angle_correlation.T[1], yerr=position_angle_error, fmt="o", label="Position Angle", markersize=10, lw=2)
 
-axs.bar(concentration_x, concentration_correlation.T[1], label="Concentration", width=0.1, yerr=concentration_error, capsize=2, lw=1)
+axs.bar(concentration_x, concentration_correlation.T[1], label="Concentration", width=0.1, yerr=concentration_error, capsize=2, lw=1, color=tab20(0))
 # axs.errorbar(x=concentration_x, y=concentration_correlation.T[1], yerr=concentration_error, fmt="o", label="Concentration", markersize=10, lw=2)
 
-axs.bar(asymmetry_x, asymmetry_correlation.T[1], label="Asymmetry", width=0.1, yerr=asymmetry_error, capsize=2, lw=1)
+axs.bar(asymmetry_x, asymmetry_correlation.T[1], label="Asymmetry", width=0.1, yerr=asymmetry_error, capsize=2, lw=1, color=tab20(0))
 # axs.errorbar(x=asymmetry_x, y=asymmetry_correlation.T[1], yerr=asymmetry_error, fmt="o", label="Asymmetry", markersize=10, lw=2)
 
-axs.bar(smoothness_x, smoothness_correlation.T[1], label="Smoothness", width=0.1, yerr=smoothness_error, capsize=2, lw=1)
+axs.bar(smoothness_x, smoothness_correlation.T[1], label="Smoothness", width=0.1, yerr=smoothness_error, capsize=2, lw=1, color=tab20(0))
 # axs.errorbar(x=smoothness_x, y=smoothness_correlation.T[1], yerr=smoothness_error, fmt="o", label="Smoothness", markersize=10, lw=2)
 
 
@@ -577,5 +578,5 @@ axs.legend(fontsize=20, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=7)
 
 
 
-plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars", bbox_inches='tight')
+plt.savefig("Variational Eagle/Correlation Plots/Normalising Flow Balanced/PCA/structure_correlation_run_comparison_bars_2", bbox_inches='tight')
 plt.show()
