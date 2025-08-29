@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import textwrap
 from sklearn.decomposition import PCA
-# import dcor
+import dcor
 
 
 
