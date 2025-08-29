@@ -43,11 +43,11 @@ galaxies = [16360007, 16360007, 12099013, 14188900, 7196586, 15797866, 13255951,
 # galaxies = [2637010, 2637010, 9714040, 9714040, 15927500, 10637654, 13885346, 10520697, 3537188]
 # galaxies = [10835614, 17511062, 10835614, 14059470, 19891778, 15418092, 19891778, 10835614, 13246030]
 
-fig, axs = plt.subplots(5, 5, figsize=(25, 25))
+fig, axs = plt.subplots(3, 3, figsize=(25, 25))
 
 n = 0
-for i in range(0, 5):
-    for j in range(0, 5):
+for i in range(0, 3):
+    for j in range(0, 3):
 
         galaxy = galaxies[n]
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
