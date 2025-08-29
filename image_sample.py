@@ -83,4 +83,4 @@ for i in range(0, 3):
 
         n += 1
 
-plt.savefig("Variational Eagle/2D Visualisation/sample_6", bbox_inches="tight")
+plt.savefig("Variational Eagle/2D Visualisation/sample_reversed_6", bbox_inches="tight")
