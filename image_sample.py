@@ -1,6 +1,22 @@
 from matplotlib import pyplot as plt
 from matplotlib import image as mpimg
 import pandas as pd
+import numpy as np
+from skimage import color
+
+
+
+
+
+# normalise each band individually
+def normalise_independently(image):
+    image = image.T
+    for i in range(0, 3):
+        image[i] = (image[i] - np.min(image[i])) / (np.max(image[i]) - np.min(image[i]))
+    return image.T
+
+
+
 
 
 all_properties = pd.read_csv("Galaxy Properties/Eagle Properties/all_properties_balanced.csv")
@@ -52,7 +68,13 @@ for i in range(0, 3):
         galaxy = galaxies[n]
         image = mpimg.imread("/cosma7/data/Eagle/web-storage/RefL0100N1504_Subhalo/galrand_" + str(galaxy) + ".png")
 
-        axs[i][j].imshow(image)
+        # axs[i][j].imshow(image)
+        # axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
+
+        image = normalise_independently(image)
+        image = color.rgb2gray(image)
+
+        axs[i][j].imshow(image, cmap="gray_r")
         axs[i][j].tick_params(axis='both', which='both', length=0, labelbottom=False, labelleft=False)
 
         dt = all_properties[all_properties["GalaxyID"] == galaxy]["DiscToTotal"].values[0]
